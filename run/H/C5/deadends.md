@@ -2,3 +2,4 @@
 - [feedback-vertex-set reduction] upper route: SAT (12 symmetry groups, K=235: UNSAT or timeout, no DRAT) and local search on (independent / non-independent) FVS never below |S|=236; best 2400 (H-C5-001)
 - [multiway-cut SA, clusters] upper route: multiway-cut SA (9 runs d=9) and symmetric penalty SA never below |S|=236; no net-2 cluster with <= 6 words (exhaustive up to symmetry); best 2400 (H-C5-003)
 - [cluster-value decomposition search] upper route: recursive-product / near-parity SAT-CEGAR, 10 symmetric classes, SAT-LNS regions and SA never below |S|=236; best 2400 (H-C5-005)
+- [SAT-LNS symmetric forests] upper route: SAT on forests invariant under 9/7/5-cycles of coordinates UNSAT (no DRAT), 3-cycle classes timed out; SA/LNS plateau at |S|=236; Q_8xK_2 with perfect-code halves caps at 272 vertices; best 2400 (H-C5-004)

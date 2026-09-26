@@ -1,4 +1,4 @@
-# Board: problem H, updated 14:04, run time 0:57 of 7:00
+# Board: problem H, updated 14:24, run time 1:17 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -6,8 +6,8 @@
 | H-C2 | 2 | T1: 32 vertices, local search feasible; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 88 (gated H-C4-001 claim C10, d=5; both referees ACCEPT C10) | – | 88 (H-C2-001, H-C2-002, H-C5-002) | excess-DP (H-C2-001), decycling (H-C2-002) | none | 0:35 |
 | H-C3 | 3 | T1: 64 vertices; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 204 (gated H-C4-001 claim C10, d=6; both referees ACCEPT C10) | – | 204 (H-C3-001, H-C2-002, H-C5-002) | forest-peak exhaustive (H-C3-001) | none | 0:35 |
 | H-C4 | 5 | T2: two values, Q8 256 vertices; /E/+2 pattern may break | submitted (portal: correct); gated | SOLVED | PROVED 464, 1040 (gate VALID: H-C4-002 + H-C4-003 ACCEPT) | – | Q7 464, Q8 1040 (H-C4-001, H-C2-002, H-C5-002) | induced-forest bound, doubling (H-C4-001) | none | 0:35 |
-| H-C5 | 8 | T2: scored construction, beat 2400 | 1, 1L done; WAVE + 3 | PARTIAL | BEST-FOUND 2400 (= organisers; reproduced, checker) | – | 2400 (H-C5-002 parity/code construction) | decycling-local-search (H-C5-003), symmetric-SAT (H-C5-004), recursive-product (H-C5-005); blind H-C5-001 running | no new dispatches (humans: option 1); re-score returns | 0:37 |
-| H-C6 | 13 | T3: open; stretch only | - | NOT ATTEMPTED | OPEN | – | – | none | only if C5 lands | 0:00 |
+| H-C5 | 8 | T2: scored construction, beat 2400 | closed (humans: option 1) | NOT SOLVED | BEST-FOUND 2400 (= organisers; no improvement); LB unconditional 2312 | – | 2400 (5 lineages) | all retired | none | 1:45 |
+| H-C6 | 13 | T3: open; stretch only | - | NOT ATTEMPTED | OPEN | – | – | none | none (C5 not reached) | 0:00 |
 | H-L1 | 0 (lemma for C1-C4) | T1: written sketch exists (dry-run H-C1-006 Remark) | gated | SOLVED | PROVED (gate VALID 13:21: H-L1-002 + H-L1-003 ACCEPT) | – | U(Q_d) >= d*2^(d-1)+2 for all d >= 3 (accepted/proof.md) | edge-count+divisibility | use as gated ASSUMPTION for C2-C5 (non-blind briefs) | 0:14 |
 
 ## Partial cells: established / remaining gap
@@ -32,3 +32,4 @@
 ## Obstacle notes (parked cells)
 - [14:01] H-C5 lower route: TRIED: parity split + clique cover (H-C5-007). STALLS AT: R9, tau(G_2[F∩E]) <= z+2 for 4 <= z <= 116. PROVED (unrefereed): forests missing <= 3 vertices of one parity have <= 279 vertices, so such labellings have >= 2376 paths. Unconditional LB still 2312. KNOWN: 225/226 <= nabla(Q_9) <= 236 (Pike 2003, Hertz 2021; H-C5-006).
 - [14:04] H-C5 (H-C5-006 analyst): published 225 <= nabla(Q_9) <= 236 (Hertz 2021 Table 4, citing Pike 2003; Pike itself paywalled, unopened). No source gives a decycling set <= 235 or nabla(Q_9) >= 227. Independent decycling sets have size >= 2^(d-1) - A(d,4) = 236 (A(9,4) = 20 cited), so an upper-route S_f must contain an edge. Searches for a 277-vertex induced forest: none found.
+- [14:24] H-C5 CLOSED (run ~1:45): TRIED: parity/code construction + decycling SA (H-C5-002), FVS SAT+LS (H-C5-001), decycling local search (H-C5-003), symmetric SAT (H-C5-004), recursive product (H-C5-005), lower-route parity split (H-C5-007), literature (H-C5-006). STALLS AT: a decycling set of Q_9 with <= 235 vertices (upper) or nabla(Q_9) >= 233 (lower). NEEDS: improving the published 225 <= nabla(Q_9) <= 236 (Pike 2003; Hertz 2021).
