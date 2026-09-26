@@ -159,3 +159,15 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 3. **Bulgarian solitaire:** paste the official text; the conventions need cross-checking.
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
+
+## Improvement layer (proposed; not approved yet)
+
+These go beyond editing lessons text. Recommended order: I1, then I2, then I4. I2, I3 and lesson A/B tests cost subagent calls, so they need a bigger call budget or must take the place of FRESH workers.
+
+- [ ] **I1. Per-task telemetry.** `pp.py` appends one record per task to `run/telemetry.jsonl`: role, regime, angle tag, lessons versions (role and problem), verdict or score, runtime, tokens, and whether the task fed a gated claim. The "revert a lesson if the next wave doesn't improve" rule then reads data. I2–I4 depend on this log. No extra subagent calls.
+- [ ] **I2. EVOLVE searcher regime (AlphaEvolve / FunSearch style).** Each cell keeps a scored program pool in `run/<P>/<cell>/programs/`. An EVOLVE searcher gets the top-k programs and their scores in its inbox and writes a changed program. The head scores it with the cross-tested checker. This forwards one worker's output to another, so it has to be written as a sanctioned regime, like EXPLOIT. Targets: Hypercube and Angles construction cells.
+- [ ] **I3. Regression set for gate lessons.** A golden set of past proofs: some with known flaws a referee should flag, some correct ones it should accept. A pending Referee or Checker-builder lesson must still catch every seeded flaw before it goes to the humans for approval. Costs referee calls.
+- [ ] **I4. Adaptive angle and regime allocation.** Thompson sampling over (angle tag × regime), with rewards from I1, replaces the fixed 60/25/15 mix table. `pp.py suggest` prints the next wave's allocation.
+- [ ] **I5. Technique library across problems.** Verified, reusable code and lemmas (SAT encoders, simulated annealing and tabu search harnesses, exact-arithmetic helpers, accepted checkers, gated lemmas) are copied into inboxes on request. A problem lesson seen in two or more problems becomes a candidate role lesson.
+- [ ] **I6. Head retrospective.** The head writes `pending/head.md` at each checkpoint: which phases wasted calls and which allocations paid off. Humans promote the useful items into the head skill between runs. The head still never edits its own skill.
+- [ ] **I7. Stretch goal: Lean 4 for small lemmas.** A machine-checked lemma is a perfect reward signal and would strengthen the gate. Setup cost is high (Mathlib, toolchain, and workers that can write Lean), so only attempt it with days to spare rather than hours.
