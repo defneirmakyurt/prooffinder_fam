@@ -12,3 +12,4 @@
 | B-C6-010 | WAVE | prover | FRESH | - | - | - | 16:52 |
 | B-C6-011 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C6-003 | 16:52 |
 | B-C6-012 | GATE | referee | CLEAN-ROOM | GATE | - | B-C6-003 | 16:52 |
+| B-C6-013 | 5 | scribe | RECORD | SUBMISSION | - | - | 16:54 |

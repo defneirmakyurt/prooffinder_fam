@@ -1,4 +1,4 @@
-# Board: problem B, updated 16:48, run time 3:03 of 7:00
+# Board: problem B, updated 16:54, run time 3:09 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -7,7 +7,7 @@
 | C3 | 3 | T2: 3 pts, three parts (bound for all non-triangular n; exact value; all maximisers) | SUBMISSION done: run/B/C3/submission/ (LaTeX + PDF, 10 pp) from gated B-C3-007 | SOLVED | PROVED | – | B-C3-007 VALID: (a) all k>=4; (b) D_B(T_k-1)=k^2-2k-1 (k>=4), D_B(2)=0, D_B(5)=3; (c) criterion B^{k^2-2k-2}(lambda)=nu_k |  | Phase 5 report + audit if time | 0:00 |
 | C4 | 5 | T2: 5 pts, exact value both bounds for all k>=5 | LOWER half at gate (008 VERIFY + 009 GATE on B-C4-007); prover 006 running | NOT ATTEMPTED | CONJECTURED F(k)=(k-1)(k-3) (exhaustive k=5..12); LOWER proved by 005 and 007 (unrefereed); UPPER partial | – | witness (k-2,k-2,k-3,...,3,2,2,1), found independently by 005 and 007; weaker UPPER (k-1)(k-2) for all k (005) | diagonal energy + lap rotation (006, under repair 010); energy levels (007, lower half at gate); monotone coupling (005) | LOWER: referees 008/009; UPPER: repair 010 (EXPLOIT on 006) + literature 011 in parallel | 0:00 |
 | C5 | 8 | T2/T3: 8 pts, four stated requirements incl. C3-extension analysis | PAUSED by humans (focus B2, B3); Phase 1 stopped | NOT ATTEMPTED | OPEN | – |  |  | resume after B3 | 0:00 |
-| C6 | 13 | T3: open question, 13 pts; human-directed start at 16:40 | 1: 002, 004 PARTIAL (same lower bound F(n), D_B=F checked n<=60/62; head re-ran n<=55: 0 mismatches); 003 running; referees 006+007 on 004 lower bound; repair 008 on upper bound; 1L 009; FRESH 005; 2S 001 | PARTIAL | CONJECTURED D_B(n)=F(n) (checked n<=62); lower bound claimed x3, at gate |  |  |  | log each breakthrough in run/B/C6/progress.md; 1L after Phase 1; referees on any family result | 0:00 |
+| C6 | 13 | T3: open question, 13 pts; human-directed start at 16:40 | lower bound GATE VALID (004; 006+007); computation n<=60 pinned; PARTIAL scribe 013; structure referees 011+012 on 003; upper bound: 008, 010, 1L 009; FRESH 005 | PARTIAL | PROVED D_B(n)>=F(n) all n; D_B=F on n=T_k, T_k-1; COMPUTER-VERIFIED D_B=F n<=60; CONJECTURED D_B=F all n (GH Conj 4.7) |  |  |  | log each breakthrough in run/B/C6/progress.md; 1L after Phase 1; referees on any family result | 0:00 |
 
 ## Partial cells: established / remaining gap
 - [16:03] B-C2: established D_B(T_k) >= k^2-k for all k (gate on B-C2-002 = LOWER half only, both referees scoped their ACCEPT to it); gap: upper bound, under review in B-C2-003.

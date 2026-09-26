@@ -1,0 +1,4 @@
+n from 56 to 62 mismatches (n,k,r,D_B,F): []
+real 69.01
+user 61.68
+sys 2.31
