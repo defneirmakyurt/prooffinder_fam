@@ -1,0 +1,11 @@
+E1 Step 0 & Step 3/4 exact identities: 20000 random rationals x 4 moduli: OK
+E1b arccos|cos(pi t)|/pi vs dist(t,Z), 20000 floats in [-50,50]: max abs diff 6.62e-12
+E2 identity (10.1) exact (breakpoint integration): 5000 random rational (u,v) + D endpoints: OK
+E3/E4 counting identity and full chain S = (1/4) int k(N-k), exact: 1500 random configs N=0..11: OK
+E5 k(N-k) <= floor(N^2/4), all 0<=k<=N<=400, equality iff k in {floor,ceil}(N/2): OK
+E6 exhaustive grid search, 863163 multisets: no violation; max attained exactly when grid contains perpendicular pair: OK
+E7 binom(N,2)-M(N,2)=floor(N^2/4) N<=2000; Setting example N=2,3,4; S6 values pi/2,pi,2pi,3pi: OK
+E8 balanced perpendicular split N=0..40: S == bound exactly, and k(N-k)=floor(N^2/4) on every open piece: OK; N=3 at pi/3 spacing also equal: OK
+real 22.53
+user 20.75
+sys 0.21

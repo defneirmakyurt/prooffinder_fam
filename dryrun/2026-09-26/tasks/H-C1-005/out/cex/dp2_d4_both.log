@@ -1,0 +1,12 @@
+=== d=4 cutoff 34 mode=both ===
+  level  1: 16 states
+  level  2: 32 states
+  level  3: 96 states
+  level  4: 256 states
+  level  5: 400 states
+  level  6: 0 states
+  states kept: 800
+d=4 mode=both -> NO labelling of Q_4 has fewer than 34 uphill paths
+real 0.10
+user 0.10
+sys 0.00
