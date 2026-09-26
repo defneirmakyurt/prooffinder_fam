@@ -19,9 +19,11 @@ import enc
 import symbreak
 
 
-def build_base(d, m, kset, sb, gl_enc="stdlib", exact=False):
+def build_base(d, m, kset, sb, gl_enc="stdlib", exact=False, low=0):
     pool = enc.Pool(1 << d)
     clauses = []
+    if low:
+        enc.build_subcube_S_counters(d, m, low, pool, clauses)
     if exact:
         enc.global_exact_and_edges(d, m, pool, clauses)
     if kset:
@@ -43,6 +45,7 @@ def main():
     ap.add_argument("--sb", default="")
     ap.add_argument("--solver", default="cd195")
     ap.add_argument("--gl", default="stdlib")
+    ap.add_argument("--low", type=int, default=0, help="k_max for subcube lower bounds (0 = none)")
     ap.add_argument("--exact", type=int, default=0, help="1: add |T|<=m and e(S) bound (E1,E2)")
     ap.add_argument("--maxit", type=int, default=100000)
     ap.add_argument("--tlimit", type=float, default=550.0)
@@ -52,7 +55,7 @@ def main():
     from pysat.solvers import Solver
     t0 = time.time()
     kset = [int(x) for x in a.kset.split(",") if x]
-    pool, clauses = build_base(a.d, a.m, kset, a.sb, a.gl, bool(a.exact))
+    pool, clauses = build_base(a.d, a.m, kset, a.sb, a.gl, bool(a.exact), a.low)
     print("base: vars=%d clauses=%d (%.1fs)" % (pool.top, len(clauses), time.time() - t0), flush=True)
     s = Solver(name=a.solver, bootstrap_with=clauses)
     cycles = []
@@ -90,8 +93,8 @@ def main():
             s.add_clause([-(v + 1) for v in c])
         if it % 50 == 0:
             print("it=%d cycles=%d lens=%s t=%.1f" % (it, len(cycles), dict(sorted(hist.items())), time.time() - t0), flush=True)
-    print("RESULT d=%d m=%d kset=%s sb=%s exact=%d: %s after %d iterations, %d cycle clauses, %.1fs"
-          % (a.d, a.m, a.kset, a.sb or "-", a.exact, status, it, len(cycles), time.time() - t0))
+    print("RESULT d=%d m=%d kset=%s sb=%s exact=%d low=%d: %s after %d iterations, %d cycle clauses, %.1fs"
+          % (a.d, a.m, a.kset, a.sb or "-", a.exact, a.low, status, it, len(cycles), time.time() - t0))
     print("cycle length histogram:", dict(sorted(hist.items())))
     if a.out:
         with open(a.out + ".cycles", "w") as f:

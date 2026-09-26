@@ -28,12 +28,21 @@ def wt(x): return bin(x).count("1")
 DIST2 = [(1 << i) | (1 << j) for i in range(D) for j in range(i + 1, D)]
 
 def canon(C):
-    C = list(C); k = len(C); best = None
+    """Key with the property: equal keys => equivalent sets (README, proof Step 12(b)).  Minimum over o in C and
+    over the row orderings allowed below of the column-sorted matrix with rows c XOR o.  Allowed orderings: rows
+    sorted by the permutation-invariant (weight, sorted distances to the other rows); rows with equal invariant
+    are permuted in all ways.  Any choice of allowed orderings keeps 'equal keys => equivalent'; a
+    non-canonical choice can only create duplicate classes (more work), never lose one."""
+    C = list(C); best = None
     for o in C:
         rows0 = [c ^ o for c in C]
-        for perm in itertools.permutations(rows0):
-            cols = sorted(tuple((r >> b) & 1 for r in perm) for b in range(D))
-            key = tuple(cols)
+        inv = {r: (wt(r), tuple(sorted(wt(r ^ s) for s in rows0 if s != r))) for r in rows0}
+        groups = {}
+        for r in rows0: groups.setdefault(inv[r], []).append(r)
+        glist = [groups[g] for g in sorted(groups)]
+        for combo in itertools.product(*[list(itertools.permutations(g)) for g in glist]):
+            perm = [r for grp in combo for r in grp]
+            key = tuple(sorted(tuple((r >> b) & 1 for r in perm) for b in range(D)))
             if best is None or key < best: best = key
     return best
 
@@ -78,51 +87,156 @@ def tau(Mp):
 
 def tau_star(C, thr):
     """Returns (flag, witness): flag False iff some valid M' has tau(G_2[M']) > thr (witness returned);
-    flag True certifies tau*(C) <= thr.  Branch and bound: tau(G_2[M' u R]) <= tau(G_2[M']) + |R|."""
+    flag True certifies tau*(C) <= thr.  Branch and bound, see README for the two pruning bounds.
+    State: olab maps every odd vertex of N_O(Mp) minus C to the label of its component in
+    Q_9[Mp u (N_O(Mp) minus C)]; x (even, not in Mp) can be added without creating a cycle iff its
+    odd neighbours outside C that are already present carry pairwise distinct labels (every edge at x
+    goes to an odd vertex; x's other odd neighbours outside C are new leaves)."""
     Cs = set(C)
     cand = sorted({o ^ (1 << i) for o in C for i in range(D)})
+    onb = {x: [x ^ (1 << i) for i in range(D) if (x ^ (1 << i)) not in Cs] for x in cand}
+    kn = {o: [o ^ (1 << i) for i in range(D)] for o in C}
+    # cap[o] = largest t with (t-1)(t-2)/2 <= #{o' in C : d(o,o') = 2}  (local Lemma 2, proof Step 12(c))
+    cap = {}
+    for o in C:
+        c2 = sum(1 for p in C if wt(o ^ p) == 2)
+        t = 1
+        while (t) * (t - 1) // 2 <= c2 and t < D: t += 1   # test t+1: ((t+1)-1)((t+1)-2)/2 = t(t-1)/2
+        cap[o] = t
     bad = [None]
-    def labels(Mp):
-        # components of Q_9[Mp u (N_O(Mp) minus C)] -> dict vertex -> label (BFS)
-        verts = set(Mp)
-        for x in Mp:
-            for i in range(D):
-                w = x ^ (1 << i)
-                if w not in Cs: verts.add(w)
-        lab = {}; c = 0
-        for v in verts:
-            if v in lab: continue
-            lab[v] = c; st = [v]
-            while st:
-                u = st.pop()
-                for i in range(D):
-                    w = u ^ (1 << i)
-                    if w in verts and w not in lab: lab[w] = c; st.append(w)
-            c += 1
-        return lab
-    def addable(x, lab):
+    def addable(x, olab):
         seen = set()
-        for i in range(D):
-            w = x ^ (1 << i)
-            if w in Cs or w not in lab: continue
-            l = lab[w]
+        for w in onb[x]:
+            l = olab.get(w)
+            if l is None: continue
             if l in seen: return False
             seen.add(l)
         return True
-    def rec(start, Mp):
+    def add(x, olab, newid):
+        L = {olab[w] for w in onb[x] if w in olab}
+        n2 = {w: (newid if l in L else l) for w, l in olab.items()}
+        for w in onb[x]: n2[w] = newid
+        return n2
+    def rec(start, Mp, olab, t):
         if bad[0] is not None: return
-        lab = labels(Mp)
-        later = [idx for idx in range(start, len(cand)) if addable(cand[idx], lab)]
-        t = tau(Mp)
+        later = [idx for idx in range(start, len(cand)) if addable(cand[idx], olab)]
         if t > thr: bad[0] = list(Mp); return
         if t + len(later) <= thr: return
+        pool = set(Mp) | {cand[idx] for idx in later}
+        cc = 0
+        for o in C:
+            s = min(cap[o], sum(1 for y in kn[o] if y in pool))
+            if s > 1: cc += s - 1
+        if cc <= thr: return
         for idx in later:
-            Mp.append(cand[idx]); rec(idx + 1, Mp); Mp.pop()
-    rec(0, [])
+            x = cand[idx]
+            Mp.append(x)
+            t2 = tau(Mp)
+            rec(idx + 1, Mp, add(x, olab, len(Mp)), t2)
+            Mp.pop()
+    rec(0, [], {}, 0)
     return bad[0] is None, bad[0]
 
+def tau_star2(C, thr):
+    """Faster certifier (proof.md Step 12(c')): same answer semantics as tau_star.
+    Candidates with >= 2 neighbours in C ('shared') are enumerated exhaustively (no pruning); for each C-valid
+    shared set S', all extensions by 'private' candidates (exactly one neighbour in C) are bounded at once by the
+    tau of a virtual graph (S' plus q_o twins per o); only if that bound exceeds thr are the private extensions
+    searched explicitly."""
+    Cs = set(C); Cl = list(C)
+    cand = sorted({o ^ (1 << i) for o in C for i in range(D)})
+    onb = {x: [x ^ (1 << i) for i in range(D) if (x ^ (1 << i)) not in Cs] for x in cand}
+    cnb = {x: [o for o in Cl if wt(o ^ x) == 1] for x in cand}
+    shared = [x for x in cand if len(cnb[x]) >= 2]
+    private = [x for x in cand if len(cnb[x]) == 1]
+    cap = {}
+    for o in C:
+        c2 = sum(1 for p in C if wt(o ^ p) == 2)
+        cap[o] = max(t for t in range(1, D + 1) if (t - 1) * (t - 2) // 2 <= c2)
+    bad = [None]
+    def addable(x, olab):
+        seen = set()
+        for w in onb[x]:
+            l = olab.get(w)
+            if l is None: continue
+            if l in seen: return False
+            seen.add(l)
+        return True
+    def add(x, olab, newid):
+        L = {olab[w] for w in onb[x] if w in olab}
+        n2 = {w: (newid if l in L else l) for w, l in olab.items()}
+        for w in onb[x]: n2[w] = newid
+        return n2
+    def virtual_tau(Mp, olab, plist):
+        # vertices: Mp, then q_o virtual twins for every o; adjacency = common neighbour in C
+        vs = [(x, set(cnb[x])) for x in Mp]
+        for o in Cl:
+            k_o = sum(1 for x in Mp if o in cnb[x])
+            a_o = sum(1 for x in plist if cnb[x][0] == o and addable(x, olab))
+            q = min(a_o, cap[o] - k_o)
+            for _ in range(max(q, 0)): vs.append((None, {o}))
+        n = len(vs); adj = [0] * n
+        for a in range(n):
+            for b in range(a + 1, n):
+                if vs[a][1] & vs[b][1]: adj[a] |= 1 << b; adj[b] |= 1 << a
+        return n - alpha(list(range(n)), adj)
+    def priv_rec(start, Mp, olab, t):
+        # explicit search over private extensions (fallback)
+        if bad[0] is not None: return
+        if t > thr: bad[0] = list(Mp); return
+        later = [private[i] for i in range(start, len(private)) if addable(private[i], olab)]
+        if t + len(later) <= thr: return
+        if virtual_tau(Mp, olab, later) <= thr: return
+        for i in range(start, len(private)):
+            x = private[i]
+            if x in later:
+                Mp.append(x); priv_rec(i + 1, Mp, add(x, olab, len(Mp)), tau(Mp)); Mp.pop()
+    def sh_rec(start, Mp, olab, t):
+        if bad[0] is not None: return
+        if t > thr: bad[0] = list(Mp); return
+        if virtual_tau(Mp, olab, private) > thr:
+            priv_rec(0, Mp, olab, t)
+            if bad[0] is not None: return
+        for i in range(start, len(shared)):
+            x = shared[i]
+            if addable(x, olab):
+                Mp.append(x); sh_rec(i + 1, Mp, add(x, olab, len(Mp)), tau(Mp)); Mp.pop()
+    sh_rec(0, [], {}, 0)
+    return bad[0] is None, bad[0]
+
+def exact_tau_star(C):
+    """Cross-check only: max of tau(G_2[M']) over ALL C-valid M' (no pruning; same validity test)."""
+    Cs = set(C)
+    cand = sorted({o ^ (1 << i) for o in C for i in range(D)})
+    onb = {x: [x ^ (1 << i) for i in range(D) if (x ^ (1 << i)) not in Cs] for x in cand}
+    best = [0]
+    def rec(start, Mp, olab):
+        t = tau(Mp)
+        if t > best[0]: best[0] = t
+        for idx in range(start, len(cand)):
+            x = cand[idx]
+            seen = set(); ok = True
+            for w in onb[x]:
+                l = olab.get(w)
+                if l is None: continue
+                if l in seen: ok = False; break
+                seen.add(l)
+            if not ok: continue
+            L = {olab[w] for w in onb[x] if w in olab}
+            n2 = {w: (len(Mp) + 1 if l in L else l) for w, l in olab.items()}
+            for w in onb[x]: n2[w] = len(Mp) + 1
+            Mp.append(x); rec(idx + 1, Mp, n2); Mp.pop()
+    rec(0, [], {})
+    return best[0]
+
+PROG = False
+FAST = False
 def main():
     KMAX = int(sys.argv[1]) if len(sys.argv) > 1 else 4
+    OFF = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    global PROG, FAST
+    PROG = 'prog' in sys.argv[3:]
+    FAST = 'fast' in sys.argv[3:]   # self-test: threshold k + OFF (OFF < 0 must find violations; OFF = 99: exact unpruned cross-check)
     o0 = 1
     layer = {canon([o0]): [o0]}
     worst_overall = []
@@ -139,11 +253,18 @@ def main():
                         key = canon(C2)
                         if key not in new: new[key] = C2
             layer = new
+        if OFF == 99:   # cross-check mode: exact tau*(C) - k histogram, no pruning
+            hist = {}
+            for C in layer.values():
+                d = exact_tau_star(C) - k; hist[d] = hist.get(d, 0) + 1
+            print("k=%d classes=%d  EXACT histogram of tau*(C)-k: %s" % (k, len(layer), dict(sorted(hist.items()))), flush=True)
+            continue
         cnt = 0; nviol = 0; wit = None
         for key, C in layer.items():
-            ok, Mp = tau_star(C, k)
+            ok, Mp = (tau_star2 if FAST else tau_star)(C, k + OFF)
             cnt += 1
             if not ok:
                 nviol += 1; wit = (C, Mp)
-        print("k=%d classes=%d  clusters with tau*(C) > k: %d %s" % (k, cnt, nviol, "" if wit is None else "witness C=%s M'=%s" % wit), flush=True)
+            if PROG: print("   k=%d class %d/%d done, violation so far: %d" % (k, cnt, len(layer), nviol), file=sys.stderr, flush=True)
+        print("k=%d classes=%d  clusters with tau*(C) > k%+d: %d %s" % (k, cnt, OFF, nviol, "" if wit is None else "witness C=%s M'=%s" % wit), flush=True)
 main()

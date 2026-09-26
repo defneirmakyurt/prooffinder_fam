@@ -57,6 +57,31 @@ def find_cycle(F):
                 stack.append(w)
     return None
 
+
+def short_cycles():
+    # all 4-cycles of Q_n, and the 6-cycles through the base vertex of each Q_3 subcube (12 of its 16 6-cycles;
+    # the other 4 are caught lazily by CEGAR). Every clause added is a genuine cycle, so UNSAT is sound.
+    cyc = []
+    for base in range(N):
+        for i, j in itertools.combinations(range(n), 2):
+            if base & (1 << i) or base & (1 << j): continue
+            a, b = 1 << i, 1 << j
+            cyc.append([base, base | a, base | a | b, base | b])
+    q3 = []
+    for p in itertools.permutations(range(1, 8), 5):
+        seq = [0] + list(p)
+        if seq[1] > seq[5]: continue
+        if all(bin(seq[k] ^ seq[(k + 1) % 6]).count('1') == 1 for k in range(6)):
+            q3.append(seq)
+    for base in range(N):
+        for dirs in itertools.combinations(range(n), 3):
+            if any(base & (1 << t) for t in dirs): continue
+            sub = [base | sum(1 << dirs[t] for t in range(3) if (m >> t) & 1) for m in range(8)]
+            for seq in q3:
+                cyc.append([sub[m] for m in seq])
+    return cyc
+SHORT = []
+
 def ball_search(F0, centre, R, tlimit):
     free = [v for v in range(N) if wt[v ^ centre] <= R]
     fs = set(free)
@@ -65,6 +90,10 @@ def ball_search(F0, centre, R, tlimit):
     var = {v: i + 1 for i, v in enumerate(free)}
     card = CardEnc.atleast(lits=list(var.values()), bound=need, top_id=len(free), encoding=EncType.seqcounter)
     s = Cadical153(bootstrap_with=card.clauses)
+    inF0 = set(F0)
+    for cy in SHORT:
+        if any(v in fs for v in cy) and all((v in fs) or (v in inF0) for v in cy):
+            s.add_clause([-var[v] for v in cy if v in fs])
     t0 = time.time(); it = 0
     while True:
         if time.time() - t0 > tlimit: return 'TIMEOUT', it
@@ -76,11 +105,17 @@ def ball_search(F0, centre, R, tlimit):
         it += 1
         if cyc is None:
             return ('FOUND', sorted(F)), it
-        s.add_clause([-var[v] for v in cyc if v in fs])
+        Fs = set(F)
+        while cyc is not None:   # add several cycle cuts per SAT call
+            s.add_clause([-var[v] for v in cyc if v in fs])
+            Fs.discard(next(v for v in cyc if v in fs))
+            cyc = find_cycle(sorted(Fs))
 
 if __name__ == '__main__':
     R = int(sys.argv[1]); ncent = int(sys.argv[2]); tl = float(sys.argv[3]); seed = int(sys.argv[4])
     t0 = time.time()
+    SHORT.extend(short_cycles())
+    print('short cycles', len(SHORT), flush=True)
     C = find_code()
     assert len(C) == 20 and all(wt[a ^ b] >= 4 for a, b in itertools.combinations(C, 2))
     F0 = [v for v in range(N) if wt[v] % 2 == 1] + C
@@ -93,6 +128,7 @@ if __name__ == '__main__':
         res, it = ball_search(F0, c, R, tl)
         key = res if isinstance(res, str) else res[0]
         stats[key] = stats.get(key, 0) + 1
+        print("centre", c, key, "iters", it, "t=%.1fs" % (time.time() - t0), flush=True)
         if key == 'FOUND':
             print('FOUND 277-forest at centre', c, flush=True)
             open('found_F.txt', 'w').write('\n'.join(format(v, '09b') for v in res[1]))

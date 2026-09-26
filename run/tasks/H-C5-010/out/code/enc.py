@@ -271,3 +271,47 @@ def global_exact_and_edges(d, m, pool, clauses, es=True):
         p = unary_upward(ws, B + 1, pool, clauses)
         if len(p) - 1 >= B + 1:
             clauses.append([-p[B + 1]])
+
+
+def build_subcube_S_counters(d, m, kmax, pool, clauses, fb=FB):
+    """Lower bounds on T in every k-subcube, k = 1..kmax (proof.md 2.5): a k-subcube Q lies in the
+    parallel class of 2^(d-k) disjoint k-subcubes with the same free coordinates, which partition
+    V(Q_d); each other member holds <= fb[k] vertices of T, so if |T| >= m then
+    |T cap Q| >= L_k := m - (2^(d-k) - 1) fb[k], i.e. #(Q minus T) <= U_k := 2^k - L_k.
+    Encoded by an upward hierarchical totalizer on the negated literals (count of S = V minus T)."""
+    cnt = {}
+    for v in range(1 << d):
+        cnt[(0, v)] = [None, -(v + 1)]
+    nasserted = 0
+    for k in range(1, kmax + 1):
+        L = m - ((1 << (d - k)) - 1) * fb[k]
+        U = (1 << k) - L
+        cap = min(1 << k, U + 1) if L > 0 else (1 << k)
+        for (fm, b) in subcubes(d, k):
+            hi = fm.bit_length() - 1
+            sub = fm & ~(1 << hi)
+            A = cnt[(sub, b)]
+            B = cnt[(sub, b | (1 << hi))]
+            la, lb = len(A) - 1, len(B) - 1
+            top = min(la + lb, cap)
+            o = [None] + [pool.new() for _ in range(top)]
+            for i in range(0, la + 1):
+                for j in range(0, lb + 1):
+                    s = i + j
+                    if s == 0:
+                        continue
+                    s = min(s, top)
+                    lits = []
+                    if i > 0:
+                        lits.append(-A[i])
+                    if j > 0:
+                        lits.append(-B[j])
+                    clauses.append(lits + [o[s]])
+            cnt[(fm, b)] = o
+            if L > 0:
+                if U < 0:
+                    clauses.append([])
+                elif top >= U + 1:
+                    clauses.append([-o[U + 1]])
+                    nasserted += 1
+    return nasserted

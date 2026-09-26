@@ -12,7 +12,7 @@
 #include <string.h>
 #include <math.h>
 
-static int k, n, gens[9];
+static int k, n, gens[9], DEG;
 static int nb[4096][9];
 static int mult[4096][9];     /* multiplicity of edge v - nb[v][j] (>=2 means parallel) */
 static int inF[4096], comp[4096];
@@ -27,7 +27,7 @@ static void components(void){
   for (int s = 0; s < n; s++) if (inF[s] && comp[s] < 0){
     int sp = 0; stackv[sp++] = s; comp[s] = c;
     while (sp){ int v = stackv[--sp];
-      for (int j = 0; j < 9; j++){ int w = nb[v][j]; if (w != v && inF[w] && comp[w] < 0){ comp[w] = c; stackv[sp++] = w; } } }
+      for (int j = 0; j < 9 && nb[v][j] >= 0; j++){ int w = nb[v][j]; if (w != v && inF[w] && comp[w] < 0){ comp[w] = c; stackv[sp++] = w; } } }
     c++;
   }
 }
@@ -35,7 +35,7 @@ static void components(void){
 static int check(void){
   long e = 0; int vs = 0;
   for (int v = 0; v < n; v++) if (inF[v]){ vs++;
-    for (int j = 0; j < 9; j++){ int w = nb[v][j]; if (w == v) return 0; if (inF[w]){ if (mult[v][j] > 1) return 0; e++; } } }
+    for (int j = 0; j < DEG; j++){ int w = nb[v][j]; if (w == v) return 0; if (inF[w]){ if (mult[v][j] > 1) return 0; e++; } } }
   e /= 2; /* each simple edge counted twice (distinct neighbours listed once each) */
   components();
   int c = 0; for (int v = 0; v < n; v++) if (inF[v] && comp[v] + 1 > c) c = comp[v] + 1;
@@ -49,12 +49,13 @@ int main(int argc, char **argv){
   rs = strtoull(argv[11], 0, 10) * 2654435761ULL + 88172645463325252ULL;
   long iters = atol(argv[12]); double T0 = atof(argv[13]), T1 = atof(argv[14]);
   /* distinct neighbour lists with multiplicity */
-  int deg = 0;
+  int deg = 0; (void)0;
   int dg[9], ml[9];
   for (int i = 0; i < 9; i++){ int f = -1; for (int j = 0; j < deg; j++) if (dg[j] == gens[i]) f = j;
     if (f < 0){ dg[deg] = gens[i]; ml[deg] = 1; deg++; } else ml[f]++; }
   for (int v = 0; v < n; v++) for (int j = 0; j < 9; j++){ if (j < deg){ nb[v][j] = v ^ dg[j]; mult[v][j] = ml[j]; } else { nb[v][j] = v; mult[v][j] = 0; } }
   /* for padding entries nb = v itself with mult 0: treat as absent */
+  DEG = deg;
   for (int v = 0; v < n; v++) for (int j = deg; j < 9; j++) nb[v][j] = -1;
   /* rewrite loops over nb to skip -1 */
   memset(inF, 0, sizeof inF);

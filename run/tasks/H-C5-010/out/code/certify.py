@@ -34,6 +34,7 @@ def main():
     ap.add_argument("--drat", required=True)
     ap.add_argument("--work", required=True)
     ap.add_argument("--tlimit", type=int, default=500)
+    ap.add_argument("--low", type=int, default=0, help="k_max for subcube lower bounds (0 = none)")
     ap.add_argument("--exact", type=int, default=0)
     a = ap.parse_args()
     t0 = time.time()
@@ -41,6 +42,8 @@ def main():
     kset = [int(x) for x in a.kset.split(",") if x]
     pool = enc.Pool(1 << d)
     clauses = []
+    if a.low:
+        enc.build_subcube_S_counters(d, m, a.low, pool, clauses)
     if a.exact:
         enc.global_exact_and_edges(d, m, pool, clauses)
     if kset:
