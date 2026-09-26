@@ -17,6 +17,7 @@ Contents:
 14. Final report (Phase 5)
 15. Audit report
 16. Status table (after every phase)
+17. Space map output and the head's choice (Phase 2S)
 
 `scripts/pp.py` parses this file. Keep the shapes it relies on:
 - role blocks look like `**Role**` or `**Role: MODE**` followed by a fenced block;
@@ -28,7 +29,7 @@ Every brief starts with this block. `scripts/pp.py task` writes it for you.
 
 ```
 TASK: <P>-<cell>-<nnn>      ROLE: <role>      REGIME: <BLIND | FRESH | CONTRARIAN | EXPLOIT | CLEAN-ROOM | LITERATURE | RECORD>
-PHASE: <0 | 1 | 1L | 2 | 2A | 2B | 2B-XV | 2C | 3 | GATE | REPAIR | WAVE | 5 | AUDIT>   MODE: <mode or ->   BRANCH: <branch or ->
+PHASE: <0 | 1 | 1L | 2 | 2A | 2S | 2B | 2B-XV | 2C | 3 | GATE | REPAIR | WAVE | 5 | AUDIT>   MODE: <mode or ->   BRANCH: <branch or ->
 SUBJECT: <task id of the proof under review, or ->
 TIME BOX: <minutes>
 READ ONLY: run/tasks/<task-id>/ (this brief + inbox/). Do not open anything else under run/.
@@ -57,8 +58,8 @@ Inbox contents set by phase (`pp.py` enforces them):
 | `checklist-G.md` | everyone except Checker-builder |
 | `checklist-S.md` | Referee only (VERIFY, GATE, CROSS) |
 | `subject/` (`proof.md`, `claims.md`, `code/`, `best.*` of SUBJECT only; add a computational subject's artefact with `--subject-file NAME`, which refuses `plan.md`, `runlog.md`, `stuck.md`) | Referee; REPAIR (plus the gate report) |
-| `obstacles/` (`stuck.md`, `verdict.md`, `no_natural_route.md` of named tasks, never proofs) | Triage (2A), Breaker ADVERSARY (2C) |
-| `checker/` | Searchers, Breakers where relevant; Referees judging a computational claim, so they can re-score the artefact |
+| `obstacles/` (`stuck.md`, `verdict.md`, `no_natural_route.md` of named tasks, never proofs) | Triage (2A), Space (2S), Breaker ADVERSARY (2C) |
+| `checker/` | Searchers, Breakers, Space where relevant; Referees judging a computational claim, so they can re-score the artefact |
 | earlier results the phase allows | Literature (1L: Phase 1 outputs; 3: everything for the cell) |
 | `record/tasks/<id>/…` (paths preserved so citations resolve; an AUDIT task gets the *subject's* snapshot plus the subject's own `brief.md` and `out/`, never a fresh one, so the report's citations resolve against the record it was written from) | Scribe REPORT, Auditor |
 | accepted artefacts + hand-in text | Scribe SUBMISSION |
@@ -223,6 +224,27 @@ a dropped branch may be tagged verifier-only. Log every elimination with its rea
 Write out/selected_branches.txt (section 11).
 ```
 
+**Space**
+```
+Phase 2S. Do not solve the cell and do not choose: the head evaluates your cards and decides what runs.
+You have web search and fetch: use them to discover spaces and tools, what is known in each space about this
+problem and its neighbours, and what no source has used. Open every source you cite; tag it PROVED /
+COMPUTER-VERIFIED / CONJECTURED and say whether it contains the argument or only cites it. Never present a
+citation as a proof of the cell. Never call anything new: write "not found in <sources searched>".
+Inbox/obstacles/ (if present) holds stuck.md and verdict.md files, never proofs; inbox/checker/ (if present) is an
+exact checker you may use on small cases; any other inbox file is extra material the head chose to give you.
+1. Pin the target: restate it, classify the goal, compute small and boundary cases by code, list extremizers
+   (out/target_pin.md, out/small_cases.md).
+2. Sweep the catalogue in your agent instructions and search beyond it; log every search and source in
+   out/sources.md; keep 4-8 spaces where the problem can be written precisely (discards in out/discarded.md).
+3. One card per kept space in out/spaces.md, in the exact field format of section 17: fidelity with its direction,
+   a translation check run on the small cases, tightness on every known extremizer, the tools and what each would
+   deliver here, what is KNOWN in this space, what is UNEXPLORED, cost, payoff, an ANGLE and a FIRST TASK.
+4. out/graph.md: directed edges between spaces and neighbours, with sources; unanswered NEIGHBOUR QUESTION lines.
+5. out/spec.md: properties any valid proof must have. 6. out/proposals.md: 3-6 ranked proposals.
+Code in out/checks/. Fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+```
+
 **Scribe**
 ```
 Reports introduce no new mathematics. Never upgrade a status given in the brief.
@@ -269,7 +291,7 @@ DEAD ENDS: <approach — why it fails; one line each>
 SCORE: <searchers: value from the provided checker; others: n/a>
 ```
 
-Triage, Literature, Scribe and Auditor use the same block with IDEA-TAG set to their phase and LADDER omitted.
+Triage, Space, Literature, Scribe and Auditor use the same block with IDEA-TAG set to their phase and LADDER omitted. Space adds one CARDS line per card (section 17).
 
 The head uses IDEA-TAG to spot convergence and to name lineages. SCORE is always recomputed before it is trusted. The 200-word limit excludes LADDER and RAN lines; the full ladder stays in `out/plan.md`. LADDER statuses are the worker's claims: a PROVED rung is unrefereed and a CHECKED rung is unrerun until the head says otherwise.
 
@@ -347,7 +369,7 @@ Keep each entry to one line. CONTRARIAN briefs receive these lines verbatim.
 
 ## 7. Angle generator and branch lenses
 
-**Branch lenses (Phase 2A/2B).** These are generic. Problem-specific branch notes live in the problem skill and go only into the matching lens.
+**Branch lenses (Phase 2A/2S/2B).** These are generic. Problem-specific branch notes live in the problem skill and go only into the matching lens.
 - **ALGEBRAIC:** matrices, rank, eigenvalues, trace and norm inequalities, determinants, positive semidefinite cones, polynomial identities, symmetry groups and invariants.
 - **TOPOLOGICAL:** configuration spaces, compactness, continuity and degree arguments, critical point structure, connectedness of the extremiser set.
 - **ANALYSIS:** convexity, Jensen, tangent-line bounds, Lagrange multipliers, second-order conditions, behaviour near degenerate configurations, smoothing and variational arguments, potential functions.
@@ -444,7 +466,7 @@ Classification:
 - **UNSUPPORTED:** every verdict is in, nothing is contested, and no proof has the confirmations ROBUST needs.
 - **INCOMPLETE** (transient): no disagreement so far, and some proof with no negative verdict still has verdicts pending (its Phase 2 verifier or a kept branch), so it could still become ROBUST. It is not ROBUST, so the gate treats it as a GAP.
 
-Kept branches are those in the latest triage's `selected_branches.txt`, plus any branch re-admitted in 2B-D (from its first 2B task). The gate needs the proof under the gate to be ROBUST itself; a ROBUST cell reached through another proof doesn't count.
+Kept branches are those in the head's `branches.txt` (written by `pp.py choose` from a 2S space map) if the cell has one, else in the latest triage's `selected_branches.txt`; plus any branch re-admitted in 2B-D (from its first 2B task). The gate needs the proof under the gate to be ROBUST itself; a ROBUST cell reached through another proof doesn't count.
 
 ## 13. Gate report (`run/<P>/<cell>/gate/gate_report.md`, written by `pp.py gate`)
 
@@ -502,3 +524,61 @@ are checked by counting and grepping the record.
 ```
 | Cell | Agents run (by phase) | Verdicts | Robustness | Next |
 ```
+
+## 17. Space map output and the head's choice (Phase 2S)
+
+The Space agent writes one card per kept space in `out/spaces.md`. `pp.py choose` parses these fields, so the names and order are fixed:
+
+```
+### S<n> <short-tag>
+SPACE: <catalogue code + name>
+BRANCH: ALGEBRAIC | TOPOLOGICAL | ANALYSIS | NUMBER-THEORY | DISCRETE | COMPUTATIONAL
+FIDELITY: EQUIVALENT | RELAXATION | RESTRICTION | LIMIT | ANALOGY | HEURISTIC — <direction for this cell, justified>
+FEEDS: <bound, construction, proof, disproof, obstruction>
+CHECK: PASSED <cases, script> | FAILED <case, script> | NOT RUN <why>
+TIGHT: yes <cases incl. every known extremizer> | NO <object the method cannot rule out> | n/a
+TOOLS: <each tool, what it would deliver for TARGET, where it breaks>
+KNOWN: <what has been done in this space on this problem or its neighbours: result, link, status tag; or "nothing found in <sources searched>">
+UNEXPLORED: <tools or properties of this space not found used on this problem in <sources searched>; or "none">
+COST: low | medium | high — <why>
+PAYOFF: low | medium | high — <what success gives the cell>
+ANGLE: <1-3 sentences for a FRESH worker: translation, what it preserves, tool to try first; sources allowed>
+FIRST TASK: <prover | searcher | breaker>: <statement> | assumes: <...> | output: <...> | stop: <...>
+```
+
+Fidelity, in one line each: EQUIVALENT (both directions, map stated); RELAXATION (a larger class: one-sided bounds); RESTRICTION (a subclass: constructions and counterexamples); LIMIT (scaling or continuum limit: asymptotics only); ANALOGY (a different problem with the same defining feature: insight only unless it specialises back exactly); HEURISTIC (direction not proved yet).
+
+**Information rule.** A space map is web-informed, so no card text ever reaches a BLIND brief. A `2B` or `VERIFIER` decision passes only the branch name and its generic lens from section 7. A card's ANGLE goes only into a FRESH brief (`WAVE`). The head may quote KNOWN and UNEXPLORED to the humans, and hand them to Literature (Phase 3) with `--inbox`.
+
+The return block's CARDS lines summarise the cards, one per card:
+
+```
+  S1 <tag> <BRANCH> <FIDELITY> CHECK <PASSED|FAILED|NOT RUN> TIGHT <yes|NO|n/a> COST <l|m|h> PAYOFF <l|m|h>
+```
+
+**The head's choice.** `pp.py choose P CELL --map TASK --take "S<n>=ACTION: reason" ...` takes one decision per card. The actions are `2B`, `VERIFIER`, `WAVE`, `DEADEND`, `HOLD` and `DROP`.
+
+It refuses the choice in these cases:
+- a card has no decision, or a decision has no reason;
+- a `2B` card doesn't have CHECK PASSED, has a HEURISTIC, ANALOGY or LIMIT fidelity, or has TIGHT NO;
+- a `2B` or `VERIFIER` card is on COMPUTATIONAL, or on a branch another card already holds;
+- a `2B` or `WAVE` card has CHECK FAILED;
+- a `WAVE` card has no ANGLE;
+- a `DEADEND` card has neither TIGHT NO nor CHECK FAILED;
+- a `2B` card is chosen without a second kept branch to cross-verify it.
+
+It writes three things:
+- `run/<P>/<cell>/branches.txt`: the kept branches, in section 11's format. The matrix reads it in place of the triage.
+- An appended section in `run/<P>/<cell>/spaces.md`, the decision record:
+
+  ```
+  ## <time>, map <task>
+  | Card | Tag | Branch | Fidelity | Check | Tight | Cost | Payoff | Decision | Reason |
+  Kept branches: <branch kind, ...>
+  Handed to workers (2B / VERIFIER: the branch and its generic lens only; WAVE: the card's ANGLE, in a FRESH brief):
+  - S<n> <action> [<tag>]: <branch ..., generic lens | ANGLE>
+  ```
+
+- One `deadends.md` line per `DEADEND` card, in section 5's format.
+
+It also logs a `choose` telemetry event and prints the `pp.py task` lines to dispatch next.

@@ -606,6 +606,126 @@ def board_report_tests():
           "summary merges rows + top cells across branches, lists missing ones")
 
 
+def card(cid, tag, branch, fidelity, check_, tight, angle="Work with the Gram matrix; rank at most d is the only constraint.",
+         first="prover: bound S by the Gram entries | assumes: none | output: proof.md | stop: on a gap"):
+    return (f"### {cid} {tag}\nSPACE: A5 linear algebra\nBRANCH: {branch}\nFIDELITY: {fidelity} — direction\n"
+            f"FEEDS: bound, proof\nCHECK: {check_}\nTIGHT: {tight}\nTOOLS: rank, minors\n"
+            f"KNOWN: rank arguments used for neighbours (source link) — PROVED\n"
+            f"UNEXPLORED: minors of the Gram matrix not found in <sources searched>\nCOST: medium — why\n"
+            f"PAYOFF: high — why\nANGLE: {angle}\nFIRST TASK: {first}\n\nTranslation in full ...\n\n")
+
+
+def space_tests():
+    print("\n== Phase 2S space map + pp.py choose")
+    pp("open", "A", "C12", "C13")
+    c12 = os.path.join(S, "run", "A", "C12")
+    write(os.path.join(c12, "target.md"), "For all d >= 2, any d+2 lines satisfy S <= ...\n")
+    t1 = last_task(pp("task", "A", "C12", "--phase", "1", "--role", "prover", *STOP))
+    fake_proof(t1)
+    write(os.path.join(c12, "checker", "verify.py"), "print('VERIFIED')\n")
+    out = pp("task", "A", "C12", "--phase", "2S", "--obstacles", t1, "--checker", os.path.join(c12, "checker"), *STOP)
+    tm = last_task(out)
+    inbox = set(os.listdir(T(tm, "inbox")))
+    brief = open(T(tm, "brief.md")).read()
+    check("subagent_type=space" in out, "2S dispatches the space agent")
+    check("REGIME: LITERATURE" in brief and "PHASE: 2S" in brief and "Phase 2S. Do not solve" in brief, "2S brief block")
+    check("CARDS / RAN" in brief, "2S return asks for CARDS lines")
+    check("checklist-S.md" not in inbox and "checklist-G.md" in inbox, "space map gets Part G, never Part S")
+    check({"role-lessons.md", "checker"} <= inbox, "space map gets its lessons and the checker")
+    check(sorted(os.listdir(T(tm, "inbox", "obstacles", t1))) == ["stuck.md"], "space obstacles: stuck.md only, no proof")
+    write(os.path.join(c12, "prior-work.md"), "humans' notes on earlier work\n")
+    tp = last_task(pp("task", "A", "C12", "--phase", "2S", "--inbox", os.path.join(c12, "prior-work.md"), *STOP))
+    check("prior-work.md" in os.listdir(T(tp, "inbox")), "space map (LITERATURE) takes extra sources with --inbox")
+
+    write(T(tm, "out", "spaces.md"),
+          "# Space map\n\n"
+          + card("S1", "gram-rank", "ALGEBRAIC", "EQUIVALENT", "PASSED d=2..5, checks/gram.py", "n/a")
+          + card("S2", "pair-lp", "ANALYSIS", "RELAXATION", "PASSED d=2..4, checks/lp.py", "NO pair measure beats the bound")
+          + card("S3", "orth-graph", "DISCRETE", "RELAXATION", "PASSED d=2..6, checks/graph.py", "yes d=2..6, both extremizers")
+          + card("S4", "exponent-path", "TOPOLOGICAL", "HEURISTIC", "NOT RUN no time", "n/a")
+          + card("S5", "known-route", "NUMBER-THEORY", "EQUIVALENT", "PASSED d=2..3", "n/a",
+                 angle="Follow the argument of Smith (1999) on residues.")
+          + card("S6", "gram-minors", "ALGEBRAIC", "EQUIVALENT", "PASSED d=2..4", "n/a", first="searcher: ..."))
+    good = ["S1=2B: equivalent, check reproduced", "S3=2B: tight on both extremizers", "S2=DEADEND: not tight",
+            "S4=WAVE: unchecked", "S5=DROP: literature route", "S6=HOLD: second algebraic card"]
+    def choose(*takes, ok=True, label=None, map_=tm):
+        args = ["choose", "A", "C12", "--map", map_]
+        for t in takes:
+            args += ["--take", t]
+        return pp(*args, ok=ok, label=label)
+    choose(*good[:-1], ok=False, label="choose: every card needs a decision")
+    choose(*good[:-1], "S6=HOLD", ok=False, label="choose: a decision needs a reason")
+    choose(*good[:-1], "S6=MAYBE: hmm", ok=False, label="choose: unknown action")
+    choose("S2=2B: try it", *[g for g in good if not g.startswith("S2")], ok=False, label="choose: 2B refused on TIGHT NO")
+    choose("S4=2B: try it", *[g for g in good if not g.startswith("S4")], ok=False, label="choose: 2B refused on CHECK NOT RUN")
+    for fid in ("ANALOGY", "LIMIT"):
+        write(T(tm, "out", "spaces.md"), open(T(tm, "out", "spaces.md")).read().replace(
+            "FIDELITY: EQUIVALENT — direction\nFEEDS: bound, proof\nCHECK: PASSED d=2..3",
+            f"FIDELITY: {fid} — direction\nFEEDS: bound, proof\nCHECK: PASSED d=2..3"))
+        choose("S5=2B: try it", *[g for g in good if not g.startswith("S5")], ok=False,
+               label=f"choose: 2B refused on {fid} fidelity")
+        write(T(tm, "out", "spaces.md"), open(T(tm, "out", "spaces.md")).read().replace(
+            f"FIDELITY: {fid} — direction", "FIDELITY: EQUIVALENT — direction"))
+    body = open(T(tm, "out", "spaces.md")).read()
+    write(T(tm, "out", "spaces.md"), body.replace("ANGLE: Follow the argument of Smith (1999) on residues.\n", ""))
+    choose("S5=WAVE: try it", *[g for g in good if not g.startswith("S5")], ok=False, label="choose: WAVE refused without ANGLE")
+    write(T(tm, "out", "spaces.md"), body)
+    choose("S3=DEADEND: no", *[g for g in good if not g.startswith("S3")], ok=False, label="choose: DEADEND needs an obstruction")
+    choose("S6=2B: also", *good[:-1], ok=False, label="choose: one card per branch")
+    choose("S1=2B: alone", "S2=DROP: x", "S3=DROP: x", "S4=DROP: x", "S5=DROP: x", "S6=DROP: x", ok=False,
+           label="choose: a lone 2B branch cannot be cross-verified")
+    choose(*good, map_=t1, ok=False, label="choose: --map must be a 2S task")
+    check(not os.path.exists(os.path.join(c12, "branches.txt")), "refused choices write nothing")
+
+    out = choose(*good)
+    check(open(os.path.join(c12, "branches.txt")).read().splitlines()[1:] == ["ALGEBRAIC\tsolver", "DISCRETE\tsolver"],
+          "branches.txt holds the chosen solver branches")
+    check("[pair-lp] A5 linear algebra — NO pair measure beats the bound" in open(os.path.join(c12, "deadends.md")).read(),
+          "DEADEND card lands in deadends.md")
+    rec = open(os.path.join(c12, "spaces.md")).read()
+    check(f"map {tm}" in rec and "| S2 | pair-lp | ANALYSIS | RELAXATION | PASSED | NO |" in rec
+          and "DEADEND | not tight |" in rec, "spaces.md records every card and its decision")
+    check("- S1 2B [gram-rank]: branch ALGEBRAIC, generic lens" in rec
+          and "- S4 WAVE [exponent-path]: Work with the Gram matrix" in rec and "S6 HOLD" not in rec,
+          "spaces.md lists what each worker is handed")
+    check("--phase 2B --role prover --branch ALGEBRAIC --angle gram-rank --stop" in out
+          and "--phase WAVE --role prover --regime FRESH --angle 'exponent-path: " in out, "choose prints the dispatch lines")
+    check("--branch-note" not in out and "Smith" not in out, "no card text is printed for a blind 2B brief")
+    ev = [json.loads(ln) for ln in open(os.path.join(S, "run", "telemetry.jsonl")) if '"choose"' in ln]
+    check(ev and ev[-1]["decisions"]["S1"] == "2B" and ev[-1]["kept"] == {"ALGEBRAIC": "solver", "DISCRETE": "solver"},
+          "choose logs a telemetry event")
+
+    # the matrix reads the head's choice, even when a triage with other branches exists
+    ta = last_task(pp("task", "A", "C12", "--phase", "2A", *STOP))
+    write(T(ta, "out", "selected_branches.txt"), "ANALYSIS\tsolver\nTOPOLOGICAL\tsolver\n")
+    tb = last_task(pp("task", "A", "C12", "--phase", "2B", "--role", "prover", "--branch", "ALGEBRAIC",
+                      "--angle", "gram-rank", "--branch-note", "Work with the Gram matrix", *STOP))
+    fake_proof(tb)
+    tv = last_task(pp("task", "A", "C12", "--phase", "2", "--subject", tb, *STOP))
+    tx = last_task(pp("task", "A", "C12", "--phase", "2B-XV", "--branch", "DISCRETE", "--subject", tb, *STOP))
+    verdict(tv, "ACCEPT")
+    cross(tx, "CONFIRMED")
+    out = pp("matrix", "A", "C12")
+    m = open(os.path.join(c12, "matrix.md")).read()
+    check("CLASS: ROBUST" in out and "from head choice, branches.txt" in m and "TOPOLOGICAL" not in m,
+          "matrix uses branches.txt over the triage")
+    check('"angle": "gram-rank"' in open(os.path.join(S, "run", "telemetry.jsonl")).read(),
+          "2B task from a card carries the card tag for telemetry --by angle")
+
+    choose("S1=HOLD: later", "S2=DROP: x", "S3=DROP: x", "S4=DROP: x", "S5=DROP: x", "S6=DROP: x")
+    check(not os.path.exists(os.path.join(c12, "branches.txt")), "a choice that keeps no branch removes branches.txt")
+    check(rec.count("## ") < open(os.path.join(c12, "spaces.md")).read().count("## "), "spaces.md keeps earlier choices")
+    out = pp("matrix", "A", "C12")
+    check("from A-C12" in open(os.path.join(c12, "matrix.md")).read(), "without branches.txt the matrix falls back to triage")
+
+    c13 = os.path.join(S, "run", "A", "C13")
+    write(os.path.join(c13, "target.md"), "t\n")
+    tm13 = last_task(pp("task", "A", "C13", "--phase", "2S", *STOP))
+    pp("choose", "A", "C13", "--map", tm13, "--take", "S1=2B: x", ok=False, label="choose: map without out/spaces.md")
+    pp("task", "A", "C13", "--phase", "2B", "--role", "prover", "--checker", c13, "--branch", "ALGEBRAIC", *STOP,
+       ok=False, label="--checker still refused for provers")
+
+
 if __name__ == "__main__":
     setup()
     phase_tests()
@@ -613,5 +733,6 @@ if __name__ == "__main__":
     telemetry_library_tests()
     board_report_tests()
     branch_tests()
+    space_tests()
     print(f"\n{'ALL PASSED' if not fails else f'{len(fails)} FAILED: ' + '; '.join(fails)}")
     sys.exit(1 if fails else 0)
