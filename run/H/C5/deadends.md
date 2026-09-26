@@ -3,3 +3,5 @@
 - [multiway-cut SA, clusters] upper route: multiway-cut SA (9 runs d=9) and symmetric penalty SA never below |S|=236; no net-2 cluster with <= 6 words (exhaustive up to symmetry); best 2400 (H-C5-003)
 - [cluster-value decomposition search] upper route: recursive-product / near-parity SAT-CEGAR, 10 symmetric classes, SAT-LNS regions and SA never below |S|=236; best 2400 (H-C5-005)
 - [SAT-LNS symmetric forests] upper route: SAT on forests invariant under 9/7/5-cycles of coordinates UNSAT (no DRAT), 3-cycle classes timed out; SA/LNS plateau at |S|=236; Q_8xK_2 with perfect-code halves caps at 272 vertices; best 2400 (H-C5-004)
+- [parity/code construction] upper route: S inside one parity class (even words minus a distance-4 code) gives |S| = 256 - |code| >= 236 (A(9,4) = 20); SA on induced forests of Q_9 (7 runs) and labelling-level SA seeded at 2400 never below 236 / 2400 (H-C5-002)
+- [fixed-size forest SA] upper route: fixed-size penalty SA for a 277-vertex induced forest of Q_9 (3 runs x 3e7 moves) and C9-symmetric CEGAR (timed out) found none; lower route: counting, halving, subcube averaging, spectral and 4-cycle bounds stop at nabla(Q_9) >= 225 (H-C5-006)
