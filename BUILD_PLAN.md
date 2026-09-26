@@ -39,12 +39,12 @@ Working rules from the user's global instructions:
 
 ### B0. Problem skills from the official texts (no solving)
 
-- [ ] `problem-bulgarian-solitaire`:
+- [x] `problem-bulgarian-solitaire`:
   - fill in §1 (verbatim), §3, §4 and §5 from `sources/problem_description_bulgarian_solitaire.tex`;
   - complete the provenance table in §2; where it differs, the official text wins, and list every difference for the humans;
   - remove the "conventions only" banner.
-- [ ] `problem-disjoint-congruence-classes`: create it from `problem-template` using `sources/problem_description_disjoint_congruence_classes.tex`, verbatim, with every idea labelled as a hypothesis or angle.
-- [ ] Update the README board table and the head skill's problem list.
+- [x] `problem-disjoint-congruence-classes`: create it from `problem-template` using `sources/problem_description_disjoint_congruence_classes.tex`, verbatim, with every idea labelled as a hypothesis or angle.
+- [x] Update the README board table and the head skill's problem list.
 - **Acceptance:** every cell is present with verbatim text, points and checking mode; Part S seeds come from the statement only.
 
 ### B1. `scripts/pp.py`: phase machinery
@@ -169,8 +169,10 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 ## Open questions for the humans
 
 1. ~~Angles cell count~~ **Resolved:** the official text has 6 cells; the extract had dropped Cell 1 and changed the order. `problem-angles-lines` has been rewritten from the official text.
-2. **Disjoint congruence classes:** the official text is in `sources/problem_description_disjoint_congruence_classes.tex`. Its skill is built in step B0.
-3. **Bulgarian solitaire:** the official text is in `sources/problem_description_bulgarian_solitaire.tex`. Cross-check the conventions in step B0.
+2. ~~Disjoint congruence classes skill~~ **Built in B0.**
+3. ~~Bulgarian solitaire cross-check~~ **Done in B0;** the differences are listed in the skill's §2.
+6. **Cell 1 is missing for B and D.** Both official sources say "The statement of this cell is not visible in the provided screenshots" (B-C1 "Cyclic Partitions and Cycles", D-C1 "Three Classes"; no points given). The skills mark C1 pending, and the heads won't open it until a human pastes the verbatim text into `sources/`.
+7. **D source says "all four" but lists five certificate items.** The skill keeps all five.
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
 
