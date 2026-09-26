@@ -101,3 +101,18 @@ Edge cases, ranges and conventions that are easy to get wrong:
 ## 10. Run notes
 
 This skill is frozen once filled in; the head doesn't edit it during the run. New pitfalls, clarifications and reasons for tier changes go to `run/<P>/lessons.md`, which is copied into briefs for problem <P> only.
+
+## 11. Checklist Part S seeds and branch notes
+
+Part S seeds go into each cell's `checklist.md` Part S (referees and gate only, never blind agents). Take them **only from the statement** or from gated lower cells. Write "unknown" where the statement gives nothing.
+- S2 equality / extremal configurations: <from the statement, or "unknown">
+- S3 cases any proof must cover: <ranges, parities, degenerate inputs>
+- S5 consistency between cells: <e.g. "C4 is a special case of C3">
+- S6 small instances with known values: <only if the statement gives them>
+
+Branch notes are problem-specific hints for one Phase 2B lens. The head copies a note only into that branch's brief, and each note is an (angle), never a fact.
+- ALGEBRAIC: <angle>
+- TOPOLOGICAL: <angle>
+- ANALYSIS: <angle>
+- NUMBER-THEORY: <angle>
+- DISCRETE: <angle>

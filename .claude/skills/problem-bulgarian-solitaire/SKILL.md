@@ -110,3 +110,12 @@ The artefact format is **provisional** until the official hand-in format arrives
 ## 10. Run notes
 
 This skill is frozen during the run; the head doesn't edit it. The exception is the one-time update from the official text described at the top, which is done with the humans. New pitfalls, clarifications and problem-specific lessons go to `run/B/lessons.md`, which is copied into briefs for problem B only.
+
+## 11. Checklist Part S seeds and branch notes
+
+**PENDING the official text.** Seeds from the human-supplied conventions, to be cross-checked:
+- **S3 cases to cover:** every \(n\) in the cell's range; cyclic starts (transient 0); rank boundaries \(n=T_k\) and \(n=T_{k-1}+1\).
+- **S5 consistency:** a formula in \(k\) must match every exhaustively verified small \(n\).
+- **S2 and S6:** unknown until the cells arrive.
+
+Branch notes (angles): see the §7 angle bank, where each entry is already tagged with its branch.
