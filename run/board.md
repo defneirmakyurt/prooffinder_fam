@@ -1,4 +1,4 @@
-# Board: problem B, updated 16:11, run time 2:26 of 7:00
+# Board: problem B, updated 16:21, run time 2:36 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -21,5 +21,6 @@
 ## Decisions for the team
 - [15:58] Humans: B2 first then B3; fewer agents; no Space agent on easy cells; proofs over reports. B4/B5 workers stopped; B-C2-008/009 created, not dispatched (reserve).
 - [16:00] TOOLING (for main): pp.py task --target FILE writes the path into brief TARGET and inbox/target.md stays the full-cell target, so carved half-targets never reach the worker. Workaround: copy the carved target over inbox/target.md before dispatch. B-C3-005/006 stopped for this reason.
+- [16:21] [16:20] Session lost ~16:13 (usage limit); B-C3-007/010/011/012/013 re-dispatched under the same task ids to continue from their own out/. 2S map B-C3-001 decided: no 2B branch (S1/S2 restate live diagonal and c-sequence lineages), so Robustness stays '-' for C3.
 
 ## Obstacle notes (parked cells)
