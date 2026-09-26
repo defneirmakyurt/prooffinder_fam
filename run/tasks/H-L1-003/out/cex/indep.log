@@ -1,0 +1,10 @@
+T1 Q_3 all 40320 labellings: min P = 14, #P=13 = 0 [(14, 7104), (16, 14112), (17, 6720), (18, 4704), (19, 576), (20, 3648), (21, 1920), (22, 480), (23, 192), (24, 768), (26, 96)] 0.73s
+T2 all graphs n<=7 (n, #graphs, #P=|E|+1, #of those w/o isolated vtx): [(1, 1, 1, 0), (2, 2, 1, 1), (3, 8, 3, 3), (4, 64, 17, 17), (5, 1024, 163, 163), (6, 32768, 2481, 2481), (7, 2097152, 57731, 57731)] 31.97s
+T3 first k in [2,10^6] with k | 2^k-1: None 1.36s
+T4 Step-10 algebra d=3..3000 OK: True 0.08s
+T5 Q_4 local search (|E|+2, best P, any P<=|E|+1 seen): (34, 34, False) 2.66s
+T5 Q_5 local search (|E|+2, best P, any P<=|E|+1 seen): (82, 88, False) 2.03s
+
+real	0m38.900s
+user	0m25.437s
+sys	0m0.024s

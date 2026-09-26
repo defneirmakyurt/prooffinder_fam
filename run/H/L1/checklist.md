@@ -1,0 +1,21 @@
+# Checklist: H-L1
+
+## Part G (generic; shared with every agent, blind ones included)
+- G1 The statement proved is exactly the cell's: no extra hypotheses, no weaker inequality, the full parameter range.
+- G2 Every step justified. No unexplained "clearly", "similarly", "routine", "obviously", "by symmetry".
+- G3 Base cases, edge and degenerate cases, exceptional parameter values handled.
+- G4 Every claimed invariant is preserved; every claimed decrease is strict where strictness is needed.
+- G5 Every construction works for every claimed parameter value, not only the tested ones.
+- G6 No circularity, and no citation that is the statement itself.
+- G7 Any computation is exact or interval-based, code included, under 10 minutes; a finite check proves
+     nothing beyond its range; a computer-assisted step has a written reduction to exactly the set searched.
+- G8 Cited results separated from new work, with precise references.
+- G9 The proof says what is established and what is not.
+
+## Part S (specific; referees and the gate only, NEVER shown to blind agents)
+- S1 Exact statement: for every integer d >= 3 and every labelling f of Q_d, #uphill paths(f) >= d*2^(d-1) + 2 (= |E(Q_d)| + 2). Quantifiers: all d >= 3, all labellings. d = 1, 2 not claimed.
+- S2 Equality / tightness: the bound is attained at d = 3 (min 14 = 12 + 2: exhaustive over all 8! labellings, re-run by the head in the dry run, dryrun findings item 21) and a labelling of Q_4 with exactly 34 = 32 + 2 exists (checker-verified). Hypothesis only (not gated): equality at other d is unknown. A valid proof must therefore not yield more than 14 at d = 3 or more than 34 at d = 4.
+- S3 Cases the proof must cover: every d >= 3 (a divisibility or parity step must be shown for all d >= 3, not checked for a few); labellings with one valley and with several valleys; the full equality analysis of any intermediate bound of the form |E| + 1 (every way equality could occur must be excluded, not only the typical one); the maximum-label vertex and the valley(s) as special vertices; any number-theoretic fact (e.g. about n | 2^n - 1) proved or cited exactly.
+- S4 Known traps (problem skill §8): a lone valley counts as an uphill path (k=1); uphill paths are counted as sequences, so different routes to the same endpoint count separately; paths must start at a valley (increasing paths from non-valleys do not count); labels strictly increase and are a bijection onto 1..2^d; hand-in lists vertices in increasing label order (line 1 = label 1), strings exactly d characters with leading zeros; never trust a reported count, re-score with the accepted checker. Dry run (source: dryrun/2026-09-26-findings.md items 23, 25): two blind searches can be one algorithm (byte-identical artefacts, near-identical node counts); agreement of runs is evidence, not proof.
+- S5 Consistency: must agree with Q_3 exhaustive minimum 14 and the checker-verified Q_4 labelling with 34 (above). The organisers' Q_9 bounds 2368 <= U(Q_9) <= 2400 (statement) are consistent with d*2^(d-1)+2 = 2306 at d = 9; a proof that implied more than 2400 at d = 9, or more than 14 / 34 at d = 3 / 4, is wrong.
+- S6 Checkable instances: accepted checker (inbox/checker/ if given; library entry H-uphill-checker) counts uphill paths of any labelling file; run it on random and structured labellings of Q_3..Q_6 and confirm every count is >= d*2^(d-1)+2. Brute force over all 8! labellings of Q_3 gives minimum 14.

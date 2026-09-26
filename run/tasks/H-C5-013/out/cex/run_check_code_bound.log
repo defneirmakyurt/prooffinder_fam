@@ -1,0 +1,12 @@
+(a) K1, K2 closed forms: True
+(b) pair-sum identity over all 512 sign vectors: True
+    i=4: K1=1 K2=-4  multiplier value 1 (need >= 1)
+    i=6: K1=-3 K2=0  multiplier value 1 (need >= 1)
+    i=8: K1=-7 K2=20  multiplier value 1 (need >= 1)
+(c) certificate valid: True  bound = 64/3 -> |C| <= 21
+(d) distance-8 words pairwise at distance 2: True
+ALL OK
+
+real	0m0.187s
+user	0m0.071s
+sys	0m0.004s

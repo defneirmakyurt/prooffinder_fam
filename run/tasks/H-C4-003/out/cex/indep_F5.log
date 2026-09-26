@@ -1,0 +1,10 @@
+F_1 = 2 (brute force, all 4 subsets)
+F_2 = 3 (brute force, all 16 subsets)
+F_3 = 5 (brute force, all 256 subsets)
+F_4 = 10 (brute force, all 65536 subsets), witness [1, 2, 4, 6, 7, 8, 9, 11, 13, 14]
+Q_3 forests by size: {0: 1, 1: 8, 2: 28, 3: 56, 4: 64, 5: 32}
+Q_5, |T| = 20: quadruples fully tested = 8, pruned = 1512, acyclic found = NONE
+Q_5, |T| = 19: quadruples fully tested = 768, pruned = 247440, acyclic found = NONE
+Q_5, |T| = 18: quadruples fully tested = 32, pruned = 53369, acyclic found = [1, 2, 3, 4, 7, 8, 11, 13, 14, 16, 19, 21, 22, 25, 26, 29, 30, 31]
+elapsed 0.30 s
+real 0.318 s

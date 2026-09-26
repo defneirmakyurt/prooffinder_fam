@@ -1,0 +1,5 @@
+graphs on 7 vertices: 1044 labellings checked: 5261760 equality labellings (no isolated vtx): 139444 180.5s
+
+real	3m1.575s
+user	1m45.030s
+sys	0m0.154s

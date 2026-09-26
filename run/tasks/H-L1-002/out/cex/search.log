@@ -1,0 +1,9 @@
+1. Q_3 exhaustive (min P, #labellings with P=13): (14, 0) 0.6s
+2. all graphs n<=6, all labellings (labellings checked, equality labellings): (116693, 8034) 2.6s
+3. k !| 2^k-1, 2<=k<=10^6: True 0.9s
+4. (d-1) !| 2^(d-1)(d-2)+1, 3<=d<=3000; symbolic identities: (True, True) 0.2s
+5. hill-climb (d, |E|+2, best P found): [(3, 14, 14), (4, 34, 34), (5, 82, 88), (6, 194, 204), (7, 450, 488)] 3.5s
+
+real	0m8.786s
+user	0m5.923s
+sys	0m0.039s

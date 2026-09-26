@@ -1,0 +1,18 @@
+d=1 exhaustive: 2 labellings, all checks pass, min count=2, min slack=0
+d=2 exhaustive: 24 labellings, all checks pass, min count=5, min slack=0
+d=3 exhaustive: 40320 labellings, all checks pass, min count=14, min slack=0
+d=1 structured (count,bound): {'lex': (2, 2), 'revlex': (2, 2), 'weight': (2, 2), 'gray': (2, 2)}
+d=2 structured (count,bound): {'lex': (5, 5), 'revlex': (5, 5), 'weight': (5, 5), 'gray': (5, 5)}
+d=3 structured (count,bound): {'lex': (16, 16), 'revlex': (16, 16), 'weight': (16, 16), 'gray': (21, 16)}
+d=4 structured (count,bound): {'lex': (65, 49), 'revlex': (65, 49), 'weight': (65, 49), 'gray': (278, 49)}
+d=5 structured (count,bound): {'lex': (326, 136), 'revlex': (326, 136), 'weight': (326, 136), 'gray': (43435, 136)}
+d=6 structured (count,bound): {'lex': (1957, 349), 'revlex': (1957, 349), 'weight': (1957, 349), 'gray': (1046774430, 349)}
+d=7 structured (count,bound): {'lex': (13700, 848), 'revlex': (13700, 848), 'weight': (13700, 848), 'gray': (607893105039973959, 848)}
+d=8 structured (count,bound): {'lex': (109601, 1985), 'revlex': (109601, 1985), 'weight': (109601, 1985), 'gray': (205010184278737800544294388950417608, 1985)}
+d=9 structured (count,bound): {'lex': (986410, 4528), 'revlex': (986410, 4528), 'weight': (986410, 4528), 'gray': (23316957069052323456087333502536009372979405716649687635065979545422635, 4528)}
+adversarial local search, min slack (count - bound) found per d: {4: 0, 5: 0, 6: 30, 7: 212}
+elapsed 8.4 s
+
+real	0m8.379s
+user	0m8.283s
+sys	0m0.012s

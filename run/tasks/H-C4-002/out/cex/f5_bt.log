@@ -1,0 +1,15 @@
+d=5: F_d = 18, nodes=11188945, witness: 0 1 2 4 7 8 11 13 14 15 16 19 21 22 23 25 26 28
+
+real	0m0.143s
+user	0m0.141s
+sys	0m0.000s
+d=5: no induced forest with more than 18 vertices (nodes=11188945)
+
+real	0m0.142s
+user	0m0.142s
+sys	0m0.000s
+d=5: F_d = 18, nodes=11188945, witness: 0 1 2 4 7 8 11 13 14 15 16 19 21 22 23 25 26 28
+
+real	0m0.154s
+user	0m0.139s
+sys	0m0.004s

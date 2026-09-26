@@ -1,0 +1,12 @@
+== checker Q7
+VERIFIED 464
+real 0.030 s
+== checker Q8
+VERIFIED 1040
+real 0.022 s
+== --d 7
+VERIFIED 464
+real 0.021 s
+== --d 8
+VERIFIED 1040
+real 0.022 s
