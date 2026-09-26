@@ -7,7 +7,7 @@ description: Problem skill for "Angles between lines" (A), Fejes Tóth's 1959 co
 
 Letter code: `A` (cell ids `A-C1` … `A-C5`). Ledger: `run/A/`.
 
-> **Extraction note:** `extracted_problems.md` lists **5** cells for this column, while the format promises 6. Numbering here follows the order in the file. Check the original for a missing cell before relying on the numbering.
+> **Extraction note:** `sources/practice-problems.md` lists **5** cells for this column, while the format promises 6. Numbering here follows the order in the file. Check the original for a missing cell before relying on the numbering.
 
 ## 1. Verbatim statement
 
@@ -170,6 +170,6 @@ Lower cells are the way in: C1's lemma is placed as a tool, C2–C4 are the \(k=
 - Computation: code included, < 10 min, exact or interval arithmetic or a bounded numerical error.
 - Say clearly which cells are solved and which are partial.
 
-## 10. Run notes (append during the run)
+## 10. Run notes
 
-- (none yet)
+This skill is frozen during the run; the head doesn't edit it. New pitfalls, clarifications and problem-specific lessons go to `run/A/lessons.md`, which is copied into briefs for problem A only.
