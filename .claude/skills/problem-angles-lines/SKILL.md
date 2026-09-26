@@ -173,3 +173,28 @@ Lower cells are the way in: C1's lemma is placed as a tool, C2–C4 are the \(k=
 ## 10. Run notes
 
 This skill is frozen during the run; the head doesn't edit it. New pitfalls, clarifications and problem-specific lessons go to `run/A/lessons.md`, which is copied into briefs for problem A only.
+
+## 11. Checklist Part S seeds and branch notes
+
+Part S seeds (from the statement only; referees and gate only):
+- **S2 equality configuration.**
+  - C2–C5: the Setting names the conjectured optimum, which is \(d\) mutually orthogonal lines, each used \(\lfloor N/d\rfloor\) or \(\lceil N/d\rceil\) times, attaining the bound.
+  - C1: no equality configuration is given; write "unknown" unless a gated result supplies one.
+- **S3 cases to cover.**
+  - C1: every \(m\ge2\), vectors in \(\mathbb{R}^{m-1}\).
+  - C2: every \(d\ge1\).
+  - C3: every \(d\ge2\).
+  - C4: both instances.
+  - Everywhere: repetitions allowed, and lines rather than vectors (signs irrelevant).
+- **S5 consistency.**
+  - C2 and C3 are the \(k=1,2\) cases of the Setting's \(N=d+k\) formula.
+  - C4 is C3 at \(d=3,4\).
+  - For \(N=d+k\) with \(0\le k\le d\), C5's \(M(N,d)\) equals \(k\) (arithmetic from the definitions), so C5 must agree with C2–C4.
+- **S6 checkable values:** the Setting's value \((\binom N2-k)\pi/2\) at the orthogonal-with-repeats configuration.
+
+Branch notes (angles, each only into its own 2B lens):
+- ALGEBRAIC (angle): the Gram matrix of spanning unit vectors, which is PSD with rank ≤ d.
+- TOPOLOGICAL (angle): lines through the origin are points of \(\mathbb{RP}^{d-1}\); the configuration space is compact.
+- ANALYSIS (angle): behaviour of \(t\mapsto\arccos|t|\); perturbation at a maximiser.
+- NUMBER-THEORY (angle): the rounding \(N=qd+s\) in \(M(N,d)\).
+- DISCRETE (angle): the orthogonality graph of the lines; C1's hypothesis is a chain.
