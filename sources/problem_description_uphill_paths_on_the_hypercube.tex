@@ -38,7 +38,7 @@ possible. IMO 2022 settled the grid; the cube is still open.
 Let $G$ be a finite simple graph on $n$ vertices. A \emph{labelling}
 of $G$ is a bijection
 \[
-  f \colon V(G) \to \{1, 2, \ldots, n\}.
+  f \colon V(G) \longrightarrow \{1, 2, \ldots, n\}.
 \]
 \end{definition}
 
@@ -48,8 +48,15 @@ Fix a labelling.
 \leavevmode
 \begin{itemize}[leftmargin=*]
   \item A vertex $v$ is a \emph{valley} if every neighbour $w$ of $v$
-    has $f(w) > f(v)$. An isolated vertex counts as a valley.
-  \item An \emph{uphill path} is a sequence $(v_1, v_2, \ldots, v_k)$
+    has
+    \[
+      f(w) > f(v).
+    \]
+    An isolated vertex counts as a valley.
+  \item An \emph{uphill path} is a sequence
+    \[
+      (v_1, v_2, \ldots, v_k)
+    \]
     with $k \geq 1$ in which $v_1$ is a valley, $v_i$ and $v_{i+1}$
     are adjacent for each $i$, and
     \[
@@ -74,9 +81,12 @@ answer is
 
 \begin{definition}[Hypercube]
 This column asks about the $d$-dimensional hypercube $Q_d$. Its
-vertex set is $\{0, 1\}^d$, and two vertices are adjacent when they
-differ in exactly one coordinate. $Q_d$ has $2^d$ vertices and
-$d \cdot 2^{d-1}$ edges.
+vertex set is
+\[
+  \{0, 1\}^d,
+\]
+and two vertices are adjacent when they differ in exactly one
+coordinate. $Q_d$ has $2^d$ vertices and $d \cdot 2^{d-1}$ edges.
 \end{definition}
 
 % ===================================================================
@@ -84,17 +94,19 @@ $d \cdot 2^{d-1}$ edges.
 % ===================================================================
 
 \begin{itemize}[leftmargin=*]
-  \item \textbf{Cells 1 to 4.}
+  \item \textbf{C1 to C4.}
     Hand in the values, and for each value an explicit labelling that
     attains it as a list of the $2^d$ vertices in increasing label
-    order, written as $0/1$ strings. These cells are marked correct
-    on the values alone, but a value with no labelling behind it will
-    not survive the later cells, which build on the construction.
-  \item \textbf{Cell 5.}
+    order, written as $0/1$ strings.
+
+    These cells are marked correct on the values alone, but a value
+    with no labelling behind it will not survive the later cells,
+    which build on the construction.
+  \item \textbf{C5.}
     Hand in either a labelling of $Q_9$ in the same format, whose
     uphill paths will be counted mechanically, or a proof of the
     lower bound.
-  \item \textbf{Cell 6.}
+  \item \textbf{C6.}
     Hand in all three of:
     \begin{enumerate}[leftmargin=*]
       \item the value;
@@ -117,10 +129,9 @@ $d \cdot 2^{d-1}$ edges.
 \textbf{Checked instantly.}
 
 The two smallest interesting cubes: $Q_3$ has $8$ vertices and $12$
-edges, $Q_4$ has $16$ vertices and $32$ edges. Determine
-\[
-  U(Q_3) \qquad \text{and} \qquad U(Q_4).
-\]
+edges, $Q_4$ has $16$ vertices and $32$ edges.
+
+Determine $U(Q_3)$ and $U(Q_4)$.
 
 % ===================================================================
 \cell{2}{$U(Q_5)$}{2 points}
@@ -145,10 +156,9 @@ $Q_6$ has $64$ vertices and $192$ edges. Determine $U(Q_6)$.
 \textbf{Checked instantly.}
 
 Two larger cubes: $Q_7$ has $128$ vertices and $448$ edges, $Q_8$ has
-$256$ vertices and $1024$ edges. Determine
-\[
-  U(Q_7) \qquad \text{and} \qquad U(Q_8).
-\]
+$256$ vertices and $1024$ edges.
+
+Determine $U(Q_7)$ and $U(Q_8)$.
 
 % ===================================================================
 \cell{5}{Bounds for $U(Q_9)$}{8 points}
@@ -161,11 +171,13 @@ the organisers are
 \[
   2368 \leq U(Q_9) \leq 2400;
 \]
-the lower bound is unpublished. Improve either one:
-\begin{itemize}[leftmargin=*]
-  \item prove that $U(Q_9) \geq 2369$, or
-  \item exhibit a labelling of $Q_9$ with at most $2399$ uphill paths.
-\end{itemize}
+the lower bound is unpublished.
+
+Improve either one: prove that
+\[
+  U(Q_9) \geq 2369,
+\]
+or exhibit a labelling of $Q_9$ with at most $2399$ uphill paths.
 
 % ===================================================================
 \cell{6}{$U(Q_9)$}{13 points}
