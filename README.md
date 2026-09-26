@@ -49,8 +49,8 @@ The system is built around one idea: **nothing reaches the board as established 
 |---|---|---|
 | `angles_between_lines` | A: Angles between lines | `problem-angles-lines` |
 | `uphill_paths_on_the_hypercube` | H: Uphill paths on the hypercube | `problem-hypercube-uphill` |
-| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` (conventions only until the official text arrives) |
-| `Disjoint_congruence_classes` | D: Disjoint congruence classes | none yet: built from the pasted verbatim text, never from the title |
+| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` (official text in `sources/`; skill update is build step B0) |
+| `Disjoint_congruence_classes` | D: Disjoint congruence classes | none yet: official text in `sources/`; skill is built in build step B0 |
 
 **One teammate, one branch, one head.** The shared tooling (skills, agents, scripts) lives on `main` and is merged into every problem branch. Each teammate:
 

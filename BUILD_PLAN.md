@@ -37,6 +37,16 @@ Working rules from the user's global instructions:
 
 ## To build (in order)
 
+### B0. Problem skills from the official texts (no solving)
+
+- [ ] `problem-bulgarian-solitaire`:
+  - fill in §1 (verbatim), §3, §4 and §5 from `sources/problem_description_bulgarian_solitaire.tex`;
+  - complete the provenance table in §2; where it differs, the official text wins, and list every difference for the humans;
+  - remove the "conventions only" banner.
+- [ ] `problem-disjoint-congruence-classes`: create it from `problem-template` using `sources/problem_description_disjoint_congruence_classes.tex`, verbatim, with every idea labelled as a hypothesis or angle.
+- [ ] Update the README board table and the head skill's problem list.
+- **Acceptance:** every cell is present with verbatim text, points and checking mode; Part S seeds come from the statement only.
+
 ### B1. `scripts/pp.py`: phase machinery
 
 - [ ] **`ROLES` and regimes**, matching the head skill:
@@ -114,8 +124,12 @@ Working rules from the user's global instructions:
 
 ### B6. Problem branches (after B1–B5 are committed on `main`)
 
-- [ ] For each of the 4 branches: create a local tracking branch, merge `main`, add `run/PROBLEM` (letter + skill slug, e.g. `A problem-angles-lines`; `D` has no skill yet), and commit.
-- [ ] Show the user the result. **Push only after their OK** (`main` is also 1+ commits ahead of origin).
+- [x] **Done 2026-09-26, pre-build:**
+  - `main` merged into all 4 branches;
+  - each branch's `.tex` moved to `sources/`;
+  - `run/PROBLEM` added;
+  - pushed with the user's OK.
+- [ ] **After the build:** merge `main` into all 4 branches again, and push. The user has authorised pushes for syncing.
 
 ### B7. Restart Claude Code
 
@@ -154,9 +168,9 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 
 ## Open questions for the humans
 
-1. The extracted Angles column has **5 cells**, not 6. Check the original.
-2. **Disjoint congruence classes:** paste the verbatim text so its skill can be built.
-3. **Bulgarian solitaire:** paste the official text; the conventions need cross-checking.
+1. ~~Angles cell count~~ **Resolved:** the official text has 6 cells; the extract had dropped Cell 1 and changed the order. `problem-angles-lines` has been rewritten from the official text.
+2. **Disjoint congruence classes:** the official text is in `sources/problem_description_disjoint_congruence_classes.tex`. Its skill is built in step B0.
+3. **Bulgarian solitaire:** the official text is in `sources/problem_description_bulgarian_solitaire.tex`. Cross-check the conventions in step B0.
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
 
