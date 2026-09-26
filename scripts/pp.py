@@ -25,6 +25,10 @@ ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 RUN = os.path.join(ROOT, "run")
 TASKS = os.path.join(RUN, "tasks")
 REFERENCE = os.path.join(ROOT, ".claude", "skills", "proof-pursuit-head", "references", "briefs-and-ledger.md")
+LESSONS = os.path.join(ROOT, ".claude", "lessons")
+ROLE_LESSONS_ONLY = {"referee", "checker-builder"}
+STATEMENT_RULE = ("Work from the exact statement in TARGET. Preserve every definition, quantifier, parameter range "
+                  "and hand-in requirement. Never infer the question from a cell's title.")
 
 ROLES = {
     "scout": {"CLEAN-ROOM"},
@@ -112,6 +116,24 @@ def copy_into(src, dest_dir):
     return os.path.relpath(dest, dest_dir)
 
 
+def lessons_version(path):
+    with open(path) as fh:
+        m = re.match(r"version:\s*(\S+)", fh.readline().strip())
+    return m.group(1) if m else "?"
+
+
+def copy_lessons(p, role, inbox):
+    sources = [(os.path.join(LESSONS, f"{role}.md"), "role-lessons.md")]
+    if role not in ROLE_LESSONS_ONLY:
+        sources.append((os.path.join(RUN, p, "lessons.md"), "problem-lessons.md"))
+    placed = []
+    for src, name in sources:
+        if os.path.isfile(src):
+            shutil.copy2(src, os.path.join(inbox, name))
+            placed.append(f"{name} v{lessons_version(src)}")
+    return placed
+
+
 def cmd_task(a):
     role, regime = a.role, a.regime.upper()
     if regime not in ROLES[role]:
@@ -127,6 +149,7 @@ def cmd_task(a):
     os.makedirs(inbox)
     os.makedirs(out)
     placed = [copy_into(src, inbox) for src in a.inbox]
+    lessons = copy_lessons(a.P, role, inbox)
 
     rules = "; ".join([DEFAULT_RULES] + a.rules)
     lines = [
@@ -135,6 +158,10 @@ def cmd_task(a):
         f"READ ONLY: run/tasks/{task_id}/ (this brief + inbox/). Do not open anything else under run/.",
         f"WRITE ONLY: run/tasks/{task_id}/out/",
         f"TARGET: {a.target}",
+        f"STATEMENT RULE: {STATEMENT_RULE}",
+        f"ASSUMPTIONS: {a.assumptions}",
+        f"STOPPING CONDITION: {a.stop}",
+        f"LESSONS: {', '.join(lessons) if lessons else 'none'}",
         f"RULES: {rules}",
         "RETURN: only the report block from your agent instructions, at most 200 words"
         + (" plus a LADDER of at most 10 lines." if role in ("prover", "searcher", "breaker") else "."),
@@ -316,6 +343,8 @@ def main():
     s.add_argument("--regime", required=True)
     s.add_argument("--target", required=True)
     s.add_argument("--timebox", type=int, default=30)
+    s.add_argument("--stop", required=True, help="stopping condition for the worker")
+    s.add_argument("--assumptions", default="none beyond the statement")
     s.add_argument("--rules", action="append", default=[], help="extra rule; repeatable")
     s.add_argument("--angle")
     s.add_argument("--forbid", action="append", default=[], help="forbidden-approach line; repeatable")
