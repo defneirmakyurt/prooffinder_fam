@@ -5,3 +5,4 @@
 {"event": "task", "at": "2026-09-26T14:50:16", "run_time": "0:50", "task": "A-C5-D2-002", "cell": "A-C5-D2", "phase": "2", "role": "referee", "regime": "CLEAN-ROOM", "mode": "VERIFY", "branch": "-", "subject": "A-C5-D2-001", "angle": "-", "lessons": {"role": "0", "problem": "-"}, "lib": [], "timebox": 30}
 {"event": "task", "at": "2026-09-26T14:50:16", "run_time": "0:50", "task": "A-C5-D2-003", "cell": "A-C5-D2", "phase": "2", "role": "referee", "regime": "CLEAN-ROOM", "mode": "VERIFY", "branch": "-", "subject": "A-C5-D2-001", "angle": "-", "lessons": {"role": "0", "problem": "-"}, "lib": [], "timebox": 30}
 {"event": "gate", "at": "2026-09-26T14:50:37", "run_time": "0:50", "task": "A-C5-001", "cell": "A-C5", "decision": "GAP", "accepts": []}
+{"event": "gate", "at": "2026-09-26T14:54:50", "run_time": "0:54", "task": "A-C5-D2-001", "cell": "A-C5-D2", "decision": "VALID", "accepts": ["A-C5-D2-002", "A-C5-D2-003"]}
