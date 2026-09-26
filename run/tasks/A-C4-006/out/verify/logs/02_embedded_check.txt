@@ -1,0 +1,8 @@
+embedded proof sha256: 66449ec26e2a5bfc1f0c5fc00d2980aeb1dd3c1d791364a3a80af3b8ab289518
+proof.md       sha256: 66449ec26e2a5bfc1f0c5fc00d2980aeb1dd3c1d791364a3a80af3b8ab289518
+embedded == proof.md: OK
+embedded == pinned hash: OK
+real 0.02
+user 0.00
+sys 0.00
+exit=0

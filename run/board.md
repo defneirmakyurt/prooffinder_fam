@@ -1,11 +1,11 @@
-# Board: problem A, updated 16:15, run time 1:01 of 7:00
+# Board: problem A, updated 16:19, run time 1:06 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
 | A-C1 | 1 | T0/T1: d=2 fixed, all N, short argument likely | GATE | SOLVED | PROVED | – | A-C1-001 proof, gate VALID (004 VERIFY + 006 GATE) | cut-averaging | done: final_report.md filed after AUDIT PASS | 0:00 |
 | A-C2 | 2 | T1 (drill: full pipeline forced): 2 pts, a genuine lemma, all m | 5 | SOLVED | PROVED | ROBUST | A-C2-002 proof, gate VALID pre-2B and re-gated VALID with matrix ROBUST (005+006; XV 012 ALG + 013 ANA CONFIRMED) | tridiagonal-minors (001, 010 ALG); project-out-induction (002); gram-schmidt residuals (003 1L, 015 2C); trig AM-GM weights (011 ANA) | done: final_report.md (audit PASS); submission.md packaged (020) for the humans to read and submit | 0:00 |
 | A-C3 | 3 | T1 (skill guess: first case in every dimension; 3 pts so 2A-2C run) | 5 | SOLVED | PROVED | – | A-C3-002 proof, gate VALID (006 VERIFY + 007 GATE ACCEPT), pinned in accepted/ | arcsin-sum Gram nonsingularity (002, VALID); extremal minimiser sliding (001, unrefereed reserve) | done: submission.md packaged (008); humans read before submitting | 0 |
-| A-C4 | 5 | T2 (concrete d=3,4; must be rigorous); lean track per humans | GATE | SOLVED | PROVED | – | A-C4-003 proof (blind, no assumptions), gate VALID (004 VERIFY + 005 GATE ACCEPT), pinned in accepted/ | extremal orthogonality-maximizing (003, under gate; VERIFY ACCEPT); orthogonality-maximal + cycle lemmas (002, reserve); 001 stopped (cost) | Scribe SUBMISSION (006) packaging; humans read before submitting | 0 |
+| A-C4 | 5 | T2 (concrete d=3,4; must be rigorous); lean track per humans | 5 | SOLVED | PROVED | – | A-C4-003 proof (blind, no assumptions), gate VALID (004 VERIFY + 005 GATE ACCEPT), pinned in accepted/ | extremal orthogonality-maximizing (003, under gate; VERIFY ACCEPT); orthogonality-maximal + cycle lemmas (002, reserve); 001 stopped (cost) | done: submission.md packaged (006); humans read before submitting | 0 |
 
 ## Partial cells: established / remaining gap
 
