@@ -1,4 +1,4 @@
-# Board: problem H, updated 14:54, run time 1:46 of 7:00
+# Board: problem H, updated 15:02, run time 1:54 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -6,7 +6,7 @@
 | H-C2 | 2 | T1: 32 vertices, local search feasible; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 88 (gated H-C4-001 claim C10, d=5; both referees ACCEPT C10) | – | 88 (H-C2-001, H-C2-002, H-C5-002) | excess-DP (H-C2-001), decycling (H-C2-002) | none | 0:35 |
 | H-C3 | 3 | T1: 64 vertices; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 204 (gated H-C4-001 claim C10, d=6; both referees ACCEPT C10) | – | 204 (H-C3-001, H-C2-002, H-C5-002) | forest-peak exhaustive (H-C3-001) | none | 0:35 |
 | H-C4 | 5 | T2: two values, Q8 256 vertices; /E/+2 pattern may break | submitted (portal: correct); gated | SOLVED | PROVED 464, 1040 (gate VALID: H-C4-002 + H-C4-003 ACCEPT) | – | Q7 464, Q8 1040 (H-C4-001, H-C2-002, H-C5-002) | induced-forest bound, doubling (H-C4-001) | none | 0:35 |
-| H-C5 | 8 | T2: scored construction, beat 2400 | WAVE 3 (humans: solve C5) | PARTIAL | BEST-FOUND 2400 (= organisers; no improvement); LB unconditional 2312 | – | 2400 (5 lineages) | CP-SAT contrarian (H-C5-008), clusters merged (H-C5-009), SAT lower bound (H-C5-010), parity-split repair (H-C5-011); literature H-C5-012 | wave 3: CP-SAT contrarian, cluster enumeration, SAT lower bound, R9 repair, Pike 2003 | 1:17 |
+| H-C5 | 8 | T2: scored construction, beat 2400 | stopped by humans (run ~1:57) | PARTIAL | BEST-FOUND 2400 (= organisers; no improvement); LB unconditional 2312 | – | 2400 (5 lineages) | all stopped | none | 1:17 |
 | H-C6 | 13 | T3: open; stretch only | - | NOT ATTEMPTED | OPEN | – | – | none | none (C5 not reached) | 0:00 |
 | H-L1 | 0 (lemma for C1-C4) | T1: written sketch exists (dry-run H-C1-006 Remark) | gated | SOLVED | PROVED (gate VALID 13:21: H-L1-002 + H-L1-003 ACCEPT) | – | U(Q_d) >= d*2^(d-1)+2 for all d >= 3 (accepted/proof.md) | edge-count+divisibility | use as gated ASSUMPTION for C2-C5 (non-blind briefs) | 0:14 |
 
@@ -31,6 +31,7 @@
 - [13:42] Humans asked for speed, proofs only (run ~0:50): Phase 5 reports/audits, triage and cross-verification skipped for C1-C4; gate = two referees per proof. C5 lower route opened: prover H-C5-007 (EXPLOIT on H-C5-002's lower-route notes).
 - [14:02] Humans chose option 1 for C5 (run ~1:10): let the running workers (H-C5-001, -003, -004, -005, -006) finish; no new C5 dispatches. Stop C5 if nothing scores <= 2399 or proves >= 2369.
 - [14:30] Humans: 'solve C5' (run ~1:20). C5 reopened with wave 3, only approaches not yet tried: CP-SAT exact model with implied subcube constraints (CONTRARIAN, dead ends forbidden), exhaustive cluster enumeration (merged cluster lineages), SAT lower bound with DRAT (FRESH), repair of H-C5-007's R9, and a literature pass for Pike 2003's full text and any non-independent minimum decycling set. Gated Lemma A given as ASSUMPTION. ortools installed in the venv.
+- [15:02] Humans: 'stop all' (run ~1:57). Stopped H-C5-008, -009, -010, -011 (wave 3), referees H-C5-013/-014 (H-C5-007 partial proof stays UNREFEREED), scribe H-C5-015. No worker processes left running. C5 hand-in = run/H/handin/C5_partial_plain.txt + Q9_2400.txt.
 
 ## Obstacle notes (parked cells)
 - [14:01] H-C5 lower route: TRIED: parity split + clique cover (H-C5-007). STALLS AT: R9, tau(G_2[F∩E]) <= z+2 for 4 <= z <= 116. PROVED (unrefereed): forests missing <= 3 vertices of one parity have <= 279 vertices, so such labellings have >= 2376 paths. Unconditional LB still 2312. KNOWN: 225/226 <= nabla(Q_9) <= 236 (Pike 2003, Hertz 2021; H-C5-006).

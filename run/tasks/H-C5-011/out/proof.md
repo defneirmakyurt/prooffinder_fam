@@ -2,8 +2,8 @@ Statement proved (PARTIAL, not the cell): every induced forest F of Q_9 with |O 
 
 Reading of the brief: none ambiguous. Definitions (labelling, valley, uphill path, Q_9) exactly as in
 inbox/statement.md. Only Lemma A (inbox/gated-lemmaA.md) is assumed; every other step is proved here, or is a
-finite exact computation (Step 12) whose reduction is written out in Steps 10-12. Steps 1-8 re-prove, in
-self-contained form, the parts of the subject H-C5-007 that are re-used; Steps 9-15 are new.
+finite exact computation (Step 12) whose reduction is written out in Steps 10-12. Steps 2-7 re-prove, in
+self-contained form, the parts of the subject H-C5-007 that are re-used; Steps 8-15 are new.
 
 ## Notation
 V = {0,1}^9; E / O = vertices of even / odd Hamming weight, |E| = |O| = 256. e_j = j-th unit vector,
@@ -142,12 +142,14 @@ What it does, and why it covers every such C:
        cycle: impossible. So H is acyclic, has <= t - 1 edges, and at least C(t,2) - (t-1) = (t-1)(t-2)/2 pairs {i,j}
        of D give distinct vertices o + e_i + e_j of C at distance 2 from o; hence (t-1)(t-2)/2 <= c2(o).
        Bound 2 is sum_{o in C} (min(cap(o), |N(o) n (M' u later)|) - 1)^+. The subtree is skipped iff bound 1 or
-       bound 2 is <= k. (A formula check for cap over c2 = 0..39 is in RAN.)
+       bound 2 is <= k.
      Output for k = 1..5: "clusters with tau*(C) > k+0: 0" for every k, i.e. tau*(C) <= |C| for every class.
  (d) Self-tests (not needed for the proof): with threshold k - 1 (second argument -1) the program finds C-valid
      sets with tau = k for 1, 1, 2, 5 of the 1, 1, 2, 8 classes of sizes 1..4; the exact unpruned evaluator (second
      argument 99) gives the histogram of tau*(C) - k: {0:1}, {0:1}, {0:2}, {-1:3, 0:5} for k = 1..4, consistent with
-     both pruned runs.
+     both pruned runs; code/crosscheck_validity.py rebuilds, for k <= 3, the whole C-valid family with a from-scratch
+     union-find on the explicit graph L(C, M'), finds it identical to the family produced by the incremental test,
+     and recomputes max tau by brute-force minimum vertex cover (max tau - k = 0 for all classes).
 By Step 11 and (a), (b), every connected set C of <= 5 odd vertices is equivalent to a checked representative,
 so tau*(C) <= |C| for all of them.
 
@@ -184,3 +186,14 @@ R9 is open for 6 <= z <= 116. Remarks on the gap:
    <= 5 vertices of one parity). This strengthens the subject's z <= 3 case from 279 to 277 and extends it to z <= 5.
  * Not established: R9 for 6 <= z <= 116; F_9 <= 279; U(Q_9) >= 2369. The strongest unconditional lower bound
    available here remains U(Q_9) >= 2312 (edge counting, as in the subject).
+
+## Computations (all stdlib Python, exact; run from out/code/)
+ * python3 cluster_tau.py 5 -> k=1..5: classes 1, 1, 2, 8, 31; "clusters with tau*(C) > k+0: 0" for every k.
+   COMPLETED, real 2m32.5s (user 1m43s). This is the only computation Step 12 rests on.
+ * python3 cluster_tau.py 4 -1 -> violations 1, 1, 2, 5 (self-test). COMPLETED, 1.9 s.
+ * python3 cluster_tau.py 4 99 -> exact histograms {0:1}, {0:1}, {0:2}, {-1:3, 0:5}. COMPLETED, 11.3 s.
+ * python3 crosscheck_validity.py 3 -> families identical, brute-force max tau - k = 0. COMPLETED, 2.7 s.
+ * python3 check_code_bound.py -> ALL OK. COMPLETED, 0.24 s.
+ * python3 cluster_tau.py 6 0 prog -> k <= 5 as above, then 19 of 268 size-6 keys checked (0 violations) when the
+   run was stopped after about 3.7 minutes (projected > 1 hour). PARTIAL; not used.
+ * sa_forest (C, exploratory): seeds 2, 3, 4, 2.5e7 moves each, best 276 each, about 92 s each. Not used.
