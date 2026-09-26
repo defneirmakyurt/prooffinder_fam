@@ -4,8 +4,6 @@ A Claude Code setup for the *Proof Pursuit* hackathon track: 4 problems, each a 
 
 The system is built around one idea: **nothing reaches the board as established until an independent check says so.** A *head* agent runs each problem. It never does the mathematics itself. It dispatches isolated *worker* subagents, controls exactly what each one may see, stores everything on disk, runs the tests and gates, and writes the reports. The humans read everything and decide what gets submitted.
 
-> **Build status:** the design below is complete and documented. Part of the tooling is still being built: the phase commands of `pp.py`, and the `literature`, `triage` and `auditor` agents. See [BUILD_PLAN.md](BUILD_PLAN.md) for what's done and what's left.
-
 ---
 
 ## 1. The whole process at a glance
@@ -49,8 +47,8 @@ The system is built around one idea: **nothing reaches the board as established 
 |---|---|---|
 | `angles_between_lines` | A: Angles between lines | `problem-angles-lines` |
 | `uphill_paths_on_the_hypercube` | H: Uphill paths on the hypercube | `problem-hypercube-uphill` |
-| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` (official text in `sources/`; skill update is build step B0) |
-| `Disjoint_congruence_classes` | D: Disjoint congruence classes | none yet: official text in `sources/`; skill is built in build step B0 |
+| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` |
+| `Disjoint_congruence_classes` | D: Disjoint congruence classes | `problem-disjoint-congruence-classes` (C1 text missing from the official source) |
 
 **One teammate, one branch, one head.** The shared tooling (skills, agents, scripts) lives on `main` and is merged into every problem branch. Each teammate:
 
@@ -109,10 +107,10 @@ Cross-problem decisions (which problems get the most effort, which two to go dee
 | Breaker | Refute targets early; ADVERSARY mode in Phase 2C | same |
 | Checker-builder | Exact stdlib-only checker from the statement alone | same |
 | Referee | VERIFY / GATE (7-step protocol) and CROSS (branch lens) | Read, Write (`verdict.md`, `cex/` only), Glob, Grep, Bash |
-| Literature *(to build)* | SOLVE (Phase 1L) and ANALYST (Phase 3); the only role with web access | Read, Write, Glob, Bash, WebSearch, WebFetch |
-| Triage *(to build)* | Branch relevance for Phase 2A; never solves | Read, Write, Glob |
+| Literature | SOLVE (Phase 1L) and ANALYST (Phase 3); the only role with web access | Read, Write, Glob, Grep, Bash, WebSearch, WebFetch |
+| Triage | Branch relevance for Phase 2A; never solves | Read, Write, Glob |
 | Scribe | SUBMISSION (hand-in) and REPORT (`final_report.md`) | Read, Write, Edit, Glob, Bash |
-| Auditor *(to build)* | Checks every citation in a final report | Read, Write, Glob, Grep |
+| Auditor | Checks every citation in a final report | Read, Write, Glob, Grep |
 
 Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitClaudeMd: true`, so personal CLAUDE.md rules don't leak in.
 
@@ -220,8 +218,9 @@ A result is never called "new". The wording is always "not found in <sources sea
 - **2026-09-26, initial build:** head skill; seven worker agents with the isolation guard; `pp.py`, envcheck and the `run/` skeleton; problem template and the two practice problem skills.
 - **2026-09-26, verification hardening:** statement rule, assumptions and stopping condition in briefs; `RAN` field; cell statuses; 7-item referee checklist; gate rules for extremal values, computer-assisted proofs and novelty; lessons layer; Bulgarian solitaire skill (conventions only).
 - **2026-09-26, synthesis:** `pp.py report` (per-problem report and SUMMARY), obstacle note format, problem lessons file.
-- **2026-09-26, merged phase pipeline (documented; build in progress):**
+- **2026-09-26, merged phase pipeline:**
   - Phases 0–5 from the team's pipeline spec merged into the existing design: checklist Part G/S, blind solvers, literature solver, branch triage, perspective solvers with an agreement matrix, adversary, literature analyst, final report with audit.
   - One head per problem branch.
   - `SEARCH-FOUND-NOTHING` and the extra cell statuses.
   - A two-referee gate with a 7-step protocol.
+- **2026-09-26, pipeline build:** skills for Bulgarian solitaire (official text) and Disjoint congruence classes; `pp.py` phase machinery (`task --phase`, inbox rules, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`); referee `out/cex/` in the guard; agents updated, `literature`, `triage` and `auditor` added, `scout` removed.

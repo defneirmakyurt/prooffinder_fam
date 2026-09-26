@@ -13,8 +13,8 @@ HOW TO FILL THIS IN (head only; timebox ~10 minutes; delete this comment when do
 - Copy text VERBATIM wherever the section says so. Don't paraphrase definitions.
 - Don't solve anything. Every mathematical idea in the Ladders or the Angle bank is labelled
   (hypothesis) or (angle), never stated as a fact.
-- Nothing about the literature goes in as fact. That is the Scout's job at run time.
-  Scout references go in only as "unverified" until a human or a second scout has opened them.
+- Nothing about the literature goes in as fact. That is the Literature agent's job at run time.
+  Literature references go in only as "unverified" until a human or a second Literature agent has opened them.
 - Workers never read this file. The head copies the relevant parts into briefs.
 - Build it only from verbatim problem text a human has provided. Never infer the problem from its title.
 - For "determine exactly" cells, the exact target names both halves: a universal bound over every admissible object, and a matching explicit construction as a function of the parameters.

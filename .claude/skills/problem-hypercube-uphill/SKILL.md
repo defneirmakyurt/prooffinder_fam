@@ -107,7 +107,7 @@ Lower cells are the way in: they validate the checker, the search methods and an
 - `symmetric-labelling` (angle): labellings invariant or near-invariant under a subgroup of \(\mathrm{Aut}(Q_d)\).
 - `sat-ilp-lower` (angle): encode "≤ T uphill paths" as SAT/ILP for small \(d\); UNSAT with a DRAT proof gives a lower bound.
 - `exhaustive-symbreak` (angle): exhaustive search over canonical labellings with proved symmetry breaking.
-- `grid-lower-bound-style` (angle): adapt the *style* of lower-bound argument used for the grid (IMO 2022 P6). The Scout must find that argument; don't assume it transfers.
+- `grid-lower-bound-style` (angle): adapt the *style* of lower-bound argument used for the grid (IMO 2022 P6). The Literature agent must find that argument; don't assume it transfers.
 - `small-cases-pattern` (angle): exact values for small \(d\), then guess the structure and generalise.
 - `obstruction-first` (angle): what forces uphill paths (per valley, per edge) and how to count them.
 

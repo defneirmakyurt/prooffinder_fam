@@ -39,17 +39,17 @@ Working rules from the user's global instructions:
 
 ### B0. Problem skills from the official texts (no solving)
 
-- [ ] `problem-bulgarian-solitaire`:
+- [x] `problem-bulgarian-solitaire`:
   - fill in §1 (verbatim), §3, §4 and §5 from `sources/problem_description_bulgarian_solitaire.tex`;
   - complete the provenance table in §2; where it differs, the official text wins, and list every difference for the humans;
   - remove the "conventions only" banner.
-- [ ] `problem-disjoint-congruence-classes`: create it from `problem-template` using `sources/problem_description_disjoint_congruence_classes.tex`, verbatim, with every idea labelled as a hypothesis or angle.
-- [ ] Update the README board table and the head skill's problem list.
+- [x] `problem-disjoint-congruence-classes`: create it from `problem-template` using `sources/problem_description_disjoint_congruence_classes.tex`, verbatim, with every idea labelled as a hypothesis or angle.
+- [x] Update the README board table and the head skill's problem list.
 - **Acceptance:** every cell is present with verbatim text, points and checking mode; Part S seeds come from the statement only.
 
 ### B1. `scripts/pp.py`: phase machinery
 
-- [ ] **`ROLES` and regimes**, matching the head skill:
+- [x] **`ROLES` and regimes**, matching the head skill:
 
   | Role | Regimes |
   |---|---|
@@ -61,66 +61,66 @@ Working rules from the user's global instructions:
   | scribe, auditor | RECORD |
 
   Remove `scout`, and add `auditor` to `ROLE_LESSONS_ONLY`.
-- [ ] **`task --phase {0,1,1L,2,2A,2B,2B-XV,2C,3,GATE,REPAIR,WAVE,5,AUDIT}`** sets the role, regime and mode from a table.
+- [x] **`task --phase {0,1,1L,2,2A,2B,2B-XV,2C,3,GATE,REPAIR,WAVE,5,AUDIT}`** sets the role, regime and mode from a table.
   - Also accepts `--mode` (VERIFY / GATE / CROSS / SOLVE / ANALYST / ADVERSARY / BRANCH / SUBMISSION / REPORT), `--branch`, `--subject TASK`, `--obstacles TASK…`, `--earlier TASK…` and `--record`.
   - The brief header gains the lines `PHASE / MODE / BRANCH` and `SUBJECT`.
-- [ ] **Brief blocks:**
+- [x] **Brief blocks:**
   - `reference_block()` appends the `**Role: MODE**` block after `**Role**`;
   - regime additions include BLIND;
   - a BRANCH lens pulls its text from reference §7 plus `--branch-note`.
-- [ ] **Inbox rules** (reference §1 table):
+- [x] **Inbox rules** (reference §1 table):
   - `checklist.md` is split into `checklist-G.md` (everyone except checker-builder) and `checklist-S.md` (referee only);
   - BLIND inboxes reject everything except obstacles (`stuck.md`, `verdict.md`, `no_natural_route.md`) and `checker/`;
   - `--subject` copies only `proof.md`, `claims.md` and `code/`;
   - `--record` copies `run/tasks/<P>-<cell>-*/` into `inbox/record/tasks/…` with paths preserved.
-- [ ] **`phases.md`:** append a row per task (reference §10).
-- [ ] **`open`:** also writes the `checklist.md` template (reference §9) and `phases.md` header.
-- [ ] **Board:** new columns `Phase` and `Robustness`, the 5 cell statuses, and a `contested` note section. Regenerate `run/board.md`.
-- [ ] **`matrix P CELL`:** reads the selected branches from the latest 2A task's `out/selected_branches.txt`, proofs from the output folders, and verdicts from `out/verdict.md` (`VERDICT:` / `CROSS VERDICT:` lines). Writes `matrix.md` and classifies it per reference §12.
-- [ ] **`gate P CELL --subject TASK [--statement-checked]`:**
+- [x] **`phases.md`:** append a row per task (reference §10).
+- [x] **`open`:** also writes the `checklist.md` template (reference §9) and `phases.md` header.
+- [x] **Board:** new columns `Phase` and `Robustness`, the 5 cell statuses, and a `contested` note section. Regenerate `run/board.md`.
+- [x] **`matrix P CELL`:** reads the selected branches from the latest 2A task's `out/selected_branches.txt`, proofs from the output folders, and verdicts from `out/verdict.md` (`VERDICT:` / `CROSS VERDICT:` lines). Writes `matrix.md` and classifies it per reference §12.
+- [x] **`gate P CELL --subject TASK [--statement-checked]`:**
   - finds the VERIFY/GATE referees on that subject;
   - checks that each ACCEPT has a complete checklist (every G/S item answered, no FAIL);
   - reads the matrix class if 2B ran;
   - writes `gate/gate_report.md` (reference §13) and prints VALID / GAP / INVALID.
-- [ ] **`status P`:** the per-phase table (reference §16).
-- [ ] **`blindcheck TASK`:** grep the blind outputs for arXiv, doi, http, "et al.", author-year patterns and "conjecture of"; print the hits.
-- [ ] **`finalize P CELL --report TASK --audit TASK`:** copy `final_report.md` only if the audit says `AUDIT: PASS`.
-- [ ] **`summary --branches b1 b2 …`:** merge the SUMMARY rows from each branch via `git show <branch>:run/SUMMARY.md`.
-- [ ] **`report`:** add the Robustness column, the new statuses, and the top 3 cells for human attention (CONTESTED or counterexample first, then PARTIAL by points).
+- [x] **`status P`:** the per-phase table (reference §16).
+- [x] **`blindcheck TASK`:** grep the blind outputs for arXiv, doi, http, "et al.", author-year patterns and "conjecture of"; print the hits.
+- [x] **`finalize P CELL --report TASK --audit TASK`:** copy `final_report.md` only if the audit says `AUDIT: PASS`.
+- [x] **`summary --branches b1 b2 …`:** merge the SUMMARY rows from each branch via `git show <branch>:run/SUMMARY.md`.
+- [x] **`report`:** add the Robustness column, the new statuses, and the top 3 cells for human attention (CONTESTED or counterexample first, then PARTIAL by points).
 - **Acceptance:**
   - scratch-copy tests for every phase: a brief is generated, the inbox rules are enforced, and forbidden inputs are rejected;
   - matrix and gate tested on synthetic verdict files covering ROBUST / CONTESTED / UNSUPPORTED and VALID / GAP / INVALID.
 
 ### B2. `scripts/guard.py`
 
-- [ ] The referee may write `out/verdict.md` **and** `out/cex/**`; its Bash redirects into `out/cex/` are allowed.
-- [ ] The new agent types need no special case. Literature, triage and auditor write only under `out/`.
-- **Acceptance:** re-run the 15 original cases plus the new cex cases.
+- [x] The referee may write `out/verdict.md` **and** `out/cex/**`; its Bash redirects into `out/cex/` are allowed.
+- [x] The new agent types need no special case. Literature, triage and auditor write only under `out/`.
+- **Acceptance:** re-run the 15 original cases plus the new cex cases. (The original 15 were never saved; a rebuilt 15-case baseline plus 19 cex/Bash-write cases pass.)
 
 ### B3. Agents (locked cores; humans have authorised this build)
 
-- [ ] `prover.md`, `searcher.md`: BLIND regime, BRANCH mode (with `no_natural_route.md`), and outputs `claims.md`, `stuck.md`, `code/README.md`.
-- [ ] `breaker.md`: ADVERSARY mode with its four files (contrapositive, cex search, local analysis, minimal failing) and the verdict labels.
-- [ ] `referee.md`:
+- [x] `prover.md`, `searcher.md`: BLIND regime, BRANCH mode (with `no_natural_route.md`), and outputs `claims.md`, `stuck.md`, `code/README.md`.
+- [x] `breaker.md`: ADVERSARY mode with its four files (contrapositive, cex search, local analysis, minimal failing) and the verdict labels.
+- [x] `referee.md`:
   - VERIFY / GATE modes run the 7-step protocol (Parts G + S, equality cases, cross-cell consistency, own cex search in `out/cex/`);
   - CROSS mode (branch lens, translate the key idea, CROSS verdict);
   - verdict blocks per reference §4.
-- [ ] `scribe.md`: SUBMISSION mode (current) and REPORT mode (`final_report.md`, reference §14, citations by path and step; uncited claims deleted).
-- [ ] New `literature.md`, replacing `scout.md`, which gets deleted:
+- [x] `scribe.md`: SUBMISSION mode (current) and REPORT mode (`final_report.md`, reference §14, citations by path and step; uncited claims deleted).
+- [x] New `literature.md`, replacing `scout.md`, which gets deleted:
   - tools Read, Write, Glob, Grep, Bash, WebSearch, WebFetch;
   - modes SOLVE (1L) and ANALYST (3).
-- [ ] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
-- [ ] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
-- [ ] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
+- [x] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
+- [x] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
+- [x] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
 
 ### B4. Lessons
 
-- [ ] Rename `.claude/lessons/scout.md` to `literature.md`.
-- [ ] Add `triage.md` and `auditor.md` (at `version: 0`) and `pending/auditor.md`.
+- [x] Rename `.claude/lessons/scout.md` to `literature.md`.
+- [x] Add `triage.md` and `auditor.md` (at `version: 0`) and `pending/auditor.md`.
 
 ### B5. Remove build notes
 
-- [ ] Delete the "Build status" note in the head skill and in the README, and mark the Literature / Triage / Auditor rows in the README as built.
+- [x] Delete the "Build status" note in the head skill and in the README, and mark the Literature / Triage / Auditor rows in the README as built.
 
 ### B6. Problem branches (after B1–B5 are committed on `main`)
 
@@ -169,8 +169,10 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 ## Open questions for the humans
 
 1. ~~Angles cell count~~ **Resolved:** the official text has 6 cells; the extract had dropped Cell 1 and changed the order. `problem-angles-lines` has been rewritten from the official text.
-2. **Disjoint congruence classes:** the official text is in `sources/problem_description_disjoint_congruence_classes.tex`. Its skill is built in step B0.
-3. **Bulgarian solitaire:** the official text is in `sources/problem_description_bulgarian_solitaire.tex`. Cross-check the conventions in step B0.
+2. ~~Disjoint congruence classes skill~~ **Built in B0.**
+3. ~~Bulgarian solitaire cross-check~~ **Done in B0;** the differences are listed in the skill's §2.
+6. **Cell 1 was missing for B and D.** Both official sources say "The statement of this cell is not visible in the provided screenshots". **B-C1** was supplied from a screenshot on 2026-09-26 and is being added to the skill by a human (the `.tex` in `sources/` still lacks it). **D-C1** ("Three Classes"; no points given) is still pending: the skill marks it, and the head won't open it until a human pastes the verbatim text.
+7. **D source says "all four" but lists five certificate items.** The skill keeps all five.
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
 
