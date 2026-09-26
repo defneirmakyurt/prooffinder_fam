@@ -1,0 +1,5 @@
+k=12 n=67 #P=2679689 D_B=99 F=99 D_B==F:True d_B(lambda^(k)=(10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1))=99 sum=67 #maximisers=119871 maximisers=[(10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1), (10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1), (10, 10, 9, 8, 7, 6, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=495 lemmas_ok=True
+ALL OK
+real 16.55
+user 16.26
+sys 0.26

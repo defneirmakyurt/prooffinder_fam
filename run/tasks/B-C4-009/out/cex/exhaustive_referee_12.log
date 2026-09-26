@@ -1,0 +1,20 @@
+k=12 n=67 #part=2679689 D_B=99 F=99 d_B(lambda^(k))=99 lambda^(k)=(10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1) #maximisers=119871 maximisers=[omitted] cycles=1 lengths=[12] cyclic=gamma_j:True OK=True
+ALL OK
+        4.96 real         4.84 user         0.11 sys
+          1150124032  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               76710  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  57  involuntary context switches
+         78471585514  instructions retired
+         19805487510  cycles elapsed
+          1094501504  peak memory footprint

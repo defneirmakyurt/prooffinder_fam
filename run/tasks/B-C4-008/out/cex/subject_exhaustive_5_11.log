@@ -1,0 +1,11 @@
+k=5 n=11 #partitions=56 D_B=8 F(k)=8 match=True cyclic_set_is_delta+e_j=True
+k=6 n=16 #partitions=231 D_B=15 F(k)=15 match=True cyclic_set_is_delta+e_j=True
+k=7 n=22 #partitions=1002 D_B=24 F(k)=24 match=True cyclic_set_is_delta+e_j=True
+k=8 n=29 #partitions=4565 D_B=35 F(k)=35 match=True cyclic_set_is_delta+e_j=True
+k=9 n=37 #partitions=21637 D_B=48 F(k)=48 match=True cyclic_set_is_delta+e_j=True
+k=10 n=46 #partitions=105558 D_B=63 F(k)=63 match=True cyclic_set_is_delta+e_j=True
+k=11 n=56 #partitions=526823 D_B=80 F(k)=80 match=True cyclic_set_is_delta+e_j=True
+ALL MATCH
+real 2.06
+user 2.01
+sys 0.04

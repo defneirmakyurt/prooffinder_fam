@@ -1,0 +1,4 @@
+lower-bound orbit verified for k=5..60: d_B(lambda^(k)) = (k-1)(k-3)
+real 7.61
+user 7.56
+sys 0.04

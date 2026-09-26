@@ -1,0 +1,9 @@
+tau_{m-1} - t* = 0
+t* - ((k-1)(k-3) - 1) = 0
+t* - 1 - (k(k-4) + 1) = 0
+d formula at h0=1,m=k-2 minus (k-1)(k-3) = 0
+sum(lambda^(k)) - (T_{k-1}+1) = 0
+C3(a) bound slack (k^2-2k-1) - (k-1)(k-3) = 2*k - 4
+real 0.30
+user 0.17
+sys 0.03

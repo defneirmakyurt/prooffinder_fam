@@ -1,0 +1,11 @@
+k=5 n=11 #P=56 D_B=8 F=8 D_B==F:True d_B(lambda^(k)=(3, 3, 2, 2, 1))=8 sum=11 #maximisers=3 maximisers=[(3, 3, 2, 2, 1), (3, 3, 2, 1, 1, 1), (3, 2, 2, 2, 1, 1)] lambda^(k)_is_maximiser=True level1_size=12 lemmas_ok=True
+k=6 n=16 #P=231 D_B=15 F=15 D_B==F:True d_B(lambda^(k)=(4, 4, 3, 2, 2, 1))=15 sum=16 #maximisers=12 maximisers=[(4, 4, 3, 2, 2, 1), (4, 4, 3, 2, 1, 1, 1), (4, 4, 2, 2, 2, 1, 1), (4, 3, 3, 3, 2, 1), (4, 3, 3, 3, 1, 1, 1), (4, 3, 3, 2, 2, 2), (4, 3, 3, 2, 1, 1, 1, 1), (4, 3, 2, 2, 2, 2, 1), (4, 3, 2, 2, 2, 1, 1, 1), (3, 3, 3, 3, 2, 1, 1), (3, 3, 3, 2, 2, 2, 1), (3, 3, 3, 2, 2, 1, 1, 1)] lambda^(k)_is_maximiser=True level1_size=30 lemmas_ok=True
+k=7 n=22 #P=1002 D_B=24 F=24 D_B==F:True d_B(lambda^(k)=(5, 5, 4, 3, 2, 2, 1))=24 sum=22 #maximisers=62 maximisers=[(5, 5, 4, 3, 2, 2, 1), (5, 5, 4, 3, 2, 1, 1, 1), (5, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=60 lemmas_ok=True
+k=8 n=29 #P=4565 D_B=35 F=35 D_B==F:True d_B(lambda^(k)=(6, 6, 5, 4, 3, 2, 2, 1))=35 sum=29 #maximisers=288 maximisers=[(6, 6, 5, 4, 3, 2, 2, 1), (6, 6, 5, 4, 3, 2, 1, 1, 1), (6, 6, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=105 lemmas_ok=True
+k=9 n=37 #P=21637 D_B=48 F=48 D_B==F:True d_B(lambda^(k)=(7, 7, 6, 5, 4, 3, 2, 2, 1))=48 sum=37 #maximisers=1310 maximisers=[(7, 7, 6, 5, 4, 3, 2, 2, 1), (7, 7, 6, 5, 4, 3, 2, 1, 1, 1), (7, 7, 6, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=168 lemmas_ok=True
+k=10 n=46 #P=105558 D_B=63 F=63 D_B==F:True d_B(lambda^(k)=(8, 8, 7, 6, 5, 4, 3, 2, 2, 1))=63 sum=46 #maximisers=5862 maximisers=[(8, 8, 7, 6, 5, 4, 3, 2, 2, 1), (8, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1), (8, 8, 7, 6, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=252 lemmas_ok=True
+k=11 n=56 #P=526823 D_B=80 F=80 D_B==F:True d_B(lambda^(k)=(9, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1))=80 sum=56 #maximisers=26399 maximisers=[(9, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1), (9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1), (9, 9, 8, 7, 6, 5, 4, 2, 2, 2, 1, 1), '...'] lambda^(k)_is_maximiser=True level1_size=360 lemmas_ok=True
+ALL OK
+real 3.30
+user 3.25
+sys 0.04

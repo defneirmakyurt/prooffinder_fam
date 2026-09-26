@@ -1,0 +1,11 @@
+k=5 n=11 #part=56 D_B=8 F=8 d_B(lambda^(k))=8 lambda^(k)=(3, 3, 2, 2, 1) #maximisers=3 maximisers=[(3, 3, 2, 2, 1), (3, 3, 2, 1, 1, 1), (3, 2, 2, 2, 1, 1)] cycles=1 lengths=[5] cyclic=gamma_j:True OK=True
+k=6 n=16 #part=231 D_B=15 F=15 d_B(lambda^(k))=15 lambda^(k)=(4, 4, 3, 2, 2, 1) #maximisers=12 maximisers=[(4, 4, 3, 2, 2, 1), (4, 4, 3, 2, 1, 1, 1), (4, 4, 2, 2, 2, 1, 1), (4, 3, 3, 3, 2, 1), (4, 3, 3, 3, 1, 1, 1), (4, 3, 3, 2, 2, 2), (4, 3, 3, 2, 1, 1, 1, 1), (4, 3, 2, 2, 2, 2, 1), (4, 3, 2, 2, 2, 1, 1, 1), (3, 3, 3, 3, 2, 1, 1), (3, 3, 3, 2, 2, 2, 1), (3, 3, 3, 2, 2, 1, 1, 1)] cycles=1 lengths=[6] cyclic=gamma_j:True OK=True
+k=7 n=22 #part=1002 D_B=24 F=24 d_B(lambda^(k))=24 lambda^(k)=(5, 5, 4, 3, 2, 2, 1) #maximisers=62 maximisers=[omitted] cycles=1 lengths=[7] cyclic=gamma_j:True OK=True
+k=8 n=29 #part=4565 D_B=35 F=35 d_B(lambda^(k))=35 lambda^(k)=(6, 6, 5, 4, 3, 2, 2, 1) #maximisers=288 maximisers=[omitted] cycles=1 lengths=[8] cyclic=gamma_j:True OK=True
+k=9 n=37 #part=21637 D_B=48 F=48 d_B(lambda^(k))=48 lambda^(k)=(7, 7, 6, 5, 4, 3, 2, 2, 1) #maximisers=1310 maximisers=[omitted] cycles=1 lengths=[9] cyclic=gamma_j:True OK=True
+k=10 n=46 #part=105558 D_B=63 F=63 d_B(lambda^(k))=63 lambda^(k)=(8, 8, 7, 6, 5, 4, 3, 2, 2, 1) #maximisers=5862 maximisers=[omitted] cycles=1 lengths=[10] cyclic=gamma_j:True OK=True
+k=11 n=56 #part=526823 D_B=80 F=80 d_B(lambda^(k))=80 lambda^(k)=(9, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1) #maximisers=26399 maximisers=[omitted] cycles=1 lengths=[11] cyclic=gamma_j:True OK=True
+ALL OK
+real 0.94
+user 0.91
+sys 0.02

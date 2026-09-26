@@ -1,0 +1,5 @@
+k=12 n=67 #partitions=2679689 D_B=99 F(k)=99 match=True cyclic_set_is_delta+e_j=True
+ALL MATCH
+real 10.45
+user 10.26
+sys 0.18

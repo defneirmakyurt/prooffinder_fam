@@ -1,0 +1,18 @@
+k=5: d_B(lambda^(k))=8 = (k-1)(k-3)=8; cycle length 5 = k
+k=6: d_B(lambda^(k))=15 = (k-1)(k-3)=15; cycle length 6 = k
+k=7: d_B(lambda^(k))=24 = (k-1)(k-3)=24; cycle length 7 = k
+k=8: d_B(lambda^(k))=35 = (k-1)(k-3)=35; cycle length 8 = k
+k=9: d_B(lambda^(k))=48 = (k-1)(k-3)=48; cycle length 9 = k
+k=10: d_B(lambda^(k))=63 = (k-1)(k-3)=63; cycle length 10 = k
+k=11: d_B(lambda^(k))=80 = (k-1)(k-3)=80; cycle length 11 = k
+k=12: d_B(lambda^(k))=99 = (k-1)(k-3)=99; cycle length 12 = k
+k=25: d_B(lambda^(k))=528 = (k-1)(k-3)=528; cycle length 25 = k
+k=50: d_B(lambda^(k))=2303 = (k-1)(k-3)=2303; cycle length 50 = k
+k=75: d_B(lambda^(k))=5328 = (k-1)(k-3)=5328; cycle length 75 = k
+k=100: d_B(lambda^(k))=9603 = (k-1)(k-3)=9603; cycle length 100 = k
+k=125: d_B(lambda^(k))=15128 = (k-1)(k-3)=15128; cycle length 125 = k
+k=150: d_B(lambda^(k))=21903 = (k-1)(k-3)=21903; cycle length 150 = k
+k=5..150: ALL MATCH
+real 14.53
+user 14.38
+sys 0.14

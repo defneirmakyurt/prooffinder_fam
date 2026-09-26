@@ -1,0 +1,8 @@
+(a) d_B(lambda^(k)) = (k-1)(k-3) by direct first-repeat iteration, k=5..200: OK
+(b) orbit B^t = Q(1+(t mod k-1); b_t, b_t+) for all 0<=t<=k^2-4k+2, finals, k=5..80: OK
+(c) Lemma 6(a) closedness + Lemma 7 formula on all S(h;x,y), unique max Q(1;k-1,k), k=4..25: OK
+(d) Lemma 2 (energy drop, equality iff lambda_1<=s+1 iff rho(Y) closed, then Y(B)=rho(Y)) on 20000 random partitions n<=300; Lemma 5 identity on 2000 random partitions of T_(k-1)+1, 4<=k<=30: OK
+ALL OK
+real 71.29
+user 70.74
+sys 0.48
