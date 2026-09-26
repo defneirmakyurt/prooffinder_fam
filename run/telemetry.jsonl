@@ -159,3 +159,4 @@
 {"event": "pin", "at": "2026-09-26T16:56:23", "run_time": "1:43", "task": "B-C4-007", "cell": "B-C4"}
 {"event": "pin", "at": "2026-09-26T16:56:23", "run_time": "1:43", "task": "B-C4-007", "cell": "B-C4"}
 {"event": "done", "at": "2026-09-26T16:56:23", "run_time": "1:43", "task": "B-C4-008", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 75274, "ms": 365503, "tool_uses": 16}
+{"event": "done", "at": "2026-09-26T16:59:26", "run_time": "1:46", "task": "B-C4-011", "out": ["claims.md", "code", "divergence.md", "proof.md", "sources.md", "stuck.md"], "verdict": null, "tokens": 150538, "ms": 551774, "tool_uses": 46}
