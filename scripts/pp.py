@@ -26,6 +26,7 @@ RUN = os.path.join(ROOT, "run")
 TASKS = os.path.join(RUN, "tasks")
 REFERENCE = os.path.join(ROOT, ".claude", "skills", "proof-pursuit-head", "references", "briefs-and-ledger.md")
 LESSONS = os.path.join(ROOT, ".claude", "lessons")
+VENV_PYTHON = os.path.join(ROOT, ".venv", "bin", "python3")
 ROLE_LESSONS_ONLY = {"referee", "checker-builder"}
 STATEMENT_RULE = ("Work from the exact statement in TARGET. Preserve every definition, quantifier, parameter range "
                   "and hand-in requirement. Never infer the question from a cell's title.")
@@ -171,6 +172,8 @@ def cmd_task(a):
         + (" plus a LADDER of at most 10 lines." if role in ("prover", "searcher", "breaker") else "."),
         "        Full work goes in out/.",
         f"INBOX: {', '.join(placed) if placed else '(empty)'}",
+        f"PYTHON: {VENV_PYTHON} (sympy, mpmath, networkx, python-flint, python-sat); plain python3 lacks them. "
+        "Checkers and anything a judge reruns stay stdlib-only unless the brief says otherwise.",
         "",
         reference_block(role),
     ]
