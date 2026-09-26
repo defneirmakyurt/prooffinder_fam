@@ -37,3 +37,4 @@
 {"event": "pin", "at": "2026-09-26T13:44:00", "run_time": "0:36", "task": "H-C4-001", "cell": "H-C4"}
 {"event": "pin", "at": "2026-09-26T13:44:00", "run_time": "0:36", "task": "H-C4-001", "cell": "H-C4"}
 {"event": "done", "at": "2026-09-26T13:44:07", "run_time": "0:36", "task": "H-C4-002", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 78040, "ms": 720540, "tool_uses": 32}
+{"event": "done", "at": "2026-09-26T14:01:49", "run_time": "0:54", "task": "H-C5-007", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 159738, "ms": 1170158, "tool_uses": 23}

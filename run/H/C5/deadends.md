@@ -1,0 +1,1 @@
+- [parity split, clique cover] lower route: clique-cover bound for tau(G_2[F∩E]) closes only z <= 3 missing vertices of one parity; general forest bound F_9 <= 279 open (R9) (H-C5-007)
