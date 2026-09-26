@@ -15,7 +15,7 @@ Do not do the mathematics yourself. The run lasts hours and involves dozens of w
 
 ## Principles
 
-- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers usually share a filesystem, so isolation holds only by instruction: every brief lists what the worker may read, and nothing else under `run/` is in bounds.
+- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers share a filesystem, so isolation holds by instruction plus the `scripts/guard.py` hook: every brief lists what the worker may read, and nothing else under `run/` is in bounds. The hook is best effort for Bash, so still audit for leaks.
 - **Assign diversity; don't hope for it.** Workers are copies of the same model. Give five workers the same prompt and you get the same obvious idea five times, whether or not you show them the best attempt. Every FRESH or CONTRARIAN worker gets an explicit angle that differs from every live lineage.
 - **A report is a claim, not a result.** Nothing is marked established until it passes the verification gate.
 - **Numbers come from code, judgments from referees.** For construction problems, re-score every artefact with the cell's checker. Never copy a score from a worker's report. Re-run every computation a claim depends on before you trust it, using the report's `RAN` line as the recipe. If a `RAN` line doesn't reproduce, the whole report is untrusted.
@@ -111,7 +111,7 @@ Break targets into smaller claims mostly *inside* a worker's task. Don't spawn o
 
 ## Problem skills
 
-When you open problem P, load skill `problem-<slug>` with the Skill tool. If the skill list hasn't refreshed, Read `.claude/skills/problem-<slug>/SKILL.md` directly.
+Verbatim official problem texts live in `sources/`, as pasted by the humans. When you open problem P, load skill `problem-<slug>` with the Skill tool. If the skill list hasn't refreshed, Read `.claude/skills/problem-<slug>/SKILL.md` directly.
 
 If the skill doesn't exist, create it first:
 - Copy `.claude/skills/problem-template/SKILL.md` and fill it in from the verbatim statement, timeboxed to about 10 minutes.
@@ -158,6 +158,8 @@ Triage is an estimate, not an attempt: don't solve anything to decide a tier. Wr
 5. **Choose the next wave's mix** from the table below.
 6. **Gate:** apply the verification gate before anything is marked established.
 7. **Package:** dispatch a Scribe, then get a human review before submission.
+
+**Synthesis (per checkpoint and at the end).** Every hand-in must "say clearly which cells you consider solved and which are partial". Keep every non-`SOLVED` cell explained on the board: a `partial` note (established / gap) or an `obstacle` note in the §6 format (what was tried, where it stalls, what would unlock it, what the Scout found). Then run `pp.py report`, which writes `run/<P>/report.md` per problem and `run/SUMMARY.md` from the gated board alone. The humans hand these in with the Scribe submissions. A report never states more than the board.
 
 | Cell state | Exploit | Fresh | Contrarian | Also |
 |---|---|---|---|---|

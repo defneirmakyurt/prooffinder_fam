@@ -208,6 +208,7 @@ Keep each entry to one line. CONTRARIAN briefs receive these lines verbatim.
 ## Lessons (changes since last checkpoint; pending Referee/Checker-builder lessons)
 ## Decisions for the team
 ## Obstacle notes (parked cells)
+- <cell>: TRIED: <idea tags> STALLS AT: <exact step or lemma> NEEDS: <what would unlock it> KNOWN: <Scout status, or "not found in <sources>">
 ```
 
 - **Cell status** is `SOLVED`, `PARTIAL` or `NOT ATTEMPTED`. A cell is `SOLVED` only when every claim its hand-in requires has passed the gate at an established status (`PROVED`, `COMPUTER-VERIFIED`, or `EXHAUSTIVE-WITHIN-CLASS` where the class is the whole space the statement quantifies over). Everything short of that is `PARTIAL`, including a value submitted as `BEST-FOUND` in an instant-check cell. Every `PARTIAL` cell has an entry under "Partial cells".

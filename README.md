@@ -14,7 +14,7 @@ A Claude Code setup for the Proof Pursuit hackathon. A **head** agent (skill `pr
 | `.claude/lessons/<role>.md` | Worker **lessons layer** | head, between waves |
 | `.claude/lessons/pending/{referee,checker-builder}.md` | Lessons for the gate roles, awaiting human approval | head proposes, humans approve |
 | `.claude/lessons/CHANGELOG.md` | Every lessons edit, with evidence and outcome | head |
-| `scripts/pp.py` | Ledger helper: `open`, `task` (brief + inbox), `deadend`, `board` (`--cell-status`, `--claim-status`), `pin`, `crosstest`. Scribe tasks require `--status` and `--cell-status`, and PARTIAL also requires `--established` (repeatable) and `--gap`. | humans |
+| `scripts/pp.py` | Ledger helper: `open` (also creates `run/<P>/lessons.md` at version 0), `task` (brief + inbox), `deadend`, `board` (`--cell-status`, `--claim-status`), `pin`, `crosstest`, `report` (`run/<P>/report.md` per problem and `run/SUMMARY.md`: solved / partial / not attempted, established vs. gap, obstacles, pinned artefacts; generated from the gated board only). Scribe tasks require `--status` and `--cell-status`, and PARTIAL also requires `--established` (repeatable) and `--gap`. | humans |
 | `scripts/guard.py` | PreToolUse isolation hook for workers | humans |
 | `scripts/envcheck.py`, `requirements.txt` | Checks the `.venv` for sympy, mpmath, networkx, python-flint, python-sat | humans |
 | `sources/practice-problems.md` | Verbatim source text of the practice problems (Angles, Hypercube); official competition texts go here too | humans |
