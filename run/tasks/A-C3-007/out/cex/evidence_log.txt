@@ -1,0 +1,3 @@
+(a) min over samples of T - pi/2, by d: {1: 0.0, 2: -0.0, 3: 0.069139, 4: 0.232051, 5: 0.903341, 6: 0.776967, 7: 2.732875, 8: 3.163256}
+(b) min slack of Lemma L: -3.3306690738754696e-16
+(c) min relative slack of Key Lemma (should be > 0): 1.2968238705113322e-09

@@ -1,0 +1,1 @@
+Prove: for every integer d >= 1 and all lines l_1, ..., l_{d+1} through the origin of R^d (repetitions allowed), S(l_1, ..., l_{d+1}) = sum_{i<j} theta(l_i, l_j) <= (C(d+1, 2) - 1) * pi/2, where theta(l, l') = arccos |<x, x'>| for spanning unit vectors x, x' (the acute angle, in [0, pi/2]).

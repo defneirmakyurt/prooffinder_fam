@@ -1,0 +1,50 @@
+A. target search: min T - pi/2 found, per d
+  d=1  min(T - pi/2) = 0.000e+00
+  d=2  min(T - pi/2) = -2.198e-12
+  d=3  min(T - pi/2) = 4.467e-05
+  d=4  min(T - pi/2) = 4.576e-03
+  d=5  min(T - pi/2) = 2.469e-02
+  d=6  min(T - pi/2) = 5.960e-02
+  d=7  min(T - pi/2) = 1.119e-01
+B. Lemma L: min slack found, per k
+  k=1  min slack = 0.000e+00
+  k=2  min slack = -3.331e-16
+  k=3  min slack = -3.331e-16
+  k=4  min slack = -3.331e-16
+  k=5  min slack = -2.220e-16
+  k=6  min slack = -2.220e-16
+  k=7  min slack = -2.220e-16
+C. Key Lemma: min relative slack found (T<pi/2 scaled to T = frac*pi/2), per n
+  n=2 T=0.500*pi/2  min rel slack = 2.929e-01
+  n=2 T=0.900*pi/2  min rel slack = 1.231e-02
+  n=2 T=0.999*pi/2  min rel slack = 1.234e-06
+  n=3 T=0.500*pi/2  min rel slack = 2.929e-01
+  n=3 T=0.900*pi/2  min rel slack = 1.231e-02
+  n=3 T=0.999*pi/2  min rel slack = 1.234e-06
+  n=4 T=0.500*pi/2  min rel slack = 2.929e-01
+  n=4 T=0.900*pi/2  min rel slack = 1.231e-02
+  n=4 T=0.999*pi/2  min rel slack = 1.234e-06
+  n=5 T=0.500*pi/2  min rel slack = 2.929e-01
+  n=5 T=0.900*pi/2  min rel slack = 1.231e-02
+  n=5 T=0.999*pi/2  min rel slack = 1.234e-06
+  n=6 T=0.500*pi/2  min rel slack = 3.008e-01
+  n=6 T=0.900*pi/2  min rel slack = 2.292e-02
+  n=6 T=0.999*pi/2  min rel slack = 1.852e-03
+  n=7 T=0.500*pi/2  min rel slack = 3.423e-01
+  n=7 T=0.900*pi/2  min rel slack = 9.926e-02
+  n=7 T=0.999*pi/2  min rel slack = 2.153e-02
+  sub-step (b)/(c)/(d) violations beyond 1e-13: 0
+D. unit-diag G with sum arcsin|G_ij| < pi/2, random signs: 20000 samples, non-PD: 0
+E. equality configurations
+  orth+repeat d=1: pairs with |g|=1: 1, pairs with g=0: 0 of 1  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=2: pairs with |g|=1: 1, pairs with g=0: 2 of 3  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=3: pairs with |g|=1: 1, pairs with g=0: 5 of 6  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=4: pairs with |g|=1: 1, pairs with g=0: 9 of 10  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=5: pairs with |g|=1: 1, pairs with g=0: 14 of 15  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=6: pairs with |g|=1: 1, pairs with g=0: 20 of 21  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=7: pairs with |g|=1: 1, pairs with g=0: 27 of 28  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=8: pairs with |g|=1: 1, pairs with g=0: 35 of 36  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=9: pairs with |g|=1: 1, pairs with g=0: 44 of 45  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  orth+repeat d=10: pairs with |g|=1: 1, pairs with g=0: 54 of 55  => T = pi/2 exactly, S = (C(d+1,2)-1)pi/2
+  d=2 gap family (all gaps <= pi/2), 2000 samples: max |S - pi| = 2.158e-13
+  60-degree triple: T - pi/2 = 0.000e+00

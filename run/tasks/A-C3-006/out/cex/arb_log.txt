@@ -1,0 +1,5 @@
+d=2: T - pi/2 in [+/- 3.83e-56]; certified >= 0: False; certified > 0: False
+d=3: T - pi/2 in [0.000188597105828 +/- 4.03e-16]; certified >= 0: True; certified > 0: True
+d=4: T - pi/2 in [0.0120043129042 +/- 3.42e-14]; certified >= 0: True; certified > 0: True
+d=5: T - pi/2 in [0.0442187836668 +/- 8.32e-16]; certified >= 0: True; certified > 0: True
+d=6: T - pi/2 in [0.103522167501 +/- 2.65e-13]; certified >= 0: True; certified > 0: True
