@@ -1,0 +1,1 @@
+- [carolina-compositions] C3 analogue: Carolina solitaire on compositions (ordered piles), GH Sec. 5 — NO — D_C(15)=24 > D_B(15)=20, D_C(T_k)=k^2-1 > k^2-k; GH prove only D_C(n) <= k^2-k-2 for non-triangular n (weaker than k^2-2k-1) (B-C6-001 S6)

@@ -20,3 +20,11 @@ Links point to the worker's proof document (out/proof.md, updated rung by rung).
 - [16:58] CHECKED by one worker (finite range; head re-ran n<=55 at 17:03: 0 mismatches, 15 s): D_B(n) = F(n) for every 1 <= n <= 62 (B-C6-004 code/conj_check.py).
   So the conjecture D_B(n) = F(n) for all n is on the table; the upper half is OPEN (GAP in every proof).
 - [17:03] Referees B-C6-006 (VERIFY) and B-C6-007 (GATE) dispatched on the lower bound of B-C6-004 (target run/B/C6/target_lower.md). Upper bound: repair prover B-C6-008 (from the gated Cell 3 method), literature B-C6-009.
+- [17:12] CHECKED by head: B-C6-002's exhaustive program re-run, D_B(n) = F(n) for all n <= 60, 0 mismatches (40 s). Two independent
+  exact programs (B-C6-002 conj_table.py, B-C6-004 conj_check.py) now agree on n <= 60; B-C6-003 reports n <= 66, the space map n <= 80.
+- [17:12] LITERATURE (space map B-C6-001, sources not yet opened by a second agent): F(n) is Griggs-Ho 1998 Conjecture 4.7, open in all
+  sources found. So the upper bound D_B(n) <= F(n) for all n is an open conjecture; our lower bound is a written-out proof of the witness side.
+- [17:12] CLAIMED (unrefereed) by blind B-C6-003, structural: containment monotonicity (lambda in mu => B lambda in B mu); d_B = max(fill time,
+  fit time); D_B quasi-convex on each block T_{k-1} <= n <= T_k; D_B(n) <= k^2 - k for every n of rank k. Proof: run/tasks/B-C6-003/out/proof.md
+  Steps 7-8. Referees B-C6-011 (VERIFY) + B-C6-012 (GATE) dispatched (target run/B/C6/target_structure.md).
+- [17:12] Upper bound attack: EXPLOIT B-C6-008 (gated Cell 3 method), FRESH B-C6-010 (fill/fit split, one-sided bounds), literature B-C6-009.
