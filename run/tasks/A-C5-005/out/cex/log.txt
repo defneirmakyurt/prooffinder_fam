@@ -1,0 +1,34 @@
+=== Equality-case check (conjectured optimum: axes, two repeated) ===
+d=2: S=6.283185, bound=6.283185, diff=0.00e+00
+d=3: S=12.566371, bound=12.566371, diff=0.00e+00
+d=4: S=20.420352, bound=20.420352, diff=0.00e+00
+d=5: S=29.845130, bound=29.845130, diff=1.42e-14
+d=6: S=40.840704, bound=40.840704, diff=2.13e-14
+d=7: S=53.407075, bound=53.407075, diff=3.55e-14
+d=8: S=67.544242, bound=67.544242, diff=4.26e-14
+
+=== Random search for violations of S <= bound (target statement) ===
+d=2: random trials=4000, max(S-bound) observed = -0.011140  (positive would be a violation)
+d=3: random trials=4000, max(S-bound) observed = -0.241482  (positive would be a violation)
+d=4: random trials=4000, max(S-bound) observed = -1.004718  (positive would be a violation)
+d=5: random trials=4000, max(S-bound) observed = -2.052585  (positive would be a violation)
+d=6: random trials=4000, max(S-bound) observed = -3.430763  (positive would be a violation)
+d=7: random trials=4000, max(S-bound) observed = -4.605951  (positive would be a violation)
+d=8: random trials=4000, max(S-bound) observed = -6.275445  (positive would be a violation)
+
+=== Local hill-climbing search attempting to approach/exceed bound ===
+d=2: best S found by local search = 6.282856, bound = 6.283185, gap(bound-best)=0.000330
+d=3: best S found by local search = 12.541697, bound = 12.566371, gap(bound-best)=0.024673
+d=4: best S found by local search = 20.346594, bound = 20.420352, gap(bound-best)=0.073758
+d=5: best S found by local search = 29.492010, bound = 29.845130, gap(bound-best)=0.353120
+d=6: best S found by local search = 40.173682, bound = 40.840704, gap(bound-best)=0.667022
+
+=== Sanity check of proof's Step 3 intermediate bound: sum_{i<j} a_ij^2 >= (d+2)/d ===
+d=2: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 1.0001 (should be >= 1)
+d=3: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 1.0145 (should be >= 1)
+d=4: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 1.1565 (should be >= 1)
+d=5: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 1.2769 (should be >= 1)
+d=6: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 1.8789 (should be >= 1)
+d=7: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 2.1676 (should be >= 1)
+d=8: min observed sum a_ij^2 / ((d+2)/d) over 4000 random trials = 2.5410 (should be >= 1)
+elapsed: 3s

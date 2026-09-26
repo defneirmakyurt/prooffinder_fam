@@ -1,0 +1,43 @@
+=== (a) equality configuration check, d=2..8 ===
+d=2: N=4, S=6.283185, bound=6.283185, diff=0.00e+00
+d=3: N=5, S=12.566371, bound=12.566371, diff=0.00e+00
+d=4: N=6, S=20.420352, bound=20.420352, diff=0.00e+00
+d=5: N=7, S=29.845130, bound=29.845130, diff=1.42e-14
+d=6: N=8, S=40.840704, bound=40.840704, diff=2.13e-14
+d=7: N=9, S=53.407075, bound=53.407075, diff=3.55e-14
+d=8: N=10, S=67.544242, bound=67.544242, diff=4.26e-14
+
+=== (b) random search for violations of the TARGET, d=2..8, 20000 trials each ===
+d=2: worst (S-bound) over 20000 random trials = -0.015130 (S=6.268055, bound=6.283185)  -> no violation
+d=3: worst (S-bound) over 20000 random trials = -0.206111 (S=12.360260, bound=12.566371)  -> no violation
+d=4: worst (S-bound) over 20000 random trials = -0.974303 (S=19.446050, bound=20.420352)  -> no violation
+d=5: worst (S-bound) over 20000 random trials = -1.726963 (S=28.118167, bound=29.845130)  -> no violation
+d=6: worst (S-bound) over 20000 random trials = -2.733272 (S=38.107432, bound=40.840704)  -> no violation
+d=7: worst (S-bound) over 20000 random trials = -4.546057 (S=48.861018, bound=53.407075)  -> no violation
+d=8: worst (S-bound) over 20000 random trials = -5.943643 (S=61.600600, bound=67.544242)  -> no violation
+
+=== (b') adversarial configs: axes + small perturbation, d=3..6 ===
+  d=3, eps=0.001: S=12.562326, bound=12.566371, diff=-4.05e-03
+  d=3, eps=0.01: S=12.540260, bound=12.566371, diff=-2.61e-02
+  d=3, eps=0.1: S=12.261831, bound=12.566371, diff=-3.05e-01
+  d=4, eps=0.001: S=20.408781, bound=20.420352, diff=-1.16e-02
+  d=4, eps=0.01: S=20.315396, bound=20.420352, diff=-1.05e-01
+  d=4, eps=0.1: S=19.794256, bound=20.420352, diff=-6.26e-01
+  d=5, eps=0.001: S=29.827594, bound=29.845130, diff=-1.75e-02
+  d=5, eps=0.01: S=29.691688, bound=29.845130, diff=-1.53e-01
+  d=5, eps=0.1: S=28.854561, bound=29.845130, diff=-9.91e-01
+  d=6, eps=0.001: S=40.816581, bound=40.840704, diff=-2.41e-02
+  d=6, eps=0.01: S=40.661093, bound=40.840704, diff=-1.80e-01
+  d=6, eps=0.1: S=38.891349, bound=40.840704, diff=-1.95e+00
+
+=== (c) sanity of proof's own weak bound (Step 3-4): T >= (d+2)/d, T vs pi, d=2..8 ===
+d=2: min T over 2000 random trials = 3.163122, weak bound (d+2)/d = 2.000000 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=3: min T over 2000 random trials = 3.445000, weak bound (d+2)/d = 1.666667 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=4: min T over 2000 random trials = 4.106925, weak bound (d+2)/d = 1.500000 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=5: min T over 2000 random trials = 5.364878, weak bound (d+2)/d = 1.400000 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=6: min T over 2000 random trials = 6.593909, weak bound (d+2)/d = 1.333333 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=7: min T over 2000 random trials = 8.157101, weak bound (d+2)/d = 1.285714 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+d=8: min T over 2000 random trials = 9.262702, weak bound (d+2)/d = 1.250000 (OK, min_T>=weak bound), needed target T>=pi=3.141593 (target holds here)
+
+
+elapsed 6.158586502075195

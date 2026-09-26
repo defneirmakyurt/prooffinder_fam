@@ -1,4 +1,4 @@
-# Board: problem A, updated 14:40, run time 0:40 of 7:00
+# Board: problem A, updated 14:50, run time 0:50 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -8,6 +8,7 @@
 - [14:40] A-C5: d=2 (N=4) fully proved (2 independent elementary arguments, unverified by referees); d>=3 open. New partial: T>=1 for all d (Theorem A), tight-at-extremal weighted version Theorem A' (=1 at conjectured minimizer). Second-moment/Jensen family proved incapable of closing the gap for any d (constant capped at ~1.38<pi). See run/A/C5/final_report.md.
 
 ## Awaiting gate
+- [14:50] A-C5-001 gated against the FULL cell target: GAP/INVALID-adjacent MAJOR x2 (both referees: statement match no, since only d=2 of every d>=2 is proved) — correct, cell stays PARTIAL. Carved the d=2 sub-claim into its own lemma-cell A-C5-D2 (its own checklist scoped to N=4,d=2 only) and dispatched 2 fresh referees (A-C5-D2-002/003) to gate it on its own honest scope.
 
 ## Contested cells (tell the humans)
 
