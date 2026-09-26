@@ -173,6 +173,8 @@ A wave is 3–6 workers on one cell. Cap the total number of concurrent workers 
 
 Dispatch workers with your subagent tool (Task/Agent in Claude Code), using `subagent_type` = the role name (`prover`, `searcher`, …), several in one message so they run in parallel. Before dispatching, create the task with `scripts/pp.py task`. It writes `run/tasks/<task-id>/brief.md` and copies the inbox, including `role-lessons.md` and, when it exists, `problem-lessons.md`. Use the templates in `references/briefs-and-ledger.md`, and read that file before the first wave.
 
+Pass exactly the prompt that `pp.py task` prints ("Your task folder is <abs path>/ . Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, and follow them.") and nothing else: no context, no hints, no opinions. The `scripts/guard.py` hook binds each worker to the first task folder it touches. For the rest of the bookkeeping, use `pp.py open` (problem and cell folders), `pp.py deadend`, `pp.py board` (rows and `--note` sections), `pp.py crosstest` (two checkers against a generator) and `pp.py pin` (copy into `accepted/` with sha256; `--verify` to re-check). Run `.venv/bin/python3 scripts/envcheck.py` once at the start of the run.
+
 Every brief fills in TARGET from `target.md`, ASSUMPTIONS (only gated claims, with statements in the inbox), and a STOPPING CONDITION suited to the task, e.g. "stop and report as soon as you find a counterexample", "stop if the same rung fails twice", or "stop when the checker score reaches X".
 
 ## Problem types → role mix

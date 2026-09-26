@@ -198,7 +198,8 @@ def cmd_task(a):
         fh.write("\n".join(lines) + "\n")
     print(task_id)
     print(f"dispatch: subagent_type={role}  prompt=\"Your task folder is {tdir}/ . "
-          f"Read {tdir}/brief.md first and follow it.\"")
+          f"Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, "
+          f"and follow them.\"")
 
 
 def cmd_deadend(a):
