@@ -1,0 +1,5 @@
+proof embedded verbatim (from line 47)
+real 0.00
+user 0.00
+sys 0.00
+exit=0

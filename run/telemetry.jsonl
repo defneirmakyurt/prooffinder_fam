@@ -85,3 +85,4 @@
 {"event": "pin", "at": "2026-09-26T15:31:33", "run_time": "0:18", "task": "A-C3-002", "cell": "A-C3"}
 {"event": "done", "at": "2026-09-26T15:31:40", "run_time": "0:18", "task": "A-C3-006", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 47479, "ms": 221493, "tool_uses": 13}
 {"event": "task", "at": "2026-09-26T15:32:14", "run_time": "0:18", "task": "A-C3-008", "cell": "A-C3", "phase": "5", "role": "scribe", "regime": "RECORD", "mode": "SUBMISSION", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "2", "problem": "0"}, "lib": [], "timebox": 15}
+{"event": "done", "at": "2026-09-26T15:34:37", "run_time": "0:21", "task": "A-C3-008", "out": ["submission", "submission.md", "verify"], "verdict": null, "tokens": 30943, "ms": 123549, "tool_uses": 13}
