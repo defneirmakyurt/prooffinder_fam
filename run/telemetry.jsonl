@@ -107,3 +107,9 @@
 {"event": "task", "at": "2026-09-26T16:33:25", "run_time": "2:48", "task": "B-C6-002", "cell": "B-C6", "phase": "1", "role": "prover", "regime": "BLIND", "mode": "-", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "0", "problem": "0"}, "lib": [], "timebox": 45}
 {"event": "task", "at": "2026-09-26T16:33:25", "run_time": "2:48", "task": "B-C6-003", "cell": "B-C6", "phase": "1", "role": "prover", "regime": "BLIND", "mode": "-", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "0", "problem": "0"}, "lib": [], "timebox": 45}
 {"event": "task", "at": "2026-09-26T16:33:26", "run_time": "2:48", "task": "B-C6-004", "cell": "B-C6", "phase": "1", "role": "prover", "regime": "BLIND", "mode": "-", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "0", "problem": "0"}, "lib": [], "timebox": 45}
+{"event": "done", "at": "2026-09-26T16:34:56", "run_time": "2:49", "task": "B-C3-013", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null}
+{"event": "done", "at": "2026-09-26T16:35:01", "run_time": "2:49", "task": "B-C3-013", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 109139, "ms": 947211}
+{"event": "done", "at": "2026-09-26T16:37:56", "run_time": "2:52", "task": "B-C3-016", "out": ["cex", "verdict.md"], "verdict": "MINOR", "tokens": 90533, "ms": 496998}
+{"event": "done", "at": "2026-09-26T16:39:04", "run_time": "2:53", "task": "B-C3-015", "out": ["cex", "verdict.md"], "verdict": "MINOR", "tokens": 92995, "ms": 543181}
+{"event": "done", "at": "2026-09-26T16:39:20", "run_time": "2:54", "task": "B-C3-011", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null}
+{"event": "done", "at": "2026-09-26T16:39:25", "run_time": "2:54", "task": "B-C3-011", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 183452, "ms": 1215978}
