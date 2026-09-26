@@ -49,7 +49,7 @@ The system is built around one idea: **nothing reaches the board as established 
 |---|---|---|
 | `angles_between_lines` | A: Angles between lines | `problem-angles-lines` |
 | `uphill_paths_on_the_hypercube` | H: Uphill paths on the hypercube | `problem-hypercube-uphill` |
-| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` (C1 text missing from the official source) |
+| `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` |
 | `Disjoint_congruence_classes` | D: Disjoint congruence classes | `problem-disjoint-congruence-classes` (C1 text missing from the official source) |
 
 **One teammate, one branch, one head.** The shared tooling (skills, agents, scripts) lives on `main` and is merged into every problem branch. Each teammate:
