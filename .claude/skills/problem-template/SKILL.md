@@ -16,6 +16,8 @@ HOW TO FILL THIS IN (head only; timebox ~10 minutes; delete this comment when do
 - Nothing about the literature goes in as fact. That is the Scout's job at run time.
   Scout references go in only as "unverified" until a human or a second scout has opened them.
 - Workers never read this file. The head copies the relevant parts into briefs.
+- Build it only from verbatim problem text a human has provided. Never infer the problem from its title.
+- For "determine exactly" cells, the exact target names both halves: a universal bound over every admissible object, and a matching explicit construction as a function of the parameters.
 -->
 
 # Problem <P>: <title>
@@ -96,6 +98,6 @@ Edge cases, ranges and conventions that are easy to get wrong:
 - <e.g. "Citing a published result for the statement you are asked to prove does not count.">
 - <e.g. "A value with no labelling behind it will not survive the later cells.">
 
-## 10. Run notes (append during the run)
+## 10. Run notes
 
-- <new pitfalls, clarifications, reasons for tier changes>
+This skill is frozen once filled in; the head doesn't edit it during the run. New pitfalls, clarifications and reasons for tier changes go to `run/<P>/lessons.md`, which is copied into briefs for problem <P> only.

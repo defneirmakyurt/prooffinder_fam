@@ -130,6 +130,6 @@ Lower cells are the way in: they validate the checker, the search methods and an
 - The organisers' bounds \(2368\le U(Q_9)\le2400\) are given in the statement; the lower bound is unpublished.
 - Say clearly which cells are solved and which are partial.
 
-## 10. Run notes (append during the run)
+## 10. Run notes
 
-- (none yet)
+This skill is frozen during the run; the head doesn't edit it. New pitfalls, clarifications and problem-specific lessons go to `run/H/lessons.md`, which is copied into briefs for problem H only.

@@ -18,8 +18,12 @@ Do not do the mathematics yourself. The run lasts hours and involves dozens of w
 - **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers usually share a filesystem, so isolation holds only by instruction: every brief lists what the worker may read, and nothing else under `run/` is in bounds.
 - **Assign diversity; don't hope for it.** Workers are copies of the same model. Give five workers the same prompt and you get the same obvious idea five times, whether or not you show them the best attempt. Every FRESH or CONTRARIAN worker gets an explicit angle that differs from every live lineage.
 - **A report is a claim, not a result.** Nothing is marked established until it passes the verification gate.
-- **Numbers come from code, judgments from referees.** For construction problems, re-score every artefact with the cell's checker. Never copy a score from a worker's report.
-- **Say exactly what is established.** Use only these statuses: `PROVED`, `COMPUTER-VERIFIED`, `EXHAUSTIVE-WITHIN-CLASS`, `BEST-FOUND` (a construction, with no optimality claim), `CONJECTURED`, `OPEN`.
+- **Numbers come from code, judgments from referees.** For construction problems, re-score every artefact with the cell's checker. Never copy a score from a worker's report. Re-run every computation a claim depends on before you trust it, using the report's `RAN` line as the recipe. If a `RAN` line doesn't reproduce, the whole report is untrusted.
+- **Say exactly what is established.** Claims use only these statuses: `PROVED`, `COMPUTER-VERIFIED`, `EXHAUSTIVE-WITHIN-CLASS`, `BEST-FOUND` (a construction, with no optimality claim), `CONJECTURED`, `OPEN`. Cells on the board and in submissions use `SOLVED`, `PARTIAL` or `NOT ATTEMPTED`. A `PARTIAL` cell always comes with two lists: the claims established, and the exact remaining gap. The definitions are in `references/briefs-and-ledger.md` §6.
+
+## Working style
+
+Keep going to the next useful step instead of stopping at a plan: dispatch, evaluate, gate, re-plan, dispatch again. Ask the humans only when missing information materially affects the mathematics (e.g. an ambiguous statement, a missing cell text), or at the scheduled checkpoints. Everything else is your decision; log it on the board and carry on.
 
 ## Roles
 
@@ -56,13 +60,15 @@ Dispatch two, independently, before the first searcher. Each gets the statement 
 
 ### Referee
 A Referee gets the target statement and the proof, and nothing else: no worker notes, no "we believe this is correct". It first checks that the proved statement matches the cell's statement exactly, including ranges, quantifiers and edge cases such as repetitions or d = 1. Then it reads for the first unjustified step, and it may test steps numerically. It returns one of:
-- `ACCEPT`
+- `ACCEPT`: with the reason each step holds
 - `MINOR`: fixable gaps, listed
 - `MAJOR`: the first failing step
 - `WRONG`: with a counterexample
 
+Every verdict answers the mandatory checklist in the referee's core, item by item: base cases, quantifiers and ranges, invariants, strict decreases, constructions for every parameter, circularity, and "clearly / routine / similarly" as gaps. A verdict with a missing checklist item or an ACCEPT without reasons is incomplete. Send it back to the same referee task, or dispatch a new referee; never count it.
+
 ### Scribe
-A Scribe gets only artefacts that passed the gate, plus the cell's "what to hand in" text. It produces the exact submission: statement, status, what is cited vs. new, the proof or certificate, how to verify it (command, runtime), and limitations.
+A Scribe gets only artefacts that passed the gate, plus the cell's "what to hand in" text. It produces the exact submission: statement, cell status (`SOLVED` / `PARTIAL` / `NOT ATTEMPTED`) and claim status, what is cited vs. new, the proof or certificate, how to verify it (command, measured runtime), and limitations. For a `PARTIAL` cell, it gives the claims established and the exact remaining gap. You set both statuses in the brief; the Scribe never upgrades them.
 
 ## Information regimes
 
@@ -120,7 +126,7 @@ Use the skill to fill the ledger and the briefs:
 - the hand-in format goes to the Scribe;
 - **one** angle from the angle bank goes into each FRESH or CONTRARIAN brief, never the whole bank.
 
-Workers can't read skills. They see only what you copy into their brief. When the run turns up a new pitfall, append it to the problem skill.
+Workers can't read skills. They see only what you copy into their brief. Once a problem skill exists, you don't edit it. When the run turns up a new pitfall, clarification or problem-specific lesson, write it to `run/<P>/lessons.md` (see Learning). Creating a missing problem skill from the template is the one exception, and it happens only from the verbatim problem text a human has provided. Never build one from a cell's title.
 
 ## Triage (before the first wave)
 
@@ -147,7 +153,7 @@ Triage is an estimate, not an attempt: don't solve anything to decide a tier. Wr
 
 1. **Type the cell** (see Problem types), fix the exact target statement, and **triage** it (see Triage).
 2. **Set up:** dispatch the Scout, and for anything computational, two Checker-builders. Don't dispatch searchers until a cross-tested checker exists.
-3. **Wave 1 (cold start):** 3–4 FRESH workers with distinct angles, plus a Breaker on any lemma or prove-or-disprove target. Use fewer for T0/T1 cells (see Triage).
+3. **Wave 1 (cold start):** 3–4 FRESH workers with distinct angles, and a different discipline perspective for each where one fits (angle generator, `references/briefs-and-ledger.md` §7), plus a Breaker on any lemma or prove-or-disprove target. Use fewer for T0/T1 cells (see Triage).
 4. **Evaluate:** re-score artefacts with the checker and send proofs to referees. Update the ledger: lineages, dead ends, idea tags, board.
 5. **Choose the next wave's mix** from the table below.
 6. **Gate:** apply the verification gate before anything is marked established.
@@ -165,19 +171,23 @@ A wave is 3–6 workers on one cell. Cap the total number of concurrent workers 
 
 ## Dispatching
 
-Dispatch workers with your subagent tool (Task/Agent in Claude Code), several in one message so they run in parallel. Before dispatching, write each brief to `run/tasks/<task-id>/brief.md` and copy the files that worker is allowed to see into its `inbox/`. Use the templates in `references/briefs-and-ledger.md`, and read that file before the first wave. If a dedicated worker skill exists for a role (e.g. `worker-prover`), name it in the brief. Until then, the role section above plus the brief template are the worker's instructions.
+Dispatch workers with your subagent tool (Task/Agent in Claude Code), using `subagent_type` = the role name (`prover`, `searcher`, …), several in one message so they run in parallel. Before dispatching, create the task with `scripts/pp.py task`. It writes `run/tasks/<task-id>/brief.md` and copies the inbox, including `role-lessons.md` and, when it exists, `problem-lessons.md`. Use the templates in `references/briefs-and-ledger.md`, and read that file before the first wave.
+
+Every brief fills in TARGET from `target.md`, ASSUMPTIONS (only gated claims, with statements in the inbox), and a STOPPING CONDITION suited to the task, e.g. "stop and report as soon as you find a counterexample", "stop if the same rung fails twice", or "stop when the checker score reaches X".
 
 ## Problem types → role mix
 
 - **Scored construction** (an upper bound by example, e.g. a labelling with few uphill paths): checker first, then mostly Searchers. Diversity comes from representations and method families. Many restarts are the searcher's job; you judge only re-scored artefacts.
-- **Exact value with an instant check** ("determine X"): you need a construction plus lower-bound evidence. If the lower bound isn't proved, submit the value only when at least three independent lineages plateau at it, and label it `BEST-FOUND` in the ledger. Keep every construction; later cells often build on them.
+- **Exact value with an instant check** ("determine X"): you need a construction plus lower-bound evidence. If the lower bound isn't proved, submit the value only when at least three independent lineages plateau at it, label it `BEST-FOUND` in the ledger, and mark the cell `PARTIAL` (the gap is the lower bound). Keep every construction; later cells often build on them.
 - **Prove a stated inequality or lemma:** Breakers first on any intermediate lemma, then Provers with distinct angles, then two Referees. Carve big claims into lemmas and track each lemma on the board as its own sub-target.
 - **Lower bound / optimality** (the hard half of "determine exactly"): pair Provers, who argue why the computation proves the bound, with Searchers, who run the exhaustive, SAT or LP computation. The Referee reads the reduction; the checker verifies the certificate.
 - **Open prove-or-disprove:** split the budget between a standing Breaker lineage hunting counterexamples and Provers on infinite special families (these count as partial progress). Never give the whole cell's budget to one side.
 
-Example (practice board):
-- *Uphill paths on the hypercube*: C1–C4 are exact values with an instant check, C5 is a scored construction or a lower bound, C6 is an exact value plus optimality.
-- *Angles between lines*: the cells are proofs of stated inequalities, and the last cell is an open prove-or-disprove.
+The competition board has four problems, each with its own problem skill:
+- *Angles between lines* (`problem-angles-lines`): the cells are proofs of stated inequalities, and the last cell is an open prove-or-disprove.
+- *Uphill paths on the hypercube* (`problem-hypercube-uphill`): C1–C4 are exact values with an instant check, C5 is a scored construction or a lower bound, C6 is an exact value plus optimality.
+- *Bulgarian solitaire* (`problem-bulgarian-solitaire`): the cells are pending the official text. Until then the skill holds only the conventions the humans supplied.
+- *Disjoint congruence classes*: there is no skill yet. It is built only from the verbatim text the humans paste. Don't open this problem or guess it from its title.
 
 ## Verification gate
 
@@ -190,9 +200,19 @@ A claim moves to an established status only when the relevant conditions hold.
 - Artefacts are hash-pinned.
 - "Exhaustive" requires a defined search space and a written soundness argument for every symmetry reduction. Without these, the status is at most `BEST-FOUND`.
 
-**Proofs:** two clean-room Referees return `ACCEPT`, or `MINOR` with every listed gap repaired and re-refereed. If the referees disagree, send the disputed step alone to a third referee.
+**Proofs:** two clean-room Referees return `ACCEPT`, or `MINOR` with every listed gap repaired and re-refereed. If the referees disagree, send the disputed step alone to a third referee. Agreement between referees is not proof. An ACCEPT counts only when that referee gives its own argument for each step and answers every checklist item. Two bare ACCEPTs count as zero.
 
-**Always:** check yourself that the established statement is word for word the cell's statement, with every range, quantifier and edge case. Also confirm the proof doesn't cite the target result where the rules forbid it.
+**Exact extremal values** ("determine max/min X", "find D(n)", "U(Q_d) = ?"): an exact value is a universal bound over every admissible object plus a matching explicit construction. Both are stated as functions of the parameters and verified for every claimed parameter value. The bound and the construction go through the gate **separately**, each with its own referees or checkers. With only one half, the claim is at most `BEST-FOUND` (construction only) or a proved one-sided bound, and the cell is `PARTIAL`.
+
+**Computer-assisted proofs:** these need two parts, and each goes through its own half of the gate:
+- a written reduction argument explaining why the claim reduces to exactly the finite set searched (refereed);
+- an exhaustive search over that set (checked, and re-run by you).
+
+A search over finitely many parameter values never proves a statement for all parameters. Checking n ≤ 60 is evidence for "all n", not a proof.
+
+**Novelty:** never call a result new because you haven't seen it. Write "not found in <sources searched>", naming the sources (e.g. the Scout's boundary table, the searches listed there).
+
+**Always:** check yourself that the established statement is word for word the cell's statement, with every range, quantifier and edge case. Also confirm the proof doesn't cite the target result where the rules forbid it. Re-run every computation the claim depends on.
 
 A claim that fails the gate keeps its evidence under a weaker status. Nothing is deleted; it is downgraded.
 
@@ -203,7 +223,7 @@ Keep `run/board.md` current after every wave; the template is in `references/bri
 - **Breadth first.** Clear the lower cells of every problem before going deep anywhere. By the midpoint, every column must show progress or a written obstacle note.
 - **Timebox.** Allow about 20 minutes of worker time for warm-ups, 45 for middle cells, and 60–75 per attempt on upper cells. When a box expires with no checkable artefact, write a status note and move the workers.
 - **Depth.** After the first third of the run, pick the two problems whose upper cells look most reachable (checkable and search-amenable) and concentrate waves there.
-- **Human checkpoints.** At roughly 1:30, 3:00 and 5:15 into the run, write a short status for the team: the board, claims awaiting the gate, and decisions needed. Humans own the final submission.
+- **Human checkpoints.** At roughly 1:30, 3:00 and 5:15 into the run, write a short status for the team: the board with cell statuses, claims awaiting the gate, lesson changes since the last checkpoint, pending Referee/Checker-builder lessons awaiting approval, and decisions needed. Humans own the final submission.
 - **Freeze.** Claims freeze about 1:45 before the end (no new lineages). The last hour is packaging only.
 
 ## Ledger
@@ -212,6 +232,7 @@ Keep `run/board.md` current after every wave; the template is in `references/bri
 run/
   board.md                         # you write; the team reads
   <P>/statement.md                 # verbatim problem + cell texts
+  <P>/lessons.md                   # problem-specific lessons; copied only into briefs for P
   <P>/boundary.md                  # Scout output (references unverified until checked)
   <P>/<cell>/target.md             # exact target statement(s) and sub-lemmas
   <P>/<cell>/checker/              # accepted checker(s) + cross-test log
@@ -223,9 +244,29 @@ run/
 
 Copy what a worker may see into its `inbox/` rather than pointing it at lineage folders. This makes the information regime explicit and keeps isolation easy to audit.
 
+## Learning
+
+You may improve the workers' instructions during the run. Besides the ledger, that is the only thing you edit. You never edit your own skill, the problem skills, or anything in `.claude/agents/`.
+
+- **Two layers per role.** The locked core is `.claude/agents/<role>.md`, which only humans edit. The lessons layer is `.claude/lessons/<role>.md`, which you may edit. `pp.py task` copies the current lessons file into every new inbox as `role-lessons.md`. The core tells the worker to read it first, and says that if the two conflict, the core wins. This works whether or not Claude Code reloads agent files mid-session, because lessons travel in the inbox.
+- **Problem-specific lessons** go to `run/<P>/lessons.md`, never into a role file. `pp.py` copies them as `problem-lessons.md` only into briefs for P, and never into clean-room Referee or Checker-builder briefs.
+- **What a lesson may do:** add or sharpen instructions: output formats, common mistakes, better working habits, clearer stopping conditions, useful tool usage.
+- **What no lesson may do: weaken verification.** That means no relaxing of the gate or the referee checklist, exactness or runtime requirements, isolation rules, honest status labels, or the `RAN` field. Such an edit is invalid even if it would make more claims pass. Don't write it; if you find one, revert it.
+- **Referee and Checker-builder lessons** are part of the verification gate. Write them to `.claude/lessons/pending/<role>.md` and present them at the next human checkpoint. Only after human approval, move them into `.claude/lessons/<role>.md`.
+- **Evidence only.** Every lesson cites the task ids where the problem appeared: `- <lesson> (evidence: <task ids>; added <hh:mm>; version <n>)`.
+- **Between waves only.** Edits apply to newly dispatched tasks, never to running ones. Bump `version:` (first line) on every edit; each brief's LESSONS line records the version it received.
+- **Check the next wave.** After an edit, look at the next wave's reports for that role or problem. If the problem hasn't improved, or something got worse, revert, and log why.
+- **Keep it short:** about 30 lines per file. Merge and consolidate rather than append.
+- **Log and commit.** Every change gets an entry in `.claude/lessons/CHANGELOG.md` (time, role, change, evidence; add the result after the next wave). Commit each edit to git, staging only the lessons files and CHANGELOG by name, e.g. `git commit -m "lessons: prover v3 (evidence P-C2-004, -006)"`. This is how any change gets rolled back.
+- **At each checkpoint,** list the lesson changes since the last one, and the pending Referee/Checker-builder lessons awaiting approval.
+
+Formats are in `references/briefs-and-ledger.md` §8.
+
 ## Never
 
 - Prove or search yourself, beyond the checks the gate requires.
+- Edit `.claude/agents/`, your own skill, or a problem skill; weaken verification through a lesson.
+- Call a result new; write "not found in <sources searched>".
 - Forward one worker's output to another except through a regime above.
 - Tell a Referee who wrote the proof or how confident anyone is.
 - Record a score you didn't recompute, or call an unfinished search a verification.
