@@ -3,7 +3,8 @@
 
   pp.py open P CELL [CELL ...]                 problem + cell folders, checklist template, phases index, lessons
   pp.py task P CELL --phase PH --stop S [--role R] [--regime X] [--mode M] [--branch B [--branch-note T]]
-                    [--subject TASK] [--obstacles TASK ...] [--earlier TASK ...] [--record] [--checker DIR]
+                    [--subject TASK [--subject-file NAME ...]] [--obstacles TASK ...] [--earlier TASK ...]
+                    [--record] [--checker DIR]
                     [--target T] [--timebox MIN] [--assumptions A] [--rules R] [--angle A] [--forbid F]
                     [--forbid-file F] [--inbox SRC[=NAME]] [--lib ENTRY] [--status S --cell-status C] [--extra TEXT]
       phases: 0 1 1L 2 2A 2B 2B-XV 2C 3 GATE REPAIR WAVE 5 AUDIT (role, regime and mode follow from the phase)
@@ -22,7 +23,7 @@
   pp.py crosstest CHECKER_A CHECKER_B --gen CMD [--n 200] [--log PATH]
   pp.py matrix P CELL                           agreement matrix: ROBUST / CONTESTED / UNSUPPORTED / INCOMPLETE
   pp.py gate P CELL --subject TASK [--statement-checked]   gate report: VALID / GAP / INVALID
-  pp.py status P                                per-phase status table
+  pp.py status P                                per-phase status table + tasks with no 'done' recorded
   pp.py blindcheck TASK                         literature markers in a task's out/
   pp.py report                                  run/<P>/report.md per problem + run/SUMMARY.md from the board
   pp.py finalize P CELL --report TASK --audit TASK   copy final_report.md after an audit PASS
@@ -90,6 +91,8 @@ PHASES = {
 BRANCHES = ("ALGEBRAIC", "TOPOLOGICAL", "ANALYSIS", "NUMBER-THEORY", "DISCRETE", "COMPUTATIONAL")
 OBSTACLE_FILES = ("stuck.md", "verdict.md", "no_natural_route.md")
 SUBJECT_ITEMS = ("proof.md", "claims.md", "code")
+SUBJECT_ARTEFACTS = ("best.txt", "best.json", "best.csv", "best.py", "best.md")
+PROCESS_FILES = ("plan.md", "runlog.md", "stuck.md")
 CELL_STATUSES = ("SOLVED", "PARTIAL", "COUNTEREXAMPLE", "NOT SOLVED", "NOT ATTEMPTED")
 ROBUSTNESS = ("ROBUST", "CONTESTED", "UNSUPPORTED", "INCOMPLETE", "–")
 POSITIVE = {"ACCEPT", "CONFIRMED", "CONFIRMED-WITH-CAVEATS"}
@@ -402,8 +405,15 @@ def validate_task(a, role, regime, mode, rows):
         check_same_cell(a.P, a.cell, t, "--obstacles")
     if a.record and not (mode == "REPORT" or a.phase == "AUDIT"):
         die("--record is only for Scribe REPORT and Auditor tasks")
-    if a.checker and role not in ("searcher", "breaker"):
-        die("--checker is only for searchers and breakers")
+    if a.checker and role not in ("searcher", "breaker", "referee"):
+        die("--checker is only for searchers, breakers and referees")
+    if a.subject_file and role not in ("referee", "prover", "searcher", "breaker"):
+        die("--subject-file goes with --subject, on referee and repair tasks")
+    for name in a.subject_file:
+        if name in PROCESS_FILES:
+            die(f"--subject-file {name}: that file says how the work was made; a clean-room reader never sees it")
+        if a.subject and not os.path.exists(os.path.join(task_dir(a.subject), "out", name)):
+            die(f"--subject-file {name}: {a.subject} has no out/{name}")
     if regime == "BLIND" and a.inbox:
         die("a BLIND inbox accepts only lessons, checklist Part G, obstacles, checker/ and library code; drop --inbox")
     for name in a.lib:
@@ -457,7 +467,8 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
             die(f"{a.subject} has no out/final_report.md")
         placed.append("final_report.md")
     elif a.subject:
-        found = copy_task_outputs(a.subject, SUBJECT_ITEMS, os.path.join(inbox, "subject"))
+        wanted = (*SUBJECT_ITEMS, *SUBJECT_ARTEFACTS, *a.subject_file)
+        found = copy_task_outputs(a.subject, wanted, os.path.join(inbox, "subject"))
         if not found:
             die(f"{a.subject} has none of out/{', out/'.join(SUBJECT_ITEMS)}")
         placed.append(f"subject/ ({', '.join(found)} of {a.subject})")
@@ -487,7 +498,26 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
         accepted = os.path.join(cell_dir(a.P, a.cell), "accepted")
         if os.path.isdir(accepted) and os.listdir(accepted):
             placed.append(copy_into(f"{accepted}=accepted", inbox))
-    if a.record or mode == "REPORT" or a.phase == "AUDIT":
+    if a.phase == "AUDIT":
+        # The auditor must read the report against exactly the record the Scribe wrote it from.
+        # A fresh snapshot is taken later and can contradict the report's own citations (the
+        # Scribe's copy of phases.md predates its own row; a new copy contains it).
+        rec = os.path.join(inbox, "record")
+        subj_rec = os.path.join(task_dir(a.subject), "inbox", "record")
+        if os.path.isdir(subj_rec):
+            shutil.copytree(subj_rec, rec, dirs_exist_ok=True)
+        dest = os.path.join(rec, "tasks", a.subject)
+        os.makedirs(dest, exist_ok=True)
+        for name in ("brief.md",):
+            src = os.path.join(task_dir(a.subject), name)
+            if os.path.isfile(src):
+                shutil.copy2(src, dest)
+        out = os.path.join(task_dir(a.subject), "out")
+        if os.path.isdir(out):
+            shutil.copytree(out, os.path.join(dest, "out"),
+                            ignore=shutil.ignore_patterns("tmp"), dirs_exist_ok=True)
+        placed.append(f"record/ (the snapshot {a.subject} wrote from, plus its own brief.md and out/)")
+    elif a.record or mode == "REPORT":
         rec = os.path.join(inbox, "record")
         for t in cell_tasks(a.P, a.cell):
             if t == task_id:
@@ -997,6 +1027,9 @@ def cmd_status(a):
         robust = (verdict_field(read(matrix), "CLASS") if os.path.isfile(matrix) else None) or "–"
         nxt = board.get(f"{a.P}-{cell}", {}).get("Next", "")
         print(f"| {a.P}-{cell} | {agents} | {'; '.join(verdicts) or '–'} | {robust} | {nxt} |")
+    open_tasks = tasks_without_done(a.P)
+    if open_tasks:
+        print(f"\nno 'pp.py done' recorded (still running, or telemetry lost): {', '.join(open_tasks)}")
 
 
 BLIND_MARKERS = [
@@ -1187,6 +1220,12 @@ def task_outcome(task):
     if not verdict and verdict_text(task):
         verdict = next((lab for lab in ADVERSARY_LABELS if lab in verdict_text(task)), None)
     return names, verdict
+
+
+def tasks_without_done(p=None):
+    tasks = telemetry_tasks()
+    return sorted(t for t, rec in tasks.items()
+                  if not rec.get("done") and (p is None or t.startswith(f"{p}-")))
 
 
 def cmd_done(a):
@@ -1430,6 +1469,9 @@ def main():
     s.add_argument("--branch", choices=BRANCHES)
     s.add_argument("--branch-note", help="the problem skill's branch note for this lens")
     s.add_argument("--subject", help="task whose proof.md, claims.md, code/ go to inbox/subject/")
+    s.add_argument("--subject-file", action="append", default=[], metavar="NAME",
+                   help="extra file or dir from the subject's out/ into inbox/subject/ "
+                        "(a computational subject's artefact); repeatable")
     s.add_argument("--obstacles", nargs="+", default=[], help="tasks whose stuck/verdict/no_natural_route files go in")
     s.add_argument("--earlier", nargs="+", default=[], help="literature: earlier tasks whose out/ goes in")
     s.add_argument("--record", action="store_true", help="copy the cell's full record (Scribe REPORT, Auditor)")

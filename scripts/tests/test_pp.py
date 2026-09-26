@@ -158,6 +158,19 @@ def phase_tests():
     pp("task", "A", "C1", "--phase", "2", *STOP, ok=False, label="referee without --subject")
     pp("task", "A", "C1", "--phase", "2", "--subject", "A-C9-001", *STOP, ok=False, label="subject from another cell")
 
+    write(T(t1, "out", "Q4.txt"), "0000\n1111\n")
+    write(T(t1, "out", "runlog.md"), "how I did it\n")
+    ck = os.path.join(S, "run", "A", "C1", "checker")
+    write(os.path.join(ck, "verify.py"), "print('VERIFIED 0')\n")
+    tcv = last_task(pp("task", "A", "C1", "--phase", "2", "--subject", t1,
+                       "--subject-file", "Q4.txt", "--checker", ck, *STOP))
+    check("Q4.txt" in os.listdir(T(tcv, "inbox", "subject")), "referee gets the computational subject's artefact")
+    check(os.path.isfile(T(tcv, "inbox", "checker", "verify.py")), "referee may be given the checker to re-score")
+    pp("task", "A", "C1", "--phase", "2", "--subject", t1, "--subject-file", "runlog.md", *STOP, ok=False,
+       label="--subject-file refuses a process file (clean room)")
+    pp("task", "A", "C1", "--phase", "2", "--subject", t1, "--subject-file", "nope.txt", *STOP, ok=False,
+       label="--subject-file refuses a file the subject does not have")
+
     out = pp("task", "A", "C1", "--phase", "2A", "--obstacles", t1, tv, *STOP)
     ta = last_task(out)
     check(sorted(os.listdir(T(ta, "inbox", "obstacles", t1))) == ["stuck.md"], "triage obstacles: stuck.md only, no proof")
@@ -246,6 +259,12 @@ def phase_tests():
     inbox = set(os.listdir(T(tau, "inbox")))
     check({"final_report.md", "record", "checklist-G.md"} <= inbox and "checklist-S.md" not in inbox
           and "problem-lessons.md" not in inbox, "auditor inbox: report + record, no Part S, no problem lessons")
+    arec = T(tau, "inbox", "record")
+    check(os.path.isfile(os.path.join(arec, "tasks", tsr, "out", "final_report.md")),
+          "auditor record holds the subject's own brief.md + out/")
+    check(open(os.path.join(arec, "cell", "phases.md")).read()
+          == open(os.path.join(T(tsr, "inbox", "record"), "cell", "phases.md")).read(),
+          "auditor reads the record snapshot the Scribe wrote from, not a later one")
 
     rows = [l for l in open(os.path.join(c1, "phases.md")).read().splitlines() if l.startswith(f"| A-C1-")]
     n_tasks = len([d for d in os.listdir(os.path.join(S, "run", "tasks")) if d.startswith("A-C1-")])

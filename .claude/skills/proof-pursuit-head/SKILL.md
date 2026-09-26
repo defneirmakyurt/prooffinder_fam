@@ -32,7 +32,7 @@ Each problem has its own git branch (`angles_between_lines`, `uphill_paths_on_th
 
 ## Principles
 
-- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers share a filesystem, so isolation holds by instruction plus the `scripts/guard.py` hook. The hook binds a worker to its own `run/tasks/<id>/` and is best effort for Bash, so still audit for leaks.
+- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers share a filesystem, so isolation holds by instruction plus the `scripts/guard.py` hook. The hook binds a worker to its own `run/tasks/<id>/` and is best effort for Bash, so still audit for leaks: every denial is appended to `run/guard.log` (task, agent type, tool, target, reason), which is your isolation audit trail — you cannot read worker transcripts. Read it at each checkpoint alongside `pp.py blindcheck`.
 - **Information moves forward only.** Later-phase findings are never fed back to earlier-phase agents. A repair is a *new*, later-phase agent that may see the gate report. Blind agents never see literature, other agents' proofs, or Part S of the checklist.
 - **Assign diversity; don't hope for it.** Workers are copies of the same model. Beyond the two or three Phase 1 blind baselines, every solver gets an explicit branch lens or angle that differs from every live lineage.
 - **Whoever finds a proof never validates it.** Validation is always a different agent with a fresh context.
@@ -74,7 +74,7 @@ A role is what a worker does. The same role can run under different regimes, pha
 | Literature | SOLVE mode: literature map + attempt with known techniques + divergence from blind work. ANALYST mode: map, reduce to sub-problems, attempt, explain why not solvable | 1L, 3 | `sources.md`, `divergence.md`, proof or analysis |
 | Triage | Rate the five branches for a cell from its structure and the obstacles so far; never solves | 2A | `triage.md`, `selected_branches.txt` |
 | Scribe | SUBMISSION mode: package gated results in the hand-in format. REPORT mode: `final_report.md` citing artefacts by path and step | 5 | submission / final report |
-| Auditor | Check every citation in a final report against the artefacts | 5 | audit PASS / FAIL |
+| Auditor | Check every citation in a final report against the artefacts, re-running the report's `RAN` lines | 5 | audit PASS / FAIL |
 
 Role notes:
 - **Blind solvers** (Prover or Searcher, BLIND) derive everything themselves. Standard textbook tools are fine (Cauchy–Schwarz, Jensen, the spectral theorem). Results specific to this problem or its literature are not. Run `pp.py blindcheck` on every blind output, and stop and tell the humans if literature appears.
@@ -82,7 +82,7 @@ Role notes:
 - **Checker-builders.** Dispatch two, independently, before the first searcher. Checkers are stdlib-only, exact, and short enough to read line by line. Cross-test them with `pp.py crosstest`. Once they agree, one becomes the ground-truth scorer and ships with the submission.
 - **Referees** get the target, the proof, its claims and code, and checklist Parts G + S. Nothing else: no worker notes, no author, no confidence. An ACCEPT without per-step reasons, or with an unanswered checklist item, is incomplete: re-dispatch, never count it.
 - **Literature** results never reach blind agents. Its references stay unverified until a human or a second literature agent has opened them. It may not present a citation as a proof of the cell itself. Blind and literature results are compared, never merged.
-- **Scribe and Auditor.** Reports introduce no new mathematics. A claim with no artefact is deleted. A report is final only after the Auditor passes it.
+- **Scribe and Auditor.** Reports introduce no new mathematics. A claim with no artefact is deleted. A report is final only after the Auditor passes it. The Auditor has Bash and re-runs what the report says was run, from a copy in its own `out/tmp/`; a `RAN` line reproduces when the outputs match, not when the wall clock does.
 
 ## Information regimes
 
@@ -218,6 +218,8 @@ Before dispatching, create the task with `scripts/pp.py task --phase <phase>`. I
 Read `references/briefs-and-ledger.md` before the first wave.
 
 Pass exactly the prompt that `pp.py task` prints ("Your task folder is <abs path>/ . Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, and follow them.") and nothing else: no context, no hints, no names of theorems, authors or papers.
+
+**If a worker dies mid-task** (session restart, API error, crash), re-dispatch the *same* task id rather than opening a new one: its `out/` holds its own partial work, so the lineage, the regime and the budget slot are preserved. Add one sentence to the prompt saying its `out/` is its own interrupted work and it should continue from there — process only, never mathematical content. The same applies to a report sent back after an audit FAIL: give the failing citations verbatim and change nothing else.
 
 When a worker returns, run `pp.py done TASK --tokens N --ms N` with the total tokens and duration from the subagent result, plus `--score S` for a searcher once you have re-scored its artefact. This closes the task's telemetry record. `task`, `gate` and `pin` record everything else themselves.
 

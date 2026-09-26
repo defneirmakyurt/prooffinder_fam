@@ -112,6 +112,7 @@ Working rules from the user's global instructions:
   - modes SOLVE (1L) and ANALYST (3).
 - [x] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
 - [x] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
+  **Amended 2026-09-26 after the dry run, with the humans' approval:** Bash added, so the Auditor re-runs the report's `RAN` lines instead of taking them on trust; the guard confines its Bash writes to `out/`.
 - [x] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
 
 ### B4. Lessons
@@ -138,32 +139,28 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 
 ### B8. Dry run (≤ 16 subagent calls)
 
-- [ ] **Hypercube C1 (`uphill_paths_on_the_hypercube`)** (6 calls):
-  1. Phase 0 checklist + 2 checker-builders;
-  2. `crosstest`;
-  3. Phase 1: 2 blind searchers;
-  4. re-score;
-  5. 1L literature;
-  6. gate on computational claims;
-  7. scribe SUBMISSION.
-- [ ] **Angles C1 (`angles_between_lines`)** (9 calls):
-  1. Phase 0 checklist;
-  2. Phase 1: 2 blind provers;
-  3. 1L literature;
-  4. Phase 2: one verifier per result (≤ 3);
-  5. one GATE referee;
-  6. scribe REPORT + auditor.
-- [ ] **Audit afterwards:**
-  - isolation leaks (guard denials, `blindcheck`, transcripts);
-  - report length;
-  - unclear briefs;
-  - gate and matrix behaviour;
-  - whether Part S stayed out of blind inboxes;
-  - telemetry: `pp.py done` after every worker, with tokens and duration taken from the subagent result; `pp.py telemetry` shows a record per task and the gated claims as fed.
-- [ ] If Hypercube C1's checker passes the cross-test, add it to the library (`pp.py lib add`). Then give one Angles C1 blind prover a `--lib` entry, to exercise the library path end to end.
-- [ ] Fix the skills and agents, then move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit.
+**Run on 2026-09-26. Findings and fixes: `dryrun/2026-09-26-findings.md`.** 16 fresh subagent calls
+used (A-C1 nine, H-C1 seven); interrupted workers were resumed in their own task folders, which
+costs no extra slot.
+
+- [x] **Hypercube C1** — 2 checker-builders, `crosstest` (208 cases, 0 disagreements), 2 blind
+  searchers, head re-scoring, 1L literature, 2 referees on the lower-bound arguments.
+  Values U(Q_3)=14, U(Q_4)=34, re-scored by the head; the literature route proves both bounds by
+  hand. Cell PARTIAL until the gate closes.
+- [x] **Angles C1** — checklist, 2 blind provers, 1L literature, 3 verifiers, 1 GATE referee,
+  scribe REPORT, auditor. Gate VALID, cell SOLVED / PROVED, `final_report.md` filed after an
+  audit PASS (the first audit returned FAIL on three citations; the repair loop was exercised).
+- [x] **Audit afterwards:** isolation (`blindcheck` clean on every blind task; the guard had no
+  audit trail, now fixed); report length; brief clarity; gate behaviour; Part S never left a
+  referee inbox; telemetry gaps. All written up in the findings file.
+- [x] Hypercube C1's checker passed the cross-test and is in the library as `H-uphill-checker`.
+  The `--lib` dispatch path is covered by `test_pp.py`; a 16th call to hand an Angles prover a
+  hypercube checker would have exercised nothing further and was spent on a referee instead.
+- [x] Fixes implemented and tested (see the findings file's change table).
+- [ ] Move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit.
 - Dry-run results are **not** submission-verified unless they pass the gate.
-- Phases 2A–2C and 3 aren't covered at this size. Propose a second mini dry run (a small 2A/2B/2C/3 chain on Angles C2) if the budget allows.
+- [ ] Phases 2A–2C and 3 were not reached at this size. A second mini dry run (a small 2A/2B/2C/3
+  chain on Angles C2) is still worth doing if the budget allows.
 
 ### B9. Clean up
 

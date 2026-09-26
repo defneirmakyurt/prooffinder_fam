@@ -56,11 +56,11 @@ Inbox contents set by phase (`pp.py` enforces them):
 | `problem-lessons.md` | everyone except Referee, Checker-builder, Auditor |
 | `checklist-G.md` | everyone except Checker-builder |
 | `checklist-S.md` | Referee only (VERIFY, GATE, CROSS) |
-| `subject/` (`proof.md`, `claims.md`, `code/` of SUBJECT only) | Referee; REPAIR (plus the gate report) |
+| `subject/` (`proof.md`, `claims.md`, `code/`, `best.*` of SUBJECT only; add a computational subject's artefact with `--subject-file NAME`, which refuses `plan.md`, `runlog.md`, `stuck.md`) | Referee; REPAIR (plus the gate report) |
 | `obstacles/` (`stuck.md`, `verdict.md`, `no_natural_route.md` of named tasks, never proofs) | Triage (2A), Breaker ADVERSARY (2C) |
-| `checker/` | Searchers, Breakers where relevant |
+| `checker/` | Searchers, Breakers where relevant; Referees judging a computational claim, so they can re-score the artefact |
 | earlier results the phase allows | Literature (1L: Phase 1 outputs; 3: everything for the cell) |
-| `record/tasks/<id>/…` (paths preserved so citations resolve) | Scribe REPORT, Auditor |
+| `record/tasks/<id>/…` (paths preserved so citations resolve; an AUDIT task gets the *subject's* snapshot plus the subject's own `brief.md` and `out/`, never a fresh one, so the report's citations resolve against the record it was written from) | Scribe REPORT, Auditor |
 | accepted artefacts + hand-in text | Scribe SUBMISSION |
 | `library/<entry>/` (`ENTRY.md`, `MANIFEST.sha256`, `files/`), chosen with `--lib` | Prover, Searcher, Breaker. Under BLIND: `code` entries with no literature markers only. Never clean-room roles, Triage, Literature, Scribe or Auditor |
 
@@ -487,8 +487,15 @@ Every statement cites an artefact as `tasks/<id>/out/<file>, step <k>`.
 ```
 AUDIT: PASS | FAIL
 CITATIONS CHECKED: <n>
-UNSUPPORTED: <statement — why (missing file / step says otherwise / no citation)>, one per line, or "none"
+UNSUPPORTED: <statement — why (missing file / step says otherwise / no citation / count wrong / RAN line did not reproduce)>, one per line, or "none"
 ```
+
+followed by a table `statement | citation | found? | what the artefact actually says`. The Auditor
+has Bash: it re-runs the report's `RAN` lines from a copy in its own `out/tmp/`, saves each run's
+output under `out/logs/`, and cites the log. A `RAN` line reproduces when the **outputs** match;
+wall-clock drift is not a failure, but a runtime reported as under a limit that in fact exceeds it
+is unsupported. Counts and inventories ("seven tasks", "the only seed is X") are citations too and
+are checked by counting and grepping the record.
 
 ## 16. Status table (printed by the head after every phase; `pp.py status`)
 

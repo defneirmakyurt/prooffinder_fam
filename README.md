@@ -110,7 +110,7 @@ Cross-problem decisions (which problems get the most effort, which two to go dee
 | Literature | SOLVE (Phase 1L) and ANALYST (Phase 3); the only role with web access | Read, Write, Glob, Grep, Bash, WebSearch, WebFetch |
 | Triage | Branch relevance for Phase 2A; never solves | Read, Write, Glob |
 | Scribe | SUBMISSION (hand-in) and REPORT (`final_report.md`) | Read, Write, Edit, Glob, Bash |
-| Auditor | Checks every citation in a final report | Read, Write, Glob, Grep |
+| Auditor | Checks every citation in a final report, and re-runs its `RAN` lines | Read, Write, Glob, Grep, Bash |
 
 Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitClaudeMd: true`, so personal CLAUDE.md rules don't leak in.
 
@@ -129,7 +129,7 @@ Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitCl
 
 How it's enforced:
 - Each worker gets a task folder `run/tasks/<id>/` holding `brief.md`, `inbox/` (copies the head places there) and `out/`. `pp.py task --phase` builds the inbox. It enforces the regime: Part S goes only to referees, and blind inboxes accept only obstacle files and library code, never proofs.
-- `scripts/guard.py`, a PreToolUse hook in every agent, binds a worker to its own task folder. It blocks reads of other tasks, the ledger and `.claude/`, and blocks writes outside `out/`. For Bash commands it can only pattern-match, so enforcement there is best effort. `pp.py blindcheck` flags literature markers in blind outputs, and any breach is reported to the humans at once.
+- `scripts/guard.py`, a PreToolUse hook in every agent, binds a worker to its own task folder. It blocks reads of other tasks, the ledger and `.claude/`, and blocks writes outside `out/`. For Bash commands it can only pattern-match, so enforcement there is best effort. Every denial is appended to `run/guard.log` (task, agent type, tool, target, reason): the head cannot read worker transcripts, so this is its only isolation audit trail. `pp.py blindcheck` flags literature markers in blind outputs, and any breach is reported to the humans at once.
 - The head passes each worker a one-line prompt pointing at its task folder, and nothing else: no hints, no theorem or author names.
 
 ---
@@ -239,6 +239,7 @@ If this system runs again, start with I4 and I6: the telemetry log from this run
 | `sources/` | Verbatim problem texts | humans |
 | `run/` | The ledger for one problem per branch (layout in the head skill) | head |
 | `BUILD_PLAN.md` | Temporary: what's still to be built | build session |
+| `dryrun/` | Dry-run findings and archived dry-run ledgers | build session |
 
 ---
 
@@ -272,6 +273,14 @@ If this system runs again, start with I4 and I6: the telemetry log from this run
 - **2026-09-26, pipeline build:** skills for Bulgarian solitaire (official text) and Disjoint congruence classes; `pp.py` phase machinery (`task --phase`, inbox rules, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`); referee `out/cex/` in the guard; agents updated, `literature`, `triage` and `auditor` added, `scout` removed.
 - **2026-09-26, cross-verification fixes:** the gate needs the gated proof itself to be ROBUST, not just the cell; `INCOMPLETE` while verdicts are pending (UNSUPPORTED only once every verdict is in); branches re-admitted in 2B-D count in the matrix; `pp.py task` refuses a cross-verifier on a proof whose Phase 2 verdict is negative, or a second one from the same branch; triage core additions.
 - **2026-09-26, self-improvement layer documented (proposed; not approved):** ideas I1–I7 copied from `BUILD_PLAN.md` into §8, so they survive when the plan is deleted.
+- **2026-09-26, B8 dry run (A-C1 and H-C1) and the fixes it forced:**
+  - `run/guard.log`: every isolation denial is now recorded, because the head cannot read worker transcripts;
+  - `pp.py status` lists tasks with no `done` event, so lost telemetry is visible;
+  - an AUDIT task gets the Scribe's own record snapshot, not a later one that contradicts the report;
+  - `task --subject-file` and `--checker` for referees, so a referee judging a computational claim gets the artefact and can re-score it;
+  - the Auditor gets Bash and re-runs the report's `RAN` lines, confined to `out/` by the guard (human-approved change to a locked core);
+  - scribe and searcher lessons v1;
+  - full write-up in `dryrun/2026-09-26-findings.md`.
 - **2026-09-26, self-improvement layer, I1 + I5 built:**
   - telemetry: `run/telemetry.jsonl`, `pp.py done`, `pp.py telemetry`; `task`, `gate` and `pin` record events;
   - technique library: `pp.py lib add | list | import`, `task --lib`, `pp.py lessons`;
