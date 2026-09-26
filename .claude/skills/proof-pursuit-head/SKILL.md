@@ -242,7 +242,7 @@ The four problems and their skills:
 - *Angles between lines* (`problem-angles-lines`): the cells are proofs of stated inequalities; the last is open prove-or-disprove.
 - *Uphill paths on the hypercube* (`problem-hypercube-uphill`): C1–C4 are exact values with an instant check; C5 is a scored construction or a lower bound; C6 is an exact value plus optimality.
 - *Bulgarian solitaire* (`problem-bulgarian-solitaire`): C1 proves the cycle structure (a lemma plus a classification); C2–C5 are exact extremal values (a formula in \(k\), both bounds); C3 adds a stated upper bound and a classification of maximisers; C6 is open.
-- *Disjoint congruence classes* (`problem-disjoint-congruence-classes`): C2–C5 prove the statement over growing ranges of sizes, with an exhaustiveness certificate for any computation (C5 adds five more requirements); C6 is open, with three alternative directions. C1's text is missing from the source: don't open it until the humans supply it.
+- *Disjoint congruence classes* (`problem-disjoint-congruence-classes`): C1–C5 prove the statement over growing ranges of sizes (C1 is \(k=3\)), with an exhaustiveness certificate for any computation (C5 adds five more requirements); C6 is open, with three alternative directions.
 
 ## Verification gate
 

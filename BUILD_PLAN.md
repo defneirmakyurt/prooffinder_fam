@@ -171,7 +171,7 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 1. ~~Angles cell count~~ **Resolved:** the official text has 6 cells; the extract had dropped Cell 1 and changed the order. `problem-angles-lines` has been rewritten from the official text.
 2. ~~Disjoint congruence classes skill~~ **Built in B0.**
 3. ~~Bulgarian solitaire cross-check~~ **Done in B0;** the differences are listed in the skill's §2.
-6. **Cell 1 was missing for B and D.** Both official sources say "The statement of this cell is not visible in the provided screenshots". **B-C1** was supplied from a screenshot on 2026-09-26 and is being added to the skill by a human (the `.tex` in `sources/` still lacks it). **D-C1** ("Three Classes"; no points given) is still pending: the skill marks it, and the head won't open it until a human pastes the verbatim text.
+6. ~~Cell 1 missing for B and D~~ **Resolved 2026-09-26:** both C1 texts were supplied from screenshots and are now in the skills and in `sources/` (B-C1 1 pt; D-C1 "Three classes", 1 pt, judged).
 7. **D source says "all four" but lists five certificate items.** The skill keeps all five.
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.

@@ -1,6 +1,6 @@
 ---
 name: problem-disjoint-congruence-classes
-description: Problem skill for "Disjoint congruence classes" (D), whether k pairwise disjoint congruence classes must have two moduli with gcd at least k. Holds the verbatim statement (official text), six cells (C1 text pending), hand-in format with the exhaustiveness certificate, cell typing, ladders, checker spec, angle bank, pitfalls, Part S seeds and branch notes. Load when opening problem D in a Proof Pursuit run.
+description: Problem skill for "Disjoint congruence classes" (D), whether k pairwise disjoint congruence classes must have two moduli with gcd at least k. Holds the verbatim statement (official text), six cells, hand-in format with the exhaustiveness certificate, cell typing, ladders, checker spec, angle bank, pitfalls, Part S seeds and branch notes. Load when opening problem D in a Proof Pursuit run.
 ---
 
 # Problem D: Disjoint congruence classes
@@ -8,7 +8,7 @@ description: Problem skill for "Disjoint congruence classes" (D), whether k pair
 Letter code: `D` (cell ids `D-C1` … `D-C6`). Ledger: `run/D/`. Official source: `sources/problem_description_disjoint_congruence_classes.tex`.
 
 > **Source notes for the humans:**
-> 1. **Cell 1 is not in the official text we have.** The source says: "The statement of this cell is not visible in the provided screenshots." Its title is "Three Classes"; its points are not given. **Don't open D-C1, and don't guess its statement from the title,** until a human pastes the verbatim text into `sources/`.
+> 1. **Cell 1** was missing from the first transcription ("not visible in the provided screenshots"). Its verbatim text was supplied from a screenshot on 2026-09-26 and is in §1 and in `sources/`.
 > 2. The exhaustiveness certificate is introduced with "all four" in the original but lists **five** requirements (the transcriber noted this in a comment in the `.tex`). This skill keeps all five.
 > 3. The statement itself contains literature claims (an asymptotic bound "is known"; the group form "is known for \(k\le5\)"). They are part of the verbatim text, so every worker sees them. They are not gated facts: nothing may use them as an ASSUMPTION unless it passes the gate or the humans say so.
 
@@ -85,14 +85,14 @@ Observation 2 bounds a single modulus from below; it says nothing about any gcd,
 
 | Cell | Title | Points | Checking |
 |---|---|---|---|
-| C1 | Three Classes | **not given** | **text not visible in the source; pending** |
+| C1 | Three Classes | 1 | judged (written proof) |
 | C2 | Four Classes | 2 | written proof |
 | C3 | Every \(k\) up to 8 | 3 | written proof |
 | C4 | Every \(k\) up to 12 | 5 | written proof + per-\(k\) report for \(9\le k\le16\) |
 | C5 | The Certified Boundary | 8 | written proof + certificate (i)–(v) |
 | C6 | Beyond the Boundary | 13 | **open question** |
 
-**C1: Three Classes (verbatim from the source).** "*The statement of this cell is not visible in the provided screenshots.*"
+**C1: Three Classes (verbatim).** The first size that the two trivial observations above do not settle. Prove the statement for \(k=3\): any three pairwise disjoint classes have \(\gcd(m_i,m_j)\ge 3\) for some \(i<j\).
 
 **C2: Four Classes (verbatim).** The same question for four classes. Prove the statement for \(k=4\).
 
@@ -167,7 +167,7 @@ Official "What to Hand In" (verbatim): "For each cell you attempt, hand in a wri
 
 | Cell | Artefact files | Judges require |
 |---|---|---|
-| C1 | pending | pending |
+| C1 | `submission.md`; code + certificate 1–5 if computational | proof for \(k=3\) |
 | C2 | `submission.md`; code + certificate 1–5 if computational | proof for \(k=4\) |
 | C3 | `submission.md`; code + certificate 1–5 per size if computational | proof for every \(k\le8\) |
 | C4 | `submission.md`; code + certificate 1–5 per size | proof for every \(k\le12\); for each \(k=9..16\), exactly what the method leaves undecided (nothing, with proof, or the undecided objects in full); any disagreement with a consulted source resolved |
@@ -180,7 +180,7 @@ Official "What to Hand In" (verbatim): "For each cell you attempt, hand in a wri
 
 | Cell | Type | Tier guess + reason | Exact target |
 |---|---|---|---|
-| C1 | pending | pending | pending (text missing) |
+| C1 | prove a stated lemma (finite \(k\)) | T0/T1: 1 pt, smallest open size | The statement at \(k=3\): every pairwise disjoint family of three classes has a pair \(i<j\) with \(\gcd(m_i,m_j)\ge3\). |
 | C2 | prove a stated lemma (finite \(k\)) | T1: 2 pts, one size | The statement at \(k=4\). |
 | C3 | prove a stated lemma, a range of sizes | T2: 3 pts, four new sizes | The statement at every \(k\le8\) (\(k\ge2\), since the Question fixes \(k\ge2\)). |
 | C4 | prove a range + report method limits | T2: 5 pts | The statement at every \(k\le12\); plus, for each \(k\in\{9,\ldots,16\}\), the exact set of objects the method leaves undecided (empty, with proof, or listed in full). |
@@ -191,7 +191,7 @@ Official "What to Hand In" (verbatim): "For each cell you attempt, hand in a wri
 
 C2–C5 are the same statement over growing ranges of \(k\); C4 and C5 add increasingly strict accounts of the method. C6 leaves the finite range.
 
-### C2 / C3
+### C1 / C2 / C3
 - R1 (hypothesis): a reduction that bounds the moduli or their prime structure in a hypothetical counterexample of size \(k\), using only \((*)\) and the two trivial bounds as the starting point (the trivial bounds alone count for nothing).
 - R2 (hypothesis): after R1, the remaining finite set is small enough to settle by hand or by an exhaustive search with certificate 1–5.
 - Feeds: the same machinery, pushed further, is C4 and C5.
@@ -251,7 +251,7 @@ C2–C5 are the same statement over growing ranges of \(k\); C4 and C5 add incre
 - **C5 (iv):** a size that closes only with an unproved pruning rule is not certified; show the survivor list is unchanged with the rule switched off.
 - **C5 (v):** the second implementation must differ in method, not only in code; report disagreements, never reconcile them silently.
 - **The literature facts in the statement** (C6(b) "it is known…", C6(c) "known for \(k\le5\)") are not gated; don't use them as assumptions.
-- **C1 is missing** from the source; C3's text ("after C1 and C2, the sizes \(k=5,6,7\) and \(8\) remain") refers to it. Until C1's text arrives, C3's target is still every \(k\le8\) as stated.
+- **C1 is the first size the trivial bounds don't settle** (\(k=3\)); an answer resting only on observations 1 and 2 scores nothing there either.
 
 ## 9. Problem-specific rules
 
@@ -262,7 +262,7 @@ C2–C5 are the same statement over growing ranges of \(k\); C4 and C5 add incre
 
 ## 10. Run notes
 
-This skill is frozen during the run; the head doesn't edit it. The one exception: when the humans supply C1's verbatim text, it is added to §1, §3, §4 and §11 with them. New pitfalls, clarifications and problem-specific lessons go to `run/D/lessons.md`, which is copied into briefs for problem D only.
+This skill is frozen during the run; the head doesn't edit it. New pitfalls, clarifications and problem-specific lessons go to `run/D/lessons.md`, which is copied into briefs for problem D only.
 
 ## 11. Checklist Part S seeds and branch notes
 
@@ -270,7 +270,7 @@ Part S seeds (from the statement only; referees and gate only):
 - **S2 extremal configurations:** the sharpness family \(1,\ldots,k\pmod k\) (pairwise disjoint, every pairwise gcd exactly \(k\)) shows the bound \(k\) cannot be raised; any proof must be consistent with it (it must not prove \(\gcd\ge k+1\)).
 - **S3 cases to cover:** every pairwise disjoint family of the given size: all moduli \(m_i\ge1\) (unbounded), repeated moduli, repeated residues, \(m_i=1\) included; every size in the claimed range.
 - **S4 known traps (from the statement):** resting on the trivial bounds alone; an exhaustive search without a proof that nothing outside its finite set is a counterexample; an unproved pruning rule; an undecided survivor; a vacuous method (C5 (i)); a second implementation that is the same algorithm twice (C5 (v)).
-- **S5 consistency:** the statement at \(k\) is required for C2 (\(k=4\)), C3 (\(k\le8\)), C4 (\(k\le12\)); a proved range must contain every smaller claimed size; C4's per-\(k\) report at \(k=9..12\) must be consistent with its own proof there (nothing undecided at a proved size).
+- **S5 consistency:** the statement at \(k\) is required for C1 (\(k=3\)), C2 (\(k=4\)), C3 (\(k\le8\)), C4 (\(k\le12\)); a proved range must contain every smaller claimed size; C4's per-\(k\) report at \(k=9..12\) must be consistent with its own proof there (nothing undecided at a proved size).
 - **S6 checkable values:** the official example (\(0\bmod2,1\bmod4,3\bmod8\): disjoint, gcds \(2,2,4\)); \(0\bmod2,0\bmod3\) meet; the sharpness family.
 
 Branch notes (angles, each only into its own 2B lens):
