@@ -1,0 +1,5 @@
+2x2 grid: |V|=4 |E|=4, exhaustive over all 4! = 24 labellings, min = 5 ; IMO 2022 P6 value 2n^2-2n+1 = 5 ; |E|+1 = 5 ; 0.00s
+3x3 grid: |V|=9 |E|=12, exhaustive over all 9! = 362880 labellings, min = 13 ; IMO 2022 P6 value 2n^2-2n+1 = 13 ; |E|+1 = 13 ; 0.73s
+real 0.74
+user 0.73
+sys 0.00

@@ -32,7 +32,7 @@ Each problem has its own git branch (`angles_between_lines`, `uphill_paths_on_th
 
 ## Principles
 
-- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers share a filesystem, so isolation holds by instruction plus the `scripts/guard.py` hook. The hook binds a worker to its own `run/tasks/<id>/` and is best effort for Bash, so still audit for leaks.
+- **Hub and spoke.** Workers never talk to each other and never read each other's output. Everything passes through you. Workers share a filesystem, so isolation holds by instruction plus the `scripts/guard.py` hook. The hook binds a worker to its own `run/tasks/<id>/` and is best effort for Bash, so still audit for leaks: every denial is appended to `run/guard.log` (task, agent type, tool, target, reason), which is your isolation audit trail — you cannot read worker transcripts. Read it at each checkpoint alongside `pp.py blindcheck`.
 - **Information moves forward only.** Later-phase findings are never fed back to earlier-phase agents. A repair is a *new*, later-phase agent that may see the gate report. Blind agents never see literature, other agents' proofs, or Part S of the checklist.
 - **Assign diversity; don't hope for it.** Workers are copies of the same model. Beyond the two or three Phase 1 blind baselines, every solver gets an explicit branch lens or angle that differs from every live lineage.
 - **Whoever finds a proof never validates it.** Validation is always a different agent with a fresh context.
@@ -47,7 +47,7 @@ Each problem has its own git branch (`angles_between_lines`, `uphill_paths_on_th
 |---|---|
 | Claim status | `PROVED`, `COMPUTER-VERIFIED`, `EXHAUSTIVE-WITHIN-CLASS`, `BEST-FOUND` (a construction, with no optimality claim), `CONJECTURED` (includes anything heuristic), `OPEN`, `SEARCH-FOUND-NOTHING` (a search that found nothing, which is **not** a verification) |
 | Cell status (board and submissions) | `SOLVED` (every claim the hand-in requires passed the gate), `PARTIAL` (always with established claims + exact remaining gap), `COUNTEREXAMPLE` (a disproof, exactly verified), `NOT SOLVED` (every planned phase ran, nothing gated), `NOT ATTEMPTED` |
-| Robustness (cells where Phase 2B ran) | `ROBUST`, `CONTESTED`, `UNSUPPORTED`; `–` where 2B didn't run |
+| Robustness (cells where Phase 2B ran) | `ROBUST`, `CONTESTED`, `UNSUPPORTED`, `INCOMPLETE` (verdicts still pending); `–` where 2B didn't run |
 | Referee verdict | `ACCEPT` / `MINOR` / `MAJOR` / `WRONG` (reported to humans as VALID / GAP / GAP / INVALID) |
 | Cross-verifier verdict | `CONFIRMED`, `CONFIRMED-WITH-CAVEATS`, `GAP`, `REFUTED` |
 | Gate decision | `VALID`, `GAP`, `INVALID` |
@@ -73,30 +73,34 @@ A role is what a worker does. The same role can run under different regimes, pha
 | Referee | Adversarial reading against checklist Parts G + S. VERIFY and GATE modes run the 7-step protocol; CROSS mode checks through a branch lens | 2, 2B cross-verify, gate | verdict |
 | Literature | SOLVE mode: literature map + attempt with known techniques + divergence from blind work. ANALYST mode: map, reduce to sub-problems, attempt, explain why not solvable | 1L, 3 | `sources.md`, `divergence.md`, proof or analysis |
 | Triage | Rate the five branches for a cell from its structure and the obstacles so far; never solves | 2A | `triage.md`, `selected_branches.txt` |
+| Space | Carry the cell into 4–8 mathematical spaces, using the web to discover spaces and tools, what is known in each and what no source has used; check each translation on small cases by code, and report what each space's tools can deliver; never solves, never chooses | 2S | `spaces.md` (cards), `graph.md`, `spec.md`, `proposals.md`, `checks/` |
 | Scribe | SUBMISSION mode: package gated results in the hand-in format. REPORT mode: `final_report.md` citing artefacts by path and step | 5 | submission / final report |
-| Auditor | Check every citation in a final report against the artefacts | 5 | audit PASS / FAIL |
+| Auditor | Check every citation in a final report against the artefacts, re-running the report's `RAN` lines | 5 | audit PASS / FAIL |
 
 Role notes:
 - **Blind solvers** (Prover or Searcher, BLIND) derive everything themselves. Standard textbook tools are fine (Cauchy–Schwarz, Jensen, the spectral theorem). Results specific to this problem or its literature are not. Run `pp.py blindcheck` on every blind output, and stop and tell the humans if literature appears.
 - **Breaker.** Dispatch one before provers invest in a lemma you doubt, and keep one as a standing lineage on "prove or disprove" cells. "Survived" is evidence, not proof. A claimed counterexample is re-verified in exact or interval arithmetic by a separate agent before the humans are told.
 - **Checker-builders.** Dispatch two, independently, before the first searcher. Checkers are stdlib-only, exact, and short enough to read line by line. Cross-test them with `pp.py crosstest`. Once they agree, one becomes the ground-truth scorer and ships with the submission.
 - **Referees** get the target, the proof, its claims and code, and checklist Parts G + S. Nothing else: no worker notes, no author, no confidence. An ACCEPT without per-step reasons, or with an unanswered checklist item, is incomplete: re-dispatch, never count it.
+- **Space.** It has web access, so treat it like Literature: its cards never reach blind agents, and its references stay unverified until a human or a second literature agent has opened them. Its cards are claims. Rerun a card's check before you trust it. Only a card's ANGLE reaches a worker, only in a FRESH brief, and only through `pp.py choose` (see Choosing spaces).
 - **Literature** results never reach blind agents. Its references stay unverified until a human or a second literature agent has opened them. It may not present a citation as a proof of the cell itself. Blind and literature results are compared, never merged.
-- **Scribe and Auditor.** Reports introduce no new mathematics. A claim with no artefact is deleted. A report is final only after the Auditor passes it.
+- **Scribe and Auditor.** Reports introduce no new mathematics. A claim with no artefact is deleted. A report is final only after the Auditor passes it. The Auditor has Bash and re-runs what the report says was run, from a copy in its own `out/tmp/`; a `RAN` line reproduces when the outputs match, not when the wall clock does.
 
 ## Information regimes
 
 | Regime | Worker sees | Worker never sees | Used by |
 |---|---|---|---|
-| BLIND | Statement, the one cell, checklist Part G, output format; optionally a branch lens; the checker (computational); for triage/adversary also `stuck.md`, `verdict.md`, `no_natural_route.md` | Any proof by another agent, literature, Part S, web | Phase 1, 2A, 2B solvers, 2C |
+| BLIND | Statement, the one cell, checklist Part G, output format; optionally a branch lens; the checker (computational); library code entries you choose (`--lib`); for triage/adversary also `stuck.md`, `verdict.md`, `no_natural_route.md` | Any proof by another agent, literature, Part S, web, library lemmas, space cards | Phase 1, 2A, 2B solvers, 2C |
 | FRESH | Statement, Part G, an assigned angle, checker | Attempts, dead ends | extra waves |
 | CONTRARIAN | Statement, Part G, tried approaches marked forbidden | Artefacts | extra waves |
 | EXPLOIT | The lineage's best, its latest critique or gate report, its dead ends | Other lineages | repair |
 | CLEAN-ROOM | Only the object under evaluation (+ Parts G + S for referees) | How it was made, who made it | referees, checker-builders |
-| LITERATURE | Web, plus the earlier results the phase allows | — | 1L, 3 |
+| LITERATURE | Web, plus the earlier results the phase allows (2S: obstacles and checker, never proofs) | — | 1L, 2S, 3 |
 | RECORD | Accepted artefacts (SUBMISSION) or the cell's full record (REPORT, audit) | — | scribe, auditor |
 
 `pp.py task --phase` sets the regime and enforces the inbox rules: Part S only to referees, and only allowed file types in BLIND inboxes.
+
+**Technique library** (`run/library/`, see Learning) is the one sanctioned channel between cells and problems. `--lib ENTRY` copies an entry into `inbox/library/`. Only Provers, Searchers and Breakers take it. A BLIND inbox takes only `code` entries with no literature markers, never `lemma` entries. Don't give the same entry to every blind solver of a cell: keep at least one without it, so the blind attempts stay diverse.
 
 ## The pipeline (per cell, easiest cells first)
 
@@ -107,7 +111,8 @@ Role notes:
 | **1L Literature** | 1 literature agent (SOLVE mode) per cell, right after Phase 1; it may read the blind results | `proof.md`, `claims.md`, `sources.md`, `divergence.md` |
 | **2 Verify** | One referee (VERIFY mode) per Phase 1 and 1L result: the 7-step protocol plus its own counterexample search | `verdict.md`, `cex/` |
 | **2A Branch triage** | 1 triage agent: rates ALGEBRAIC, TOPOLOGICAL, ANALYSIS, NUMBER-THEORY, DISCRETE (relevance, reason, entry point, risk) | `triage.md`, `selected_branches.txt` |
-| **2B Perspectives** | A: one solver per branch tagged "solver" (BLIND + branch lens), or `no_natural_route.md`. B: for each complete or partial proof, one cross-verifier (referee CROSS mode) per *other* selected or verifier-only branch. C: `pp.py matrix`. D: if the cell is UNSUPPORTED or CONTESTED and every selected branch failed, re-admit the dropped branches (LOW first) for one more round | solver outputs; cross verdicts; `run/<P>/<cell>/matrix.md` |
+| **2S Space map** | T2/T3 cells, in place of 2A. One Space agent (LITERATURE, with web; `--checker` where the cell has one), dispatched alongside Phase 1. It maps the cell into 4–8 spaces with checked translations and reports one card per space. You evaluate every card and decide with `pp.py choose` (see Choosing spaces) | `spaces.md`, `graph.md`, `spec.md`, `proposals.md`; `run/<P>/<cell>/spaces.md` and `branches.txt` |
+| **2B Perspectives** | A: one solver per branch tagged "solver" (BLIND + branch lens), or `no_natural_route.md`. B: for each complete or partial proof whose Phase 2 verdict is ACCEPT (or still pending), one cross-verifier (referee CROSS mode) per *other* selected or verifier-only branch. Never cross-verify a proof the verifier returned MINOR, MAJOR or WRONG on (repair it, then cross-verify the repaired version), and never the same proof twice from one branch; `pp.py task` refuses both. Wait for the verifier's ACCEPT; dispatch in parallel with it only when time is short. C: `pp.py matrix`. D: if the cell is UNSUPPORTED or CONTESTED and every selected branch failed, re-admit the dropped branches (LOW first) for one more round. A re-admitted branch counts as selected from its first 2B task, so the matrix then expects its cross-verdict too | solver outputs; cross verdicts; `run/<P>/<cell>/matrix.md` |
 | **2C Adversary** | Trigger: the cell isn't ROBUST after 2B. A Breaker in ADVERSARY mode: contrapositive, counterexample search (structured, then randomised with restarts, saving near misses), local analysis at the conjectured optimum, minimal failing structure. A contrapositive proof goes to the verifiers as a new proof | adversary files, `verdict.md` |
 | **3 Literature analyst** | For every cell not `SOLVED`: literature (ANALYST mode) reads everything above; maps what is known; reduces the cell to sub-problems (a) known and citable, (b) known but hard to access, (c) unknown; attempts (b) and (c); if the cell can't be solved, explains precisely why | analysis; proofs go to the gate |
 | **Gate** | Runs on **any** proof from **any** phase as soon as it appears (see Verification gate) | `run/<P>/<cell>/gate/gate_report.md` |
@@ -118,6 +123,7 @@ Role notes:
 Which phases run on which cells:
 - Phases 0, 1, 1L, 2 and the gate run on every cell.
 - 2A–2C run on cells worth 3+ points and on cells where solvers disagree. Easy cells get only two branches.
+- 2S runs on T2 and T3 cells and replaces 2A there. You choose the branches from its cards.
 - Phase 3 runs on every cell that isn't `SOLVED`.
 - Phase 5 runs on every cell that reaches a terminal outcome.
 - **Computational parts** (constructions, exact values, searches) keep the Searcher and checker machinery. Phase 1 blind solvers are Searchers with the checker. In 2B, branch lenses act as search angles, and a construction is verified by re-scoring, not by the matrix. Lower-bound *arguments* go through the full proof pipeline.
@@ -136,11 +142,69 @@ It's an estimate, not an attempt: don't solve anything to decide a tier. Write t
 |---|---|---|---|
 | T0 direct | tiny finite computation or short standard argument | 0, 1 (2 solvers), 1L, 2, gate | 15–20 min |
 | T1 routine | known technique should suffice; moderate search | as T0; 2A–2C only if solvers disagree (2 branches) | 30–45 min |
-| T2 hard | no obvious route; large search; 3+ points | full pipeline; 3 blind solvers; 2B on HIGH/MEDIUM branches | 60–75 per attempt |
-| T3 open | marked open | only after lower cells are cleared; standing Breaker/adversary lineage; Phase 3 early; split per "Open prove-or-disprove" | per Board and budget |
+| T2 hard | no obvious route; large search; 3+ points | full pipeline; 3 blind solvers; 2S space map alongside Phase 1, then 2B on the cards you choose | 60–75 per attempt |
+| T3 open | marked open | only after lower cells are cleared; 2S space map first; standing Breaker/adversary lineage; Phase 3 early; split per "Open prove-or-disprove" | per Board and budget |
 
 - **Escalate** one tier when a phase returns no `CLAIM` and no rung beyond what's already known, or when every proof comes back `MAJOR`/`WRONG`. Never de-escalate mid-cell.
-- **Budget.** A 3+-point cell costs roughly 20–25 agent calls. Prioritise by points and likelihood of progress. State the plan and update it with every status table.
+- **Budget.** A 3+-point cell costs roughly 20–25 agent calls. Cross-verification is the part that grows: (proofs that passed Phase 2) × (kept branches − 1) calls, e.g. 2 proofs and 3 kept branches cost 4. A 2S map adds one call (two with an obstacle-aware rerun); it pays for itself when it keeps one dead branch out of 2B. Prioritise by points and likelihood of progress. State the plan and update it with every status table.
+
+## Choosing spaces (Phase 2S)
+
+On T2 and T3 cells, a Space agent maps the cell before you choose branches. It carries the target into several mathematical spaces, uses the web to learn which spaces and tools exist for problems like this, and checks each translation on small cases by code. It then reports one card per space:
+- which branch's tools the card uses;
+- its fidelity: EQUIVALENT, a RELAXATION (valid bounds only), a RESTRICTION (constructions and counterexamples only), a LIMIT (asymptotics only), an ANALOGY (insight only, unless it specialises back exactly), or HEURISTIC;
+- whether it is tight on every known extremizer;
+- what its tools would deliver here;
+- KNOWN: what has been done in that space on this problem or its neighbours, with sources;
+- UNEXPLORED: tools or properties of that space not found used on this problem in the sources it searched;
+- cost and payoff;
+- an ANGLE for a FRESH worker;
+- a first task.
+
+It never chooses. You do.
+
+**When.** Dispatch it alongside Phase 1. It has web access, but its output reaches only you and the non-blind workers you choose, so it doesn't touch Phase 1's independence. Give it `--checker` where the cell has one, and any human-provided material on earlier work with `--inbox`. If Phases 1–2 leave stuck points that the map doesn't address, dispatch a second map at 2A time with `--obstacles`.
+
+**Evaluate each card** from its fields and from reruns, not from mathematics of your own:
+1. **Reproduce.** Rerun the card's check from the RAN line. If it doesn't reproduce, the card is untrusted: DROP it and log why.
+2. **Direction.** Does the fidelity serve what the cell needs?
+   - A bound needs RELAXATION or EQUIVALENT.
+   - A construction or counterexample needs RESTRICTION or EQUIVALENT.
+   - LIMIT, ANALOGY and HEURISTIC are at most angles for a FRESH wave.
+3. **Known vs. unexplored.** A card whose KNOWN field shows that its route has already been run to its end (with the result the cell needs, or with a known obstruction) is at most a DEADEND or a pointer for Literature. A card with a concrete UNEXPLORED item that passes its check is a strong WAVE candidate.
+4. **Tightness.** On a cell with equality cases (every tight inequality, every exact value), a relaxation with TIGHT NO cannot carry the proof. Its obstruction is still worth having: record it as a DEADEND.
+5. **Specification ledger.** Drop or downgrade a card that violates an item in the map's `spec.md`.
+6. **Diversity.** Prefer cards whose tag differs from every live lineage and every Phase 1 idea tag. A card that restates a live lineage is at most a WAVE.
+7. **Cost and payoff** against the tier's time box and the remaining budget. Each 2B card costs a solver plus one cross-verifier per proof that passes Phase 2.
+8. **Pairing.** On an exact-value or prove-or-disprove cell, keep at least one card on each side: bound and construction, or proof and counterexample.
+
+**Decide every card** with `pp.py choose P CELL --map TASK --take "S<n>=ACTION: reason" ...`, one `--take` per card. The reason is required and becomes the record.
+
+| Action | Use it for | What follows |
+|---|---|---|
+| `2B` | CHECK PASSED, EQUIVALENT / RELAXATION / RESTRICTION, not TIGHT NO; the strongest card on its branch | a blind 2B solver on that branch with the generic branch lens only (never card text); `--angle` = its tag, for telemetry |
+| `VERIFIER` | a branch whose viewpoint gives an independent check (an invariant, a necessary condition) | that branch cross-verifies the 2B proofs |
+| `WAVE` | UNEXPLORED items worth a try, LIMIT / ANALOGY / HEURISTIC or unchecked cards, a second card on a taken branch, search-only (COMPUTATIONAL) or bound-only tasks | a FRESH wave with the card's tag and ANGLE as the angle, when a wave is due |
+| `DEADEND` | TIGHT NO or CHECK FAILED | the obstruction goes to `deadends.md`, and CONTRARIAN briefs inherit it |
+| `HOLD` | plausible but not affordable now | re-admitted first if every chosen branch fails (as in 2B-D) |
+| `DROP` | irreproducible, irrelevant, or dominated by another card | nothing |
+
+`pp.py choose` enforces the table's preconditions. It then:
+- writes `branches.txt`, which the matrix reads in place of the triage;
+- appends the decision to `run/<P>/<cell>/spaces.md`;
+- prints the `pp.py task` lines to dispatch next.
+
+**Route the rest of the map:**
+- Items in `spec.md` go into Part S of the checklist as labelled hypotheses (`S7 (hypothesis, from <task>): ...`). They are red flags for referees and don't block acceptance.
+- `NEIGHBOUR QUESTION` lines, and the sources the map cites, go to the Literature agent in Phase 3 via `--earlier <map task>`, so a second agent opens them.
+- A card's ANGLE is the only part of a card that reaches a worker: only a FRESH worker, and only through `choose`.
+  - Never forward cards, translations, the graph, the spec or the proposals to a blind agent (Phases 1, 2A, 2B, 2C) in any form, the ANGLE included.
+  - Never put them in `run/<P>/lessons.md`: problem lessons reach blind briefs.
+  - Report striking UNEXPLORED items to the humans at the next checkpoint.
+
+**Evaluate again after the fact.** Every task dispatched from a card carries the card's tag as `--angle`, so `pp.py telemetry --by angle` shows which spaces fed gated claims, and for how many tokens.
+- At each checkpoint, set that against the map's COST and PAYOFF.
+- When every kept card has failed, re-admit the HOLD cards first. Then dispatch a fresh Space agent with the obstacles, before escalating the tier.
 
 ## Lineages
 
@@ -217,14 +281,21 @@ Read `references/briefs-and-ledger.md` before the first wave.
 
 Pass exactly the prompt that `pp.py task` prints ("Your task folder is <abs path>/ . Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, and follow them.") and nothing else: no context, no hints, no names of theorems, authors or papers.
 
+**If a worker dies mid-task** (session restart, API error, crash), re-dispatch the *same* task id rather than opening a new one: its `out/` holds its own partial work, so the lineage, the regime and the budget slot are preserved. Add one sentence to the prompt saying its `out/` is its own interrupted work and it should continue from there — process only, never mathematical content. The same applies to a report sent back after an audit FAIL: give the failing citations verbatim and change nothing else.
+
+When a worker returns, run `pp.py done TASK --tokens N --ms N` with the total tokens and duration from the subagent result, plus `--score S` for a searcher once you have re-scored its artefact. This closes the task's telemetry record. `task`, `gate` and `pin` record everything else themselves.
+
 Other bookkeeping commands:
 - `pp.py open`: problem and cell folders, checklist template, lessons file;
 - `pp.py deadend`;
+- `pp.py choose`: your decision on every card of a 2S space map (see Choosing spaces);
 - `pp.py board`: rows and `--note` sections;
 - `pp.py crosstest`: two checkers against a generator;
 - `pp.py pin`: copy into `accepted/` with sha256; `--verify` to re-check;
 - `pp.py matrix`, `pp.py gate`, `pp.py status`, `pp.py blindcheck`;
-- `pp.py report`, `pp.py finalize`, `pp.py summary`.
+- `pp.py report`, `pp.py finalize`, `pp.py summary`;
+- `pp.py telemetry [--by role regime angle lessons lib …] [--tasks]`: yield per group from `run/telemetry.jsonl`;
+- `pp.py lib add | list | import`, `pp.py lessons --branches …`: technique library and cross-problem lessons (see Learning).
 
 Run `.venv/bin/python3 scripts/envcheck.py` once at the start.
 
@@ -258,7 +329,7 @@ A claim moves to an established status only when the relevant conditions hold. T
 7. **Verdict** with reasons for every step. "Looks correct" is not a reason.
 
 Then `pp.py gate` computes the decision:
-- **VALID** when both referees ACCEPT with complete checklists, the matrix is `ROBUST` (only where Phase 2B ran on the cell), and you have checked the statement word for word (`--statement-checked`);
+- **VALID** when both referees ACCEPT with complete checklists, the matrix is `ROBUST` **for this proof** (only where Phase 2B ran on the cell; another proof's robustness doesn't carry over), and you have checked the statement word for word (`--statement-checked`);
 - **INVALID** on any `WRONG`;
 - **GAP** otherwise.
 
@@ -300,6 +371,8 @@ Keep `run/board.md` current after every phase; the template is in `references/br
   - claims awaiting the gate;
   - contested cells;
   - lesson changes since the last checkpoint, and pending Referee/Checker-builder/Auditor lessons awaiting approval;
+  - the `pp.py telemetry` table (tokens and yield by role and regime);
+  - library entries added or imported;
   - decisions needed.
 - **Timeline.**
   - **Freeze at 5:15:** no new lineages or phases after this.
@@ -313,6 +386,8 @@ run/
   PROBLEM                          # this branch's problem letter and skill
   board.md                         # you write; the team reads
   SUMMARY.md                       # pp.py report
+  telemetry.jsonl                  # pp.py task/done/gate/pin: one event per line (append-only)
+  library/<P>-<name>/              # pp.py lib: ENTRY.md, MANIFEST.sha256, files/ (verified material only)
   <P>/statement.md                 # verbatim problem + cell texts
   <P>/lessons.md                   # problem-specific lessons; copied only into this problem's briefs
   <P>/report.md                    # pp.py report
@@ -342,7 +417,9 @@ You may improve the workers' instructions during the run. Besides the ledger, th
 - **Referee, Checker-builder and Auditor lessons** are part of the verification gate. Write them to `.claude/lessons/pending/<role>.md` and present them at the next human checkpoint. Only after human approval do they move into `.claude/lessons/<role>.md`.
 - **Evidence only.** Every lesson cites the task ids where the problem appeared: `- <lesson> (evidence: <task ids>; added <hh:mm>; version <n>)`.
 - **Between phases only.** Edits apply to newly dispatched tasks, never to running ones. Bump `version:` (first line) on every edit; each brief's LESSONS line records the version it received.
-- **Check the next wave.** After an edit, look at the next reports for that role or problem. If the problem hasn't improved, or something got worse, revert, and log why.
+- **Check the next wave.** After an edit, look at the next reports for that role or problem, and compare versions with `pp.py telemetry --by lessons` (returned, proofs, fed gated claims, verdicts, tokens per role-and-version). If the problem hasn't improved, or something got worse, revert, and log why. With only a few tasks per version the numbers are a hint, not proof: read the reports too.
+- **Technique library.** When a checker has passed the cross-test, or a gated or pinned artefact contains a reusable, problem-agnostic tool (SAT encoder, annealing or tabu harness, exact-arithmetic helper), add it with `pp.py lib add NAME SRC… --kind code --what … --evidence …`. A gated lemma goes in with `--kind lemma`. Sources must come from `accepted/` or `checker/`, and a lemma only from `accepted/`. At each checkpoint, run `pp.py lib list --branches <the other problem branches>` and `pp.py lib import BRANCH ENTRY` whatever helps your open cells. This needs the humans to have pushed and fetched those branches. Measure whether it pays off with `pp.py telemetry --by lib`.
+- **Lessons across problems.** At each checkpoint, run `pp.py lessons --branches <all problem branches>`. A problem lesson that appears for two or more problems is a candidate role lesson: write it into the role file (or `pending/` for gate roles), citing the problem lessons as evidence.
 - **Keep it short:** about 30 lines per file. Merge and consolidate rather than append.
 - **Log and commit.** Every change gets an entry in `.claude/lessons/CHANGELOG.md`. Commit each edit, staging only the lessons files and CHANGELOG by name. On a problem branch, report role-lesson changes to the humans so they can be merged to `main`.
 
@@ -354,7 +431,7 @@ Formats are in `references/briefs-and-ledger.md`.
 - Feed later-phase information into blind agents, or show Part S to anyone but referees.
 - Edit `.claude/agents/`, your own skill, or a problem skill; weaken verification through a lesson.
 - Call a result new; write "not found in <sources searched>".
-- Forward one worker's output to another except through a regime above.
+- Forward one worker's output to another except through a regime above, a verified library entry, or a card's ANGLE chosen with `pp.py choose` for a FRESH brief.
 - Tell a referee who wrote the proof or how confident anyone is.
 - Record a score you didn't recompute, call an unfinished search a verification, or upgrade a status beyond what the gate and the matrix support.
 - Let a single cell eat the run.

@@ -3,10 +3,19 @@
 
   pp.py open P CELL [CELL ...]                 problem + cell folders, checklist template, phases index, lessons
   pp.py task P CELL --phase PH --stop S [--role R] [--regime X] [--mode M] [--branch B [--branch-note T]]
-                    [--subject TASK] [--obstacles TASK ...] [--earlier TASK ...] [--record] [--checker DIR]
+                    [--subject TASK [--subject-file NAME ...]] [--obstacles TASK ...] [--earlier TASK ...]
+                    [--record] [--checker DIR]
                     [--target T] [--timebox MIN] [--assumptions A] [--rules R] [--angle A] [--forbid F]
-                    [--forbid-file F] [--inbox SRC[=NAME]] [--status S --cell-status C] [--extra TEXT]
-      phases: 0 1 1L 2 2A 2B 2B-XV 2C 3 GATE REPAIR WAVE 5 AUDIT (role, regime and mode follow from the phase)
+                    [--forbid-file F] [--inbox SRC[=NAME]] [--lib ENTRY] [--status S --cell-status C] [--extra TEXT]
+      phases: 0 1 1L 2 2A 2S 2B 2B-XV 2C 3 GATE REPAIR WAVE 5 AUDIT (role, regime and mode follow from the phase)
+  pp.py choose P CELL --map TASK --take "S<n>=ACTION: reason" [...]   head's decision on every card of a 2S space map
+      ACTION: 2B VERIFIER WAVE DEADEND HOLD DROP → run/P/CELL/spaces.md, branches.txt (kept branches), deadends.md
+  pp.py done TASK [--tokens N] [--ms N] [--tool-uses N] [--score S]   telemetry: a worker returned
+  pp.py telemetry [--by KEY ...] [--tasks]      yield per role/regime/angle/lessons version/library entry
+  pp.py lib add NAME SRC [SRC ...] --kind code|lemma --what T --evidence E   verified material → run/library/<P>-NAME
+  pp.py lib list [--branches B ...]             library entries here and on other problem branches
+  pp.py lib import BRANCH ENTRY                 copy an entry from another branch, sha256-checked
+  pp.py lessons --branches B [B ...]            problem lessons across branches (candidates for role lessons)
   pp.py deadend P CELL --tag T --task ID "approach — why"
   pp.py board CELL [--pts ..] [--tier ..] [--phase ..] [--cell-status ..] [--claim-status ..] [--robustness ..]
                    [--best ..] [--lineages ..] [--next ..] [--time ..]
@@ -14,17 +23,20 @@
   pp.py pin P CELL FILE [FILE ...]              copy into accepted/ and record sha256
   pp.py pin --verify DIR                        re-check a MANIFEST.sha256
   pp.py crosstest CHECKER_A CHECKER_B --gen CMD [--n 200] [--log PATH]
-  pp.py matrix P CELL                           agreement matrix: ROBUST / CONTESTED / UNSUPPORTED
+  pp.py matrix P CELL                           agreement matrix: ROBUST / CONTESTED / UNSUPPORTED / INCOMPLETE
   pp.py gate P CELL --subject TASK [--statement-checked]   gate report: VALID / GAP / INVALID
-  pp.py status P                                per-phase status table
+  pp.py status P                                per-phase status table + tasks with no 'done' recorded
   pp.py blindcheck TASK                         literature markers in a task's out/
   pp.py report                                  run/<P>/report.md per problem + run/SUMMARY.md from the board
   pp.py finalize P CELL --report TASK --audit TASK   copy final_report.md after an audit PASS
   pp.py summary --branches B [B ...] [--out PATH]    merge run/SUMMARY.md rows across problem branches
 """
 import argparse
+import collections
 import datetime as dt
 import hashlib
+import itertools
+import json
 import os
 import re
 import shlex
@@ -36,6 +48,9 @@ import tempfile
 ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 RUN = os.path.join(ROOT, "run")
 TASKS = os.path.join(RUN, "tasks")
+TELEMETRY = os.path.join(RUN, "telemetry.jsonl")
+LIBRARY = os.path.join(RUN, "library")
+NON_PROBLEM_DIRS = {"tasks", "library"}
 REFERENCE = os.path.join(ROOT, ".claude", "skills", "proof-pursuit-head", "references", "briefs-and-ledger.md")
 LESSONS = os.path.join(ROOT, ".claude", "lessons")
 VENV_PYTHON = os.path.join(ROOT, ".venv", "bin", "python3")
@@ -54,6 +69,7 @@ ROLES = {
     "referee": {"CLEAN-ROOM"},
     "literature": {"LITERATURE"},
     "triage": {"BLIND"},
+    "space": {"LITERATURE"},
     "scribe": {"RECORD"},
     "auditor": {"RECORD"},
 }
@@ -65,6 +81,7 @@ PHASES = {
     "1L": ({"literature"}, "LITERATURE", "SOLVE", set()),
     "2": ({"referee"}, "CLEAN-ROOM", "VERIFY", set()),
     "2A": ({"triage"}, "BLIND", None, set()),
+    "2S": ({"space"}, "LITERATURE", None, set()),
     "2B": ({"prover", "searcher"}, "BLIND", "BRANCH", set()),
     "2B-XV": ({"referee"}, "CLEAN-ROOM", "CROSS", set()),
     "2C": ({"breaker"}, "BLIND", "ADVERSARY", set()),
@@ -78,11 +95,34 @@ PHASES = {
 BRANCHES = ("ALGEBRAIC", "TOPOLOGICAL", "ANALYSIS", "NUMBER-THEORY", "DISCRETE", "COMPUTATIONAL")
 OBSTACLE_FILES = ("stuck.md", "verdict.md", "no_natural_route.md")
 SUBJECT_ITEMS = ("proof.md", "claims.md", "code")
+SUBJECT_VERSION_FILES = ("proof.md", "claims.md")
+SUBJECT_ARTEFACTS = ("best.txt", "best.json", "best.csv", "best.py", "best.md")
+PROCESS_FILES = ("plan.md", "runlog.md", "stuck.md")
 CELL_STATUSES = ("SOLVED", "PARTIAL", "COUNTEREXAMPLE", "NOT SOLVED", "NOT ATTEMPTED")
-ROBUSTNESS = ("ROBUST", "CONTESTED", "UNSUPPORTED", "–")
+ROBUSTNESS = ("ROBUST", "CONTESTED", "UNSUPPORTED", "INCOMPLETE", "–")
 POSITIVE = {"ACCEPT", "CONFIRMED", "CONFIRMED-WITH-CAVEATS"}
 NEGATIVE = {"MINOR", "MAJOR", "WRONG", "GAP", "REFUTED"}
 PHASE_COLS = ["Task", "Phase", "Role", "Regime", "Mode", "Branch", "Subject", "Created"]
+ADVERSARY_LABELS = ("PROOF-ROUTE-FOUND", "COUNTEREXAMPLE-CANDIDATE", "LOCALLY-OPTIMAL-EVIDENCE", "STUCK")
+GROUP_KEYS = ("role", "regime", "phase", "angle", "branch", "cell", "lessons", "lib")
+LIB_KINDS = ("code", "lemma")
+LIB_ROLES = {"prover", "searcher", "breaker"}
+CARD_FIELDS = ("SPACE", "BRANCH", "FIDELITY", "FEEDS", "CHECK", "TIGHT", "TOOLS", "KNOWN", "UNEXPLORED",
+               "COST", "PAYOFF", "ANGLE", "FIRST TASK")
+# A space map is web-informed (LITERATURE), so no card text ever reaches a BLIND brief.
+NO_EXACT_PROOF = ("HEURISTIC", "ANALOGY", "LIMIT")
+CHOICE_ACTIONS = {
+    "2B": "the card's branch runs in Phase 2B as a solver branch; blind solvers get only the generic branch lens",
+    "VERIFIER": "verifier-only branch: cross-verifies the 2B proofs",
+    "WAVE": "FRESH extra wave (prover, searcher or breaker) with the card's ANGLE, which may carry tools and sources",
+    "DEADEND": "the card's obstruction goes to deadends.md, so CONTRARIAN briefs inherit it",
+    "HOLD": "kept for re-admission if every chosen branch fails",
+    "DROP": "not useful for this cell",
+}
+LIBRARY_NOTE = ("LIBRARY: inbox/library/<entry>/ holds verified material from the shared technique library; its "
+                "ENTRY.md says what it is and how it was verified. Use it only if it helps. Copy any library file your "
+                "code needs into out/code/ so the code runs on its own, and name the entry in claims.md for every "
+                "claim that depends on it. A library lemma is an assumption: state it in full where you use it.")
 
 
 def die(msg):
@@ -260,11 +300,11 @@ def copy_lessons(p, role, inbox):
     sources = [(os.path.join(LESSONS, f"{role}.md"), "role-lessons.md")]
     if role not in ROLE_LESSONS_ONLY:
         sources.append((os.path.join(RUN, p, "lessons.md"), "problem-lessons.md"))
-    placed = []
+    placed = {}
     for src, name in sources:
         if os.path.isfile(src):
             shutil.copy2(src, os.path.join(inbox, name))
-            placed.append(f"{name} v{lessons_version(src)}")
+            placed[name] = lessons_version(src)
     return placed
 
 
@@ -359,12 +399,19 @@ def validate_task(a, role, regime, mode, rows):
         own = (phase_row(rows, a.subject) or {}).get("Branch", "-")
         if own == a.branch:
             die(f"cross-verifier branch {a.branch} is the subject's own branch; use another branch")
+        dup = [r["Task"] for r in rows if r["Phase"] == "2B-XV" and r["Subject"] == a.subject and r["Branch"] == a.branch]
+        if dup:
+            die(f"{a.subject} already has a {a.branch} cross-verifier ({dup[-1]}); never cross-verify twice from one branch")
+        verifiers = [r["Task"] for r in rows if r["Phase"] == "2" and r["Subject"] == a.subject]
+        p2 = verdict_of(verifiers[-1]) if verifiers else None
+        if p2 in NEGATIVE:
+            die(f"the Phase 2 verifier returned {p2} on {a.subject}; repair it first and cross-verify the repaired version")
     if a.phase == "AUDIT":
         row = phase_row(rows, a.subject) or {}
         if row.get("Role") != "scribe" or row.get("Mode") != "REPORT":
             die("the auditor's --subject must be a Scribe REPORT task")
-    if a.obstacles and a.phase not in ("2A", "2C"):
-        die("--obstacles is only for phases 2A (triage) and 2C (adversary)")
+    if a.obstacles and a.phase not in ("2A", "2S", "2C"):
+        die("--obstacles is only for phases 2A (triage), 2S (space map) and 2C (adversary)")
     if a.earlier and role != "literature":
         die("--earlier is only for literature tasks (1L, 3)")
     for t in a.earlier:
@@ -375,10 +422,28 @@ def validate_task(a, role, regime, mode, rows):
         check_same_cell(a.P, a.cell, t, "--obstacles")
     if a.record and not (mode == "REPORT" or a.phase == "AUDIT"):
         die("--record is only for Scribe REPORT and Auditor tasks")
-    if a.checker and role not in ("searcher", "breaker"):
-        die("--checker is only for searchers and breakers")
+    if a.checker and role not in ("searcher", "breaker", "referee", "space"):
+        die("--checker is only for searchers, breakers, referees and space maps")
+    if a.subject_file and role not in ("referee", "prover", "searcher", "breaker"):
+        die("--subject-file goes with --subject, on referee and repair tasks")
+    for name in a.subject_file:
+        if name in PROCESS_FILES:
+            die(f"--subject-file {name}: that file says how the work was made; a clean-room reader never sees it")
+        if a.subject and not os.path.exists(os.path.join(task_dir(a.subject), "out", name)):
+            die(f"--subject-file {name}: {a.subject} has no out/{name}")
     if regime == "BLIND" and a.inbox:
-        die("a BLIND inbox accepts only lessons, checklist Part G, obstacles and checker/; drop --inbox")
+        die("a BLIND inbox accepts only lessons, checklist Part G, obstacles, checker/ and library code; drop --inbox")
+    for name in a.lib:
+        if role not in LIB_ROLES:
+            die("--lib is only for provers, searchers and breakers")
+        entry = os.path.join(LIBRARY, name)
+        if not os.path.isfile(os.path.join(entry, "ENTRY.md")):
+            die(f"run/library/{name} not found; see 'pp.py lib list' and 'pp.py lib import'")
+        if regime == "BLIND":
+            if verdict_field(read(os.path.join(entry, "ENTRY.md")), "KIND") != "code":
+                die(f"{name} is not a code entry; BLIND inboxes take library code only")
+            if marker_hits(os.path.join(entry, "files")):
+                die(f"{name} has literature markers ('pp.py blindcheck'-style scan); not for a BLIND inbox")
     for src in a.inbox:
         name = os.path.basename(src.partition("=")[0].rstrip("/"))
         if role != "referee" and name.startswith("checklist"):
@@ -419,7 +484,8 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
             die(f"{a.subject} has no out/final_report.md")
         placed.append("final_report.md")
     elif a.subject:
-        found = copy_task_outputs(a.subject, SUBJECT_ITEMS, os.path.join(inbox, "subject"))
+        wanted = (*SUBJECT_ITEMS, *SUBJECT_ARTEFACTS, *a.subject_file)
+        found = copy_task_outputs(a.subject, wanted, os.path.join(inbox, "subject"))
         if not found:
             die(f"{a.subject} has none of out/{', out/'.join(SUBJECT_ITEMS)}")
         placed.append(f"subject/ ({', '.join(found)} of {a.subject})")
@@ -440,7 +506,7 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
     if a.phase == "3":
         dest = os.path.join(inbox, "earlier", "cell")
         os.makedirs(dest, exist_ok=True)
-        for name in ("matrix.md", "gate"):
+        for name in ("matrix.md", "spaces.md", "gate"):
             src = os.path.join(cell_dir(a.P, a.cell), name)
             if os.path.exists(src):
                 copy_into(f"{src}={name}", dest)
@@ -449,7 +515,26 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
         accepted = os.path.join(cell_dir(a.P, a.cell), "accepted")
         if os.path.isdir(accepted) and os.listdir(accepted):
             placed.append(copy_into(f"{accepted}=accepted", inbox))
-    if a.record or mode == "REPORT" or a.phase == "AUDIT":
+    if a.phase == "AUDIT":
+        # The auditor must read the report against exactly the record the Scribe wrote it from.
+        # A fresh snapshot is taken later and can contradict the report's own citations (the
+        # Scribe's copy of phases.md predates its own row; a new copy contains it).
+        rec = os.path.join(inbox, "record")
+        subj_rec = os.path.join(task_dir(a.subject), "inbox", "record")
+        if os.path.isdir(subj_rec):
+            shutil.copytree(subj_rec, rec, dirs_exist_ok=True)
+        dest = os.path.join(rec, "tasks", a.subject)
+        os.makedirs(dest, exist_ok=True)
+        for name in ("brief.md",):
+            src = os.path.join(task_dir(a.subject), name)
+            if os.path.isfile(src):
+                shutil.copy2(src, dest)
+        out = os.path.join(task_dir(a.subject), "out")
+        if os.path.isdir(out):
+            shutil.copytree(out, os.path.join(dest, "out"),
+                            ignore=shutil.ignore_patterns("tmp"), dirs_exist_ok=True)
+        placed.append(f"record/ (the snapshot {a.subject} wrote from, plus its own brief.md and out/)")
+    elif a.record or mode == "REPORT":
         rec = os.path.join(inbox, "record")
         for t in cell_tasks(a.P, a.cell):
             if t == task_id:
@@ -463,11 +548,14 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
                                 ignore=shutil.ignore_patterns("tmp"))
         cdest = os.path.join(rec, "cell")
         os.makedirs(cdest, exist_ok=True)
-        for name in ("target.md", "checklist.md", "phases.md", "matrix.md", "deadends.md", "gate", "accepted"):
+        for name in ("target.md", "checklist.md", "phases.md", "spaces.md", "matrix.md", "deadends.md", "gate",
+                     "accepted"):
             src = os.path.join(cell_dir(a.P, a.cell), name)
             if os.path.exists(src) and not (os.path.isdir(src) and not os.listdir(src)):
                 copy_into(f"{src}={name}", cdest)
         placed.append("record/ (tasks/<id>/brief.md + out/, cell/)")
+    for name in a.lib:
+        placed.append(copy_into(f"{os.path.join(LIBRARY, name)}=library/{name}", inbox))
     placed += [copy_into(src, inbox) for src in a.inbox]
     return placed
 
@@ -496,11 +584,12 @@ def cmd_task(a):
     inbox, out = os.path.join(tdir, "inbox"), os.path.join(tdir, "out")
     os.makedirs(inbox)
     os.makedirs(out)
-    lessons = copy_lessons(a.P, role, inbox)
+    versions = copy_lessons(a.P, role, inbox)
+    lessons = [f"{name} v{v}" for name, v in versions.items()]
     placed = build_inbox(a, role, regime, mode, task_id, inbox)
 
     extra_lines = {"prover": "LADDER / RAN", "searcher": "LADDER / RAN", "breaker": "LADDER / RAN",
-                   "referee": "CHECKLIST / RAN"}.get(role, "RAN")
+                   "referee": "CHECKLIST / RAN", "space": "CARDS / RAN"}.get(role, "RAN")
     rules = "; ".join([DEFAULT_RULES] + a.rules)
     lines = [
         f"TASK: {task_id}      ROLE: {role}      REGIME: {regime}",
@@ -546,6 +635,8 @@ def cmd_task(a):
         lines += ["", f"CELL STATUS: {a.cell_status}", f"CLAIM STATUS (do not upgrade): {a.status}"]
         if a.cell_status == "PARTIAL":
             lines += ["ESTABLISHED: " + "; ".join(a.established), f"REMAINING GAP: {a.gap}"]
+    if a.lib:
+        lines += ["", LIBRARY_NOTE]
     for extra in a.extra:
         lines += ["", extra]
     with open(os.path.join(tdir, "brief.md"), "w") as fh:
@@ -553,6 +644,11 @@ def cmd_task(a):
     append_phase(a.P, a.cell, {"Task": task_id, "Phase": a.phase, "Role": role, "Regime": regime,
                                "Mode": mode or "-", "Branch": a.branch or "-", "Subject": a.subject or "-",
                                "Created": now()})
+    log_event("task", task=task_id, cell=f"{a.P}-{a.cell}", phase=a.phase, role=role, regime=regime,
+              mode=mode or "-", branch=a.branch or "-", subject=a.subject or "-", angle=a.angle or "-",
+              lessons={"role": versions.get("role-lessons.md", "-"),
+                       "problem": versions.get("problem-lessons.md", "-")},
+              lib=a.lib, timebox=a.timebox)
     print(task_id)
     print(f"dispatch: subagent_type={role}  prompt=\"Your task folder is {tdir}/ . "
           f"Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, "
@@ -574,6 +670,144 @@ def cmd_deadend(a):
         with open(path, "a") as fh:
             fh.write(entry)
     print(entry.rstrip())
+
+
+# ---------- space map choice (Phase 2S) ----------
+
+def parse_cards(path):
+    """Cards in a space map's out/spaces.md: '### S<n> <tag>' then 'FIELD: value' lines (first one of each counts)."""
+    cards, cur = {}, None
+    for ln in read(path).splitlines():
+        m = re.match(r"#{2,4}\s+(S\d+)\b[\s:—-]*(.*)", ln)
+        if m:
+            cur = cards.setdefault(m.group(1), {"tag": m.group(2).strip() or m.group(1)})
+            continue
+        f = re.match(r"\s*[*_]*([A-Z][A-Z ]*[A-Z])[*_]*:\s*(.*)", ln) if cur is not None else None
+        if f and f.group(1) in CARD_FIELDS and f.group(1) not in cur:
+            cur[f.group(1)] = f.group(2).strip()
+    return cards
+
+
+def card_word(card, field):
+    m = re.match(r"[*_`\s]*([A-Za-z][A-Za-z/-]*)", card.get(field, ""))
+    return m.group(1).upper() if m else ""
+
+
+def cmd_choose(a):
+    require_cell(a.P, a.cell)
+    row = phase_row(read_phases(a.P, a.cell), a.map)
+    if not row or row["Phase"] != "2S":
+        die(f"--map {a.map}: not a Phase 2S task of {a.P}-{a.cell}")
+    path = os.path.join(task_dir(a.map), "out", "spaces.md")
+    if not os.path.isfile(path):
+        die(f"{a.map} has no out/spaces.md")
+    cards = parse_cards(path)
+    if not cards:
+        die(f"{a.map}: no '### S<n> <tag>' cards in out/spaces.md")
+
+    decisions = {}
+    for take in a.take:
+        m = re.match(r"\s*(S\d+)\s*=\s*([A-Z0-9]+)\s*:\s*(\S.*)", take)
+        if not m:
+            die(f"--take '{take}': use 'S<n>=ACTION: reason'; the reason is required")
+        cid, action, reason = m.groups()
+        if cid not in cards:
+            die(f"--take {cid}: {a.map} has no card {cid}")
+        if action not in CHOICE_ACTIONS:
+            die(f"--take {cid}: ACTION must be one of {' '.join(CHOICE_ACTIONS)}")
+        if cid in decisions:
+            die(f"{cid} has two decisions")
+        decisions[cid] = (action, reason.strip().replace("|", "/"))
+    missing = [c for c in cards if c not in decisions]
+    if missing:
+        die(f"decide every card of the map; missing: {', '.join(missing)}")
+
+    kept = {}
+    for cid, (action, _) in decisions.items():
+        card = cards[cid]
+        branch, check, tight = card_word(card, "BRANCH"), card_word(card, "CHECK"), card_word(card, "TIGHT")
+        if action in ("2B", "VERIFIER"):
+            if branch not in BRANCHES or branch == "COMPUTATIONAL":
+                die(f"{cid}: {action} needs BRANCH to be one of the five branches, not '{card.get('BRANCH', '')}'; "
+                    "a search-only card goes to WAVE")
+            if branch in kept:
+                die(f"{cid}: branch {branch} is already taken by another card; one card per branch "
+                    "(send the other to WAVE)")
+            if check == "FAILED":
+                die(f"{cid}: CHECK FAILED; a failed translation is dead (DEADEND or DROP)")
+            kept[branch] = "solver" if action == "2B" else "verifier-only"
+        if action == "2B":
+            lacking = [f for f in CARD_FIELDS if not card.get(f)]
+            if lacking:
+                die(f"{cid}: the card lacks {', '.join(lacking)}")
+            if check != "PASSED":
+                die(f"{cid}: 2B needs CHECK PASSED (card: '{card['CHECK']}'); an unchecked card goes to WAVE at most")
+            fidelity = card_word(card, "FIDELITY")
+            if fidelity in NO_EXACT_PROOF:
+                die(f"{cid}: a {fidelity} translation cannot carry an exact proof; send it to WAVE")
+            if tight == "NO":
+                die(f"{cid}: TIGHT NO; a relaxation that is not tight cannot carry an exact proof "
+                    "(WAVE for a bound-only task, or DEADEND)")
+        if action == "WAVE" and check == "FAILED":
+            die(f"{cid}: CHECK FAILED; a failed translation is dead (DEADEND or DROP)")
+        if action == "WAVE" and not card.get("ANGLE"):
+            die(f"{cid}: no ANGLE line; nothing to hand a FRESH worker")
+        if action == "DEADEND" and not (tight == "NO" or check == "FAILED"):
+            die(f"{cid}: DEADEND needs TIGHT NO or CHECK FAILED on the card, i.e. an obstruction to record")
+    if "solver" in kept.values() and len(kept) < 2:
+        die("a 2B proof needs another kept branch to cross-verify it; choose a second 2B card or a VERIFIER")
+
+    base, stamp = cell_dir(a.P, a.cell), now()
+    choice = os.path.join(base, "branches.txt")
+    if kept:
+        with open(choice, "w") as fh:
+            fh.write(f"# head choice from {a.map}, {stamp} (pp.py choose)\n")
+            fh.write("".join(f"{b}\t{k}\n" for b, k in kept.items()))
+    elif os.path.isfile(choice):
+        os.remove(choice)
+    for cid, (action, _) in decisions.items():
+        if action == "DEADEND":
+            card = cards[cid]
+            why = card["TIGHT"] if card_word(card, "TIGHT") == "NO" else card["CHECK"]
+            with open(os.path.join(base, "deadends.md"), "a") as fh:
+                fh.write(f"- [{card['tag']}] {card.get('SPACE', cid)} — {why} ({a.map} {cid})\n")
+
+    record = os.path.join(base, "spaces.md")
+    lines = [] if os.path.isfile(record) else [f"# Space choices: {a.P}-{a.cell}", ""]
+    lines += [f"## {stamp}, map {a.map}", "",
+              "| Card | Tag | Branch | Fidelity | Check | Tight | Cost | Payoff | Decision | Reason |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
+    for cid, card in cards.items():
+        action, reason = decisions[cid]
+        vals = [card_word(card, f) or "?" for f in ("BRANCH", "FIDELITY", "CHECK", "TIGHT", "COST", "PAYOFF")]
+        lines.append(f"| {cid} | {card['tag']} | " + " | ".join(vals) + f" | {action} | {reason} |")
+    lines += ["", "Kept branches: " + (", ".join(f"{b} {k}" for b, k in kept.items())
+                                       or "none (the matrix falls back to the latest 2A triage)"), "",
+              "Handed to workers (2B / VERIFIER: the branch and its generic lens only, since card text never "
+              "reaches blind agents; WAVE: the card's ANGLE, in a FRESH brief):"]
+    lines += [f"- {cid} {decisions[cid][0]} [{cards[cid]['tag']}]: "
+              + (cards[cid]["ANGLE"] if decisions[cid][0] == "WAVE"
+                 else f"branch {card_word(cards[cid], 'BRANCH')}, generic lens")
+              for cid in cards if decisions[cid][0] in ("2B", "VERIFIER", "WAVE")] or ["- none"]
+    with open(record, "a") as fh:
+        fh.write("\n".join(lines) + "\n\n")
+    log_event("choose", cell=f"{a.P}-{a.cell}", map=a.map, kept=kept,
+              decisions={cid: d[0] for cid, d in decisions.items()})
+
+    print(f"{a.P}-{a.cell}: " + ", ".join(f"{cid} {d[0]}" for cid, d in decisions.items()))
+    print("kept branches: " + (", ".join(f"{b} {k}" for b, k in kept.items()) or "none"))
+    for cid, (action, _) in decisions.items():
+        card = cards[cid]
+        first = card_word(card, "FIRST TASK").lower()
+        if action == "2B":
+            role = first if first in ("prover", "searcher") else "prover"
+            # --angle only tags telemetry; a BLIND brief never shows it. No --branch-note from the card.
+            print(f"next: pp.py task {a.P} {a.cell} --phase 2B --role {role} --branch {card_word(card, 'BRANCH')} "
+                  f"--angle {shlex.quote(card['tag'])} --stop ...")
+        elif action == "WAVE":
+            role = first if first in ("prover", "searcher", "breaker") else "prover"
+            print(f"later: pp.py task {a.P} {a.cell} --phase WAVE --role {role} --regime FRESH "
+                  f"--angle {shlex.quote(card['tag'] + ': ' + card['ANGLE'])} --stop ...")
 
 
 # ---------- board ----------
@@ -668,6 +902,9 @@ def cmd_pin(a):
         die(f"{dest} does not exist; run 'pp.py open' first")
     with open(os.path.join(dest, "MANIFEST.sha256"), "a") as man:
         for f in files:
+            from_task = os.path.relpath(os.path.realpath(f.partition("=")[0]), TASKS)
+            if not from_task.startswith(".."):
+                log_event("pin", task=from_task.split(os.sep)[0], cell=f"{p}-{cell}")
             full = os.path.join(dest, copy_into(f, dest))
             paths = [os.path.join(r, n) for r, _, ns in os.walk(full) for n in ns] if os.path.isdir(full) else [full]
             for path in sorted(paths):
@@ -738,27 +975,36 @@ def verdict_of(task, cross=False):
     return m.group(1) if m else None
 
 
-def selected_branches(rows):
-    triage = [r["Task"] for r in rows if r["Phase"] == "2A"]
-    if not triage:
-        return None, {}
-    path = os.path.join(task_dir(triage[-1]), "out", "selected_branches.txt")
+def selected_branches(p, cell, rows):
+    """Kept branches: the head's choice from a 2S space map (branches.txt) wins; else the latest 2A triage."""
+    choice = os.path.join(cell_dir(p, cell), "branches.txt")
+    if os.path.isfile(choice):
+        source, path = "head choice, branches.txt", choice
+    else:
+        triage = [r["Task"] for r in rows if r["Phase"] == "2A"]
+        if not triage:
+            return None, {}
+        source, path = triage[-1], os.path.join(task_dir(triage[-1]), "out", "selected_branches.txt")
     kept = {}
     if os.path.isfile(path):
         for ln in read(path).splitlines():
             parts = ln.split()
             if len(parts) >= 2 and parts[0] in BRANCHES:
                 kept[parts[0]] = parts[1]
-    return triage[-1], kept
+    return source, kept
 
 
 def compute_matrix(p, cell):
     rows = read_phases(p, cell)
-    triage, kept = selected_branches(rows)
+    triage, kept = selected_branches(p, cell, rows)
     if not triage:
-        die(f"{p}-{cell}: no Phase 2A task in phases.md")
+        die(f"{p}-{cell}: no kept branches: no Phase 2A task in phases.md and no branches.txt from 'pp.py choose'")
     if not kept:
-        die(f"{triage}: out/selected_branches.txt is missing or empty")
+        die(f"{triage}: the kept-branch file (selected_branches.txt or branches.txt) is missing or empty")
+    # Phase 2B-D: a dropped branch re-admitted as a solver counts as selected from its first 2B task
+    for r in rows:
+        if r["Phase"] == "2B" and r["Branch"] in BRANCHES and r["Branch"] != "COMPUTATIONAL" and r["Branch"] not in kept:
+            kept[r["Branch"]] = "solver (re-admitted)"
     xv = [r for r in rows if r["Phase"] == "2B-XV"]
     proofs = sorted({r["Task"] for r in rows if r["Phase"] == "2B"
                      and os.path.isfile(os.path.join(task_dir(r["Task"]), "out", "proof.md"))}
@@ -787,7 +1033,9 @@ def compute_matrix(p, cell):
                 disputed.append(f"- {proof} / {label} ({t}, {v}): {detail}")
         report.append({"proof": proof, "own": own, "p2": p2, "cross": cross, "confirmed": confirmed,
                        "robust": bool(robust), "disagree": bool(negatives) and len(negatives) < len(present),
-                       "pending": pending, "disputed": disputed})
+                       "negative": bool(negatives), "pending": pending, "disputed": disputed})
+    # a proof with no negative verdict and verdicts still pending could still become ROBUST
+    still_open = [r["proof"] for r in report if not r["robust"] and not r["negative"] and r["pending"]]
     if any(r["robust"] for r in report):
         cls = "ROBUST"
         reason = "proof(s) " + ", ".join(r["proof"] for r in report if r["robust"]) + \
@@ -795,12 +1043,12 @@ def compute_matrix(p, cell):
     elif any(r["disagree"] for r in report):
         cls = "CONTESTED"
         reason = "verdicts disagree on " + ", ".join(r["proof"] for r in report if r["disagree"])
-    elif not any(len(r["confirmed"]) >= 2 for r in report):
-        cls = "UNSUPPORTED"
-        reason = "no proof is confirmed by at least two other branches"
-    else:
+    elif still_open:
         cls = "INCOMPLETE"
-        reason = "no disagreement so far, but verdicts are still pending"
+        reason = "no disagreement so far, but verdicts are still pending on " + ", ".join(still_open)
+    else:
+        cls = "UNSUPPORTED"
+        reason = "every verdict is in, and no proof has the confirmations ROBUST needs"
     return rows, triage, kept, report, cls, reason
 
 
@@ -849,8 +1097,12 @@ def cmd_gate(a):
     check_same_cell(a.P, a.cell, a.subject, "--subject")
     rows = read_phases(a.P, a.cell)
     items = checklist_items(a.P, a.cell)
-    proof = os.path.join(task_dir(a.subject), "out", "proof.md")
-    current = sha256(proof) if os.path.isfile(proof) else None
+    # The object under evaluation is proof.md for a written proof, claims.md for a computational
+    # subject (a Searcher writes no proof.md). Version-checking proof.md alone silently discounted
+    # every ACCEPT on a computational claim.
+    subject_file = next((n for n in SUBJECT_VERSION_FILES
+                         if os.path.isfile(os.path.join(task_dir(a.subject), "out", n))), None)
+    current = sha256(os.path.join(task_dir(a.subject), "out", subject_file)) if subject_file else None
     refs = [r for r in rows if r["Role"] == "referee" and r["Mode"] in ("VERIFY", "GATE") and r["Subject"] == a.subject]
     lines, score_lines, accepts, wrong = [], [], [], []
     for r in refs:
@@ -859,7 +1111,7 @@ def cmd_gate(a):
         v = verdict_of(t) or "none"
         scores = checklist_scores(text, items)
         complete = bool(items) and all(s in ("PASS", "N/A") for s in scores.values())
-        seen = os.path.join(task_dir(t), "inbox", "subject", "proof.md")
+        seen = os.path.join(task_dir(t), "inbox", "subject", subject_file or "proof.md")
         same = current is not None and os.path.isfile(seen) and sha256(seen) == current
         match = (verdict_field(text, "STATEMENT MATCH") or "").lower().startswith("yes")
         lines.append(f"{t} {r['Mode']} {v} (checklist complete: {'yes' if complete else 'no'}; "
@@ -870,10 +1122,17 @@ def cmd_gate(a):
         if v == "ACCEPT" and complete and same and match:
             accepts.append(t)
     ran_2b = any(r["Phase"] in ("2B", "2B-XV") for r in rows)
-    matrix = write_matrix(a.P, a.cell) if ran_2b else "not run"
+    if ran_2b:
+        matrix = write_matrix(a.P, a.cell)
+        mine = next((r for r in compute_matrix(a.P, a.cell)[3] if r["proof"] == a.subject), None)
+        this_proof = "not in matrix" if mine is None else ("robust" if mine["robust"] else "not robust")
+    else:
+        matrix, this_proof = "not run", "n/a"
+    # the proof under the gate must itself be ROBUST; another proof's robustness doesn't carry over
+    robust_ok = matrix == "not run" or (matrix == "ROBUST" and this_proof == "robust")
     if wrong:
         decision, rule = "INVALID", f"referee verdict WRONG ({', '.join(wrong)})"
-    elif len(accepts) >= 2 and matrix in ("ROBUST", "not run") and a.statement_checked:
+    elif len(accepts) >= 2 and robust_ok and a.statement_checked:
         decision, rule = "VALID", (f"two referees ACCEPT the same proof version with complete checklists "
                                    f"({', '.join(accepts)}); matrix {matrix}; statement checked by head")
     else:
@@ -882,14 +1141,19 @@ def cmd_gate(a):
             missing.append(f"{len(accepts)} counted ACCEPT(s) of 2 needed")
         if matrix not in ("ROBUST", "not run"):
             missing.append(f"matrix is {matrix}, not ROBUST")
+        elif not robust_ok:
+            missing.append(f"matrix is ROBUST through other proof(s), but {a.subject} is {this_proof}")
         if not a.statement_checked:
             missing.append("statement not checked word for word by head")
         decision, rule = "GAP", "; ".join(missing)
     nxt = {"VALID": "PROVED on board", "GAP": "repair + Phase 2C with this report",
            "INVALID": "tell the humans; repair + Phase 2C with this report"}[decision]
+    # Every referee accepted and only the count falls short: nothing to repair, the proof needs another read.
+    if decision == "GAP" and accepts and len(accepts) == len(refs) and missing == [f"{len(accepts)} counted ACCEPT(s) of 2 needed"]:
+        nxt = "dispatch another referee on this same version; no repair needed"
     report = [f"# Gate: {a.P}-{a.cell}, proof {a.subject}, {now()}",
               "Referees: " + (" | ".join(lines) or "none"),
-              f"Matrix: {matrix}",
+              f"Matrix: {matrix}; this proof: {this_proof}",
               f"Statement checked word for word by head: {'yes' if a.statement_checked else 'no'}",
               "Checklist scores: " + (" || ".join(score_lines) or "none"),
               f"DECISION: {decision} — {rule}",
@@ -899,6 +1163,7 @@ def cmd_gate(a):
     for name in ("gate_report.md", f"{a.subject}.md"):
         with open(os.path.join(gdir, name), "w") as fh:
             fh.write("\n".join(report) + "\n")
+    log_event("gate", task=a.subject, cell=f"{a.P}-{a.cell}", decision=decision, accepts=accepts)
     print("\n".join(report))
 
 
@@ -930,6 +1195,9 @@ def cmd_status(a):
         robust = (verdict_field(read(matrix), "CLASS") if os.path.isfile(matrix) else None) or "–"
         nxt = board.get(f"{a.P}-{cell}", {}).get("Next", "")
         print(f"| {a.P}-{cell} | {agents} | {'; '.join(verdicts) or '–'} | {robust} | {nxt} |")
+    open_tasks = tasks_without_done(a.P)
+    if open_tasks:
+        print(f"\nno 'pp.py done' recorded (still running, or telemetry lost): {', '.join(open_tasks)}")
 
 
 BLIND_MARKERS = [
@@ -942,14 +1210,9 @@ BLIND_MARKERS = [
 ]
 
 
-def cmd_blindcheck(a):
-    out = os.path.join(task_dir(a.task), "out")
-    if not os.path.isdir(out):
-        die(f"{a.task} has no out/")
-    brief = os.path.join(task_dir(a.task), "brief.md")
-    regime = re.search(r"REGIME:\s*(\S+)", read(brief)).group(1) if os.path.isfile(brief) else "?"
-    hits = 0
-    for root, _, names in os.walk(out):
+def marker_hits(base):
+    hits = []
+    for root, _, names in os.walk(base):
         for name in sorted(names):
             path = os.path.join(root, name)
             try:
@@ -959,8 +1222,20 @@ def cmd_blindcheck(a):
             for i, ln in enumerate(text.splitlines(), 1):
                 for label, pat in BLIND_MARKERS:
                     if pat.search(ln):
-                        hits += 1
-                        print(f"{os.path.relpath(path, out)}:{i}: [{label}] {ln.strip()[:160]}")
+                        hits.append(f"{os.path.relpath(path, base)}:{i}: [{label}] {ln.strip()[:160]}")
+    return hits
+
+
+def cmd_blindcheck(a):
+    out = os.path.join(task_dir(a.task), "out")
+    if not os.path.isdir(out):
+        die(f"{a.task} has no out/")
+    brief = os.path.join(task_dir(a.task), "brief.md")
+    regime = re.search(r"REGIME:\s*(\S+)", read(brief)).group(1) if os.path.isfile(brief) else "?"
+    found = marker_hits(out)
+    hits = len(found)
+    for ln in found:
+        print(ln)
     print(f"blindcheck {a.task} (regime {regime}): {hits} hit(s)"
           + ("; read each one and tell the humans if literature was used" if hits else ""))
     sys.exit(1 if hits else 0)
@@ -1022,7 +1297,7 @@ def problem_report(p, rows, notes):
 def cmd_report(a):
     rows, notes = board_state()
     problems = sorted(d for d in os.listdir(RUN)
-                      if os.path.isdir(os.path.join(RUN, d)) and d != "tasks" and not d.startswith("."))
+                      if os.path.isdir(os.path.join(RUN, d)) and d not in NON_PROBLEM_DIRS and not d.startswith("."))
     summary = [f"# Summary (generated {now()}, run time {run_elapsed()} of 7:00)", "",
                "| Problem | Solved | Partial | Counterexample | Not solved | Not attempted | Report |",
                "|---|---|---|---|---|---|---|"]
@@ -1094,6 +1369,252 @@ def cmd_summary(a):
     print(text, end="")
 
 
+# ---------- telemetry ----------
+
+def log_event(event, **fields):
+    rec = {"event": event, "at": dt.datetime.now().isoformat(timespec="seconds"), "run_time": run_elapsed(), **fields}
+    with open(TELEMETRY, "a") as fh:
+        fh.write(json.dumps(rec) + "\n")
+
+
+def task_outcome(task):
+    out = os.path.join(task_dir(task), "out")
+    names = sorted(n for n in os.listdir(out) if n != "tmp") if os.path.isdir(out) else []
+    verdict = verdict_of(task) or verdict_of(task, cross=True)
+    audit = os.path.join(out, "audit.md")
+    if not verdict and os.path.isfile(audit):
+        m = re.match(r"[*_]*([A-Z]+)", verdict_field(read(audit), "AUDIT") or "")
+        verdict = f"AUDIT {m.group(1)}" if m else None
+    if not verdict and verdict_text(task):
+        verdict = next((lab for lab in ADVERSARY_LABELS if lab in verdict_text(task)), None)
+    return names, verdict
+
+
+def tasks_without_done(p=None):
+    tasks = telemetry_tasks()
+    return sorted(t for t, rec in tasks.items()
+                  if not rec.get("done") and (p is None or t.startswith(f"{p}-")))
+
+
+def cmd_done(a):
+    if not os.path.isfile(os.path.join(task_dir(a.task), "brief.md")):
+        die(f"{a.task} is not a task")
+    names, verdict = task_outcome(a.task)
+    fields = {k: getattr(a, k) for k in ("tokens", "ms", "tool_uses", "score") if getattr(a, k) is not None}
+    log_event("done", task=a.task, out=names, verdict=verdict, **fields)
+    print(f"telemetry: {a.task} returned ({verdict or ', '.join(names) or 'empty out/'})")
+
+
+def telemetry_tasks():
+    if not os.path.isfile(TELEMETRY):
+        return {}
+    tasks, gates, fed = {}, {}, set()
+    for ln in open(TELEMETRY):
+        if not ln.strip():
+            continue
+        rec = json.loads(ln)
+        event, task = rec.get("event"), rec.get("task")
+        if event == "task":
+            tasks[task] = dict(rec)
+        elif event == "done" and task in tasks:
+            tasks[task]["done"] = True
+            tasks[task].update({k: rec[k] for k in ("out", "verdict", "tokens", "ms", "tool_uses", "score") if k in rec})
+        elif event == "gate":
+            gates[task] = rec
+        elif event == "pin":
+            fed.add(task)
+    for subject, g in gates.items():
+        if g["decision"] == "VALID":
+            fed |= {subject, *g.get("accepts", [])}
+    for task, rec in tasks.items():
+        rec["fed"] = task in fed
+    return tasks
+
+
+def group_values(rec, key):
+    if key == "lessons":
+        v = rec.get("lessons", {})
+        return [f"{rec['role']} r{v.get('role', '-')} p{v.get('problem', '-')}"]
+    if key == "lib":
+        return rec.get("lib") or ["none"]
+    return [str(rec.get(key) or "-")]
+
+
+def cmd_telemetry(a):
+    tasks = telemetry_tasks()
+    if not tasks:
+        die("run/telemetry.jsonl has no task records yet")
+    if a.tasks:
+        print("| Task | Phase | Role | Regime | Angle | Lessons | Library | Out | Verdict | Score | Tokens | Min | Fed |")
+        print("|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+        for t, r in sorted(tasks.items()):
+            mins = f"{r['ms'] / 60000:.1f}" if r.get("ms") else "–"
+            print(f"| {t} | {r['phase']} | {r['role']} | {r['regime']} | {r.get('angle', '-')} | "
+                  f"{group_values(r, 'lessons')[0]} | {', '.join(r.get('lib') or []) or '–'} | "
+                  f"{', '.join(r.get('out', [])) or ('–' if r.get('done') else 'not returned')} | "
+                  f"{r.get('verdict') or '–'} | {r.get('score', '–')} | {r.get('tokens', '–')} | {mins} | "
+                  f"{'yes' if r['fed'] else 'no'} |")
+        return
+    groups = collections.defaultdict(list)
+    for rec in tasks.values():
+        for key in itertools.product(*(group_values(rec, k) for k in a.by)):
+            groups[key].append(rec)
+    print(f"| {' / '.join(a.by)} | Tasks | Returned | Proof | Fed gated claim | Verdicts | Tokens | Mean min |")
+    print("|---|---|---|---|---|---|---|---|")
+    for key in sorted(groups):
+        recs = groups[key]
+        done = [r for r in recs if r.get("done")]
+        verdicts = collections.Counter(r["verdict"] for r in done if r.get("verdict"))
+        tokens = sum(r.get("tokens", 0) for r in done)
+        mins = [r["ms"] / 60000 for r in done if r.get("ms")]
+        print(f"| {' / '.join(key)} | {len(recs)} | {len(done)} | {sum('proof.md' in r.get('out', []) for r in done)} | "
+              f"{sum(r['fed'] for r in recs)} | {', '.join(f'{v} {n}' for v, n in verdicts.most_common()) or '–'} | "
+              f"{f'{tokens / 1000:.0f}k' if tokens else '–'} | {f'{sum(mins) / len(mins):.1f}' if mins else '–'} |")
+    waiting = sorted(t for t, r in tasks.items() if not r.get("done"))
+    print(f"\nNot marked returned (pp.py done): {', '.join(waiting) or 'none'}")
+
+
+# ---------- technique library ----------
+
+def git(*args, text=True):
+    return subprocess.run(["git", "-C", ROOT, *args], capture_output=True, text=text)
+
+
+def lib_origin(src):
+    rel = os.path.relpath(os.path.realpath(src), RUN)
+    parts = rel.split(os.sep)
+    if rel.startswith("..") or len(parts) < 4 or parts[0] in NON_PROBLEM_DIRS or parts[2] not in ("accepted", "checker"):
+        return None
+    return parts[0], parts[2]
+
+
+def manifest_mismatches(entry_dir):
+    bad = []
+    for ln in open(os.path.join(entry_dir, "MANIFEST.sha256")):
+        digest, name = ln.rstrip("\n").split("  ", 1)
+        path = os.path.join(entry_dir, name)
+        if not os.path.isfile(path) or sha256(path) != digest:
+            bad.append(name)
+    return bad
+
+
+def cmd_lib_add(a):
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", a.name):
+        die("NAME must be lower-case letters, digits and hyphens")
+    problems = set()
+    for src in a.sources:
+        path = src.partition("=")[0]
+        origin = lib_origin(path) if os.path.exists(path) else None
+        if not origin:
+            die(f"{src}: library sources must exist under run/<P>/<cell>/accepted/ or run/<P>/<cell>/checker/")
+        if a.kind == "lemma" and origin[1] != "accepted":
+            die(f"{src}: a lemma must come from accepted/ (it passed the gate)")
+        problems.add(origin[0])
+    if len(problems) != 1:
+        die("all sources of one entry must come from one problem")
+    entry = f"{problems.pop()}-{a.name}"
+    edir = os.path.join(LIBRARY, entry)
+    if os.path.exists(edir):
+        die(f"run/library/{entry} already exists")
+    files = os.path.join(edir, "files")
+    os.makedirs(files)
+    for src in a.sources:
+        copy_into(src, files)
+    with open(os.path.join(edir, "MANIFEST.sha256"), "w") as man:
+        for root, _, names in sorted(os.walk(files)):
+            for n in sorted(names):
+                man.write(f"{sha256(os.path.join(root, n))}  {os.path.relpath(os.path.join(root, n), edir)}\n")
+    origins = ", ".join(os.path.relpath(os.path.realpath(s.partition('=')[0]), ROOT) for s in a.sources)
+    with open(os.path.join(edir, "ENTRY.md"), "w") as fh:
+        fh.write(f"# Library entry: {entry}\nKIND: {a.kind}\nWHAT: {a.what}\nFROM: {origins}\n"
+                 f"EVIDENCE: {a.evidence}\nADDED: {dt.datetime.now().strftime('%Y-%m-%d %H:%M')}, "
+                 f"run time {run_elapsed()}\n")
+    log_event("lib-add", entry=entry, kind=a.kind)
+    print(f"added run/library/{entry}")
+
+
+def lib_entries(branch=None):
+    if branch is None:
+        if not os.path.isdir(LIBRARY):
+            return {}
+        return {n: read(os.path.join(LIBRARY, n, "ENTRY.md")) for n in sorted(os.listdir(LIBRARY))
+                if os.path.isfile(os.path.join(LIBRARY, n, "ENTRY.md"))}
+    res = git("ls-tree", "--name-only", f"{branch}:run/library")
+    if res.returncode:
+        return None
+    entries = {}
+    for n in res.stdout.split():
+        shown = git("show", f"{branch}:run/library/{n}/ENTRY.md")
+        if not shown.returncode:
+            entries[n] = shown.stdout
+    return entries
+
+
+def cmd_lib_list(a):
+    found, missing = {}, []
+    for n, text in lib_entries().items():
+        found[n] = (text, ["here"])
+    for b in a.branches:
+        entries = lib_entries(b)
+        if entries is None:
+            missing.append(b)
+            continue
+        for n, text in entries.items():
+            found.setdefault(n, (text, []))[1].append(b)
+    print("| Entry | Kind | What | Evidence | Where |")
+    print("|---|---|---|---|---|")
+    for n, (text, where) in sorted(found.items()):
+        print(f"| {n} | {verdict_field(text, 'KIND')} | {verdict_field(text, 'WHAT')} | "
+              f"{verdict_field(text, 'EVIDENCE')} | {', '.join(where)} |")
+    if missing:
+        print(f"\nNo run/library on: {', '.join(missing)}")
+    print("\n'here' entries can go into an inbox with 'pp.py task ... --lib ENTRY'; others need 'pp.py lib import'.")
+
+
+def cmd_lib_import(a):
+    dest = os.path.join(LIBRARY, a.entry)
+    if os.path.exists(dest):
+        die(f"run/library/{a.entry} already exists here")
+    res = git("ls-tree", "-r", "-z", "--name-only", a.branch, f"run/library/{a.entry}/")
+    paths = [p for p in res.stdout.split("\0") if p]
+    if res.returncode or not paths:
+        die(f"{a.branch} has no run/library/{a.entry}/")
+    for path in paths:
+        target = os.path.join(ROOT, path)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with open(target, "wb") as fh:
+            fh.write(git("show", f"{a.branch}:{path}", text=False).stdout)
+    bad = manifest_mismatches(dest)
+    if bad:
+        shutil.rmtree(dest)
+        die(f"{a.entry} from {a.branch} does not match its MANIFEST.sha256 ({', '.join(bad)}); not imported")
+    log_event("lib-import", entry=a.entry, branch=a.branch)
+    print(f"imported run/library/{a.entry} from {a.branch} (sha256 checked)")
+
+
+def cmd_lessons(a):
+    missing = []
+    for b in a.branches:
+        res = git("ls-tree", "--name-only", f"{b}:run")
+        if res.returncode:
+            missing.append(b)
+            continue
+        for p in res.stdout.split():
+            if p in NON_PROBLEM_DIRS:
+                continue
+            shown = git("show", f"{b}:run/{p}/lessons.md")
+            if shown.returncode:
+                continue
+            first = shown.stdout.split("\n", 1)[0]
+            items = [ln for ln in shown.stdout.splitlines() if ln.startswith("- ")]
+            print(f"## {b}: problem {p} ({first.strip()})")
+            print("\n".join(items) or "- (no lessons)")
+            print()
+    if missing:
+        print(f"No run/ on: {', '.join(missing)}\n")
+    print("A lesson that shows up for two or more problems is a candidate role lesson (head skill, Learning).")
+
+
 # ---------- CLI ----------
 
 def main():
@@ -1116,6 +1637,9 @@ def main():
     s.add_argument("--branch", choices=BRANCHES)
     s.add_argument("--branch-note", help="the problem skill's branch note for this lens")
     s.add_argument("--subject", help="task whose proof.md, claims.md, code/ go to inbox/subject/")
+    s.add_argument("--subject-file", action="append", default=[], metavar="NAME",
+                   help="extra file or dir from the subject's out/ into inbox/subject/ "
+                        "(a computational subject's artefact); repeatable")
     s.add_argument("--obstacles", nargs="+", default=[], help="tasks whose stuck/verdict/no_natural_route files go in")
     s.add_argument("--earlier", nargs="+", default=[], help="literature: earlier tasks whose out/ goes in")
     s.add_argument("--record", action="store_true", help="copy the cell's full record (Scribe REPORT, Auditor)")
@@ -1129,6 +1653,7 @@ def main():
     s.add_argument("--forbid", action="append", default=[], help="forbidden-approach line; repeatable")
     s.add_argument("--forbid-file", action="append", default=[], help="deadends.md to inline; repeatable")
     s.add_argument("--inbox", action="append", default=[], help="SRC or SRC=NAME to copy into inbox/; repeatable")
+    s.add_argument("--lib", action="append", default=[], help="run/library entry copied to inbox/library/; repeatable")
     s.add_argument("--status", help="scribe: the gate-approved claim status")
     s.add_argument("--cell-status", choices=CELL_STATUSES, help="scribe: the gated cell status")
     s.add_argument("--established", action="append", default=[], help="scribe, PARTIAL: established claim; repeatable")
@@ -1169,6 +1694,14 @@ def main():
     s.add_argument("--log")
     s.set_defaults(func=cmd_crosstest)
 
+    s = sub.add_parser("choose")
+    s.add_argument("P")
+    s.add_argument("cell")
+    s.add_argument("--map", required=True, help="the Phase 2S task whose out/spaces.md holds the cards")
+    s.add_argument("--take", action="append", default=[],
+                   help="'S<n>=ACTION: reason', one per card; ACTION: " + " ".join(CHOICE_ACTIONS))
+    s.set_defaults(func=cmd_choose)
+
     s = sub.add_parser("matrix")
     s.add_argument("P")
     s.add_argument("cell")
@@ -1204,6 +1737,40 @@ def main():
     s.add_argument("--branches", nargs="+", required=True)
     s.add_argument("--out")
     s.set_defaults(func=cmd_summary)
+
+    s = sub.add_parser("done")
+    s.add_argument("task")
+    s.add_argument("--tokens", type=int, help="total tokens from the subagent result")
+    s.add_argument("--ms", type=int, help="duration_ms from the subagent result")
+    s.add_argument("--tool-uses", type=int)
+    s.add_argument("--score", help="searchers: the score you re-computed with the checker")
+    s.set_defaults(func=cmd_done)
+
+    s = sub.add_parser("telemetry")
+    s.add_argument("--by", nargs="+", default=["role", "regime"], choices=GROUP_KEYS)
+    s.add_argument("--tasks", action="store_true", help="one row per task instead of groups")
+    s.set_defaults(func=cmd_telemetry)
+
+    s = sub.add_parser("lib")
+    lib = s.add_subparsers(dest="lib_cmd", required=True)
+    s = lib.add_parser("add")
+    s.add_argument("name")
+    s.add_argument("sources", nargs="+")
+    s.add_argument("--kind", required=True, choices=LIB_KINDS)
+    s.add_argument("--what", required=True, help="one line: what it does and how to call it")
+    s.add_argument("--evidence", required=True, help="how it was verified (cross-test log, gate report, pinned sha)")
+    s.set_defaults(func=cmd_lib_add)
+    s = lib.add_parser("list")
+    s.add_argument("--branches", nargs="*", default=[])
+    s.set_defaults(func=cmd_lib_list)
+    s = lib.add_parser("import")
+    s.add_argument("branch")
+    s.add_argument("entry")
+    s.set_defaults(func=cmd_lib_import)
+
+    s = sub.add_parser("lessons")
+    s.add_argument("--branches", nargs="+", required=True)
+    s.set_defaults(func=cmd_lessons)
 
     a = ap.parse_args()
     if a.cmd == "board" and not (a.cell or a.note or a.regenerate):

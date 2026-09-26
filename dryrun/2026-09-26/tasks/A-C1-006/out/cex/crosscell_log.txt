@@ -1,0 +1,11 @@
+binom(N,2)-M(N,2)==floor(N^2/4), N=0..10000: failures = 0
+N=2: balanced split S/pi = 1/2, bound/pi = 1/2
+N=3: balanced split S/pi = 1, bound/pi = 1
+N=4: balanced split S/pi = 2, bound/pi = 2
+N=5: balanced split S/pi = 3, bound/pi = 3
+Setting example d=2,k=0: (binom(N,2)-k)/2 = 1/2, floor(N^2/4)/2 = 1/2
+Setting example d=2,k=1: (binom(N,2)-k)/2 = 1, floor(N^2/4)/2 = 1
+Setting example d=2,k=2: (binom(N,2)-k)/2 = 2, floor(N^2/4)/2 = 2
+real 0.03
+user 0.01
+sys 0.00

@@ -1,0 +1,13 @@
+random configs N=1..12 x 2000: all within bound; max S/bound = 1.0
+hill-climb N=2: best S=1.570796153  bound=1.570796327  gap=1.74e-07
+hill-climb N=3: best S=3.141592654  bound=3.141592654  gap=-6.62e-12
+hill-climb N=4: best S=6.283184527  bound=6.283185307  gap=7.80e-07
+hill-climb N=5: best S=9.424777961  bound=9.424777961  gap=-3.48e-11
+hill-climb N=6: best S=14.137162655  bound=14.137166941  gap=4.29e-06
+hill-climb N=7: best S=18.849555922  bound=18.849555922  gap=-3.93e-11
+hill-climb N=8: best S=25.132738369  bound=25.132741229  gap=2.86e-06
+hill-climb N=9: best S=31.415926536  bound=31.415926536  gap=-3.32e-11
+identity check (200 random u,v, M=20000): max |error| = 6.02e-04 (Riemann-sum resolution ~ 2h = 6.28e-04)
+real 2.22
+user 2.17
+sys 0.02

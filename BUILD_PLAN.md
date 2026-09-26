@@ -34,6 +34,7 @@ Working rules from the user's global instructions:
 | Problem skills: template, A, H (practice), B (conventions only), each with Part S seeds + branch notes | `.claude/skills/problem-*/` |
 | Lessons layer (7 roles + pending referee/checker-builder + CHANGELOG) | `.claude/lessons/` |
 | README describing the whole process | `README.md` |
+| Improvement layer I1 (telemetry: `done`, `telemetry`; events from `task`, `gate`, `pin`) and I5 (technique library: `lib add/list/import`, `task --lib`, `lessons`), with tests (267 checks) | `scripts/pp.py`, `scripts/tests/test_pp.py`, README §8 |
 
 ## To build (in order)
 
@@ -111,6 +112,7 @@ Working rules from the user's global instructions:
   - modes SOLVE (1L) and ANALYST (3).
 - [x] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
 - [x] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
+  **Amended 2026-09-26 after the dry run, with the humans' approval:** Bash added, so the Auditor re-runs the report's `RAN` lines instead of taking them on trust; the guard confines its Bash writes to `out/`.
 - [x] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
 
 ### B4. Lessons
@@ -137,30 +139,29 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 
 ### B8. Dry run (≤ 16 subagent calls)
 
-- [ ] **Hypercube C1 (`uphill_paths_on_the_hypercube`)** (6 calls):
-  1. Phase 0 checklist + 2 checker-builders;
-  2. `crosstest`;
-  3. Phase 1: 2 blind searchers;
-  4. re-score;
-  5. 1L literature;
-  6. gate on computational claims;
-  7. scribe SUBMISSION.
-- [ ] **Angles C1 (`angles_between_lines`)** (9 calls):
-  1. Phase 0 checklist;
-  2. Phase 1: 2 blind provers;
-  3. 1L literature;
-  4. Phase 2: one verifier per result (≤ 3);
-  5. one GATE referee;
-  6. scribe REPORT + auditor.
-- [ ] **Audit afterwards:**
-  - isolation leaks (guard denials, `blindcheck`, transcripts);
-  - report length;
-  - unclear briefs;
-  - gate and matrix behaviour;
-  - whether Part S stayed out of blind inboxes.
-- [ ] Fix the skills and agents, then move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit.
+**Run on 2026-09-26. Findings and fixes: `dryrun/2026-09-26-findings.md`.** 16 fresh subagent calls
+used (A-C1 nine, H-C1 seven); interrupted workers were resumed in their own task folders, which
+costs no extra slot.
+
+- [x] **Hypercube C1** — 2 checker-builders, `crosstest` (208 cases, 0 disagreements), 2 blind
+  searchers, head re-scoring, 1L literature, 2 referees on the lower-bound arguments.
+  Values U(Q_3)=14, U(Q_4)=34, re-scored by the head; the literature route proves both bounds by
+  hand. Cell PARTIAL until the gate closes.
+- [x] **Angles C1** — checklist, 2 blind provers, 1L literature, 3 verifiers, 1 GATE referee,
+  scribe REPORT, auditor. Gate VALID, cell SOLVED / PROVED, `final_report.md` filed after an
+  audit PASS (the first audit returned FAIL on three citations; the repair loop was exercised).
+- [x] **Audit afterwards:** isolation (`blindcheck` clean on every blind task; the guard had no
+  audit trail, now fixed); report length; brief clarity; gate behaviour; Part S never left a
+  referee inbox; telemetry gaps. All written up in the findings file.
+- [x] Hypercube C1's checker passed the cross-test and is in the library as `H-uphill-checker`.
+  The `--lib` dispatch path is covered by `test_pp.py`; a 16th call to hand an Angles prover a
+  hypercube checker would have exercised nothing further and was spent on a referee instead.
+- [x] Fixes implemented and tested (see the findings file's change table).
+- [x] Move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit. The library
+  (`H-uphill-checker`) stays in `run/library/`.
 - Dry-run results are **not** submission-verified unless they pass the gate.
-- Phases 2A–2C and 3 aren't covered at this size. Propose a second mini dry run (a small 2A/2B/2C/3 chain on Angles C2) if the budget allows.
+- [ ] Phases 2A–2C and 3 were not reached at this size. A second mini dry run (a small 2A/2B/2C/3
+  chain on Angles C2) is still worth doing if the budget allows.
 
 ### B9. Clean up
 
@@ -176,14 +177,25 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
 
-## Improvement layer (proposed; not approved yet)
+## Improvement layer
 
-These go beyond editing lessons text. Recommended order: I1, then I2, then I4. I2, I3 and lesson A/B tests cost subagent calls, so they need a bigger call budget or must take the place of FRESH workers.
+**Decision (2026-09-26):** build only what pays off within one 7-hour run: I1 (it's free) and I5 (same-day sharing across the four problems). The rest either needs many runs of data or more subagent calls than the event has. Full description in README §8.
 
-- [ ] **I1. Per-task telemetry.** `pp.py` appends one record per task to `run/telemetry.jsonl`: role, regime, angle tag, lessons versions (role and problem), verdict or score, runtime, tokens, and whether the task fed a gated claim. The "revert a lesson if the next wave doesn't improve" rule then reads data. I2–I4 depend on this log. No extra subagent calls.
-- [ ] **I2. EVOLVE searcher regime (AlphaEvolve / FunSearch style).** Each cell keeps a scored program pool in `run/<P>/<cell>/programs/`. An EVOLVE searcher gets the top-k programs and their scores in its inbox and writes a changed program. The head scores it with the cross-tested checker. This forwards one worker's output to another, so it has to be written as a sanctioned regime, like EXPLOIT. Targets: Hypercube and Angles construction cells.
-- [ ] **I3. Regression set for gate lessons.** A golden set of past proofs: some with known flaws a referee should flag, some correct ones it should accept. A pending Referee or Checker-builder lesson must still catch every seeded flaw before it goes to the humans for approval. Costs referee calls.
-- [ ] **I4. Adaptive angle and regime allocation.** Thompson sampling over (angle tag × regime), with rewards from I1, replaces the fixed 60/25/15 mix table. `pp.py suggest` prints the next wave's allocation.
-- [ ] **I5. Technique library across problems.** Verified, reusable code and lemmas (SAT encoders, simulated annealing and tabu search harnesses, exact-arithmetic helpers, accepted checkers, gated lemmas) are copied into inboxes on request. A problem lesson seen in two or more problems becomes a candidate role lesson.
-- [ ] **I6. Head retrospective.** The head writes `pending/head.md` at each checkpoint: which phases wasted calls and which allocations paid off. Humans promote the useful items into the head skill between runs. The head still never edits its own skill.
-- [ ] **I7. Stretch goal: Lean 4 for small lemmas.** A machine-checked lemma is a perfect reward signal and would strengthen the gate. Setup cost is high (Mathlib, toolchain, and workers that can write Lean), so only attempt it with days to spare rather than hours.
+- [x] **I1. Per-task telemetry.** `run/telemetry.jsonl`:
+  - `pp.py task` records role, regime, phase, angle, branch, subject, lesson versions and library entries;
+  - `pp.py done TASK --tokens --ms [--score]` records the returned outputs and verdict;
+  - `pp.py gate` and `pp.py pin` record what fed a gated claim;
+  - `pp.py telemetry --by …` prints the yield table.
+- [x] **I5. Technique library across problems.**
+  - `run/library/<P>-<name>/` holds verified sources only (from `accepted/` or `checker/`), with a sha256 manifest;
+  - `pp.py lib add | list --branches | import`;
+  - `pp.py task --lib` (Prover / Searcher / Breaker; BLIND takes only code entries without literature markers);
+  - `pp.py lessons --branches` for candidate role lessons.
+- **Deferred**:
+  - **I2 EVOLVE regime:** needs many generations;
+  - **I3 regression set for gate lessons:** no past proofs yet;
+  - **I4 adaptive allocation:** a bandit needs many trials per option;
+  - **I6 head retrospective:** pays off between runs;
+  - **I7 Lean 4:** days of setup.
+  
+  Revisit I4 and I6 first if the system runs again, using this run's telemetry.
