@@ -343,7 +343,7 @@ Keep each entry to one line. CONTRARIAN briefs receive these lines verbatim.
   - `SOLVED` only when every claim the hand-in requires has passed the gate at an established status: `PROVED`, `COMPUTER-VERIFIED`, or `EXHAUSTIVE-WITHIN-CLASS` where the class is the whole space the statement quantifies over.
   - Everything short of that is `PARTIAL`, including a `BEST-FOUND` value in an instant-check cell. Every `PARTIAL` cell has an entry under "Partial cells".
 - **Claim status:** the strongest claim for the cell.
-- **Robustness:** `ROBUST` / `CONTESTED` / `UNSUPPORTED`, or `–` where 2B didn't run.
+- **Robustness:** `ROBUST` / `CONTESTED` / `UNSUPPORTED` / `INCOMPLETE`, or `–` where 2B didn't run.
 
 ## 7. Angle generator and branch lenses
 
@@ -441,15 +441,17 @@ Rows are proofs (task ids), and columns are the Phase 2 verifier and each cross-
 Classification:
 - **ROBUST:** some proof passed the Phase 2 verifier (ACCEPT) and is CONFIRMED (or CONFIRMED-WITH-CAVEATS) by at least three other branches. With fewer than four selected branches, it must be confirmed by every other selected branch. No GAP or REFUTED on that proof.
 - **CONTESTED:** verdicts disagree. List the disputed steps for the humans.
-- **UNSUPPORTED:** no proof confirmed by at least two other branches.
-- **INCOMPLETE** (transient, printed by `pp.py matrix`): no disagreement so far and some proof has two or more confirmations, but verdicts are still pending. It is not ROBUST, so the gate treats it as a GAP.
+- **UNSUPPORTED:** every verdict is in, nothing is contested, and no proof has the confirmations ROBUST needs.
+- **INCOMPLETE** (transient): no disagreement so far, and some proof with no negative verdict still has verdicts pending (its Phase 2 verifier or a kept branch), so it could still become ROBUST. It is not ROBUST, so the gate treats it as a GAP.
+
+Kept branches are those in the latest triage's `selected_branches.txt`, plus any branch re-admitted in 2B-D (from its first 2B task). The gate needs the proof under the gate to be ROBUST itself; a ROBUST cell reached through another proof doesn't count.
 
 ## 13. Gate report (`run/<P>/<cell>/gate/gate_report.md`, written by `pp.py gate`)
 
 ```
 # Gate: <P>-<cell>, proof <task id>, <time>
 Referees: <task id> VERIFY ACCEPT (checklist complete: yes) | <task id> GATE ACCEPT (complete: yes)
-Matrix: ROBUST | CONTESTED | UNSUPPORTED | not run
+Matrix: ROBUST | CONTESTED | UNSUPPORTED | INCOMPLETE | not run; this proof: robust | not robust | not in matrix | n/a
 Statement checked word for word by head: yes | no
 Checklist scores: <G/S items with PASS/FAIL/N/A per referee>
 DECISION: VALID | GAP | INVALID — <rule that decided it>

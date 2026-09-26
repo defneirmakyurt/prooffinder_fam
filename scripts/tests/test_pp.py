@@ -279,11 +279,13 @@ def setup_2b(cell, p2, xv, kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\t
     tb = last_task(pp("task", "A", cell, "--phase", "2B", "--role", "prover", "--branch", "ALGEBRAIC", *STOP))
     fake_proof(tb, cell)
     tv = last_task(pp("task", "A", cell, "--phase", "2", "--subject", tb, *STOP))
+    # cross-verifiers dispatched in parallel with the Phase 2 verifier, before its verdict is in
+    txs = {branch: last_task(pp("task", "A", cell, "--phase", "2B-XV", "--branch", branch, "--subject", tb, *STOP))
+           for branch in xv}
     verdict(tv, p2)
     for branch, v in xv.items():
-        tx = last_task(pp("task", "A", cell, "--phase", "2B-XV", "--branch", branch, "--subject", tb, *STOP))
         if v:
-            cross(tx, v)
+            cross(txs[branch], v)
     return tb, tv
 
 
@@ -301,8 +303,11 @@ def matrix_gate_tests():
     check("step 2 does not translate" in open(os.path.join(S, "run", "A", "C3", "matrix.md")).read(),
           "CONTESTED lists the disputed step")
 
-    setup_2b("C4", "MAJOR", {"DISCRETE": "GAP", "ANALYSIS": "REFUTED"})
+    tb4, _ = setup_2b("C4", "MAJOR", {"DISCRETE": "GAP", "ANALYSIS": "REFUTED"})
     check("CLASS: UNSUPPORTED" in pp("matrix", "A", "C4"), "all negative → UNSUPPORTED")
+    out = pp("task", "A", "C4", "--phase", "2B-XV", "--branch", "TOPOLOGICAL", "--subject", tb4, *STOP, ok=False,
+             label="2B-XV refused after a negative Phase 2 verdict")
+    check("repair it first" in out, "refusal says to repair first")
 
     pp("open", "A", "C5", "C6")
     setup_2b("C5", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "TOPOLOGICAL": "CONFIRMED",
@@ -310,15 +315,29 @@ def matrix_gate_tests():
              kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tsolver\nTOPOLOGICAL\tverifier-only\n"
                   "NUMBER-THEORY\tverifier-only\n")
     check("CLASS: ROBUST" in pp("matrix", "A", "C5"), "5 branches: 3 confirmations suffice, one pending → ROBUST")
-    setup_2b("C6", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": None})
+    tb6, _ = setup_2b("C6", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": None})
     out = pp("matrix", "A", "C6")
-    check("CLASS: UNSUPPORTED" in out and "- A-C6-002: ANALYSIS" in open(os.path.join(S, "run", "A", "C6", "matrix.md")).read(),
-          "3 branches, 1 confirm + 1 pending → UNSUPPORTED, pending listed")
+    check("CLASS: INCOMPLETE" in out and "- A-C6-002: ANALYSIS" in open(os.path.join(S, "run", "A", "C6", "matrix.md")).read(),
+          "3 branches, 1 confirm + 1 pending → INCOMPLETE (not yet UNSUPPORTED), pending listed")
+    out = pp("task", "A", "C6", "--phase", "2B-XV", "--branch", "DISCRETE", "--subject", tb6, *STOP, ok=False,
+             label="2B-XV refused: same proof, same branch twice")
+    check("already has a DISCRETE cross-verifier" in out, "duplicate refusal names the existing task")
     pp("open", "A", "C8")
     setup_2b("C8", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "TOPOLOGICAL": None, "NUMBER-THEORY": None},
              kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tsolver\nTOPOLOGICAL\tverifier-only\n"
                   "NUMBER-THEORY\tverifier-only\n")
     check("CLASS: INCOMPLETE" in pp("matrix", "A", "C8"), "5 branches, 2 confirm + 2 pending → INCOMPLETE (not ROBUST)")
+
+    pp("open", "A", "C9")
+    tb9, _ = setup_2b("C9", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "NUMBER-THEORY": None},
+                      kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tverifier-only\nNUMBER-THEORY\tverifier-only\n")
+    check("CLASS: INCOMPLETE" in pp("matrix", "A", "C9"), "4 branches, 2 of 3 confirmations + 1 pending → INCOMPLETE")
+    pp("task", "A", "C9", "--phase", "2B", "--role", "prover", "--branch", "TOPOLOGICAL", *STOP)  # 2B-D re-admission
+    tx9 = last_task(pp("task", "A", "C9", "--phase", "2B-XV", "--branch", "TOPOLOGICAL", "--subject", tb9, *STOP))
+    cross(tx9, "CONFIRMED")
+    check("CLASS: ROBUST" in pp("matrix", "A", "C9"), "re-admitted branch's confirmation counts → ROBUST")
+    check("TOPOLOGICAL solver (re-admitted)" in open(os.path.join(S, "run", "A", "C9", "matrix.md")).read(),
+          "matrix.md lists the re-admitted branch")
 
     print("\n== gate: VALID / GAP / INVALID")
     tg = last_task(pp("task", "A", "C2", "--phase", "GATE", "--subject", tb2, *STOP))
@@ -349,6 +368,21 @@ def matrix_gate_tests():
     verdict(tg3, "ACCEPT")
     out = pp("gate", "A", "C3", "--subject", tb3, "--statement-checked")
     check("DECISION: GAP" in out and "matrix is CONTESTED" in out, "2 ACCEPT but CONTESTED → GAP")
+
+    print("\n== gate: robustness belongs to the proof, not the cell")
+    pp("open", "A", "C10")
+    tx10, _ = setup_2b("C10", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED"})
+    ty = last_task(pp("task", "A", "C10", "--phase", "2B", "--role", "prover", "--branch", "DISCRETE", *STOP))
+    fake_proof(ty, "second")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "2", "--subject", ty, *STOP)), "ACCEPT")
+    cross(last_task(pp("task", "A", "C10", "--phase", "2B-XV", "--branch", "ALGEBRAIC", "--subject", ty, *STOP)), "REFUTED")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "GATE", "--subject", ty, *STOP)), "ACCEPT")
+    out = pp("gate", "A", "C10", "--subject", ty, "--statement-checked")
+    check("DECISION: GAP" in out and f"{ty} is not robust" in out,
+          "2 ACCEPT, cell ROBUST through another proof, this proof REFUTED cross-branch → GAP")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "GATE", "--subject", tx10, *STOP)), "ACCEPT")
+    out = pp("gate", "A", "C10", "--subject", tx10, "--statement-checked")
+    check("DECISION: VALID" in out and "this proof: robust" in out, "the robust proof itself still passes → VALID")
 
     print("\n== gate without 2B (matrix not run)")
     pp("open", "A", "C7")
