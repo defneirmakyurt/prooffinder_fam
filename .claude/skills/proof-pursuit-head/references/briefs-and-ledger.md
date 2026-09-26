@@ -62,8 +62,9 @@ Inbox contents set by phase (`pp.py` enforces them):
 | earlier results the phase allows | Literature (1L: Phase 1 outputs; 3: everything for the cell) |
 | `record/tasks/<id>/…` (paths preserved so citations resolve) | Scribe REPORT, Auditor |
 | accepted artefacts + hand-in text | Scribe SUBMISSION |
+| `library/<entry>/` (`ENTRY.md`, `MANIFEST.sha256`, `files/`), chosen with `--lib` | Prover, Searcher, Breaker. Under BLIND: `code` entries with no literature markers only. Never clean-room roles, Triage, Literature, Scribe or Auditor |
 
-BLIND inboxes accept nothing else. ASSUMPTIONS lists only claims that have passed the gate, with each exact statement in `inbox/`.
+BLIND inboxes accept nothing else. ASSUMPTIONS lists only claims that have passed the gate, with each exact statement in `inbox/`. A brief with `--lib` ends with a LIBRARY paragraph telling the worker to copy any library file its code needs into `out/code/`, and to name the entry in `claims.md` for every claim that depends on it. That way referees see the code and auditors can trace the entry.
 
 ## 2. Role-specific brief sections
 

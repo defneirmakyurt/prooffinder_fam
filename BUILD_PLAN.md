@@ -34,6 +34,7 @@ Working rules from the user's global instructions:
 | Problem skills: template, A, H (practice), B (conventions only), each with Part S seeds + branch notes | `.claude/skills/problem-*/` |
 | Lessons layer (7 roles + pending referee/checker-builder + CHANGELOG) | `.claude/lessons/` |
 | README describing the whole process | `README.md` |
+| Improvement layer I1 (telemetry: `done`, `telemetry`; events from `task`, `gate`, `pin`) and I5 (technique library: `lib add/list/import`, `task --lib`, `lessons`), with tests (267 checks) | `scripts/pp.py`, `scripts/tests/test_pp.py`, README §8 |
 
 ## To build (in order)
 
@@ -157,7 +158,9 @@ This is needed because the agent files changed; agent edits aren't picked up by 
   - report length;
   - unclear briefs;
   - gate and matrix behaviour;
-  - whether Part S stayed out of blind inboxes.
+  - whether Part S stayed out of blind inboxes;
+  - telemetry: `pp.py done` after every worker, with tokens and duration taken from the subagent result; `pp.py telemetry` shows a record per task and the gated claims as fed.
+- [ ] If Hypercube C1's checker passes the cross-test, add it to the library (`pp.py lib add`). Then give one Angles C1 blind prover a `--lib` entry, to exercise the library path end to end.
 - [ ] Fix the skills and agents, then move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit.
 - Dry-run results are **not** submission-verified unless they pass the gate.
 - Phases 2A–2C and 3 aren't covered at this size. Propose a second mini dry run (a small 2A/2B/2C/3 chain on Angles C2) if the budget allows.
@@ -176,14 +179,25 @@ This is needed because the agent files changed; agent edits aren't picked up by 
 4. Does each head run on **its own account**? If heads share one, the concurrency split and tiering must be tighter.
 5. The push to origin (`main` + 4 branches) is waiting for an OK.
 
-## Improvement layer (proposed; not approved yet)
+## Improvement layer
 
-These go beyond editing lessons text. Recommended order: I1, then I2, then I4. I2, I3 and lesson A/B tests cost subagent calls, so they need a bigger call budget or must take the place of FRESH workers.
+**Decision (2026-09-26):** build only what pays off within one 7-hour run: I1 (it's free) and I5 (same-day sharing across the four problems). The rest either needs many runs of data or more subagent calls than the event has. Full description in README §8.
 
-- [ ] **I1. Per-task telemetry.** `pp.py` appends one record per task to `run/telemetry.jsonl`: role, regime, angle tag, lessons versions (role and problem), verdict or score, runtime, tokens, and whether the task fed a gated claim. The "revert a lesson if the next wave doesn't improve" rule then reads data. I2–I4 depend on this log. No extra subagent calls.
-- [ ] **I2. EVOLVE searcher regime (AlphaEvolve / FunSearch style).** Each cell keeps a scored program pool in `run/<P>/<cell>/programs/`. An EVOLVE searcher gets the top-k programs and their scores in its inbox and writes a changed program. The head scores it with the cross-tested checker. This forwards one worker's output to another, so it has to be written as a sanctioned regime, like EXPLOIT. Targets: Hypercube and Angles construction cells.
-- [ ] **I3. Regression set for gate lessons.** A golden set of past proofs: some with known flaws a referee should flag, some correct ones it should accept. A pending Referee or Checker-builder lesson must still catch every seeded flaw before it goes to the humans for approval. Costs referee calls.
-- [ ] **I4. Adaptive angle and regime allocation.** Thompson sampling over (angle tag × regime), with rewards from I1, replaces the fixed 60/25/15 mix table. `pp.py suggest` prints the next wave's allocation.
-- [ ] **I5. Technique library across problems.** Verified, reusable code and lemmas (SAT encoders, simulated annealing and tabu search harnesses, exact-arithmetic helpers, accepted checkers, gated lemmas) are copied into inboxes on request. A problem lesson seen in two or more problems becomes a candidate role lesson.
-- [ ] **I6. Head retrospective.** The head writes `pending/head.md` at each checkpoint: which phases wasted calls and which allocations paid off. Humans promote the useful items into the head skill between runs. The head still never edits its own skill.
-- [ ] **I7. Stretch goal: Lean 4 for small lemmas.** A machine-checked lemma is a perfect reward signal and would strengthen the gate. Setup cost is high (Mathlib, toolchain, and workers that can write Lean), so only attempt it with days to spare rather than hours.
+- [x] **I1. Per-task telemetry.** `run/telemetry.jsonl`:
+  - `pp.py task` records role, regime, phase, angle, branch, subject, lesson versions and library entries;
+  - `pp.py done TASK --tokens --ms [--score]` records the returned outputs and verdict;
+  - `pp.py gate` and `pp.py pin` record what fed a gated claim;
+  - `pp.py telemetry --by …` prints the yield table.
+- [x] **I5. Technique library across problems.**
+  - `run/library/<P>-<name>/` holds verified sources only (from `accepted/` or `checker/`), with a sha256 manifest;
+  - `pp.py lib add | list --branches | import`;
+  - `pp.py task --lib` (Prover / Searcher / Breaker; BLIND takes only code entries without literature markers);
+  - `pp.py lessons --branches` for candidate role lessons.
+- **Deferred**:
+  - **I2 EVOLVE regime:** needs many generations;
+  - **I3 regression set for gate lessons:** no past proofs yet;
+  - **I4 adaptive allocation:** a bandit needs many trials per option;
+  - **I6 head retrospective:** pays off between runs;
+  - **I7 Lean 4:** days of setup.
+  
+  Revisit I4 and I6 first if the system runs again, using this run's telemetry.

@@ -88,7 +88,7 @@ Role notes:
 
 | Regime | Worker sees | Worker never sees | Used by |
 |---|---|---|---|
-| BLIND | Statement, the one cell, checklist Part G, output format; optionally a branch lens; the checker (computational); for triage/adversary also `stuck.md`, `verdict.md`, `no_natural_route.md` | Any proof by another agent, literature, Part S, web | Phase 1, 2A, 2B solvers, 2C |
+| BLIND | Statement, the one cell, checklist Part G, output format; optionally a branch lens; the checker (computational); library code entries you choose (`--lib`); for triage/adversary also `stuck.md`, `verdict.md`, `no_natural_route.md` | Any proof by another agent, literature, Part S, web, library lemmas | Phase 1, 2A, 2B solvers, 2C |
 | FRESH | Statement, Part G, an assigned angle, checker | Attempts, dead ends | extra waves |
 | CONTRARIAN | Statement, Part G, tried approaches marked forbidden | Artefacts | extra waves |
 | EXPLOIT | The lineage's best, its latest critique or gate report, its dead ends | Other lineages | repair |
@@ -97,6 +97,8 @@ Role notes:
 | RECORD | Accepted artefacts (SUBMISSION) or the cell's full record (REPORT, audit) | — | scribe, auditor |
 
 `pp.py task --phase` sets the regime and enforces the inbox rules: Part S only to referees, and only allowed file types in BLIND inboxes.
+
+**Technique library** (`run/library/`, see Learning) is the one sanctioned channel between cells and problems. `--lib ENTRY` copies an entry into `inbox/library/`. Only Provers, Searchers and Breakers take it. A BLIND inbox takes only `code` entries with no literature markers, never `lemma` entries. Don't give the same entry to every blind solver of a cell: keep at least one without it, so the blind attempts stay diverse.
 
 ## The pipeline (per cell, easiest cells first)
 
@@ -217,6 +219,8 @@ Read `references/briefs-and-ledger.md` before the first wave.
 
 Pass exactly the prompt that `pp.py task` prints ("Your task folder is <abs path>/ . Read inbox/role-lessons.md, then inbox/problem-lessons.md if it exists, then brief.md, and follow them.") and nothing else: no context, no hints, no names of theorems, authors or papers.
 
+When a worker returns, run `pp.py done TASK --tokens N --ms N` with the total tokens and duration from the subagent result, plus `--score S` for a searcher once you have re-scored its artefact. This closes the task's telemetry record. `task`, `gate` and `pin` record everything else themselves.
+
 Other bookkeeping commands:
 - `pp.py open`: problem and cell folders, checklist template, lessons file;
 - `pp.py deadend`;
@@ -224,7 +228,9 @@ Other bookkeeping commands:
 - `pp.py crosstest`: two checkers against a generator;
 - `pp.py pin`: copy into `accepted/` with sha256; `--verify` to re-check;
 - `pp.py matrix`, `pp.py gate`, `pp.py status`, `pp.py blindcheck`;
-- `pp.py report`, `pp.py finalize`, `pp.py summary`.
+- `pp.py report`, `pp.py finalize`, `pp.py summary`;
+- `pp.py telemetry [--by role regime angle lessons lib …] [--tasks]`: yield per group from `run/telemetry.jsonl`;
+- `pp.py lib add | list | import`, `pp.py lessons --branches …`: technique library and cross-problem lessons (see Learning).
 
 Run `.venv/bin/python3 scripts/envcheck.py` once at the start.
 
@@ -300,6 +306,8 @@ Keep `run/board.md` current after every phase; the template is in `references/br
   - claims awaiting the gate;
   - contested cells;
   - lesson changes since the last checkpoint, and pending Referee/Checker-builder/Auditor lessons awaiting approval;
+  - the `pp.py telemetry` table (tokens and yield by role and regime);
+  - library entries added or imported;
   - decisions needed.
 - **Timeline.**
   - **Freeze at 5:15:** no new lineages or phases after this.
@@ -313,6 +321,8 @@ run/
   PROBLEM                          # this branch's problem letter and skill
   board.md                         # you write; the team reads
   SUMMARY.md                       # pp.py report
+  telemetry.jsonl                  # pp.py task/done/gate/pin: one event per line (append-only)
+  library/<P>-<name>/              # pp.py lib: ENTRY.md, MANIFEST.sha256, files/ (verified material only)
   <P>/statement.md                 # verbatim problem + cell texts
   <P>/lessons.md                   # problem-specific lessons; copied only into this problem's briefs
   <P>/report.md                    # pp.py report
@@ -342,7 +352,9 @@ You may improve the workers' instructions during the run. Besides the ledger, th
 - **Referee, Checker-builder and Auditor lessons** are part of the verification gate. Write them to `.claude/lessons/pending/<role>.md` and present them at the next human checkpoint. Only after human approval do they move into `.claude/lessons/<role>.md`.
 - **Evidence only.** Every lesson cites the task ids where the problem appeared: `- <lesson> (evidence: <task ids>; added <hh:mm>; version <n>)`.
 - **Between phases only.** Edits apply to newly dispatched tasks, never to running ones. Bump `version:` (first line) on every edit; each brief's LESSONS line records the version it received.
-- **Check the next wave.** After an edit, look at the next reports for that role or problem. If the problem hasn't improved, or something got worse, revert, and log why.
+- **Check the next wave.** After an edit, look at the next reports for that role or problem, and compare versions with `pp.py telemetry --by lessons` (returned, proofs, fed gated claims, verdicts, tokens per role-and-version). If the problem hasn't improved, or something got worse, revert, and log why. With only a few tasks per version the numbers are a hint, not proof: read the reports too.
+- **Technique library.** When a checker has passed the cross-test, or a gated or pinned artefact contains a reusable, problem-agnostic tool (SAT encoder, annealing or tabu harness, exact-arithmetic helper), add it with `pp.py lib add NAME SRC… --kind code --what … --evidence …`. A gated lemma goes in with `--kind lemma`. Sources must come from `accepted/` or `checker/`, and a lemma only from `accepted/`. At each checkpoint, run `pp.py lib list --branches <the other problem branches>` and `pp.py lib import BRANCH ENTRY` whatever helps your open cells. This needs the humans to have pushed and fetched those branches. Measure whether it pays off with `pp.py telemetry --by lib`.
+- **Lessons across problems.** At each checkpoint, run `pp.py lessons --branches <all problem branches>`. A problem lesson that appears for two or more problems is a candidate role lesson: write it into the role file (or `pending/` for gate roles), citing the problem lessons as evidence.
 - **Keep it short:** about 30 lines per file. Merge and consolidate rather than append.
 - **Log and commit.** Every change gets an entry in `.claude/lessons/CHANGELOG.md`. Commit each edit, staging only the lessons files and CHANGELOG by name. On a problem branch, report role-lesson changes to the humans so they can be merged to `main`.
 
@@ -354,7 +366,7 @@ Formats are in `references/briefs-and-ledger.md`.
 - Feed later-phase information into blind agents, or show Part S to anyone but referees.
 - Edit `.claude/agents/`, your own skill, or a problem skill; weaken verification through a lesson.
 - Call a result new; write "not found in <sources searched>".
-- Forward one worker's output to another except through a regime above.
+- Forward one worker's output to another except through a regime above or a verified library entry.
 - Tell a referee who wrote the proof or how confident anyone is.
 - Record a score you didn't recompute, call an unfinished search a verification, or upgrade a status beyond what the gate and the matrix support.
 - Let a single cell eat the run.

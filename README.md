@@ -120,7 +120,7 @@ Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitCl
 
 | Regime | Sees | Used for |
 |---|---|---|
-| BLIND | statement, cell, Part G, optional branch lens, checker; triage/adversary also get `stuck.md`/verdicts (never proofs) | Phase 1, 2A, 2B, 2C |
+| BLIND | statement, cell, Part G, optional branch lens, checker, library code the head picks (§8); triage/adversary also get `stuck.md`/verdicts (never proofs) | Phase 1, 2A, 2B, 2C |
 | FRESH / CONTRARIAN | statement + an assigned angle / a list of forbidden approaches | extra waves |
 | EXPLOIT | one lineage's best + its critique or gate report | repair |
 | CLEAN-ROOM | only the object under evaluation (+ Parts G/S for referees) | referees, checker-builders |
@@ -128,7 +128,7 @@ Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitCl
 | RECORD | accepted artefacts or the full cell record | scribe, auditor |
 
 How it's enforced:
-- Each worker gets a task folder `run/tasks/<id>/` holding `brief.md`, `inbox/` (copies the head places there) and `out/`. `pp.py task --phase` builds the inbox. It enforces the regime: Part S goes only to referees, and blind inboxes accept only obstacle files, never proofs.
+- Each worker gets a task folder `run/tasks/<id>/` holding `brief.md`, `inbox/` (copies the head places there) and `out/`. `pp.py task --phase` builds the inbox. It enforces the regime: Part S goes only to referees, and blind inboxes accept only obstacle files and library code, never proofs.
 - `scripts/guard.py`, a PreToolUse hook in every agent, binds a worker to its own task folder. It blocks reads of other tasks, the ledger and `.claude/`, and blocks writes outside `out/`. For Bash commands it can only pattern-match, so enforcement there is best effort. `pp.py blindcheck` flags literature markers in blind outputs, and any breach is reported to the humans at once.
 - The head passes each worker a one-line prompt pointing at its task folder, and nothing else: no hints, no theorem or author names.
 
@@ -175,32 +175,50 @@ A result is never called "new". The wording is always "not found in <sources sea
 - **No lesson may weaken verification.** That covers the gate, the checklist, exactness, isolation or blindness, status labels, and `RAN` records.
 - **Gate-role lessons need approval.** Lessons for Referee, Checker-builder and Auditor wait in `pending/` until the humans approve them.
 
-Proposals to take this further are in §8.
+§8 adds measurement (telemetry) and a shared technique library, and lists the proposals that were deferred.
 
 ---
 
-## 8. Self-improvement layer (proposed; not approved)
+## 8. Self-improvement layer
 
-§7 lets lessons change between phases. These proposals go further. The system would measure every task, move effort towards what is working, evolve its best programs and reuse techniques across problems. **None of this is built or approved yet.** The limits in §6–7 still apply: no change may weaken the gate, isolation or blindness, and gate-role lessons still need the humans' approval.
+§7 lets lessons change between phases. This layer adds two things: every task is measured, and verified tools are shared across cells and problems. Of the seven proposals, **two are built (I1, I5)**. The other five are deferred, because they pay off only over many runs or need more subagent calls than a 7-hour event has. The limits in §6–7 still apply: nothing here may weaken the gate, isolation or blindness.
 
 ```
- every task ──► I1 telemetry ──┬──► I4 allocation of the next wave (angle × regime)
-                               └──► §7 lesson rollback decided on data
- I2 program pool · I5 technique library ──► worker inboxes
- I3 regression set · I6 head retrospective ──► humans approve ──► lessons / head skill
+ pp.py task / done / gate / pin ──► run/telemetry.jsonl ──► pp.py telemetry ──► §7 lesson rollback, checkpoint status
+ accepted/ + checker/ ──► pp.py lib add ──► run/library/ ◄── pp.py lib import (other problem branches)
+                                                 └──► pp.py task --lib ──► worker inbox/library/
 ```
 
-| # | Idea | What it does | Cost |
-|---|---|---|---|
-| **I1** | Per-task telemetry | `pp.py` appends one record per task to `run/telemetry.jsonl`: role, regime, angle tag, lessons versions (role and problem), verdict or score, runtime, tokens, and whether the task fed a gated claim. The §7 rule "revert a lesson if the next wave doesn't improve" then reads data. | No extra subagent calls. I2–I4 depend on it. |
-| **I2** | EVOLVE searcher regime (AlphaEvolve / FunSearch style) | Each cell keeps a scored program pool in `run/<P>/<cell>/programs/`. An EVOLVE searcher gets the top-k programs and their scores in its inbox and writes a changed program, which the head scores with the cross-tested checker. This forwards one worker's output to another, so it has to be a sanctioned regime, like EXPLOIT. Targets: Hypercube and Angles construction cells. | Subagent calls. Needs I1. |
-| **I3** | Regression set for gate lessons | A golden set of past proofs: some with known flaws a referee should flag, some correct ones it should accept. A pending Referee or Checker-builder lesson must catch every seeded flaw before it goes to the humans for approval. | Referee calls. |
-| **I4** | Adaptive angle and regime allocation | Thompson sampling over (angle tag × regime), with rewards from I1, replaces the fixed 60/25/15 mix table. `pp.py suggest` prints the next wave's allocation. | No extra subagent calls. Needs I1. |
-| **I5** | Technique library across problems | Verified, reusable code and lemmas are copied into inboxes on request: SAT encoders, simulated annealing and tabu search harnesses, exact-arithmetic helpers, accepted checkers and gated lemmas. A problem lesson seen in two or more problems becomes a candidate role lesson. | Low. |
-| **I6** | Head retrospective | At each checkpoint the head writes `pending/head.md`: which phases wasted calls and which allocations paid off. Humans promote the useful items into the head skill between runs. The head still never edits its own skill. | Low. |
-| **I7** | Stretch goal: Lean 4 for small lemmas | A machine-checked lemma is a perfect reward signal and would strengthen the gate. | High setup cost (Mathlib, toolchain, workers that can write Lean). Only with days to spare, not hours. |
+### Built
 
-**Recommended order:** I1, then I2, then I4. I2, I3 and lesson A/B tests cost subagent calls, so they need a bigger call budget or must take the place of FRESH workers.
+**I1. Telemetry.** `run/telemetry.jsonl` holds one JSON event per line and is append-only.
+- `pp.py task` records the task: phase, role, regime, mode, branch, angle, subject, role and problem lesson versions, library entries and time box.
+- `pp.py done TASK --tokens N --ms N [--score S]` records a returned worker. The head runs it with the numbers from the subagent result. It also records the `out/` files and the verdict (referee, cross-verifier, auditor or adversary label).
+- `pp.py gate` and `pp.py pin` record their decisions, so every task knows whether it **fed a gated claim**. A task fed one if it was the subject or an accepting referee of a VALID gate, or the source of a pinned artefact.
+- `pp.py telemetry --by <role regime angle lessons lib cell phase branch>` prints, per group: tasks, returned, proofs, fed, verdicts, tokens and mean minutes. `--tasks` prints one row per task.
+- **What it's for:** the §7 rollback rule (`--by lessons` compares lesson versions), and tokens and yield by role and regime at each checkpoint. With a handful of tasks per group, the numbers are a hint, not a verdict.
+
+**I5. Technique library.** Each entry lives in `run/library/<P>-<name>/` and holds `ENTRY.md` (kind, what, from, evidence), `MANIFEST.sha256` and `files/`.
+- **Verified material only.** Sources must come from `accepted/` (gated or pinned) or `checker/` (cross-tested). There are two kinds: `code`, and `lemma` (from `accepted/` only).
+- **Add:** `pp.py lib add NAME SRC… --kind code|lemma --what … --evidence …`.
+- **Share across problems:** `pp.py lib list --branches …` shows the entries here and on other problem branches. `pp.py lib import BRANCH ENTRY` copies one over and checks its sha256. As with `pp.py summary`, the branches must have been pushed and fetched, which is a human step.
+- **Use:** `pp.py task … --lib ENTRY` copies an entry into `inbox/library/`.
+  - Only Provers, Searchers and Breakers get it; clean-room roles never do.
+  - BLIND inboxes take only `code` entries with no literature markers, so a blind solver never sees a proof or literature.
+  - The brief tells the worker to copy any library file its code needs into `out/code/` and to name the entry in `claims.md`.
+- **Lessons across problems:** `pp.py lessons --branches …` lists every problem's lessons across branches. A lesson that appears for two or more problems is a candidate role lesson.
+
+### Deferred
+
+| # | Idea | Why not now |
+|---|---|---|
+| I2 | EVOLVE searcher regime (AlphaEvolve / FunSearch style): a scored program pool per cell; an EVOLVE searcher changes the top-k programs | Evolution pays off after many generations. A 7-hour call budget can't get there, and building it takes time away from solving. |
+| I3 | Regression set for gate lessons: past proofs with seeded flaws that a pending Referee lesson must catch | Needs a set of past proofs that doesn't exist yet, and costs referee calls. |
+| I4 | Adaptive angle × regime allocation (Thompson sampling on telemetry rewards) | A bandit needs many trials per option. A cell gets a handful of workers, so a sensible fixed mix does as well. |
+| I6 | Head retrospective (`pending/head.md` at checkpoints) | Pays off between runs, not within one. The checkpoint status already covers what matters on the day. |
+| I7 | Lean 4 for small lemmas | Setup (Mathlib, toolchain, workers that can write Lean) takes days, not hours. |
+
+If this system runs again, start with I4 and I6: the telemetry log from this run is the data they need.
 
 ---
 
@@ -214,9 +232,9 @@ Proposals to take this further are in §8.
 | `.claude/skills/problem-template/SKILL.md` | Template for new problem skills | humans |
 | `.claude/agents/<role>.md` | Worker locked cores | humans only |
 | `.claude/lessons/` | Lessons layer, `pending/`, `CHANGELOG.md` | head, between phases |
-| `scripts/pp.py` | Ledger helper: tasks and inboxes, board, dead ends, pinning, cross-tests, matrix, gate, status, blind check, reports, finalize, summary | humans |
+| `scripts/pp.py` | Ledger helper: tasks and inboxes, board, dead ends, pinning, cross-tests, matrix, gate, status, blind check, reports, finalize, summary, telemetry, technique library, cross-branch lessons | humans |
 | `scripts/guard.py` | Isolation hook for workers | humans |
-| `scripts/tests/` | Scratch-copy tests: `test_pp.py` (phases, inbox rules, matrix, gate, reports) and `test_guard.py` (isolation cases); run with `python3 scripts/tests/<file>` | humans |
+| `scripts/tests/` | Scratch-copy tests: `test_pp.py` (phases, inbox rules, matrix, gate, reports, telemetry, library) and `test_guard.py` (isolation cases); run with `python3 scripts/tests/<file>` | humans |
 | `scripts/envcheck.py`, `requirements.txt` | Environment check (`.venv`: sympy, mpmath, networkx, python-flint, python-sat) | humans |
 | `sources/` | Verbatim problem texts | humans |
 | `run/` | The ledger for one problem per branch (layout in the head skill) | head |
@@ -253,3 +271,7 @@ Proposals to take this further are in §8.
   - A two-referee gate with a 7-step protocol.
 - **2026-09-26, pipeline build:** skills for Bulgarian solitaire (official text) and Disjoint congruence classes; `pp.py` phase machinery (`task --phase`, inbox rules, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`); referee `out/cex/` in the guard; agents updated, `literature`, `triage` and `auditor` added, `scout` removed.
 - **2026-09-26, self-improvement layer documented (proposed; not approved):** ideas I1–I7 copied from `BUILD_PLAN.md` into §8, so they survive when the plan is deleted.
+- **2026-09-26, self-improvement layer, I1 + I5 built:**
+  - telemetry: `run/telemetry.jsonl`, `pp.py done`, `pp.py telemetry`; `task`, `gate` and `pin` record events;
+  - technique library: `pp.py lib add | list | import`, `task --lib`, `pp.py lessons`;
+  - I2, I3, I4, I6 and I7 deferred, with reasons in §8.
