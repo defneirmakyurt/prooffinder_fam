@@ -1,10 +1,11 @@
-# Board: problem A, updated 15:34, run time 0:21 of 7:00
+# Board: problem A, updated 15:47, run time 0:33 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
 | A-C1 | 1 | T0/T1: d=2 fixed, all N, short argument likely | GATE | SOLVED | PROVED | – | A-C1-001 proof, gate VALID (004 VERIFY + 006 GATE) | cut-averaging | done: final_report.md filed after AUDIT PASS | 0:00 |
 | A-C2 | 2 | T1 (drill: full pipeline forced): 2 pts, a genuine lemma, all m | 5 | SOLVED | PROVED | ROBUST | A-C2-002 proof, gate VALID pre-2B and re-gated VALID with matrix ROBUST (005+006; XV 012 ALG + 013 ANA CONFIRMED) | tridiagonal-minors (001, 010 ALG); project-out-induction (002); gram-schmidt residuals (003 1L, 015 2C); trig AM-GM weights (011 ANA) | done: final_report.md (audit PASS); submission.md packaged (020) for the humans to read and submit | 0:00 |
 | A-C3 | 3 | T1 (skill guess: first case in every dimension; 3 pts so 2A-2C run) | 5 | SOLVED | PROVED | – | A-C3-002 proof, gate VALID (006 VERIFY + 007 GATE ACCEPT), pinned in accepted/ | arcsin-sum Gram nonsingularity (002, VALID); extremal minimiser sliding (001, unrefereed reserve) | done: submission.md packaged (008); humans read before submitting | 0 |
+| A-C4 | 5 | T2 (concrete d=3,4; must be rigorous); lean track per humans | 1 running (lean track) | NOT ATTEMPTED | OPEN | – | – | – | Phase 1: 3 blind provers; first proof -> VERIFY + GATE referees together | 0 |
 
 ## Partial cells: established / remaining gap
 
@@ -19,6 +20,7 @@
 - [15:13] [15:13] Angles branch now carries Radu's A-C1/A-C2 (both gate VALID, audited). Humans: next cell is A-C3 only. H-C1 dry-run row removed from this branch's board (H lives on its own branch).
 - [15:18] [15:18] Humans: maximum speed. Fast track (gate unchanged): phases that don't depend on each other run in parallel; T1 cells keep exactly 2 branches; on the first proof: VERIFY + GATE referees + cross-verifiers dispatched together; 2B branch solvers only as fallback if Phase 1 proofs fail.
 - [15:26] [15:26] Humans: finish A-C3 asap, time and cost efficient (not an open question). Cut: literature 1L stopped (A-C3-005); 2B cross-verifiers and branch solvers skipped (T1: only if solvers disagree), so robustness is '–'; final report/audit deferred. Kept: gate = two clean-room referees ACCEPT the same proof version + head's word-for-word statement check; Scribe SUBMISSION. C4-C6 not started.
+- [15:47] [15:47] Humans: A-C4 lean track, no Space agent (question is already space-specific), no triage/literature/2B; gate = two clean-room ACCEPTs + head statement check.
 
 ## Obstacle notes (parked cells)
 - [15:24] [15:24] A-C3: A-C3-001/002/003 (provers) and A-C3-005 (literature) died on an API session limit (HTTP 429); re-dispatched on the same task ids to keep their partial out/.
