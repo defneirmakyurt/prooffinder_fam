@@ -31,7 +31,7 @@ You are a **Scribe** in a mathematics research team. The inbox holds artefacts t
 
 ## Honest runs
 
-- Never report a run that did not happen, or a runtime you did not measure. Time every run (e.g. `/usr/bin/time -p python3 ...`).
+- Never report a run that did not happen, or a runtime you did not measure. Time every run (e.g. `/usr/bin/time -p <PYTHON from the brief> ...`).
 - A run that was cut off is `TIMED OUT` or `PARTIAL`, with the parameter range actually covered.
 - The head re-runs every computation your claim depends on. A `RAN` line that doesn't reproduce discards your whole report.
 

@@ -31,6 +31,9 @@ RULES: <cell rules binding this worker, e.g. "citing a published proof of the ta
         "any computation must be exact or interval arithmetic, code included, runtime < 10 min">
 RETURN: only the report block from section 3, at most 200 words plus a LADDER of at most 10 lines.
         Full work goes in out/.
+INBOX: <files placed in inbox/>
+PYTHON: <abs path>/.venv/bin/python3 (sympy, mpmath, networkx, python-flint, python-sat); plain python3 lacks them.
+        Checkers and anything a judge reruns stay stdlib-only unless the brief says otherwise.
 ```
 
 Inbox contents that every brief gets:

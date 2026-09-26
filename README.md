@@ -75,7 +75,7 @@ Claude Code has no per-agent path scoping, and workers need Bash. Isolation is t
 ## Setup and dry run
 
 1. **Restart Claude Code** before any dispatch. New agent directories and edits to agent files are only picked up at startup.
-2. **Environment:** the machine runs Python 3.14, and `python-flint` / `python-sat` may not have 3.14 wheels yet. `scripts/envcheck.py` checks inside `.venv` and reports what's missing. Nothing has been installed. *Decision needed:* should `.venv` be created and populated?
+2. **Environment:** each person creates their own `.venv` with `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`. All five packages install on Python 3.14. Check with `.venv/bin/python3 scripts/envcheck.py`, which should print "All required tools present". Every brief carries a `PYTHON:` line pointing workers at `.venv/bin/python3`; plain `python3` lacks the packages. Checkers and anything a judge re-runs stay stdlib-only. A standalone DRAT/LRAT proof checker (e.g. `drat-trim`) is optional, needed only if a hypercube lower bound rests on a SAT UNSAT proof.
 3. **Planned dry run** (practice problems, 11 subagent calls, leaving 5 for a repair round or a tie-break referee; no Scouts):
    - Hypercube: 2 checker-builders, 2 searchers and 1 scribe. Cross-test and re-scoring are head scripts (`pp.py crosstest` with a random-permutation generator).
    - Angles: 1 breaker, 2 provers, 2 referees and 1 scribe. Both referees read the stronger proof, because the gate needs two ACCEPTs on the same proof.
