@@ -1,15 +1,13 @@
 ---
 name: problem-bulgarian-solitaire
-description: Problem skill for "Bulgarian solitaire" (B), transient lengths d_B(λ) and their maximum D_B(n) under the Bulgarian solitaire shift on partitions of n. Holds the verbatim statement (official text), six cells (C1 text pending), hand-in format, cell typing, ladders, checker spec, angle bank, pitfalls, Part S seeds and branch notes. Load when opening problem B in a Proof Pursuit run.
+description: Problem skill for "Bulgarian solitaire" (B), transient lengths d_B(λ) and their maximum D_B(n) under the Bulgarian solitaire shift on partitions of n. Holds the verbatim statement (official text), six cells, hand-in format, cell typing, ladders, checker spec, angle bank, pitfalls, Part S seeds and branch notes. Load when opening problem B in a Proof Pursuit run.
 ---
 
 # Problem B: Bulgarian solitaire
 
 Letter code: `B` (cell ids `B-C1` … `B-C6`). Ledger: `run/B/`. Official source: `sources/problem_description_bulgarian_solitaire.tex`.
 
-> **Source note:** this skill follows the **official** text. The conventions the humans supplied earlier were cross-checked against it (§2 provenance table); where they differed, the official text wins.
->
-> **Cell 1 is not in the official text we have.** The source says: "The statement of this cell is not visible in the provided screenshots." Its title is "Cyclic Partitions and Cycles"; its points are not given. **Don't open B-C1, and don't guess its statement from the title,** until a human pastes the verbatim text into `sources/`. Cells C2–C6 can run without it.
+> **Source note:** this skill follows the **official** text. The conventions the humans supplied earlier were cross-checked against it (§2 provenance table); where they differed, the official text wins. C1's verbatim text (below) was supplied 2026-09-26 from a screenshot the first transcription lacked; `sources/` now has it too.
 
 ## 1. Verbatim statement
 
@@ -71,14 +69,14 @@ Here \(d_B\bigl((2,1,1,1,1)\bigr)=3\).
 
 | Cell | Title | Points | Checking |
 |---|---|---|---|
-| C1 | Cyclic Partitions and Cycles | **not given** | **text not visible in the source; pending** |
+| C1 | Cyclic Partitions and Cycles | 1 | written proof |
 | C2 | \(D_B\) at Triangular \(n\) | 2 | written proof |
 | C3 | A General Upper Bound | 3 | written proof |
 | C4 | One Above a Triangular Number | 5 | written proof |
 | C5 | Two Above a Triangular Number | 8 | written proof |
 | C6 | \(D_B(n)\) for Every \(n\) | 13 | **open question** |
 
-**C1: Cyclic Partitions and Cycles (verbatim from the source).** "*The statement of this cell is not visible in the provided screenshots.*"
+**C1: Cyclic Partitions and Cycles (verbatim).** First, the long-run behaviour: which partitions repeat under the shift, and how they fall into cycles. Let \(n=T_k\). Prove that for every partition \(\lambda\) of \(n\) there is an \(i\) with \(B^i(\lambda)=\delta_k\), and that \(\delta_k\) is the only cyclic partition of \(n\). Then let \(n\) be arbitrary of rank \(k\), say \(n=T_{k-1}+r\) with \(1\le r\le k\): determine all cyclic partitions of \(n\), and determine the number of distinct cycles of \(B\) on the partitions of \(n\). Prove both.
 
 **C2: \(D_B\) at Triangular \(n\) (verbatim).** Next, how long the process can take to reach a cycle, starting with the triangular numbers. Determine
 \[
@@ -157,7 +155,7 @@ Provenance table (human-supplied conventions of 2026-09-26 vs. the official text
 1. Rule 8: the official computation rule is stricter than the supplied one. A computation counts only if it is exhaustive over a finite set the argument has reduced the problem to. The supplied rule only mentioned the 10-minute limit.
 2. Rule 8: the official text does not itself require attribution of a written-out proof's source (the general hackathon rule to separate cited results from our own still applies).
 3. The official text adds a **Status** rule: say clearly which cells are solved and which are partial.
-4. The official text has six cells, and **C1's statement is missing** from the source we have.
+4. The official text has six cells. C1's statement was missing from the first transcription; it was supplied from a screenshot on 2026-09-26 and is now in §1 and in `sources/`.
 
 ## 3. Hand-in format
 
@@ -165,7 +163,7 @@ Official "What to Hand In" (verbatim): "For each cell you attempt, hand in a wri
 
 | Cell | Artefact files | Judges require |
 |---|---|---|
-| C1 | pending | pending |
+| C1 | `submission.md` | for \(n=T_k\): proof every \(\lambda\vdash n\) reaches \(\delta_k\) under iteration, and that \(\delta_k\) is the unique cyclic partition of \(n\); for general \(n=T_{k-1}+r\) (\(1\le r\le k\)): the complete, explicit list of cyclic partitions of \(n\) and the exact count of distinct \(B\)-cycles on partitions of \(n\), both proved |
 | C2 | `submission.md` | formula for \(D_B(T_k)\) for every \(k\); both bounds proved; witnesses explicit in \(k\) |
 | C3 | `submission.md` | (a) proof of the bound for all \(k\ge4\) and all non-triangular \(n\) in range; (b) exact \(D_B(T_k-1)\), both bounds; (c) the full set of maximisers at \(n=T_k-1\), with proof that there are no others |
 | C4 | `submission.md` | formula for every \(k\ge5\); both bounds; witnesses explicit in \(k\) |
@@ -180,7 +178,7 @@ Every "determine" cell is an **exact extremal value** in the head's gate: an upp
 
 | Cell | Type | Tier guess + reason | Exact target |
 |---|---|---|---|
-| C1 | pending | pending | pending (text missing) |
+| C1 | classification + count, two parts | T1: 1 pt; base case then general case | (i) For \(n=T_k\): every \(\lambda\vdash T_k\) has \(B^i(\lambda)=\delta_k\) for some \(i\), and \(\delta_k\) is the unique cyclic partition of \(T_k\). (ii) For \(n=T_{k-1}+r\), \(1\le r\le k\): the explicit set of cyclic partitions of \(n\), and the exact number of distinct \(B\)-cycles on partitions of \(n\) — both proved for every \(k\) and every \(r\) in range. |
 | C2 | exact extremal value | T1: 2 pts; one family | For every \(k\ge1\): a formula \(F_2(k)\) with (upper) \(d_B(\lambda)\le F_2(k)\) for all \(\lambda\vdash T_k\), and (lower) an explicit \(\lambda^{(k)}\vdash T_k\) with \(d_B(\lambda^{(k)})=F_2(k)\). |
 | C3 | (a) prove a stated bound; (b) exact extremal value; (c) classification | T2: 3 pts, three parts | (a) For all \(k\ge4\), all \(n\) with \(T_{k-1}<n<T_k\), all \(\lambda\vdash n\): \(d_B(\lambda)\le k^2-2k-1\). (b) A formula for \(D_B(T_k-1)\) with both halves; the \(k\)-range is **not stated** in the cell (see Pitfalls). (c) The exact set \(\{\lambda\vdash T_k-1: d_B(\lambda)=D_B(T_k-1)\}\), as explicit functions of \(k\), with proof that it is complete. |
 | C4 | exact extremal value | T2: 5 pts | For every \(k\ge5\): a formula for \(D_B(T_{k-1}+1)\) with both halves; witnesses explicit in \(k\). |
@@ -269,8 +267,9 @@ This skill is frozen during the run; the head doesn't edit it. The one exception
 ## 11. Checklist Part S seeds and branch notes
 
 Part S seeds (from the statement only; referees and gate only):
-- **S2 extremal configurations:** unknown for every cell (the statement names no maximiser).
+- **S2 extremal configurations:** C1 is the exception — it names \(\delta_k\) explicitly as the unique cyclic partition at \(n=T_k\). Unknown for every other cell (the statement names no maximiser).
 - **S3 cases to cover:**
+  - C1(i): every \(k\ge1\), \(n=T_k\). C1(ii): every \(k\ge1\) and every \(r\) with \(1\le r\le k\).
   - C2: every \(k\ge1\).
   - C3(a): every \(k\ge4\) and every non-triangular \(n\) with \(T_{k-1}<n<T_k\); every \(\lambda\vdash n\).
   - C3(b)/(c): the \(k\)-range the proof claims, stated explicitly; (c) completeness of the maximiser list.
@@ -278,6 +277,8 @@ Part S seeds (from the statement only; referees and gate only):
   - C5: every \(k\ge2\): the formula's range plus the remaining values.
   - Everywhere: cyclic starts (\(d_B=0\)); partitions with many parts equal to 1.
 - **S5 consistency** (arithmetic from the definitions):
+  - C1(ii) at \(r=k\) is \(n=T_k\), so it must reduce to C1(i): exactly one cyclic partition (\(\delta_k\)), one cycle.
+  - C1's classification of cyclic partitions is a prerequisite for every cyclicity check in C2–C6's ladders (R1's brute force and R3/R4's proofs both need it).
   - C5 at \(k=2\) is \(n=3=T_2\), so it must agree with C2 at \(k=2\).
   - \(T_k-1=T_{k-1}+(k-1)\): C3(b) at \(k=3\) is \(n=5=T_2+2\), so it must agree with C5 at \(k=3\).
   - For \(k\ge4\), C4's and C5's values are at non-triangular \(n\) of rank \(k\), so they must satisfy C3(a)'s bound \(k^2-2k-1\).

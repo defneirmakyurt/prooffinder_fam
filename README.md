@@ -48,7 +48,7 @@ The system is built around one idea: **nothing reaches the board as established 
 | `angles_between_lines` | A: Angles between lines | `problem-angles-lines` |
 | `uphill_paths_on_the_hypercube` | H: Uphill paths on the hypercube | `problem-hypercube-uphill` |
 | `Bulgarian_solitaire` | B: Bulgarian solitaire | `problem-bulgarian-solitaire` |
-| `Disjoint_congruence_classes` | D: Disjoint congruence classes | `problem-disjoint-congruence-classes` (C1 text missing from the official source) |
+| `Disjoint_congruence_classes` | D: Disjoint congruence classes | `problem-disjoint-congruence-classes` |
 
 **One teammate, one branch, one head.** The shared tooling (skills, agents, scripts) lives on `main` and is merged into every problem branch. Each teammate:
 
@@ -175,9 +175,36 @@ A result is never called "new". The wording is always "not found in <sources sea
 - **No lesson may weaken verification.** That covers the gate, the checklist, exactness, isolation or blindness, status labels, and `RAN` records.
 - **Gate-role lessons need approval.** Lessons for Referee, Checker-builder and Auditor wait in `pending/` until the humans approve them.
 
+Proposals to take this further are in §8.
+
 ---
 
-## 8. Repository layout
+## 8. Self-improvement layer (proposed; not approved)
+
+§7 lets lessons change between phases. These proposals go further. The system would measure every task, move effort towards what is working, evolve its best programs and reuse techniques across problems. **None of this is built or approved yet.** The limits in §6–7 still apply: no change may weaken the gate, isolation or blindness, and gate-role lessons still need the humans' approval.
+
+```
+ every task ──► I1 telemetry ──┬──► I4 allocation of the next wave (angle × regime)
+                               └──► §7 lesson rollback decided on data
+ I2 program pool · I5 technique library ──► worker inboxes
+ I3 regression set · I6 head retrospective ──► humans approve ──► lessons / head skill
+```
+
+| # | Idea | What it does | Cost |
+|---|---|---|---|
+| **I1** | Per-task telemetry | `pp.py` appends one record per task to `run/telemetry.jsonl`: role, regime, angle tag, lessons versions (role and problem), verdict or score, runtime, tokens, and whether the task fed a gated claim. The §7 rule "revert a lesson if the next wave doesn't improve" then reads data. | No extra subagent calls. I2–I4 depend on it. |
+| **I2** | EVOLVE searcher regime (AlphaEvolve / FunSearch style) | Each cell keeps a scored program pool in `run/<P>/<cell>/programs/`. An EVOLVE searcher gets the top-k programs and their scores in its inbox and writes a changed program, which the head scores with the cross-tested checker. This forwards one worker's output to another, so it has to be a sanctioned regime, like EXPLOIT. Targets: Hypercube and Angles construction cells. | Subagent calls. Needs I1. |
+| **I3** | Regression set for gate lessons | A golden set of past proofs: some with known flaws a referee should flag, some correct ones it should accept. A pending Referee or Checker-builder lesson must catch every seeded flaw before it goes to the humans for approval. | Referee calls. |
+| **I4** | Adaptive angle and regime allocation | Thompson sampling over (angle tag × regime), with rewards from I1, replaces the fixed 60/25/15 mix table. `pp.py suggest` prints the next wave's allocation. | No extra subagent calls. Needs I1. |
+| **I5** | Technique library across problems | Verified, reusable code and lemmas are copied into inboxes on request: SAT encoders, simulated annealing and tabu search harnesses, exact-arithmetic helpers, accepted checkers and gated lemmas. A problem lesson seen in two or more problems becomes a candidate role lesson. | Low. |
+| **I6** | Head retrospective | At each checkpoint the head writes `pending/head.md`: which phases wasted calls and which allocations paid off. Humans promote the useful items into the head skill between runs. The head still never edits its own skill. | Low. |
+| **I7** | Stretch goal: Lean 4 for small lemmas | A machine-checked lemma is a perfect reward signal and would strengthen the gate. | High setup cost (Mathlib, toolchain, workers that can write Lean). Only with days to spare, not hours. |
+
+**Recommended order:** I1, then I2, then I4. I2, I3 and lesson A/B tests cost subagent calls, so they need a bigger call budget or must take the place of FRESH workers.
+
+---
+
+## 9. Repository layout
 
 | Path | What it is | Who edits it |
 |---|---|---|
@@ -189,6 +216,7 @@ A result is never called "new". The wording is always "not found in <sources sea
 | `.claude/lessons/` | Lessons layer, `pending/`, `CHANGELOG.md` | head, between phases |
 | `scripts/pp.py` | Ledger helper: tasks and inboxes, board, dead ends, pinning, cross-tests, matrix, gate, status, blind check, reports, finalize, summary | humans |
 | `scripts/guard.py` | Isolation hook for workers | humans |
+| `scripts/tests/` | Scratch-copy tests: `test_pp.py` (phases, inbox rules, matrix, gate, reports) and `test_guard.py` (isolation cases); run with `python3 scripts/tests/<file>` | humans |
 | `scripts/envcheck.py`, `requirements.txt` | Environment check (`.venv`: sympy, mpmath, networkx, python-flint, python-sat) | humans |
 | `sources/` | Verbatim problem texts | humans |
 | `run/` | The ledger for one problem per branch (layout in the head skill) | head |
@@ -196,7 +224,7 @@ A result is never called "new". The wording is always "not found in <sources sea
 
 ---
 
-## 9. Output the humans get
+## 10. Output the humans get
 
 - **`run/SUMMARY.md` and `run/<P>/report.md`:** each cell's outcome, claim status, robustness, established claims vs. remaining gap, obstacles, and the top 3 cells to look at now. `pp.py summary` merges the four branches.
 - **`run/<P>/<cell>/final_report.md`:**
@@ -224,3 +252,4 @@ A result is never called "new". The wording is always "not found in <sources sea
   - `SEARCH-FOUND-NOTHING` and the extra cell statuses.
   - A two-referee gate with a 7-step protocol.
 - **2026-09-26, pipeline build:** skills for Bulgarian solitaire (official text) and Disjoint congruence classes; `pp.py` phase machinery (`task --phase`, inbox rules, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`); referee `out/cex/` in the guard; agents updated, `literature`, `triage` and `auditor` added, `scout` removed.
+- **2026-09-26, self-improvement layer documented (proposed; not approved):** ideas I1–I7 copied from `BUILD_PLAN.md` into §8, so they survive when the plan is deleted.
