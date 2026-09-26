@@ -14,7 +14,7 @@
   pp.py pin P CELL FILE [FILE ...]              copy into accepted/ and record sha256
   pp.py pin --verify DIR                        re-check a MANIFEST.sha256
   pp.py crosstest CHECKER_A CHECKER_B --gen CMD [--n 200] [--log PATH]
-  pp.py matrix P CELL                           agreement matrix: ROBUST / CONTESTED / UNSUPPORTED
+  pp.py matrix P CELL                           agreement matrix: ROBUST / CONTESTED / UNSUPPORTED / INCOMPLETE
   pp.py gate P CELL --subject TASK [--statement-checked]   gate report: VALID / GAP / INVALID
   pp.py status P                                per-phase status table
   pp.py blindcheck TASK                         literature markers in a task's out/
@@ -79,7 +79,7 @@ BRANCHES = ("ALGEBRAIC", "TOPOLOGICAL", "ANALYSIS", "NUMBER-THEORY", "DISCRETE",
 OBSTACLE_FILES = ("stuck.md", "verdict.md", "no_natural_route.md")
 SUBJECT_ITEMS = ("proof.md", "claims.md", "code")
 CELL_STATUSES = ("SOLVED", "PARTIAL", "COUNTEREXAMPLE", "NOT SOLVED", "NOT ATTEMPTED")
-ROBUSTNESS = ("ROBUST", "CONTESTED", "UNSUPPORTED", "–")
+ROBUSTNESS = ("ROBUST", "CONTESTED", "UNSUPPORTED", "INCOMPLETE", "–")
 POSITIVE = {"ACCEPT", "CONFIRMED", "CONFIRMED-WITH-CAVEATS"}
 NEGATIVE = {"MINOR", "MAJOR", "WRONG", "GAP", "REFUTED"}
 PHASE_COLS = ["Task", "Phase", "Role", "Regime", "Mode", "Branch", "Subject", "Created"]
@@ -359,6 +359,13 @@ def validate_task(a, role, regime, mode, rows):
         own = (phase_row(rows, a.subject) or {}).get("Branch", "-")
         if own == a.branch:
             die(f"cross-verifier branch {a.branch} is the subject's own branch; use another branch")
+        dup = [r["Task"] for r in rows if r["Phase"] == "2B-XV" and r["Subject"] == a.subject and r["Branch"] == a.branch]
+        if dup:
+            die(f"{a.subject} already has a {a.branch} cross-verifier ({dup[-1]}); never cross-verify twice from one branch")
+        verifiers = [r["Task"] for r in rows if r["Phase"] == "2" and r["Subject"] == a.subject]
+        p2 = verdict_of(verifiers[-1]) if verifiers else None
+        if p2 in NEGATIVE:
+            die(f"the Phase 2 verifier returned {p2} on {a.subject}; repair it first and cross-verify the repaired version")
     if a.phase == "AUDIT":
         row = phase_row(rows, a.subject) or {}
         if row.get("Role") != "scribe" or row.get("Mode") != "REPORT":
@@ -759,6 +766,10 @@ def compute_matrix(p, cell):
         die(f"{p}-{cell}: no Phase 2A task in phases.md")
     if not kept:
         die(f"{triage}: out/selected_branches.txt is missing or empty")
+    # Phase 2B-D: a dropped branch re-admitted as a solver counts as selected from its first 2B task
+    for r in rows:
+        if r["Phase"] == "2B" and r["Branch"] in BRANCHES and r["Branch"] != "COMPUTATIONAL" and r["Branch"] not in kept:
+            kept[r["Branch"]] = "solver (re-admitted)"
     xv = [r for r in rows if r["Phase"] == "2B-XV"]
     proofs = sorted({r["Task"] for r in rows if r["Phase"] == "2B"
                      and os.path.isfile(os.path.join(task_dir(r["Task"]), "out", "proof.md"))}
@@ -787,7 +798,9 @@ def compute_matrix(p, cell):
                 disputed.append(f"- {proof} / {label} ({t}, {v}): {detail}")
         report.append({"proof": proof, "own": own, "p2": p2, "cross": cross, "confirmed": confirmed,
                        "robust": bool(robust), "disagree": bool(negatives) and len(negatives) < len(present),
-                       "pending": pending, "disputed": disputed})
+                       "negative": bool(negatives), "pending": pending, "disputed": disputed})
+    # a proof with no negative verdict and verdicts still pending could still become ROBUST
+    still_open = [r["proof"] for r in report if not r["robust"] and not r["negative"] and r["pending"]]
     if any(r["robust"] for r in report):
         cls = "ROBUST"
         reason = "proof(s) " + ", ".join(r["proof"] for r in report if r["robust"]) + \
@@ -795,12 +808,12 @@ def compute_matrix(p, cell):
     elif any(r["disagree"] for r in report):
         cls = "CONTESTED"
         reason = "verdicts disagree on " + ", ".join(r["proof"] for r in report if r["disagree"])
-    elif not any(len(r["confirmed"]) >= 2 for r in report):
-        cls = "UNSUPPORTED"
-        reason = "no proof is confirmed by at least two other branches"
-    else:
+    elif still_open:
         cls = "INCOMPLETE"
-        reason = "no disagreement so far, but verdicts are still pending"
+        reason = "no disagreement so far, but verdicts are still pending on " + ", ".join(still_open)
+    else:
+        cls = "UNSUPPORTED"
+        reason = "every verdict is in, and no proof has the confirmations ROBUST needs"
     return rows, triage, kept, report, cls, reason
 
 
@@ -870,10 +883,17 @@ def cmd_gate(a):
         if v == "ACCEPT" and complete and same and match:
             accepts.append(t)
     ran_2b = any(r["Phase"] in ("2B", "2B-XV") for r in rows)
-    matrix = write_matrix(a.P, a.cell) if ran_2b else "not run"
+    if ran_2b:
+        matrix = write_matrix(a.P, a.cell)
+        mine = next((r for r in compute_matrix(a.P, a.cell)[3] if r["proof"] == a.subject), None)
+        this_proof = "not in matrix" if mine is None else ("robust" if mine["robust"] else "not robust")
+    else:
+        matrix, this_proof = "not run", "n/a"
+    # the proof under the gate must itself be ROBUST; another proof's robustness doesn't carry over
+    robust_ok = matrix == "not run" or (matrix == "ROBUST" and this_proof == "robust")
     if wrong:
         decision, rule = "INVALID", f"referee verdict WRONG ({', '.join(wrong)})"
-    elif len(accepts) >= 2 and matrix in ("ROBUST", "not run") and a.statement_checked:
+    elif len(accepts) >= 2 and robust_ok and a.statement_checked:
         decision, rule = "VALID", (f"two referees ACCEPT the same proof version with complete checklists "
                                    f"({', '.join(accepts)}); matrix {matrix}; statement checked by head")
     else:
@@ -882,6 +902,8 @@ def cmd_gate(a):
             missing.append(f"{len(accepts)} counted ACCEPT(s) of 2 needed")
         if matrix not in ("ROBUST", "not run"):
             missing.append(f"matrix is {matrix}, not ROBUST")
+        elif not robust_ok:
+            missing.append(f"matrix is ROBUST through other proof(s), but {a.subject} is {this_proof}")
         if not a.statement_checked:
             missing.append("statement not checked word for word by head")
         decision, rule = "GAP", "; ".join(missing)
@@ -889,7 +911,7 @@ def cmd_gate(a):
            "INVALID": "tell the humans; repair + Phase 2C with this report"}[decision]
     report = [f"# Gate: {a.P}-{a.cell}, proof {a.subject}, {now()}",
               "Referees: " + (" | ".join(lines) or "none"),
-              f"Matrix: {matrix}",
+              f"Matrix: {matrix}; this proof: {this_proof}",
               f"Statement checked word for word by head: {'yes' if a.statement_checked else 'no'}",
               "Checklist scores: " + (" || ".join(score_lines) or "none"),
               f"DECISION: {decision} — {rule}",

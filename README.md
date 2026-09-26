@@ -145,7 +145,7 @@ How it's enforced:
 6. Its own counterexample search.
 7. A verdict with a reason for every step.
 
-Where Phase 2B ran, the cell must also be **ROBUST**: confirmed by at least 3 other branches, or all of them when fewer than 4 are selected, with no GAP or REFUTED. The head checks the statement word for word, and `pp.py gate` computes VALID / GAP / INVALID from the verdict files.
+Where Phase 2B ran, the proof must also be **ROBUST** itself (not just some other proof in the cell): confirmed by at least 3 other branches, or all of them when fewer than 4 are selected, with no GAP or REFUTED. The head checks the statement word for word, and `pp.py gate` computes VALID / GAP / INVALID from the verdict files.
 
 **Computations and constructions:**
 - Two independent checkers must agree, using exact or interval arithmetic.
@@ -160,7 +160,7 @@ Where Phase 2B ran, the cell must also be **ROBUST**: confirmed by at least 3 ot
 |---|---|
 | Claim | `PROVED`, `COMPUTER-VERIFIED`, `EXHAUSTIVE-WITHIN-CLASS`, `BEST-FOUND`, `CONJECTURED`, `OPEN`, `SEARCH-FOUND-NOTHING` |
 | Cell | `SOLVED`, `PARTIAL` (always with established claims + the exact gap), `COUNTEREXAMPLE`, `NOT SOLVED`, `NOT ATTEMPTED` |
-| Robustness | `ROBUST`, `CONTESTED`, `UNSUPPORTED`, or `–` where 2B didn't run |
+| Robustness | `ROBUST`, `CONTESTED`, `UNSUPPORTED`, `INCOMPLETE` (verdicts still pending), or `–` where 2B didn't run |
 
 A result is never called "new". The wording is always "not found in <sources searched>".
 
@@ -252,4 +252,5 @@ Proposals to take this further are in §8.
   - `SEARCH-FOUND-NOTHING` and the extra cell statuses.
   - A two-referee gate with a 7-step protocol.
 - **2026-09-26, pipeline build:** skills for Bulgarian solitaire (official text) and Disjoint congruence classes; `pp.py` phase machinery (`task --phase`, inbox rules, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`); referee `out/cex/` in the guard; agents updated, `literature`, `triage` and `auditor` added, `scout` removed.
+- **2026-09-26, cross-verification fixes:** the gate needs the gated proof itself to be ROBUST, not just the cell; `INCOMPLETE` while verdicts are pending (UNSUPPORTED only once every verdict is in); branches re-admitted in 2B-D count in the matrix; `pp.py task` refuses a cross-verifier on a proof whose Phase 2 verdict is negative, or a second one from the same branch; triage core additions.
 - **2026-09-26, self-improvement layer documented (proposed; not approved):** ideas I1–I7 copied from `BUILD_PLAN.md` into §8, so they survive when the plan is deleted.

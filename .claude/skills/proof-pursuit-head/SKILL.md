@@ -47,7 +47,7 @@ Each problem has its own git branch (`angles_between_lines`, `uphill_paths_on_th
 |---|---|
 | Claim status | `PROVED`, `COMPUTER-VERIFIED`, `EXHAUSTIVE-WITHIN-CLASS`, `BEST-FOUND` (a construction, with no optimality claim), `CONJECTURED` (includes anything heuristic), `OPEN`, `SEARCH-FOUND-NOTHING` (a search that found nothing, which is **not** a verification) |
 | Cell status (board and submissions) | `SOLVED` (every claim the hand-in requires passed the gate), `PARTIAL` (always with established claims + exact remaining gap), `COUNTEREXAMPLE` (a disproof, exactly verified), `NOT SOLVED` (every planned phase ran, nothing gated), `NOT ATTEMPTED` |
-| Robustness (cells where Phase 2B ran) | `ROBUST`, `CONTESTED`, `UNSUPPORTED`; `–` where 2B didn't run |
+| Robustness (cells where Phase 2B ran) | `ROBUST`, `CONTESTED`, `UNSUPPORTED`, `INCOMPLETE` (verdicts still pending); `–` where 2B didn't run |
 | Referee verdict | `ACCEPT` / `MINOR` / `MAJOR` / `WRONG` (reported to humans as VALID / GAP / GAP / INVALID) |
 | Cross-verifier verdict | `CONFIRMED`, `CONFIRMED-WITH-CAVEATS`, `GAP`, `REFUTED` |
 | Gate decision | `VALID`, `GAP`, `INVALID` |
@@ -107,7 +107,7 @@ Role notes:
 | **1L Literature** | 1 literature agent (SOLVE mode) per cell, right after Phase 1; it may read the blind results | `proof.md`, `claims.md`, `sources.md`, `divergence.md` |
 | **2 Verify** | One referee (VERIFY mode) per Phase 1 and 1L result: the 7-step protocol plus its own counterexample search | `verdict.md`, `cex/` |
 | **2A Branch triage** | 1 triage agent: rates ALGEBRAIC, TOPOLOGICAL, ANALYSIS, NUMBER-THEORY, DISCRETE (relevance, reason, entry point, risk) | `triage.md`, `selected_branches.txt` |
-| **2B Perspectives** | A: one solver per branch tagged "solver" (BLIND + branch lens), or `no_natural_route.md`. B: for each complete or partial proof, one cross-verifier (referee CROSS mode) per *other* selected or verifier-only branch. C: `pp.py matrix`. D: if the cell is UNSUPPORTED or CONTESTED and every selected branch failed, re-admit the dropped branches (LOW first) for one more round | solver outputs; cross verdicts; `run/<P>/<cell>/matrix.md` |
+| **2B Perspectives** | A: one solver per branch tagged "solver" (BLIND + branch lens), or `no_natural_route.md`. B: for each complete or partial proof whose Phase 2 verdict is ACCEPT (or still pending), one cross-verifier (referee CROSS mode) per *other* selected or verifier-only branch. Never cross-verify a proof the verifier returned MINOR, MAJOR or WRONG on (repair it, then cross-verify the repaired version), and never the same proof twice from one branch; `pp.py task` refuses both. Wait for the verifier's ACCEPT; dispatch in parallel with it only when time is short. C: `pp.py matrix`. D: if the cell is UNSUPPORTED or CONTESTED and every selected branch failed, re-admit the dropped branches (LOW first) for one more round. A re-admitted branch counts as selected from its first 2B task, so the matrix then expects its cross-verdict too | solver outputs; cross verdicts; `run/<P>/<cell>/matrix.md` |
 | **2C Adversary** | Trigger: the cell isn't ROBUST after 2B. A Breaker in ADVERSARY mode: contrapositive, counterexample search (structured, then randomised with restarts, saving near misses), local analysis at the conjectured optimum, minimal failing structure. A contrapositive proof goes to the verifiers as a new proof | adversary files, `verdict.md` |
 | **3 Literature analyst** | For every cell not `SOLVED`: literature (ANALYST mode) reads everything above; maps what is known; reduces the cell to sub-problems (a) known and citable, (b) known but hard to access, (c) unknown; attempts (b) and (c); if the cell can't be solved, explains precisely why | analysis; proofs go to the gate |
 | **Gate** | Runs on **any** proof from **any** phase as soon as it appears (see Verification gate) | `run/<P>/<cell>/gate/gate_report.md` |
@@ -140,7 +140,7 @@ It's an estimate, not an attempt: don't solve anything to decide a tier. Write t
 | T3 open | marked open | only after lower cells are cleared; standing Breaker/adversary lineage; Phase 3 early; split per "Open prove-or-disprove" | per Board and budget |
 
 - **Escalate** one tier when a phase returns no `CLAIM` and no rung beyond what's already known, or when every proof comes back `MAJOR`/`WRONG`. Never de-escalate mid-cell.
-- **Budget.** A 3+-point cell costs roughly 20–25 agent calls. Prioritise by points and likelihood of progress. State the plan and update it with every status table.
+- **Budget.** A 3+-point cell costs roughly 20–25 agent calls. Cross-verification is the part that grows: (proofs that passed Phase 2) × (kept branches − 1) calls, e.g. 2 proofs and 3 kept branches cost 4. Prioritise by points and likelihood of progress. State the plan and update it with every status table.
 
 ## Lineages
 
@@ -258,7 +258,7 @@ A claim moves to an established status only when the relevant conditions hold. T
 7. **Verdict** with reasons for every step. "Looks correct" is not a reason.
 
 Then `pp.py gate` computes the decision:
-- **VALID** when both referees ACCEPT with complete checklists, the matrix is `ROBUST` (only where Phase 2B ran on the cell), and you have checked the statement word for word (`--statement-checked`);
+- **VALID** when both referees ACCEPT with complete checklists, the matrix is `ROBUST` **for this proof** (only where Phase 2B ran on the cell; another proof's robustness doesn't carry over), and you have checked the statement word for word (`--statement-checked`);
 - **INVALID** on any `WRONG`;
 - **GAP** otherwise.
 
