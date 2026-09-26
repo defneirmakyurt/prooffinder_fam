@@ -606,11 +606,13 @@ def board_report_tests():
           "summary merges rows + top cells across branches, lists missing ones")
 
 
-def card(cid, tag, branch, fidelity, check_, tight, lens="Work with the Gram matrix; rank at most d is the only constraint.",
+def card(cid, tag, branch, fidelity, check_, tight, angle="Work with the Gram matrix; rank at most d is the only constraint.",
          first="prover: bound S by the Gram entries | assumes: none | output: proof.md | stop: on a gap"):
     return (f"### {cid} {tag}\nSPACE: A5 linear algebra\nBRANCH: {branch}\nFIDELITY: {fidelity} — direction\n"
-            f"FEEDS: bound, proof\nCHECK: {check_}\nTIGHT: {tight}\nTOOLS: rank, minors\nCOST: medium — why\n"
-            f"PAYOFF: high — why\nLENS: {lens}\nFIRST TASK: {first}\n\nTranslation in full ...\n\n")
+            f"FEEDS: bound, proof\nCHECK: {check_}\nTIGHT: {tight}\nTOOLS: rank, minors\n"
+            f"KNOWN: rank arguments used for neighbours (source link) — PROVED\n"
+            f"UNEXPLORED: minors of the Gram matrix not found in <sources searched>\nCOST: medium — why\n"
+            f"PAYOFF: high — why\nANGLE: {angle}\nFIRST TASK: {first}\n\nTranslation in full ...\n\n")
 
 
 def space_tests():
@@ -626,13 +628,14 @@ def space_tests():
     inbox = set(os.listdir(T(tm, "inbox")))
     brief = open(T(tm, "brief.md")).read()
     check("subagent_type=space" in out, "2S dispatches the space agent")
-    check("REGIME: BLIND" in brief and "PHASE: 2S" in brief and "Phase 2S. Do not solve" in brief, "2S brief block")
+    check("REGIME: LITERATURE" in brief and "PHASE: 2S" in brief and "Phase 2S. Do not solve" in brief, "2S brief block")
     check("CARDS / RAN" in brief, "2S return asks for CARDS lines")
     check("checklist-S.md" not in inbox and "checklist-G.md" in inbox, "space map gets Part G, never Part S")
     check({"role-lessons.md", "checker"} <= inbox, "space map gets its lessons and the checker")
     check(sorted(os.listdir(T(tm, "inbox", "obstacles", t1))) == ["stuck.md"], "space obstacles: stuck.md only, no proof")
-    pp("task", "A", "C12", "--phase", "2S", "--inbox", os.path.join(c12, "target.md"), *STOP, ok=False,
-       label="space map is BLIND: no --inbox")
+    write(os.path.join(c12, "prior-work.md"), "humans' notes on earlier work\n")
+    tp = last_task(pp("task", "A", "C12", "--phase", "2S", "--inbox", os.path.join(c12, "prior-work.md"), *STOP))
+    check("prior-work.md" in os.listdir(T(tp, "inbox")), "space map (LITERATURE) takes extra sources with --inbox")
 
     write(T(tm, "out", "spaces.md"),
           "# Space map\n\n"
@@ -641,7 +644,7 @@ def space_tests():
           + card("S3", "orth-graph", "DISCRETE", "RELAXATION", "PASSED d=2..6, checks/graph.py", "yes d=2..6, both extremizers")
           + card("S4", "exponent-path", "TOPOLOGICAL", "HEURISTIC", "NOT RUN no time", "n/a")
           + card("S5", "known-route", "NUMBER-THEORY", "EQUIVALENT", "PASSED d=2..3", "n/a",
-                 lens="Follow the argument of Smith (1999) on residues.")
+                 angle="Follow the argument of Smith (1999) on residues.")
           + card("S6", "gram-minors", "ALGEBRAIC", "EQUIVALENT", "PASSED d=2..4", "n/a", first="searcher: ..."))
     good = ["S1=2B: equivalent, check reproduced", "S3=2B: tight on both extremizers", "S2=DEADEND: not tight",
             "S4=WAVE: unchecked", "S5=DROP: literature route", "S6=HOLD: second algebraic card"]
@@ -655,8 +658,18 @@ def space_tests():
     choose(*good[:-1], "S6=MAYBE: hmm", ok=False, label="choose: unknown action")
     choose("S2=2B: try it", *[g for g in good if not g.startswith("S2")], ok=False, label="choose: 2B refused on TIGHT NO")
     choose("S4=2B: try it", *[g for g in good if not g.startswith("S4")], ok=False, label="choose: 2B refused on CHECK NOT RUN")
-    choose("S5=2B: try it", *[g for g in good if not g.startswith("S5")], ok=False, label="choose: 2B refused on literature LENS")
-    choose("S5=WAVE: try it", *[g for g in good if not g.startswith("S5")], ok=False, label="choose: WAVE refused on literature LENS")
+    for fid in ("ANALOGY", "LIMIT"):
+        write(T(tm, "out", "spaces.md"), open(T(tm, "out", "spaces.md")).read().replace(
+            "FIDELITY: EQUIVALENT — direction\nFEEDS: bound, proof\nCHECK: PASSED d=2..3",
+            f"FIDELITY: {fid} — direction\nFEEDS: bound, proof\nCHECK: PASSED d=2..3"))
+        choose("S5=2B: try it", *[g for g in good if not g.startswith("S5")], ok=False,
+               label=f"choose: 2B refused on {fid} fidelity")
+        write(T(tm, "out", "spaces.md"), open(T(tm, "out", "spaces.md")).read().replace(
+            f"FIDELITY: {fid} — direction", "FIDELITY: EQUIVALENT — direction"))
+    body = open(T(tm, "out", "spaces.md")).read()
+    write(T(tm, "out", "spaces.md"), body.replace("ANGLE: Follow the argument of Smith (1999) on residues.\n", ""))
+    choose("S5=WAVE: try it", *[g for g in good if not g.startswith("S5")], ok=False, label="choose: WAVE refused without ANGLE")
+    write(T(tm, "out", "spaces.md"), body)
     choose("S3=DEADEND: no", *[g for g in good if not g.startswith("S3")], ok=False, label="choose: DEADEND needs an obstruction")
     choose("S6=2B: also", *good[:-1], ok=False, label="choose: one card per branch")
     choose("S1=2B: alone", "S2=DROP: x", "S3=DROP: x", "S4=DROP: x", "S5=DROP: x", "S6=DROP: x", ok=False,
@@ -672,9 +685,12 @@ def space_tests():
     rec = open(os.path.join(c12, "spaces.md")).read()
     check(f"map {tm}" in rec and "| S2 | pair-lp | ANALYSIS | RELAXATION | PASSED | NO |" in rec
           and "DEADEND | not tight |" in rec, "spaces.md records every card and its decision")
-    check("- S1 2B [gram-rank]: Work with the Gram matrix" in rec and "S6 HOLD" not in rec, "spaces.md lists handed-out lenses only")
-    check("--phase 2B --role prover --branch ALGEBRAIC --angle gram-rank --branch-note" in out
+    check("- S1 2B [gram-rank]: branch ALGEBRAIC, generic lens" in rec
+          and "- S4 WAVE [exponent-path]: Work with the Gram matrix" in rec and "S6 HOLD" not in rec,
+          "spaces.md lists what each worker is handed")
+    check("--phase 2B --role prover --branch ALGEBRAIC --angle gram-rank --stop" in out
           and "--phase WAVE --role prover --regime FRESH --angle 'exponent-path: " in out, "choose prints the dispatch lines")
+    check("--branch-note" not in out and "Smith" not in out, "no card text is printed for a blind 2B brief")
     ev = [json.loads(ln) for ln in open(os.path.join(S, "run", "telemetry.jsonl")) if '"choose"' in ln]
     check(ev and ev[-1]["decisions"]["S1"] == "2B" and ev[-1]["kept"] == {"ALGEBRAIC": "solver", "DISCRETE": "solver"},
           "choose logs a telemetry event")

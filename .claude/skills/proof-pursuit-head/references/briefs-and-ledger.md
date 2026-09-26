@@ -227,16 +227,20 @@ Write out/selected_branches.txt (section 11).
 **Space**
 ```
 Phase 2S. Do not solve the cell and do not choose: the head evaluates your cards and decides what runs.
+You have web search and fetch: use them to discover spaces and tools, what is known in each space about this
+problem and its neighbours, and what no source has used. Open every source you cite; tag it PROVED /
+COMPUTER-VERIFIED / CONJECTURED and say whether it contains the argument or only cites it. Never present a
+citation as a proof of the cell. Never call anything new: write "not found in <sources searched>".
 Inbox/obstacles/ (if present) holds stuck.md and verdict.md files, never proofs; inbox/checker/ (if present) is an
-exact checker you may use on small cases.
+exact checker you may use on small cases; any other inbox file is extra material the head chose to give you.
 1. Pin the target: restate it, classify the goal, compute small and boundary cases by code, list extremizers
    (out/target_pin.md, out/small_cases.md).
-2. Sweep the catalogue in your agent instructions; keep 4-8 spaces where the problem can be written precisely
-   (discards, one line each, in out/discarded.md).
+2. Sweep the catalogue in your agent instructions and search beyond it; log every search and source in
+   out/sources.md; keep 4-8 spaces where the problem can be written precisely (discards in out/discarded.md).
 3. One card per kept space in out/spaces.md, in the exact field format of section 17: fidelity with its direction,
    a translation check run on the small cases, tightness on every known extremizer, the tools and what each would
-   deliver here, cost, payoff, a blind-safe LENS, and a FIRST TASK.
-4. out/graph.md: directed edges between spaces and neighbours; literature questions as NEIGHBOUR QUESTION lines.
+   deliver here, what is KNOWN in this space, what is UNEXPLORED, cost, payoff, an ANGLE and a FIRST TASK.
+4. out/graph.md: directed edges between spaces and neighbours, with sources; unanswered NEIGHBOUR QUESTION lines.
 5. out/spec.md: properties any valid proof must have. 6. out/proposals.md: 3-6 ranked proposals.
 Code in out/checks/. Fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
 ```
@@ -529,16 +533,22 @@ The Space agent writes one card per kept space in `out/spaces.md`. `pp.py choose
 ### S<n> <short-tag>
 SPACE: <catalogue code + name>
 BRANCH: ALGEBRAIC | TOPOLOGICAL | ANALYSIS | NUMBER-THEORY | DISCRETE | COMPUTATIONAL
-FIDELITY: EQUIVALENT | RELAXATION | RESTRICTION | HEURISTIC — <direction, justified>
+FIDELITY: EQUIVALENT | RELAXATION | RESTRICTION | LIMIT | ANALOGY | HEURISTIC — <direction for this cell, justified>
 FEEDS: <bound, construction, proof, disproof, obstruction>
 CHECK: PASSED <cases, script> | FAILED <case, script> | NOT RUN <why>
 TIGHT: yes <cases incl. every known extremizer> | NO <object the method cannot rule out> | n/a
 TOOLS: <each tool, what it would deliver for TARGET, where it breaks>
+KNOWN: <what has been done in this space on this problem or its neighbours: result, link, status tag; or "nothing found in <sources searched>">
+UNEXPLORED: <tools or properties of this space not found used on this problem in <sources searched>; or "none">
 COST: low | medium | high — <why>
 PAYOFF: low | medium | high — <what success gives the cell>
-LENS: <1-3 blind-safe sentences: reformulation, what it preserves, first step>
+ANGLE: <1-3 sentences for a FRESH worker: translation, what it preserves, tool to try first; sources allowed>
 FIRST TASK: <prover | searcher | breaker>: <statement> | assumes: <...> | output: <...> | stop: <...>
 ```
+
+Fidelity, in one line each: EQUIVALENT (both directions, map stated); RELAXATION (a larger class: one-sided bounds); RESTRICTION (a subclass: constructions and counterexamples); LIMIT (scaling or continuum limit: asymptotics only); ANALOGY (a different problem with the same defining feature: insight only unless it specialises back exactly); HEURISTIC (direction not proved yet).
+
+**Information rule.** A space map is web-informed, so no card text ever reaches a BLIND brief. A `2B` or `VERIFIER` decision passes only the branch name and its generic lens from section 7. A card's ANGLE goes only into a FRESH brief (`WAVE`). The head may quote KNOWN and UNEXPLORED to the humans, and hand them to Literature (Phase 3) with `--inbox`.
 
 The return block's CARDS lines summarise the cards, one per card:
 
@@ -550,11 +560,11 @@ The return block's CARDS lines summarise the cards, one per card:
 
 It refuses the choice in these cases:
 - a card has no decision, or a decision has no reason;
-- a `2B` card doesn't have CHECK PASSED, has a HEURISTIC fidelity, or has TIGHT NO;
+- a `2B` card doesn't have CHECK PASSED, has a HEURISTIC, ANALOGY or LIMIT fidelity, or has TIGHT NO;
 - a `2B` or `VERIFIER` card is on COMPUTATIONAL, or on a branch another card already holds;
 - a `2B` or `WAVE` card has CHECK FAILED;
+- a `WAVE` card has no ANGLE;
 - a `DEADEND` card has neither TIGHT NO nor CHECK FAILED;
-- a LENS that would reach a worker has literature markers;
 - a `2B` card is chosen without a second kept branch to cross-verify it.
 
 It writes three things:
@@ -565,8 +575,8 @@ It writes three things:
   ## <time>, map <task>
   | Card | Tag | Branch | Fidelity | Check | Tight | Cost | Payoff | Decision | Reason |
   Kept branches: <branch kind, ...>
-  Lenses handed to workers (2B: --branch-note; WAVE: --angle):
-  - S<n> <action> [<tag>]: <LENS>
+  Handed to workers (2B / VERIFIER: the branch and its generic lens only; WAVE: the card's ANGLE, in a FRESH brief):
+  - S<n> <action> [<tag>]: <branch ..., generic lens | ANGLE>
   ```
 
 - One `deadends.md` line per `DEADEND` card, in section 5's format.

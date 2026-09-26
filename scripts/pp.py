@@ -69,7 +69,7 @@ ROLES = {
     "referee": {"CLEAN-ROOM"},
     "literature": {"LITERATURE"},
     "triage": {"BLIND"},
-    "space": {"BLIND"},
+    "space": {"LITERATURE"},
     "scribe": {"RECORD"},
     "auditor": {"RECORD"},
 }
@@ -81,7 +81,7 @@ PHASES = {
     "1L": ({"literature"}, "LITERATURE", "SOLVE", set()),
     "2": ({"referee"}, "CLEAN-ROOM", "VERIFY", set()),
     "2A": ({"triage"}, "BLIND", None, set()),
-    "2S": ({"space"}, "BLIND", None, set()),
+    "2S": ({"space"}, "LITERATURE", None, set()),
     "2B": ({"prover", "searcher"}, "BLIND", "BRANCH", set()),
     "2B-XV": ({"referee"}, "CLEAN-ROOM", "CROSS", set()),
     "2C": ({"breaker"}, "BLIND", "ADVERSARY", set()),
@@ -107,11 +107,14 @@ ADVERSARY_LABELS = ("PROOF-ROUTE-FOUND", "COUNTEREXAMPLE-CANDIDATE", "LOCALLY-OP
 GROUP_KEYS = ("role", "regime", "phase", "angle", "branch", "cell", "lessons", "lib")
 LIB_KINDS = ("code", "lemma")
 LIB_ROLES = {"prover", "searcher", "breaker"}
-CARD_FIELDS = ("SPACE", "BRANCH", "FIDELITY", "FEEDS", "CHECK", "TIGHT", "TOOLS", "COST", "PAYOFF", "LENS", "FIRST TASK")
+CARD_FIELDS = ("SPACE", "BRANCH", "FIDELITY", "FEEDS", "CHECK", "TIGHT", "TOOLS", "KNOWN", "UNEXPLORED",
+               "COST", "PAYOFF", "ANGLE", "FIRST TASK")
+# A space map is web-informed (LITERATURE), so no card text ever reaches a BLIND brief.
+NO_EXACT_PROOF = ("HEURISTIC", "ANALOGY", "LIMIT")
 CHOICE_ACTIONS = {
-    "2B": "Phase 2B solver on the card's branch, its LENS as the branch note",
+    "2B": "the card's branch runs in Phase 2B as a solver branch; blind solvers get only the generic branch lens",
     "VERIFIER": "verifier-only branch: cross-verifies the 2B proofs",
-    "WAVE": "FRESH angle for an extra wave (prover, searcher or breaker)",
+    "WAVE": "FRESH extra wave (prover, searcher or breaker) with the card's ANGLE, which may carry tools and sources",
     "DEADEND": "the card's obstruction goes to deadends.md, so CONTRARIAN briefs inherit it",
     "HOLD": "kept for re-admission if every chosen branch fails",
     "DROP": "not useful for this cell",
@@ -690,10 +693,6 @@ def card_word(card, field):
     return m.group(1).upper() if m else ""
 
 
-def text_markers(text):
-    return [label for label, pat in BLIND_MARKERS if pat.search(text)]
-
-
 def cmd_choose(a):
     require_cell(a.P, a.cell)
     row = phase_row(read_phases(a.P, a.cell), a.map)
@@ -743,19 +742,16 @@ def cmd_choose(a):
                 die(f"{cid}: the card lacks {', '.join(lacking)}")
             if check != "PASSED":
                 die(f"{cid}: 2B needs CHECK PASSED (card: '{card['CHECK']}'); an unchecked card goes to WAVE at most")
-            if card_word(card, "FIDELITY") == "HEURISTIC":
-                die(f"{cid}: a HEURISTIC translation cannot carry a proof; send it to WAVE")
+            fidelity = card_word(card, "FIDELITY")
+            if fidelity in NO_EXACT_PROOF:
+                die(f"{cid}: a {fidelity} translation cannot carry an exact proof; send it to WAVE")
             if tight == "NO":
                 die(f"{cid}: TIGHT NO; a relaxation that is not tight cannot carry an exact proof "
                     "(WAVE for a bound-only task, or DEADEND)")
         if action == "WAVE" and check == "FAILED":
             die(f"{cid}: CHECK FAILED; a failed translation is dead (DEADEND or DROP)")
-        if action in ("2B", "VERIFIER", "WAVE"):
-            if not card.get("LENS"):
-                die(f"{cid}: no LENS line; nothing blind-safe to hand a worker")
-            hits = text_markers(card["LENS"])
-            if hits:
-                die(f"{cid}: LENS has literature markers ({', '.join(hits)}); it would go into blind briefs")
+        if action == "WAVE" and not card.get("ANGLE"):
+            die(f"{cid}: no ANGLE line; nothing to hand a FRESH worker")
         if action == "DEADEND" and not (tight == "NO" or check == "FAILED"):
             die(f"{cid}: DEADEND needs TIGHT NO or CHECK FAILED on the card, i.e. an obstruction to record")
     if "solver" in kept.values() and len(kept) < 2:
@@ -787,8 +783,11 @@ def cmd_choose(a):
         lines.append(f"| {cid} | {card['tag']} | " + " | ".join(vals) + f" | {action} | {reason} |")
     lines += ["", "Kept branches: " + (", ".join(f"{b} {k}" for b, k in kept.items())
                                        or "none (the matrix falls back to the latest 2A triage)"), "",
-              "Lenses handed to workers (2B: --branch-note; WAVE: --angle):"]
-    lines += [f"- {cid} {decisions[cid][0]} [{cards[cid]['tag']}]: {cards[cid]['LENS']}"
+              "Handed to workers (2B / VERIFIER: the branch and its generic lens only, since card text never "
+              "reaches blind agents; WAVE: the card's ANGLE, in a FRESH brief):"]
+    lines += [f"- {cid} {decisions[cid][0]} [{cards[cid]['tag']}]: "
+              + (cards[cid]["ANGLE"] if decisions[cid][0] == "WAVE"
+                 else f"branch {card_word(cards[cid], 'BRANCH')}, generic lens")
               for cid in cards if decisions[cid][0] in ("2B", "VERIFIER", "WAVE")] or ["- none"]
     with open(record, "a") as fh:
         fh.write("\n".join(lines) + "\n\n")
@@ -802,12 +801,13 @@ def cmd_choose(a):
         first = card_word(card, "FIRST TASK").lower()
         if action == "2B":
             role = first if first in ("prover", "searcher") else "prover"
+            # --angle only tags telemetry; a BLIND brief never shows it. No --branch-note from the card.
             print(f"next: pp.py task {a.P} {a.cell} --phase 2B --role {role} --branch {card_word(card, 'BRANCH')} "
-                  f"--angle {shlex.quote(card['tag'])} --branch-note {shlex.quote(card['LENS'])} --stop ...")
+                  f"--angle {shlex.quote(card['tag'])} --stop ...")
         elif action == "WAVE":
             role = first if first in ("prover", "searcher", "breaker") else "prover"
             print(f"later: pp.py task {a.P} {a.cell} --phase WAVE --role {role} --regime FRESH "
-                  f"--angle {shlex.quote(card['tag'] + ': ' + card['LENS'])} --stop ...")
+                  f"--angle {shlex.quote(card['tag'] + ': ' + card['ANGLE'])} --stop ...")
 
 
 # ---------- board ----------
