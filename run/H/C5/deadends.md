@@ -1,2 +1,3 @@
 - [parity split, clique cover] lower route: clique-cover bound for tau(G_2[F∩E]) closes only z <= 3 missing vertices of one parity; general forest bound F_9 <= 279 open (R9) (H-C5-007)
 - [feedback-vertex-set reduction] upper route: SAT (12 symmetry groups, K=235: UNSAT or timeout, no DRAT) and local search on (independent / non-independent) FVS never below |S|=236; best 2400 (H-C5-001)
+- [multiway-cut SA, clusters] upper route: multiway-cut SA (9 runs d=9) and symmetric penalty SA never below |S|=236; no net-2 cluster with <= 6 words (exhaustive up to symmetry); best 2400 (H-C5-003)
