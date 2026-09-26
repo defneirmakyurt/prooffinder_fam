@@ -1,0 +1,2 @@
+$ cmp accepted vs A-C2-002
+IDENTICAL

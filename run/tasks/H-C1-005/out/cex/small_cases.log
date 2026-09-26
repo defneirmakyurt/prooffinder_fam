@@ -1,0 +1,11 @@
+Q1 hand check OK: every labelling of Q_1 has 2 uphill paths -> U(Q_1)=2
+Q2 hand check OK: labelling 00,01,10,11 has 5 uphill paths
+d=1  labellings=2  min=2  #minimisers=2  smallest5=[(2, 2)]
+   a minimiser: ['0', '1']
+d=2  labellings=24  min=5  #minimisers=16  smallest5=[(5, 16), (6, 8)]
+   a minimiser: ['00', '01', '10', '11']
+d=3  labellings=40320  min=14  #minimisers=7104  smallest5=[(14, 7104), (16, 14112), (17, 6720), (18, 4704), (19, 576)]
+   a minimiser: ['000', '001', '010', '011', '101', '110', '100', '111']
+real 0.48
+user 0.42
+sys 0.01

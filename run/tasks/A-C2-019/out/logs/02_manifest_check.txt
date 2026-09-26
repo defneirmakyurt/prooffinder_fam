@@ -1,0 +1,3 @@
+$ cd inbox/record/cell/accepted && sha256sum -c MANIFEST.sha256
+proof.md: OK
+claims.md: OK

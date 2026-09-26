@@ -1,0 +1,8 @@
+instances: 11200 | certified target violations: 0 | reduction failures: 0 | lemma certified failures: 0
+smallest certified lower bound of slack (bound - sum): -1.9873757771666523e-58 at m = 3
+dimension trap: R^m basis exceeds bound by exactly pi/2 for m=2..49: True
+elapsed 1.92s
+
+real	0m1.976s
+user	0m1.959s
+sys	0m0.008s

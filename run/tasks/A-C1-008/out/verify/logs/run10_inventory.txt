@@ -1,0 +1,36 @@
+--- phases index: row count and A-C1-008 search ---
+       9 inbox/record/cell/phases.md
+task rows:
+7
+no A-C1-008 row in cell/phases.md
+--- mtimes ---
+12:46 inbox/record/cell/phases.md
+12:51 brief.md
+--- brief.md head ---
+TASK: A-C1-008      ROLE: scribe      REGIME: RECORD
+PHASE: 5   MODE: REPORT   BRANCH: -
+SUBJECT: -
+--- scripts in the record that use random ---
+inbox/record/tasks/A-C1-002/out/code/sanity_check.py
+inbox/record/tasks/A-C1-004/out/cex/check.py
+inbox/record/tasks/A-C1-005/out/cex/check_exact.py
+inbox/record/tasks/A-C1-005/out/cex/hill_interval.py
+inbox/record/tasks/A-C1-006/out/cex/ascent_exact_recheck.py
+inbox/record/tasks/A-C1-006/out/cex/referee_checks.py
+inbox/record/tasks/A-C1-007/out/cex/cex.py
+--- their seeds ---
+inbox/record/tasks/A-C1-002/out/code/sanity_check.py:38:    rng = random.Random(12345)
+inbox/record/tasks/A-C1-004/out/cex/check.py:12:random.seed(20260926)
+inbox/record/tasks/A-C1-005/out/cex/check_exact.py:62:    rng = random.Random(20260926)
+inbox/record/tasks/A-C1-005/out/cex/hill_interval.py:32:    rng = random.Random(777)
+inbox/record/tasks/A-C1-006/out/cex/ascent_exact_recheck.py:5:random.seed(7)
+inbox/record/tasks/A-C1-006/out/cex/referee_checks.py:9:random.seed(20260926)
+inbox/record/tasks/A-C1-007/out/cex/cex.py:16:random.seed(20260926)
+--- referee task rows ---
+6:| A-C1-004 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C1-001 | 12:39 |
+7:| A-C1-005 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C1-002 | 12:39 |
+8:| A-C1-006 | GATE | referee | CLEAN-ROOM | GATE | - | A-C1-001 | 12:43 |
+9:| A-C1-007 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C1-003 | 12:46 |
+real 0.03
+user 0.00
+sys 0.00

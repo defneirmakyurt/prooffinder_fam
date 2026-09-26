@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Scratch-copy acceptance tests for scripts/pp.py (build step B1). Never touches the real run/."""
+import json
 import os
 import re
 import shutil
@@ -157,6 +158,19 @@ def phase_tests():
     pp("task", "A", "C1", "--phase", "2", *STOP, ok=False, label="referee without --subject")
     pp("task", "A", "C1", "--phase", "2", "--subject", "A-C9-001", *STOP, ok=False, label="subject from another cell")
 
+    write(T(t1, "out", "Q4.txt"), "0000\n1111\n")
+    write(T(t1, "out", "runlog.md"), "how I did it\n")
+    ck = os.path.join(S, "run", "A", "C1", "checker")
+    write(os.path.join(ck, "verify.py"), "print('VERIFIED 0')\n")
+    tcv = last_task(pp("task", "A", "C1", "--phase", "2", "--subject", t1,
+                       "--subject-file", "Q4.txt", "--checker", ck, *STOP))
+    check("Q4.txt" in os.listdir(T(tcv, "inbox", "subject")), "referee gets the computational subject's artefact")
+    check(os.path.isfile(T(tcv, "inbox", "checker", "verify.py")), "referee may be given the checker to re-score")
+    pp("task", "A", "C1", "--phase", "2", "--subject", t1, "--subject-file", "runlog.md", *STOP, ok=False,
+       label="--subject-file refuses a process file (clean room)")
+    pp("task", "A", "C1", "--phase", "2", "--subject", t1, "--subject-file", "nope.txt", *STOP, ok=False,
+       label="--subject-file refuses a file the subject does not have")
+
     out = pp("task", "A", "C1", "--phase", "2A", "--obstacles", t1, tv, *STOP)
     ta = last_task(out)
     check(sorted(os.listdir(T(ta, "inbox", "obstacles", t1))) == ["stuck.md"], "triage obstacles: stuck.md only, no proof")
@@ -245,6 +259,12 @@ def phase_tests():
     inbox = set(os.listdir(T(tau, "inbox")))
     check({"final_report.md", "record", "checklist-G.md"} <= inbox and "checklist-S.md" not in inbox
           and "problem-lessons.md" not in inbox, "auditor inbox: report + record, no Part S, no problem lessons")
+    arec = T(tau, "inbox", "record")
+    check(os.path.isfile(os.path.join(arec, "tasks", tsr, "out", "final_report.md")),
+          "auditor record holds the subject's own brief.md + out/")
+    check(open(os.path.join(arec, "cell", "phases.md")).read()
+          == open(os.path.join(T(tsr, "inbox", "record"), "cell", "phases.md")).read(),
+          "auditor reads the record snapshot the Scribe wrote from, not a later one")
 
     rows = [l for l in open(os.path.join(c1, "phases.md")).read().splitlines() if l.startswith(f"| A-C1-")]
     n_tasks = len([d for d in os.listdir(os.path.join(S, "run", "tasks")) if d.startswith("A-C1-")])
@@ -278,11 +298,13 @@ def setup_2b(cell, p2, xv, kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\t
     tb = last_task(pp("task", "A", cell, "--phase", "2B", "--role", "prover", "--branch", "ALGEBRAIC", *STOP))
     fake_proof(tb, cell)
     tv = last_task(pp("task", "A", cell, "--phase", "2", "--subject", tb, *STOP))
+    # cross-verifiers dispatched in parallel with the Phase 2 verifier, before its verdict is in
+    txs = {branch: last_task(pp("task", "A", cell, "--phase", "2B-XV", "--branch", branch, "--subject", tb, *STOP))
+           for branch in xv}
     verdict(tv, p2)
     for branch, v in xv.items():
-        tx = last_task(pp("task", "A", cell, "--phase", "2B-XV", "--branch", branch, "--subject", tb, *STOP))
         if v:
-            cross(tx, v)
+            cross(txs[branch], v)
     return tb, tv
 
 
@@ -300,8 +322,11 @@ def matrix_gate_tests():
     check("step 2 does not translate" in open(os.path.join(S, "run", "A", "C3", "matrix.md")).read(),
           "CONTESTED lists the disputed step")
 
-    setup_2b("C4", "MAJOR", {"DISCRETE": "GAP", "ANALYSIS": "REFUTED"})
+    tb4, _ = setup_2b("C4", "MAJOR", {"DISCRETE": "GAP", "ANALYSIS": "REFUTED"})
     check("CLASS: UNSUPPORTED" in pp("matrix", "A", "C4"), "all negative → UNSUPPORTED")
+    out = pp("task", "A", "C4", "--phase", "2B-XV", "--branch", "TOPOLOGICAL", "--subject", tb4, *STOP, ok=False,
+             label="2B-XV refused after a negative Phase 2 verdict")
+    check("repair it first" in out, "refusal says to repair first")
 
     pp("open", "A", "C5", "C6")
     setup_2b("C5", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "TOPOLOGICAL": "CONFIRMED",
@@ -309,15 +334,29 @@ def matrix_gate_tests():
              kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tsolver\nTOPOLOGICAL\tverifier-only\n"
                   "NUMBER-THEORY\tverifier-only\n")
     check("CLASS: ROBUST" in pp("matrix", "A", "C5"), "5 branches: 3 confirmations suffice, one pending → ROBUST")
-    setup_2b("C6", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": None})
+    tb6, _ = setup_2b("C6", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": None})
     out = pp("matrix", "A", "C6")
-    check("CLASS: UNSUPPORTED" in out and "- A-C6-002: ANALYSIS" in open(os.path.join(S, "run", "A", "C6", "matrix.md")).read(),
-          "3 branches, 1 confirm + 1 pending → UNSUPPORTED, pending listed")
+    check("CLASS: INCOMPLETE" in out and "- A-C6-002: ANALYSIS" in open(os.path.join(S, "run", "A", "C6", "matrix.md")).read(),
+          "3 branches, 1 confirm + 1 pending → INCOMPLETE (not yet UNSUPPORTED), pending listed")
+    out = pp("task", "A", "C6", "--phase", "2B-XV", "--branch", "DISCRETE", "--subject", tb6, *STOP, ok=False,
+             label="2B-XV refused: same proof, same branch twice")
+    check("already has a DISCRETE cross-verifier" in out, "duplicate refusal names the existing task")
     pp("open", "A", "C8")
     setup_2b("C8", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "TOPOLOGICAL": None, "NUMBER-THEORY": None},
              kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tsolver\nTOPOLOGICAL\tverifier-only\n"
                   "NUMBER-THEORY\tverifier-only\n")
     check("CLASS: INCOMPLETE" in pp("matrix", "A", "C8"), "5 branches, 2 confirm + 2 pending → INCOMPLETE (not ROBUST)")
+
+    pp("open", "A", "C9")
+    tb9, _ = setup_2b("C9", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED", "NUMBER-THEORY": None},
+                      kept="ALGEBRAIC\tsolver\nDISCRETE\tsolver\nANALYSIS\tverifier-only\nNUMBER-THEORY\tverifier-only\n")
+    check("CLASS: INCOMPLETE" in pp("matrix", "A", "C9"), "4 branches, 2 of 3 confirmations + 1 pending → INCOMPLETE")
+    pp("task", "A", "C9", "--phase", "2B", "--role", "prover", "--branch", "TOPOLOGICAL", *STOP)  # 2B-D re-admission
+    tx9 = last_task(pp("task", "A", "C9", "--phase", "2B-XV", "--branch", "TOPOLOGICAL", "--subject", tb9, *STOP))
+    cross(tx9, "CONFIRMED")
+    check("CLASS: ROBUST" in pp("matrix", "A", "C9"), "re-admitted branch's confirmation counts → ROBUST")
+    check("TOPOLOGICAL solver (re-admitted)" in open(os.path.join(S, "run", "A", "C9", "matrix.md")).read(),
+          "matrix.md lists the re-admitted branch")
 
     print("\n== gate: VALID / GAP / INVALID")
     tg = last_task(pp("task", "A", "C2", "--phase", "GATE", "--subject", tb2, *STOP))
@@ -349,6 +388,21 @@ def matrix_gate_tests():
     out = pp("gate", "A", "C3", "--subject", tb3, "--statement-checked")
     check("DECISION: GAP" in out and "matrix is CONTESTED" in out, "2 ACCEPT but CONTESTED → GAP")
 
+    print("\n== gate: robustness belongs to the proof, not the cell")
+    pp("open", "A", "C10")
+    tx10, _ = setup_2b("C10", "ACCEPT", {"DISCRETE": "CONFIRMED", "ANALYSIS": "CONFIRMED"})
+    ty = last_task(pp("task", "A", "C10", "--phase", "2B", "--role", "prover", "--branch", "DISCRETE", *STOP))
+    fake_proof(ty, "second")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "2", "--subject", ty, *STOP)), "ACCEPT")
+    cross(last_task(pp("task", "A", "C10", "--phase", "2B-XV", "--branch", "ALGEBRAIC", "--subject", ty, *STOP)), "REFUTED")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "GATE", "--subject", ty, *STOP)), "ACCEPT")
+    out = pp("gate", "A", "C10", "--subject", ty, "--statement-checked")
+    check("DECISION: GAP" in out and f"{ty} is not robust" in out,
+          "2 ACCEPT, cell ROBUST through another proof, this proof REFUTED cross-branch → GAP")
+    verdict(last_task(pp("task", "A", "C10", "--phase", "GATE", "--subject", tx10, *STOP)), "ACCEPT")
+    out = pp("gate", "A", "C10", "--subject", tx10, "--statement-checked")
+    check("DECISION: VALID" in out and "this proof: robust" in out, "the robust proof itself still passes → VALID")
+
     print("\n== gate without 2B (matrix not run)")
     pp("open", "A", "C7")
     c7 = os.path.join(S, "run", "A", "C7")
@@ -363,6 +417,122 @@ def matrix_gate_tests():
     check("DECISION: VALID" in out and "Matrix: not run" in out, "no 2B: 2 ACCEPT + statement → VALID")
     verdict(rb, "MINOR")
     check("DECISION: GAP" in pp("gate", "A", "C7", "--subject", tp, "--statement-checked"), "ACCEPT + MINOR → GAP")
+
+
+def telemetry_library_tests():
+    print("\n== telemetry: task / done / gate / pin records, yield table")
+    tel = os.path.join(S, "run", "telemetry.jsonl")
+    recs = [json.loads(l) for l in open(tel)]
+    n_tasks = len(os.listdir(os.path.join(S, "run", "tasks")))
+    check(sum(r["event"] == "task" for r in recs) == n_tasks, "one task record per task created so far")
+    prover = next(r for r in recs if r["event"] == "task" and r["role"] == "prover")
+    check(prover["lessons"]["role"] != "-" and prover["lessons"]["problem"] != "-", "task record has lessons versions")
+    check(any(r["event"] == "gate" for r in recs), "pp.py gate writes a gate record")
+
+    pp("open", "A", "C11")
+    c11 = os.path.join(S, "run", "A", "C11")
+    write(os.path.join(c11, "target.md"), "t\n")
+    tp = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "prover", *STOP))
+    fake_proof(tp)
+    ra = last_task(pp("task", "A", "C11", "--phase", "2", "--subject", tp, *STOP))
+    rb = last_task(pp("task", "A", "C11", "--phase", "GATE", "--subject", tp, *STOP))
+    verdict(ra, "ACCEPT")
+    verdict(rb, "ACCEPT")
+    pp("done", tp, "--tokens", "42000", "--ms", "600000", "--tool-uses", "12")
+    pp("done", ra, "--tokens", "8000")
+    pp("done", "A-C11-999", ok=False, label="done on a task that does not exist")
+    check("DECISION: VALID" in pp("gate", "A", "C11", "--subject", tp, "--statement-checked"), "C11 gate VALID")
+    tbk = last_task(pp("task", "A", "C11", "--phase", "2C", "--obstacles", tp, *STOP))
+    write(T(tbk, "out", "verdict.md"), "STUCK\nno route beyond step 2\n")
+    pp("done", tbk)
+    ts = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "searcher", *STOP))
+    write(T(ts, "out", "best.txt"), "1 2 3\n")
+    pp("done", ts, "--score", "17")
+    pp("pin", "A", "C11", T(ts, "out", "best.txt"))
+    out = pp("telemetry", "--tasks")
+    row = lambda t: next((l for l in out.splitlines() if l.startswith(f"| {t} |")), "")
+    check("| yes |" in row(tp) and "proof.md" in row(tp) and "| 42000 | 10.0 |" in row(tp),
+          "prover: out files, tokens, minutes, fed by VALID gate")
+    check("ACCEPT" in row(ra) and "| yes |" in row(ra), "accepting referee of a VALID gate counts as fed")
+    check("STUCK" in row(tbk) and "| no |" in row(tbk), "breaker ADVERSARY label read from verdict.md")
+    check("| 17 |" in row(ts) and "| yes |" in row(ts), "searcher score recorded; pinned artefact counts as fed")
+    check("not returned" in row(rb), "task without 'done' shows as not returned")
+    out = pp("telemetry", "--by", "role")
+    check(re.search(r"\| prover \| \d+ \| \d+ \| [1-9]\d* \| [1-9]", out) is not None, "grouped by role: prover proofs + fed")
+    check("Not marked returned" in out and rb in out, "grouped view lists tasks not marked returned")
+    check(re.search(r"\| prover r\d+ p\d+ \|", pp("telemetry", "--by", "lessons")) is not None,
+          "grouped by lessons version (role r*, problem p*)")
+    pp("telemetry", "--by", "colour", ok=False, label="unknown group key rejected")
+
+    print("\n== technique library: admission, inbox rules, blindness")
+    accepted = os.path.join(c11, "accepted")
+    write(os.path.join(c11, "checker", "exact.py"), "from fractions import Fraction\n")
+    write(os.path.join(c11, "checker", "notes.py"), "# idea from arXiv:1234.5678\n")
+    pp("lib", "add", "raw", T(ts, "out", "best.txt"), "--kind", "code", "--what", "w", "--evidence", "e", ok=False,
+       label="lib add refuses a task's raw out/ (not verified)")
+    pp("lib", "add", "lem", os.path.join(c11, "checker", "exact.py"), "--kind", "lemma", "--what", "w", "--evidence", "e",
+       ok=False, label="lib add refuses a lemma from checker/")
+    pp("lib", "add", "Bad_Name", os.path.join(accepted, "best.txt"), "--kind", "code", "--what", "w", "--evidence", "e",
+       ok=False, label="lib add refuses a non-slug name")
+    pp("lib", "add", "exact", os.path.join(c11, "checker", "exact.py"), os.path.join(accepted, "best.txt"),
+       "--kind", "code", "--what", "exact rational helpers", "--evidence", "crosstest 200/200")
+    entry = os.path.join(S, "run", "library", "A-exact")
+    check(os.path.isfile(os.path.join(entry, "files", "exact.py")) and "KIND: code" in open(os.path.join(entry, "ENTRY.md")).read()
+          and len(open(os.path.join(entry, "MANIFEST.sha256")).read().splitlines()) == 2,
+          "entry named <P>-NAME with files/, ENTRY.md, MANIFEST.sha256")
+    pp("lib", "add", "exact", os.path.join(accepted, "best.txt"), "--kind", "code", "--what", "w", "--evidence", "e",
+       ok=False, label="lib add refuses a duplicate entry")
+    write(os.path.join(accepted, "lemma.md"), "Lemma. x <= y.\nProof. ...\n")
+    pp("lib", "add", "lemma1", os.path.join(accepted, "lemma.md"), "--kind", "lemma", "--what", "x<=y", "--evidence", "gate VALID")
+    pp("lib", "add", "litcode", os.path.join(c11, "checker", "notes.py"), "--kind", "code", "--what", "w", "--evidence", "e")
+
+    tl = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "searcher", "--lib", "A-exact", *STOP))
+    check(os.path.isfile(T(tl, "inbox", "library", "A-exact", "files", "exact.py")), "BLIND searcher gets library code")
+    brief = open(T(tl, "brief.md")).read()
+    check("LIBRARY: inbox/library/" in brief and "library/A-exact" in brief, "brief has LIBRARY note and INBOX entry")
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-lemma1", *STOP, ok=False,
+       label="BLIND refuses a library lemma")
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-litcode", *STOP, ok=False,
+       label="BLIND refuses library code with literature markers")
+    pp("task", "A", "C11", "--phase", "WAVE", "--role", "prover", "--regime", "FRESH", "--angle", "x",
+       "--lib", "A-lemma1", "--lib", "A-litcode", *STOP, label="FRESH prover may take a lemma and marked code")
+    pp("task", "A", "C11", "--phase", "2", "--subject", tp, "--lib", "A-exact", *STOP, ok=False,
+       label="referee (clean-room) refuses --lib")
+    pp("task", "A", "C11", "--phase", "0", "--lib", "A-exact", *STOP, ok=False, label="checker-builder refuses --lib")
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-nothing", *STOP, ok=False,
+       label="unknown library entry")
+    check("A-exact" in pp("telemetry", "--by", "lib"), "telemetry groups by library entry")
+    check("| A-exact | code | exact rational helpers | crosstest 200/200 | here |" in pp("lib", "list"), "lib list (local)")
+
+
+def branch_tests():
+    print("\n== library + lessons across branches")
+    g = lambda cmd: subprocess.run(cmd, shell=True, cwd=S, check=True)
+    g("git checkout -qb hbranch")
+    write(os.path.join(S, "run", "H", "C1", "accepted", "sa.py"), "def anneal(): pass\n")
+    write(os.path.join(S, "run", "A", "lessons.md"), "version: 1\n# Lessons: problem A\n\n- check small cases first (A-C1-002)\n")
+    pp("lib", "add", "annealer", os.path.join(S, "run", "H", "C1", "accepted", "sa.py"),
+       "--kind", "code", "--what", "SA harness", "--evidence", "pinned H-C1")
+    g("git add -A && git -c user.email=t@t -c user.name=t commit -qm h && git checkout -q main")
+    check(not os.path.exists(os.path.join(S, "run", "library", "H-annealer")), "entry lives only on hbranch")
+    out = pp("lib", "list", "--branches", "hbranch", "nolib")
+    check("| H-annealer | code | SA harness | pinned H-C1 | hbranch |" in out and "No run/library on: nolib" in out,
+          "lib list shows other branches' entries and branches without a library")
+    pp("lib", "import", "hbranch", "H-annealer")
+    check(os.path.isfile(os.path.join(S, "run", "library", "H-annealer", "files", "sa.py")), "lib import copies the entry")
+    pp("lib", "import", "hbranch", "H-annealer", ok=False, label="lib import refuses an entry already here")
+    pp("lib", "import", "hbranch", "H-nothing", ok=False, label="lib import of a missing entry")
+    shutil.rmtree(os.path.join(S, "run", "library", "H-annealer"))
+    g("git -c user.email=t@t -c user.name=t commit -qam imports && git checkout -q hbranch "
+      "&& echo tampered >> run/library/H-annealer/files/sa.py "
+      "&& git -c user.email=t@t -c user.name=t commit -qam t && git checkout -q main")
+    pp("lib", "import", "hbranch", "H-annealer", ok=False, label="lib import refuses a manifest mismatch")
+    check(not os.path.exists(os.path.join(S, "run", "library", "H-annealer")), "failed import leaves nothing behind")
+    out = pp("lessons", "--branches", "main", "hbranch", "gone")
+    check("## hbranch: problem A (version: 1)" in out and "check small cases first" in out
+          and "## main: problem A (version: 0)" in out and "No run/ on: gone" in out,
+          "lessons lists each branch's problem lessons")
+    check("problem library" not in out and "problem tasks" not in out, "lessons skips tasks/ and library/")
 
 
 def board_report_tests():
@@ -409,6 +579,8 @@ def board_report_tests():
     check("| Robustness |" in r and "C1/final_report.md" in r, "report has Robustness + final report link")
     s = open(os.path.join(S, "run", "SUMMARY.md")).read()
     check("| Counterexample | Not solved |" in s and "C5" in s.split("| A |")[1].split("\n")[0], "SUMMARY has 5 statuses")
+    check("| library |" not in s and not os.path.exists(os.path.join(S, "run", "library", "report.md")),
+          "report treats run/library as the library, not a problem")
 
     subprocess.run("git init -q -b main && git add -A && git -c user.email=t@t -c user.name=t commit -qm s "
                    "&& git checkout -qb other && sed -i '' 's/| A |/| H |/' run/SUMMARY.md "
@@ -423,6 +595,8 @@ if __name__ == "__main__":
     setup()
     phase_tests()
     matrix_gate_tests()
+    telemetry_library_tests()
     board_report_tests()
+    branch_tests()
     print(f"\n{'ALL PASSED' if not fails else f'{len(fails)} FAILED: ' + '; '.join(fails)}")
     sys.exit(1 if fails else 0)

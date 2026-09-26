@@ -56,14 +56,15 @@ Inbox contents set by phase (`pp.py` enforces them):
 | `problem-lessons.md` | everyone except Referee, Checker-builder, Auditor |
 | `checklist-G.md` | everyone except Checker-builder |
 | `checklist-S.md` | Referee only (VERIFY, GATE, CROSS) |
-| `subject/` (`proof.md`, `claims.md`, `code/` of SUBJECT only) | Referee; REPAIR (plus the gate report) |
+| `subject/` (`proof.md`, `claims.md`, `code/`, `best.*` of SUBJECT only; add a computational subject's artefact with `--subject-file NAME`, which refuses `plan.md`, `runlog.md`, `stuck.md`) | Referee; REPAIR (plus the gate report) |
 | `obstacles/` (`stuck.md`, `verdict.md`, `no_natural_route.md` of named tasks, never proofs) | Triage (2A), Breaker ADVERSARY (2C) |
-| `checker/` | Searchers, Breakers where relevant |
+| `checker/` | Searchers, Breakers where relevant; Referees judging a computational claim, so they can re-score the artefact |
 | earlier results the phase allows | Literature (1L: Phase 1 outputs; 3: everything for the cell) |
-| `record/tasks/<id>/…` (paths preserved so citations resolve) | Scribe REPORT, Auditor |
+| `record/tasks/<id>/…` (paths preserved so citations resolve; an AUDIT task gets the *subject's* snapshot plus the subject's own `brief.md` and `out/`, never a fresh one, so the report's citations resolve against the record it was written from) | Scribe REPORT, Auditor |
 | accepted artefacts + hand-in text | Scribe SUBMISSION |
+| `library/<entry>/` (`ENTRY.md`, `MANIFEST.sha256`, `files/`), chosen with `--lib` | Prover, Searcher, Breaker. Under BLIND: `code` entries with no literature markers only. Never clean-room roles, Triage, Literature, Scribe or Auditor |
 
-BLIND inboxes accept nothing else. ASSUMPTIONS lists only claims that have passed the gate, with each exact statement in `inbox/`.
+BLIND inboxes accept nothing else. ASSUMPTIONS lists only claims that have passed the gate, with each exact statement in `inbox/`. A brief with `--lib` ends with a LIBRARY paragraph telling the worker to copy any library file its code needs into `out/code/`, and to name the entry in `claims.md` for every claim that depends on it. That way referees see the code and auditors can trace the entry.
 
 ## 2. Role-specific brief sections
 
@@ -342,7 +343,7 @@ Keep each entry to one line. CONTRARIAN briefs receive these lines verbatim.
   - `SOLVED` only when every claim the hand-in requires has passed the gate at an established status: `PROVED`, `COMPUTER-VERIFIED`, or `EXHAUSTIVE-WITHIN-CLASS` where the class is the whole space the statement quantifies over.
   - Everything short of that is `PARTIAL`, including a `BEST-FOUND` value in an instant-check cell. Every `PARTIAL` cell has an entry under "Partial cells".
 - **Claim status:** the strongest claim for the cell.
-- **Robustness:** `ROBUST` / `CONTESTED` / `UNSUPPORTED`, or `–` where 2B didn't run.
+- **Robustness:** `ROBUST` / `CONTESTED` / `UNSUPPORTED` / `INCOMPLETE`, or `–` where 2B didn't run.
 
 ## 7. Angle generator and branch lenses
 
@@ -440,15 +441,17 @@ Rows are proofs (task ids), and columns are the Phase 2 verifier and each cross-
 Classification:
 - **ROBUST:** some proof passed the Phase 2 verifier (ACCEPT) and is CONFIRMED (or CONFIRMED-WITH-CAVEATS) by at least three other branches. With fewer than four selected branches, it must be confirmed by every other selected branch. No GAP or REFUTED on that proof.
 - **CONTESTED:** verdicts disagree. List the disputed steps for the humans.
-- **UNSUPPORTED:** no proof confirmed by at least two other branches.
-- **INCOMPLETE** (transient, printed by `pp.py matrix`): no disagreement so far and some proof has two or more confirmations, but verdicts are still pending. It is not ROBUST, so the gate treats it as a GAP.
+- **UNSUPPORTED:** every verdict is in, nothing is contested, and no proof has the confirmations ROBUST needs.
+- **INCOMPLETE** (transient): no disagreement so far, and some proof with no negative verdict still has verdicts pending (its Phase 2 verifier or a kept branch), so it could still become ROBUST. It is not ROBUST, so the gate treats it as a GAP.
+
+Kept branches are those in the latest triage's `selected_branches.txt`, plus any branch re-admitted in 2B-D (from its first 2B task). The gate needs the proof under the gate to be ROBUST itself; a ROBUST cell reached through another proof doesn't count.
 
 ## 13. Gate report (`run/<P>/<cell>/gate/gate_report.md`, written by `pp.py gate`)
 
 ```
 # Gate: <P>-<cell>, proof <task id>, <time>
 Referees: <task id> VERIFY ACCEPT (checklist complete: yes) | <task id> GATE ACCEPT (complete: yes)
-Matrix: ROBUST | CONTESTED | UNSUPPORTED | not run
+Matrix: ROBUST | CONTESTED | UNSUPPORTED | INCOMPLETE | not run; this proof: robust | not robust | not in matrix | n/a
 Statement checked word for word by head: yes | no
 Checklist scores: <G/S items with PASS/FAIL/N/A per referee>
 DECISION: VALID | GAP | INVALID — <rule that decided it>
@@ -484,8 +487,15 @@ Every statement cites an artefact as `tasks/<id>/out/<file>, step <k>`.
 ```
 AUDIT: PASS | FAIL
 CITATIONS CHECKED: <n>
-UNSUPPORTED: <statement — why (missing file / step says otherwise / no citation)>, one per line, or "none"
+UNSUPPORTED: <statement — why (missing file / step says otherwise / no citation / count wrong / RAN line did not reproduce)>, one per line, or "none"
 ```
+
+followed by a table `statement | citation | found? | what the artefact actually says`. The Auditor
+has Bash: it re-runs the report's `RAN` lines from a copy in its own `out/tmp/`, saves each run's
+output under `out/logs/`, and cites the log. A `RAN` line reproduces when the **outputs** match;
+wall-clock drift is not a failure, but a runtime reported as under a limit that in fact exceeds it
+is unsupported. Counts and inventories ("seven tasks", "the only seed is X") are citations too and
+are checked by counting and grepping the record.
 
 ## 16. Status table (printed by the head after every phase; `pp.py status`)
 

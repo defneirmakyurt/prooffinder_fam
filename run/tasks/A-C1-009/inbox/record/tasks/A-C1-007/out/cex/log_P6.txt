@@ -1,0 +1,20 @@
+P6 float N=2: best found S/pi = 0.499999999990, bound = 0.5, excess = -9.635e-12
+P6 float N=3: best found S/pi = 1.000000000000, bound = 1.0, excess = 0.000e+00
+P6 float N=4: best found S/pi = 1.999999999662, bound = 2.0, excess = -3.380e-10
+P6 float N=5: best found S/pi = 3.000000000000, bound = 3.0, excess = 4.441e-16
+P6 float N=6: best found S/pi = 4.499999999464, bound = 4.5, excess = -5.364e-10
+P6 float N=7: best found S/pi = 6.000000000000, bound = 6.0, excess = 1.776e-15
+P6 float N=8: best found S/pi = 7.999999999545, bound = 8.0, excess = -4.548e-10
+P6 float N=9: best found S/pi = 10.000000000000, bound = 10.0, excess = 5.329e-15
+P6 float N=10: best found S/pi = 12.499999998615, bound = 12.5, excess = -1.385e-09
+P6 float N=11: best found S/pi = 15.000000000000, bound = 15.0, excess = 8.882e-15
+P6 float N=12: best found S/pi = 17.999999998405, bound = 18.0, excess = -1.595e-09
+P6 float N=13: best found S/pi = 21.000000000000, bound = 21.0, excess = 1.066e-14
+P6 float N=14: best found S/pi = 24.499999998795, bound = 24.5, excess = -1.205e-09
+P6 float N=15: best found S/pi = 28.000000000000, bound = 28.0, excess = 1.421e-14
+P6 float N=16: best found S/pi = 31.999999998182, bound = 32.0, excess = -1.818e-09
+P6 max excess over bound (float, exploratory) = 1.421e-14
+RESULTS: {'P6': True} ALL OK
+real 4.16
+user 4.07
+sys 0.03

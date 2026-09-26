@@ -1,0 +1,2 @@
+$ cd inbox/record && find tasks/A-C2-007 -type f
+tasks/A-C2-007/brief.md

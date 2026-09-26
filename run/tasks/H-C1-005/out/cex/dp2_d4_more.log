@@ -1,0 +1,42 @@
+=== d=4 cutoff 35 mode=both (exact min) ===
+  level  1: 16 states
+  level  2: 120 states
+  level  3: 352 states
+  level  4: 944 states
+  level  5: 1680 states
+  level  6: 2160 states
+  level  7: 880 states
+  level  8: 416 states
+  level  9: 352 states
+  level 10: 296 states
+  level 11: 240 states
+  level 12: 172 states
+  level 13: 112 states
+  level 14: 56 states
+  level 15: 16 states
+  level 16: 1 states
+  states kept: 7813
+d=4 mode=both -> minimum over ALL 16! labellings = 34
+real 0.69
+user 0.68
+sys 0.00
+=== d=4 cutoff 34 mode=b1 ===
+  level  1: 16 states
+  level  2: 120 states
+  level  3: 656 states
+  level  4: 3156 states
+  level  5: 14064 states
+  level  6: 54344 states
+  level  7: 143728 states
+  level  8: 235784 states
+  level  9: 190080 states
+  level 10: 75184 states
+  level 11: 17968 states
+  level 12: 3328 states
+  level 13: 480 states
+  level 14: 0 states
+  states kept: 738908
+d=4 mode=b1 -> NO labelling of Q_4 has fewer than 34 uphill paths
+real 61.35
+user 59.72
+sys 0.65

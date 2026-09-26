@@ -1,0 +1,8 @@
+P1 step0.5 k(N-k)<=floor(N^2/4): N in 0..120, k in -60..60, failures=0
+P2 B1/0.3 identities: 20000 random rationals, failures=0
+P3 B2 removal identity: 3000 random configs N in 2..9, failures=0
+P4 A2 cut identity: 1500 random pairs, failures=0; A3/A4 S=(1/2)int k(N-k): 1500 random configs N in 0..10, failures=0; bound violations=0
+RESULTS: {'P1': True, 'P2': True, 'P3': True, 'P4': True} ALL OK
+real 0.99
+user 0.92
+sys 0.02

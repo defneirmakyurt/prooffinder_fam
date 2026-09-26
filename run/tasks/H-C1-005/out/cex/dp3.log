@@ -1,0 +1,28 @@
+=== d=3, no pruning at all ===
+  level  1: 8 states
+  level  2: 28 states
+  level  3: 80 states
+  level  4: 196 states
+  level  5: 416 states
+  level  6: 620 states
+  level  7: 352 states
+  level  8: 1 states
+  total states kept: 1701
+d=3 cutoff=None -> exact minimum over ALL 8! labellings = 14
+real 0.02
+user 0.02
+sys 0.00
+=== d=3, cutoff 14 ===
+  level  1: 8 states
+  level  2: 28 states
+  level  3: 80 states
+  level  4: 196 states
+  level  5: 416 states
+  level  6: 500 states
+  level  7: 160 states
+  level  8: 0 states
+  total states kept: 1388
+d=3 cutoff=14 -> NO labelling of Q_3 has fewer than 14 uphill paths
+real 0.02
+user 0.02
+sys 0.00

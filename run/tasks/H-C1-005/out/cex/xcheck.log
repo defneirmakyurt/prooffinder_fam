@@ -1,0 +1,8 @@
+Q3.txt: literal enumeration = 14, provided checker = 14, AGREE
+Q4.txt: literal enumeration = 34, provided checker = 34, AGREE
+d=3 random trials=400 mismatches=0
+d=4 random trials=400 mismatches=0
+d=5 random trials=100 mismatches=0
+real 27.72
+user 17.45
+sys 5.96

@@ -1,0 +1,12 @@
+C: S2 tuples (e1..e_{m-1}, e_{m-1}) exact equality for m=2..8: OK
+C: Step-3 identity cos psi sin(psi+phi) - sin phi == cos(psi+phi) sin psi: True
+D: interval boxes tested 20100 with certified-negative lower bound beyond 1e-25: 200
+A: chains 3200 min slack (bound - sum) -5.1698788e-26  max Q(k) violation 5.1699e-26  max Step1 residual 1.2896e-48  max over chains of min_k t_k 8.4469e-52
+B: m=3 best chain sum found 1.570796326795  bound 1.570796326795  gap 0.000e+00
+B: m=4 best chain sum found 3.141579385053  bound 3.141592653590  gap 1.327e-05
+B: m=5 best chain sum found 4.711743325991  bound 4.712388980385  gap 6.457e-04
+B: m=6 best chain sum found 6.276888611078  bound 6.283185307180  gap 6.297e-03
+
+real	0m27.316s
+user	0m27.048s
+sys	0m0.040s

@@ -1,0 +1,5 @@
+$ cd out/verify/rerun/A-C2-002/out/code && time -p /home/user/bainsahackathon/.venv/bin/python3 sanity_lemma.py   (bash builtin time; /usr/bin/time not installed)
+min of sin(a+b) - sin(a)/cos(b) over 1e6 samples: 3.077760268865859e-12
+real 0.63
+user 0.63
+sys 0.00
