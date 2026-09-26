@@ -3,9 +3,10 @@
 
 Calls from the head (no agent_id) pass untouched. A worker is bound to the
 first run/tasks/<id>/ it touches; after that it may read only that folder
-and write only its out/ (referees: only out/verdict.md). run/ outside the
-task, .claude/ and dryrun/ are always off limits. Bash is checked by
-scanning the command for path-like tokens, which is best effort only.
+and write only its out/ (referees: only out/verdict.md and out/cex/**;
+their Bash writes only into out/cex/). run/ outside the task, .claude/ and
+dryrun/ are always off limits. Bash is checked by scanning the command for
+path-like tokens, which is best effort only.
 """
 import json
 import os
@@ -61,7 +62,7 @@ def bind(agent_id, task):
         fh.write(task)
 
 
-def check(path, write, agent_id, agent_type):
+def check(path, write, agent_id, agent_type, bash=False):
     if any(under(path, r) for r in FORBIDDEN_ROOTS):
         deny(f"{path} is outside your task folder.")
     if not under(path, RUN):
@@ -81,8 +82,9 @@ def check(path, write, agent_id, agent_type):
         out = os.path.join(TASKS, mine, "out")
         if not under(path, out):
             deny(f"you may write only under {out}.")
-        if agent_type == "referee" and path != os.path.join(out, "verdict.md"):
-            deny("a referee writes only out/verdict.md.")
+        cex = os.path.join(out, "cex")
+        if agent_type == "referee" and not (under(path, cex) or (path == os.path.join(out, "verdict.md") and not bash)):
+            deny("a referee writes only out/verdict.md (Write tool) and files under out/cex/.")
 
 
 PATHISH = re.compile(r"(^|/)(run|\.claude|dryrun)/|/(run|\.claude|dryrun)$|^(\.claude|dryrun)$|(^|/)\.\.(/|$)")
@@ -101,21 +103,73 @@ def bash_paths(command):
     return found
 
 
-def referee_writes(command):
-    first = command.split("\n")[0] if "<<" in command else command
-    try:
-        tokens = shlex.split(first, posix=True)
-    except ValueError:
-        tokens = first.split()
-    for i, tok in enumerate(tokens):
-        if tok in ("tee", "cp", "mv", "touch", "mkdir", "dd"):
-            return True
-        m = re.match(r"^\d*>>?(.*)$", tok)
+WRITE_ALL_ARGS = {"tee", "touch", "mkdir", "rm", "rmdir", "mv", "truncate"}
+WRITE_LAST_ARG = {"cp", "ln", "install"}
+PREFIXES = {"time", "env", "nohup", "command", "builtin"}
+REDIRECTS = {">", ">>", ">|", "&>", "&>>"}
+SEPARATORS = {"&&", "||", ";", "|", "&", "(", ")", "|&", ";;"}
+
+
+def strip_heredocs(command):
+    kept, delim = [], None
+    for line in command.split("\n"):
+        if delim is not None:
+            if line.strip() == delim:
+                delim = None
+            continue
+        kept.append(line)
+        m = re.search(r"<<-?\s*['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?", line)
         if m:
-            target = m.group(1) or (tokens[i + 1] if i + 1 < len(tokens) else "")
-            if not (target.startswith("&") or target == "/dev/null"):
-                return True
-    return False
+            delim = m.group(1)
+    return " ; ".join(kept)
+
+
+def bash_write_targets(command):
+    """Paths a Bash command writes to (redirects, tee/cp/mv/touch/mkdir/rm/dd ...), with the cwd each resolves
+    against, following simple 'cd DIR' steps. Code run by an interpreter is not inspected."""
+    try:
+        lex = shlex.shlex(strip_heredocs(command), posix=True, punctuation_chars=True)
+        lex.whitespace_split = True
+        tokens = list(lex)
+    except ValueError:
+        tokens = strip_heredocs(command).split()
+    targets, cwd_steps, segment = [], [], []
+
+    def flush():
+        args = [a for a in segment if not a.startswith("-")]
+        while args and os.path.basename(args[0]) in PREFIXES:
+            args = args[1:]
+        if not args:
+            return
+        cmd, rest = os.path.basename(args[0]), args[1:]
+        if cmd == "cd" and rest:
+            cwd_steps.append(rest[0])
+        elif cmd in WRITE_ALL_ARGS:
+            targets.extend((a, list(cwd_steps)) for a in rest)
+        elif cmd in WRITE_LAST_ARG and rest:
+            targets.append((rest[-1], list(cwd_steps)))
+        elif cmd == "dd":
+            targets.extend((a[3:], list(cwd_steps)) for a in rest if a.startswith("of="))
+
+    i = 0
+    while i < len(tokens):
+        tok = tokens[i]
+        if tok in REDIRECTS:
+            if i + 1 < len(tokens) and tokens[i + 1] != "/dev/null":
+                targets.append((tokens[i + 1], list(cwd_steps)))
+            i += 2
+            continue
+        if tok in (">&", "<", "<<", "<<<", "<&"):
+            i += 2
+            continue
+        if tok in SEPARATORS:
+            flush()
+            segment = []
+        else:
+            segment.append(tok)
+        i += 1
+    flush()
+    return targets
 
 
 def main():
@@ -142,8 +196,12 @@ def main():
         check(root, False, agent_id, agent_type)
     elif tool == "Bash":
         cmd = ti.get("command", "")
-        if agent_type == "referee" and referee_writes(cmd):
-            deny("a referee may run checks but not write files from Bash; write only out/verdict.md.")
+        if agent_type == "referee":
+            for target, steps in bash_write_targets(cmd):
+                base = cwd
+                for step in steps:
+                    base = resolve(step, base)
+                check(resolve(target, base), True, agent_id, agent_type, bash=True)
         if under(RUN, resolve(cwd, PROJECT)):
             if re.search(r"\b(find|grep\s+-[a-zA-Z]*[rR]|rg|tree|ls\s+-[a-zA-Z]*R|du)\b", cmd) and not bash_paths(cmd):
                 deny("recursive listing/search from the project root or run/ is not allowed; cd into your task folder first.")

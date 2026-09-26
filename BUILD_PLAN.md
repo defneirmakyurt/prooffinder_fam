@@ -93,9 +93,9 @@ Working rules from the user's global instructions:
 
 ### B2. `scripts/guard.py`
 
-- [ ] The referee may write `out/verdict.md` **and** `out/cex/**`; its Bash redirects into `out/cex/` are allowed.
-- [ ] The new agent types need no special case. Literature, triage and auditor write only under `out/`.
-- **Acceptance:** re-run the 15 original cases plus the new cex cases.
+- [x] The referee may write `out/verdict.md` **and** `out/cex/**`; its Bash redirects into `out/cex/` are allowed.
+- [x] The new agent types need no special case. Literature, triage and auditor write only under `out/`.
+- **Acceptance:** re-run the 15 original cases plus the new cex cases. (The original 15 were never saved; a rebuilt 15-case baseline plus 19 cex/Bash-write cases pass.)
 
 ### B3. Agents (locked cores; humans have authorised this build)
 
