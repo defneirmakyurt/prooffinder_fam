@@ -410,26 +410,26 @@ def telemetry_library_tests():
     check(prover["lessons"]["role"] != "-" and prover["lessons"]["problem"] != "-", "task record has lessons versions")
     check(any(r["event"] == "gate" for r in recs), "pp.py gate writes a gate record")
 
-    pp("open", "A", "C9")
-    c9 = os.path.join(S, "run", "A", "C9")
-    write(os.path.join(c9, "target.md"), "t\n")
-    tp = last_task(pp("task", "A", "C9", "--phase", "1", "--role", "prover", *STOP))
+    pp("open", "A", "C11")
+    c11 = os.path.join(S, "run", "A", "C11")
+    write(os.path.join(c11, "target.md"), "t\n")
+    tp = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "prover", *STOP))
     fake_proof(tp)
-    ra = last_task(pp("task", "A", "C9", "--phase", "2", "--subject", tp, *STOP))
-    rb = last_task(pp("task", "A", "C9", "--phase", "GATE", "--subject", tp, *STOP))
+    ra = last_task(pp("task", "A", "C11", "--phase", "2", "--subject", tp, *STOP))
+    rb = last_task(pp("task", "A", "C11", "--phase", "GATE", "--subject", tp, *STOP))
     verdict(ra, "ACCEPT")
     verdict(rb, "ACCEPT")
     pp("done", tp, "--tokens", "42000", "--ms", "600000", "--tool-uses", "12")
     pp("done", ra, "--tokens", "8000")
-    pp("done", "A-C9-999", ok=False, label="done on a task that does not exist")
-    check("DECISION: VALID" in pp("gate", "A", "C9", "--subject", tp, "--statement-checked"), "C9 gate VALID")
-    tbk = last_task(pp("task", "A", "C9", "--phase", "2C", "--obstacles", tp, *STOP))
+    pp("done", "A-C11-999", ok=False, label="done on a task that does not exist")
+    check("DECISION: VALID" in pp("gate", "A", "C11", "--subject", tp, "--statement-checked"), "C11 gate VALID")
+    tbk = last_task(pp("task", "A", "C11", "--phase", "2C", "--obstacles", tp, *STOP))
     write(T(tbk, "out", "verdict.md"), "STUCK\nno route beyond step 2\n")
     pp("done", tbk)
-    ts = last_task(pp("task", "A", "C9", "--phase", "1", "--role", "searcher", *STOP))
+    ts = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "searcher", *STOP))
     write(T(ts, "out", "best.txt"), "1 2 3\n")
     pp("done", ts, "--score", "17")
-    pp("pin", "A", "C9", T(ts, "out", "best.txt"))
+    pp("pin", "A", "C11", T(ts, "out", "best.txt"))
     out = pp("telemetry", "--tasks")
     row = lambda t: next((l for l in out.splitlines() if l.startswith(f"| {t} |")), "")
     check("| yes |" in row(tp) and "proof.md" in row(tp) and "| 42000 | 10.0 |" in row(tp),
@@ -446,16 +446,16 @@ def telemetry_library_tests():
     pp("telemetry", "--by", "colour", ok=False, label="unknown group key rejected")
 
     print("\n== technique library: admission, inbox rules, blindness")
-    accepted = os.path.join(c9, "accepted")
-    write(os.path.join(c9, "checker", "exact.py"), "from fractions import Fraction\n")
-    write(os.path.join(c9, "checker", "notes.py"), "# idea from arXiv:1234.5678\n")
+    accepted = os.path.join(c11, "accepted")
+    write(os.path.join(c11, "checker", "exact.py"), "from fractions import Fraction\n")
+    write(os.path.join(c11, "checker", "notes.py"), "# idea from arXiv:1234.5678\n")
     pp("lib", "add", "raw", T(ts, "out", "best.txt"), "--kind", "code", "--what", "w", "--evidence", "e", ok=False,
        label="lib add refuses a task's raw out/ (not verified)")
-    pp("lib", "add", "lem", os.path.join(c9, "checker", "exact.py"), "--kind", "lemma", "--what", "w", "--evidence", "e",
+    pp("lib", "add", "lem", os.path.join(c11, "checker", "exact.py"), "--kind", "lemma", "--what", "w", "--evidence", "e",
        ok=False, label="lib add refuses a lemma from checker/")
     pp("lib", "add", "Bad_Name", os.path.join(accepted, "best.txt"), "--kind", "code", "--what", "w", "--evidence", "e",
        ok=False, label="lib add refuses a non-slug name")
-    pp("lib", "add", "exact", os.path.join(c9, "checker", "exact.py"), os.path.join(accepted, "best.txt"),
+    pp("lib", "add", "exact", os.path.join(c11, "checker", "exact.py"), os.path.join(accepted, "best.txt"),
        "--kind", "code", "--what", "exact rational helpers", "--evidence", "crosstest 200/200")
     entry = os.path.join(S, "run", "library", "A-exact")
     check(os.path.isfile(os.path.join(entry, "files", "exact.py")) and "KIND: code" in open(os.path.join(entry, "ENTRY.md")).read()
@@ -465,22 +465,22 @@ def telemetry_library_tests():
        ok=False, label="lib add refuses a duplicate entry")
     write(os.path.join(accepted, "lemma.md"), "Lemma. x <= y.\nProof. ...\n")
     pp("lib", "add", "lemma1", os.path.join(accepted, "lemma.md"), "--kind", "lemma", "--what", "x<=y", "--evidence", "gate VALID")
-    pp("lib", "add", "litcode", os.path.join(c9, "checker", "notes.py"), "--kind", "code", "--what", "w", "--evidence", "e")
+    pp("lib", "add", "litcode", os.path.join(c11, "checker", "notes.py"), "--kind", "code", "--what", "w", "--evidence", "e")
 
-    tl = last_task(pp("task", "A", "C9", "--phase", "1", "--role", "searcher", "--lib", "A-exact", *STOP))
+    tl = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "searcher", "--lib", "A-exact", *STOP))
     check(os.path.isfile(T(tl, "inbox", "library", "A-exact", "files", "exact.py")), "BLIND searcher gets library code")
     brief = open(T(tl, "brief.md")).read()
     check("LIBRARY: inbox/library/" in brief and "library/A-exact" in brief, "brief has LIBRARY note and INBOX entry")
-    pp("task", "A", "C9", "--phase", "1", "--role", "prover", "--lib", "A-lemma1", *STOP, ok=False,
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-lemma1", *STOP, ok=False,
        label="BLIND refuses a library lemma")
-    pp("task", "A", "C9", "--phase", "1", "--role", "prover", "--lib", "A-litcode", *STOP, ok=False,
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-litcode", *STOP, ok=False,
        label="BLIND refuses library code with literature markers")
-    pp("task", "A", "C9", "--phase", "WAVE", "--role", "prover", "--regime", "FRESH", "--angle", "x",
+    pp("task", "A", "C11", "--phase", "WAVE", "--role", "prover", "--regime", "FRESH", "--angle", "x",
        "--lib", "A-lemma1", "--lib", "A-litcode", *STOP, label="FRESH prover may take a lemma and marked code")
-    pp("task", "A", "C9", "--phase", "2", "--subject", tp, "--lib", "A-exact", *STOP, ok=False,
+    pp("task", "A", "C11", "--phase", "2", "--subject", tp, "--lib", "A-exact", *STOP, ok=False,
        label="referee (clean-room) refuses --lib")
-    pp("task", "A", "C9", "--phase", "0", "--lib", "A-exact", *STOP, ok=False, label="checker-builder refuses --lib")
-    pp("task", "A", "C9", "--phase", "1", "--role", "prover", "--lib", "A-nothing", *STOP, ok=False,
+    pp("task", "A", "C11", "--phase", "0", "--lib", "A-exact", *STOP, ok=False, label="checker-builder refuses --lib")
+    pp("task", "A", "C11", "--phase", "1", "--role", "prover", "--lib", "A-nothing", *STOP, ok=False,
        label="unknown library entry")
     check("A-exact" in pp("telemetry", "--by", "lib"), "telemetry groups by library entry")
     check("| A-exact | code | exact rational helpers | crosstest 200/200 | here |" in pp("lib", "list"), "lib list (local)")
