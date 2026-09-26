@@ -1,0 +1,4 @@
+tried 33000 admissible 20114 violations 0 min slack -2.193612885e-59 at m 3
+S2 equality tuple: chain sum == (m-2)pi/2 for m=2..11 (to 1e-50)
+Step3 random 200000 pts, failures: 0
+Step4 Schur-complement check, instances: 6738 failures: 0

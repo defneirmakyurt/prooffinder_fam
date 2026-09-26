@@ -1,0 +1,30 @@
+$ cd out/tmp/A-C2-006 && time -p /home/user/bainsahackathon/.venv/bin/python3 search.py
+Step5 identity simplifies to 0: True
+m=2: 3000 exact admissible chains checked
+m=3: 3000 exact admissible chains checked
+m=4: 2976 exact admissible chains checked
+m=5: 2964 exact admissible chains checked
+m=6: 2940 exact admissible chains checked
+m=7: 2933 exact admissible chains checked
+m=8: 2909 exact admissible chains checked
+m=9: 2890 exact admissible chains checked
+m=10: 2870 exact admissible chains checked
+m=11: 2846 exact admissible chains checked
+m=12: 2848 exact admissible chains checked
+total 32176 certified violations: 0 min slack (float of ball midpoint): 0.0 at m= 3
+S2 tuple m=2: theta-sum - (m-2)pi/2 = 0
+S2 tuple m=3: theta-sum - (m-2)pi/2 = [+/- 1.73e-77]
+S2 tuple m=4: theta-sum - (m-2)pi/2 = [+/- 3.46e-77]
+S2 tuple m=5: theta-sum - (m-2)pi/2 = [+/- 1.90e-76]
+S2 tuple m=6: theta-sum - (m-2)pi/2 = [+/- 2.77e-76]
+S2 tuple m=7: theta-sum - (m-2)pi/2 = [+/- 4.32e-76]
+S2 tuple m=8: theta-sum - (m-2)pi/2 = [+/- 7.26e-76]
+S2 tuple m=9: theta-sum - (m-2)pi/2 = [+/- 8.81e-76]
+S2 tuple m=10: theta-sum - (m-2)pi/2 = [+/- 1.04e-75]
+S2 tuple m=11: theta-sum - (m-2)pi/2 = [+/- 1.33e-75]
+Step 4 reduction: 1335 explicit chains, float max residual: 1.1345773209825438e-09
+Float local search: min of A - pi/2 over m=3..8: -4.729550084903167e-14
+real 4.38
+user 4.30
+sys 0.03
+exit 0

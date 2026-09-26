@@ -1,0 +1,6 @@
+D: interval boxes tested 19900 with certified-negative lower bound beyond 1e-25: 0
+A: chains 3200 min slack (bound - sum) -3.7798601e-51  max Q(k) violation 6.9299e-100  max Step1 residual 2.9289e-99  max over chains of min_k t_k 4.5382e-102
+
+real	0m21.637s
+user	0m21.435s
+sys	0m0.009s

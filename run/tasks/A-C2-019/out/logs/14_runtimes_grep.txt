@@ -1,0 +1,89 @@
+# runtimes recorded anywhere in the record (excluding A-C2-018)
+./A-C2-016/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-016/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-016/out/cex/log.txt:4:real 5.601898483
+./A-C2-016/out/verdict.md:23:RAN: python3 out/cex/search.py, 200000 trials (85820 admissible), m=3..12, COMPLETED, 5.6 s wall (date-based timer)
+./A-C2-013/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-013/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-013/out/cex/log_search.txt:6:real	0m1.976s
+./A-C2-013/out/cex/log_search.txt:7:user	0m1.959s
+./A-C2-013/out/cex/log_search.txt:8:sys	0m0.008s
+./A-C2-013/out/cex/log_subject_sanity.txt:3:real	0m0.766s
+./A-C2-013/out/cex/log_subject_sanity.txt:4:user	0m0.764s
+./A-C2-013/out/cex/log_subject_sanity.txt:5:sys	0m0.000s
+./A-C2-013/out/cex/log_lemma_opt.txt:10:real	0m3.002s
+./A-C2-013/out/cex/log_lemma_opt.txt:11:user	0m2.927s
+./A-C2-013/out/cex/log_lemma_opt.txt:12:sys	0m0.044s
+./A-C2-013/out/verdict.md:47:- G7 PASS: no computation is load-bearing. The included float script is labelled non-load-bearing; I reran it (min 3.08e-12 > 0, 0.77 s).
+./A-C2-013/out/verdict.md:67:- `out/cex/search.py 7`: m = 2..9, 11200 exact instances, COMPLETED, real 1.98 s.
+./A-C2-013/out/verdict.md:68:- `out/cex/lemma_and_opt.py`: sympy identity plus float hill-climb for m = 2..7 (30 restarts x 400 iterations), COMPLETED, real 3.00 s.
+./A-C2-013/out/verdict.md:69:- `inbox/subject/code/sanity_lemma.py`: 1e6 float samples, COMPLETED, real 0.77 s (output in `out/cex/log_subject_sanity.txt`).
+./A-C2-017/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-012/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-012/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-012/out/cex/log.txt:29:real	0m2.377s
+./A-C2-012/out/cex/log.txt:30:user	0m2.365s
+./A-C2-012/out/cex/log.txt:31:sys	0m0.000s
+./A-C2-012/out/verdict.md:9:RAN: sanity_lemma.py (subject, 1e6 float samples) COMPLETED 0.63 s; out/cex/gram_search.py (m=3..12, 4000 draws each; m=2..8 equality; 1330 lemma pairs) COMPLETED 2.38 s
+./A-C2-012/out/verdict.md:65:- **Subject `sanity_lemma.py`** (venv python). Minimum margin 3.08e-12 over 1e6 samples. 0.63 s, COMPLETED.
+./A-C2-012/out/verdict.md:69:- Part A/B/C/D together took 2.38 s, COMPLETED. Full log is in `out/cex/log.txt`.
+./A-C2-009/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-009/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-009/out/cex/sanity_gs_log.txt:4:real	0m5.932s
+./A-C2-009/out/cex/sanity_gs_log.txt:5:user	0m5.865s
+./A-C2-009/out/cex/sanity_gs_log.txt:6:sys	0m0.004s
+./A-C2-009/out/cex/log.txt:10:real	0m27.316s
+./A-C2-009/out/cex/log.txt:11:user	0m27.048s
+./A-C2-009/out/cex/log.txt:12:sys	0m0.040s
+./A-C2-009/out/cex/log_hiprec.txt:4:real	0m21.637s
+./A-C2-009/out/cex/log_hiprec.txt:5:user	0m21.435s
+./A-C2-009/out/cex/log_hiprec.txt:6:sys	0m0.009s
+./A-C2-009/out/verdict.md:90:- inbox/subject/code/sanity_gs.py, m = 2..11 × 3000 chains + 401×401 grid: COMPLETED, 5.93 s real.
+./A-C2-009/out/verdict.md:91:- out/cex/search.py, parts A (m = 2..9, 3200 chains, 50 digits), B (m = 3..6), C (m = 2..8), D (200×200 boxes including 200 off-domain): COMPLETED, 27.3 s real.
+./A-C2-009/out/verdict.md:92:- out/cex/search_hiprec.py, parts D (19,900 in-domain boxes) and A (m = 2..9, 3200 chains, 100 digits): COMPLETED, 21.6 s real.
+./A-C2-008/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-015/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-015/brief.md:29:Fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+./A-C2-015/out/cex_search/runtime.txt:1:wall 469.250737958 s
+./A-C2-015/out/tested.md:2:Script: out/cex_search/search.py (stdlib only), log out/cex_search/log.txt, stdout.txt, wall time in runtime.txt (469 s).
+./A-C2-011/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-011/brief.md:32:exact or interval arithmetic, runtime < 10 min.
+./A-C2-011/brief.md:33:If you executed code, fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+./A-C2-010/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-010/brief.md:32:exact or interval arithmetic, runtime < 10 min.
+./A-C2-010/brief.md:33:If you executed code, fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+./A-C2-003/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-002/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-002/brief.md:32:exact or interval arithmetic, runtime < 10 min.
+./A-C2-002/brief.md:33:If you executed code, fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+./A-C2-002/out/code/README.md:3:Run: /home/user/bainsahackathon/.venv/bin/python3 sanity_lemma.py   (stdlib only; ~0.7 s)
+./A-C2-004/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-004/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-004/out/cex/check_log.txt:9:real	0m26.080s
+./A-C2-004/out/cex/check_log.txt:10:user	0m25.821s
+./A-C2-004/out/cex/check_log.txt:11:sys	0m0.040s
+./A-C2-004/out/cex/sanity_rerun_log.txt:3:real	0m1.153s
+./A-C2-004/out/cex/sanity_rerun_log.txt:4:user	0m1.141s
+./A-C2-004/out/cex/sanity_rerun_log.txt:5:sys	0m0.004s
+./A-C2-004/out/verdict.md:40:- Included sanity.py (float, exploratory, not load-bearing): rerun, min -2.2e-16 (rounding at equality), 1.15 s. Log: out/cex/sanity_rerun_log.txt.
+./A-C2-006/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-006/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-006/out/verdict.md:49:- Subject script `subject/code/sanity_lemma.py`: ran, min of sin(a+b) - sin a/cos b is 3.08e-12 >= 0 over 1e6 float samples, in 0.635 s real. It is floating point but explicitly non-load-bear
+./A-C2-006/out/verdict.md:68:- subject/code/sanity_lemma.py, 1e6 float samples, COMPLETED, 0.635 s real
+./A-C2-006/out/verdict.md:69:- out/cex/search.py: sympy identity; exact/arb chains m=2..12 (32176); S2 tuple m=2..11; Step-4 float check m=3..9; float local search m=3..8. COMPLETED, 3.863 s real
+./A-C2-007/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-001/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-001/brief.md:32:exact or interval arithmetic, runtime < 10 min.
+./A-C2-001/brief.md:33:If you executed code, fill in RAN exactly: what ran, parameter range, COMPLETED / TIMED OUT / PARTIAL, measured runtime.
+./A-C2-001/out/code/README.md:3:Run: python3 sanity.py (stdlib only, ~1 s).
+./A-C2-005/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-005/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-005/out/verdict.md:44:- The subject script inbox/subject/code/sanity_lemma.py ran in 0.65 s. It reported min of sin(a+b) - sin a/cos b = 3.08e-12 >= 0. It uses floating point but is not load-bearing.
+./A-C2-005/out/verdict.md:66:- inbox/subject/code/sanity_lemma.py, 1e6 float samples: COMPLETED, 0.65 s real.
+./A-C2-005/out/verdict.md:67:- out/cex/search.py (sympy identity check; 2800 random chains, m=2..8; local search m=3..6; equality tuple and R^m trap, m=2..8): COMPLETED, 14.7 s real.
+./A-C2-014/brief.md:14:RULES: any computation must be exact or interval arithmetic, code included, runtime < 10 min; state exactly what is established
+./A-C2-014/brief.md:28:3. Numerical sanity on random and extremal instances; run the code, record runtime; flag floating point inside a proof.
+./A-C2-014/out/cex/time.txt:2:real	0m15.518s
+./A-C2-014/out/cex/time.txt:3:user	0m15.309s
+./A-C2-014/out/cex/time.txt:4:sys	0m0.004s
+./A-C2-014/out/verdict.md:38:Script: out/cex/search.py, log out/cex/log.txt, runtime out/cex/time.txt (real 15.5 s).
