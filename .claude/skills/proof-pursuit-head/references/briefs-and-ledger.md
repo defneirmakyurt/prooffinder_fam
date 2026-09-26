@@ -52,6 +52,7 @@ Inbox contents set by phase (`pp.py` enforces them):
 | Inbox item | Who gets it |
 |---|---|
 | `role-lessons.md` | everyone |
+| `statement.md` (verbatim problem text), `target.md` (the cell's target) | everyone |
 | `problem-lessons.md` | everyone except Referee, Checker-builder, Auditor |
 | `checklist-G.md` | everyone except Checker-builder |
 | `checklist-S.md` | Referee only (VERIFY, GATE, CROSS) |
@@ -440,6 +441,7 @@ Classification:
 - **ROBUST:** some proof passed the Phase 2 verifier (ACCEPT) and is CONFIRMED (or CONFIRMED-WITH-CAVEATS) by at least three other branches. With fewer than four selected branches, it must be confirmed by every other selected branch. No GAP or REFUTED on that proof.
 - **CONTESTED:** verdicts disagree. List the disputed steps for the humans.
 - **UNSUPPORTED:** no proof confirmed by at least two other branches.
+- **INCOMPLETE** (transient, printed by `pp.py matrix`): no disagreement so far and some proof has two or more confirmations, but verdicts are still pending. It is not ROBUST, so the gate treats it as a GAP.
 
 ## 13. Gate report (`run/<P>/<cell>/gate/gate_report.md`, written by `pp.py gate`)
 

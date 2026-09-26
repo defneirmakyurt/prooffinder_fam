@@ -49,7 +49,7 @@ Working rules from the user's global instructions:
 
 ### B1. `scripts/pp.py`: phase machinery
 
-- [ ] **`ROLES` and regimes**, matching the head skill:
+- [x] **`ROLES` and regimes**, matching the head skill:
 
   | Role | Regimes |
   |---|---|
@@ -61,32 +61,32 @@ Working rules from the user's global instructions:
   | scribe, auditor | RECORD |
 
   Remove `scout`, and add `auditor` to `ROLE_LESSONS_ONLY`.
-- [ ] **`task --phase {0,1,1L,2,2A,2B,2B-XV,2C,3,GATE,REPAIR,WAVE,5,AUDIT}`** sets the role, regime and mode from a table.
+- [x] **`task --phase {0,1,1L,2,2A,2B,2B-XV,2C,3,GATE,REPAIR,WAVE,5,AUDIT}`** sets the role, regime and mode from a table.
   - Also accepts `--mode` (VERIFY / GATE / CROSS / SOLVE / ANALYST / ADVERSARY / BRANCH / SUBMISSION / REPORT), `--branch`, `--subject TASK`, `--obstacles TASK…`, `--earlier TASK…` and `--record`.
   - The brief header gains the lines `PHASE / MODE / BRANCH` and `SUBJECT`.
-- [ ] **Brief blocks:**
+- [x] **Brief blocks:**
   - `reference_block()` appends the `**Role: MODE**` block after `**Role**`;
   - regime additions include BLIND;
   - a BRANCH lens pulls its text from reference §7 plus `--branch-note`.
-- [ ] **Inbox rules** (reference §1 table):
+- [x] **Inbox rules** (reference §1 table):
   - `checklist.md` is split into `checklist-G.md` (everyone except checker-builder) and `checklist-S.md` (referee only);
   - BLIND inboxes reject everything except obstacles (`stuck.md`, `verdict.md`, `no_natural_route.md`) and `checker/`;
   - `--subject` copies only `proof.md`, `claims.md` and `code/`;
   - `--record` copies `run/tasks/<P>-<cell>-*/` into `inbox/record/tasks/…` with paths preserved.
-- [ ] **`phases.md`:** append a row per task (reference §10).
-- [ ] **`open`:** also writes the `checklist.md` template (reference §9) and `phases.md` header.
-- [ ] **Board:** new columns `Phase` and `Robustness`, the 5 cell statuses, and a `contested` note section. Regenerate `run/board.md`.
-- [ ] **`matrix P CELL`:** reads the selected branches from the latest 2A task's `out/selected_branches.txt`, proofs from the output folders, and verdicts from `out/verdict.md` (`VERDICT:` / `CROSS VERDICT:` lines). Writes `matrix.md` and classifies it per reference §12.
-- [ ] **`gate P CELL --subject TASK [--statement-checked]`:**
+- [x] **`phases.md`:** append a row per task (reference §10).
+- [x] **`open`:** also writes the `checklist.md` template (reference §9) and `phases.md` header.
+- [x] **Board:** new columns `Phase` and `Robustness`, the 5 cell statuses, and a `contested` note section. Regenerate `run/board.md`.
+- [x] **`matrix P CELL`:** reads the selected branches from the latest 2A task's `out/selected_branches.txt`, proofs from the output folders, and verdicts from `out/verdict.md` (`VERDICT:` / `CROSS VERDICT:` lines). Writes `matrix.md` and classifies it per reference §12.
+- [x] **`gate P CELL --subject TASK [--statement-checked]`:**
   - finds the VERIFY/GATE referees on that subject;
   - checks that each ACCEPT has a complete checklist (every G/S item answered, no FAIL);
   - reads the matrix class if 2B ran;
   - writes `gate/gate_report.md` (reference §13) and prints VALID / GAP / INVALID.
-- [ ] **`status P`:** the per-phase table (reference §16).
-- [ ] **`blindcheck TASK`:** grep the blind outputs for arXiv, doi, http, "et al.", author-year patterns and "conjecture of"; print the hits.
-- [ ] **`finalize P CELL --report TASK --audit TASK`:** copy `final_report.md` only if the audit says `AUDIT: PASS`.
-- [ ] **`summary --branches b1 b2 …`:** merge the SUMMARY rows from each branch via `git show <branch>:run/SUMMARY.md`.
-- [ ] **`report`:** add the Robustness column, the new statuses, and the top 3 cells for human attention (CONTESTED or counterexample first, then PARTIAL by points).
+- [x] **`status P`:** the per-phase table (reference §16).
+- [x] **`blindcheck TASK`:** grep the blind outputs for arXiv, doi, http, "et al.", author-year patterns and "conjecture of"; print the hits.
+- [x] **`finalize P CELL --report TASK --audit TASK`:** copy `final_report.md` only if the audit says `AUDIT: PASS`.
+- [x] **`summary --branches b1 b2 …`:** merge the SUMMARY rows from each branch via `git show <branch>:run/SUMMARY.md`.
+- [x] **`report`:** add the Robustness column, the new statuses, and the top 3 cells for human attention (CONTESTED or counterexample first, then PARTIAL by points).
 - **Acceptance:**
   - scratch-copy tests for every phase: a brief is generated, the inbox rules are enforced, and forbidden inputs are rejected;
   - matrix and gate tested on synthetic verdict files covering ROBUST / CONTESTED / UNSUPPORTED and VALID / GAP / INVALID.

@@ -322,7 +322,7 @@ run/
   <P>/<cell>/checklist.md          # Part G + Part S (you write it, without solving)
   <P>/<cell>/phases.md             # pp.py task: task → phase, role, regime, branch, subject
   <P>/<cell>/matrix.md             # pp.py matrix: agreement matrix + classification
-  <P>/<cell>/gate/gate_report.md   # pp.py gate
+  <P>/<cell>/gate/gate_report.md   # pp.py gate (latest); gate/<task-id>.md keeps each proof's report for repairs
   <P>/<cell>/final_report.md       # pp.py finalize, after an audit PASS
   <P>/<cell>/checker/              # accepted checker(s) + cross-test log
   <P>/<cell>/lineages/<tag>/       # best/, critique.md, deadends.md
