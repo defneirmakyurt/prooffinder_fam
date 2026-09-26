@@ -1,0 +1,288 @@
+# Submission: Problem B (Bulgarian solitaire), Cell C1: Cyclic Partitions and Cycles
+
+**Cell status:** SOLVED
+**Claim status:** PROVED
+
+Hand-in format required by the cell: a written proof (LaTeX), stating clearly what is established. The LaTeX
+hand-in is `submission.tex` (compiled with latexmk/pdfTeX, TeX Live 2026: 11 pages, exit status 0, no warnings).
+This Markdown file carries the same content.
+
+## 1. Statement
+
+Definitions (verbatim from the official problem statement):
+
+A *partition* of a positive integer \(n\) is a weakly decreasing sequence \(\lambda=(\lambda_1,\ldots,\lambda_s)\)
+of positive integers with \(\lambda_1+\cdots+\lambda_s=n\). Think of it as a division of \(n\) cards into \(s\) piles.
+
+The *shift* \(B(\lambda)\) is the partition of \(n\) obtained as follows: remove one card from every pile, discard
+the piles that become empty, and add one new pile consisting of the \(s\) removed cards. Formally, \(B(\lambda)\) is
+the partition whose parts are the positive numbers among \(\lambda_1-1,\;\ldots,\;\lambda_s-1\) together with one
+extra part equal to \(s\).
+
+Call \(\lambda\) *cyclic* if \(B^i(\lambda)=\lambda\) for some \(i\ge 1\).
+
+Write \(T_k=\frac{k(k+1)}{2}\), \(\delta_k=(k,k-1,\ldots,2,1)\), the partition of \(T_k\) into distinct parts. Every
+\(n\ge 1\) satisfies \(T_{k-1}<n\le T_k\) for exactly one \(k\), which we call the *rank* of \(n\).
+
+**C1: Cyclic Partitions and Cycles (verbatim).** First, the long-run behaviour: which partitions repeat under the
+shift, and how they fall into cycles. Let \(n=T_k\). Prove that for every partition \(\lambda\) of \(n\) there is an
+\(i\) with \(B^i(\lambda)=\delta_k\), and that \(\delta_k\) is the only cyclic partition of \(n\). Then let \(n\) be
+arbitrary of rank \(k\), say \(n=T_{k-1}+r\) with \(1\le r\le k\): determine all cyclic partitions of \(n\), and
+determine the number of distinct cycles of \(B\) on the partitions of \(n\). Prove both.
+
+Exact targets (as fixed in the team's target file, all for every \(k\ge1\)):
+
+- (i) For every \(k\ge1\) and \(n=T_k\): for every partition \(\lambda\) of \(n\) there is an \(i\ge0\) with
+  \(B^i(\lambda)=\delta_k\); and \(\delta_k\) is the only cyclic partition of \(n\).
+- (ii) For every \(k\ge1\) and every \(r\) with \(1\le r\le k\), \(n=T_{k-1}+r\):
+  (a) give an explicit description (as functions of \(k\) and \(r\)) of the set of ALL cyclic partitions of \(n\),
+  and prove that a partition of \(n\) is cyclic if and only if it lies in that set;
+  (b) give the exact number of distinct cycles of \(B\) on the partitions of \(n\) (as a formula in \(k\) and \(r\)),
+  and prove it.
+
+## 2. Status
+
+- Cell status: **SOLVED**
+- Claim status: **PROVED**
+- Established: (i), (ii)(a), (ii)(b) for all \(k\ge1\), \(1\le r\le k\) (claims R1 to R11 of
+  `submission/claims.md`, each PROVED).
+
+## 3. Answer
+
+Let \(k\ge1\), \(1\le r\le k\), \(n=T_{k-1}+r\).
+
+- (ii)(a) A partition of \(n\) is cyclic iff it equals
+  \(\lambda(\varepsilon)=(k-1+\varepsilon_1,\,k-2+\varepsilon_2,\,\ldots,\,1+\varepsilon_{k-1},\,\varepsilon_k)\)
+  (last entry deleted when it is 0) for some \(\varepsilon\in\{0,1\}^k\) with \(\varepsilon_1+\cdots+\varepsilon_k=r\);
+  equivalently, its Young diagram is the staircase \(\delta_{k-1}\) plus exactly \(r\) of the \(k\) cells of the
+  \(k\)-th diagonal. There are \(\binom kr\) of them, and
+  \(B(\lambda(\varepsilon))=\lambda(\varepsilon_k,\varepsilon_1,\ldots,\varepsilon_{k-1})\).
+- (ii)(b) Number of distinct cycles:
+  \(N(k,r)=\frac1k\sum_{d\mid\gcd(k,r)}\varphi(d)\binom{k/d}{r/d}\).
+- (i) (\(r=k\), \(n=T_k\)) \(\delta_k\) is the only cyclic partition of \(T_k\), and every partition of \(T_k\)
+  reaches \(\delta_k\) after some \(i\ge0\) shifts.
+
+## 4. Cited vs. ours
+
+**Cited (standard results used by name in the proof):**
+- Pigeonhole principle (step 1.2).
+- Chinese remainder theorem for the coprime moduli \(d\), \(d+1\) (proof of Lemma 6).
+- Orbit-counting lemma (Burnside's lemma), step 10.2; the proof includes a short derivation of it from the
+  orbit–stabiliser theorem, which is used without proof.
+- Euler's totient function \(\varphi\) (convention 0.1); the identity \(\sum_{d\mid k}\varphi(d)=k\) used in the check
+  after 10.4 is justified there by partitioning \(\{1,\ldots,k\}\) by \(\gcd(\cdot,k)\).
+
+The accepted artefacts give no bibliographic references for these standard facts, and none are added here. The
+accepted artefacts cite no literature on Bulgarian solitaire, and no literature search is part of the material
+this document was prepared from; no claim is made either way about whether these results appear in the literature.
+
+**Ours (the team's accepted artefacts):**
+- The written proof (Section 5 below; byte-identical original in `submission/proof.md`), establishing claims
+  R1 to R11 (`submission/claims.md`), all PROVED.
+- The sanity-check script `submission/code/check_c1.py` (stdlib only, exact integer arithmetic), brute-force
+  agreement for all \(1\le n\le45\). Not load-bearing.
+
+## 5. Proof
+
+The proof below is the accepted `proof.md`, reproduced verbatim except for one editorial path fix in its last
+paragraph (`out/code/check_c1.py` changed to `code/check_c1.py`, the script's location in this submission). The
+unmodified original ships as `submission/proof.md`.
+
+---
+
+**Statement proved.** For every $k\ge 1$ and every $1\le r\le k$, with $n=T_{k-1}+r$: a partition of $n$ is cyclic if and only if it equals $\lambda(\varepsilon):=(k-1+\varepsilon_1,\,k-2+\varepsilon_2,\,\ldots,\,1+\varepsilon_{k-1},\,\varepsilon_k)$ (last entry deleted when it is $0$) for some $\varepsilon\in\{0,1\}^k$ with $\varepsilon_1+\cdots+\varepsilon_k=r$; $B$ acts on these by $B(\lambda(\varepsilon))=\lambda(\varepsilon_k,\varepsilon_1,\ldots,\varepsilon_{k-1})$; the number of distinct cycles of $B$ on the partitions of $n$ is $N(k,r)=\frac1k\sum_{d\mid\gcd(k,r)}\varphi(d)\binom{k/d}{r/d}$. In particular (case $r=k$, $n=T_k$) $\delta_k$ is the only cyclic partition of $T_k$ and every partition $\lambda$ of $T_k$ has $B^i(\lambda)=\delta_k$ for some $i\ge 0$.
+
+---
+
+## 0. Conventions
+
+**0.1.** Reading of "cycle of $B$": a *cycle* is a set $\{\mu,B(\mu),\ldots,B^{p-1}(\mu)\}$ where $B^p(\mu)=\mu$, $p\ge1$ (the forward orbit of a cyclic partition). Two cycles are distinct if they are distinct as sets. $\varphi$ is Euler's totient function. $\mathbb N_{\ge1}=\{1,2,3,\ldots\}$.
+
+**0.2.** For a finite sequence $c=(c_1,\ldots,c_m)$ of positive integers (not necessarily ordered) put
+$$\mathcal C(c)=\{(j,h)\in\mathbb N_{\ge1}^2:\ 1\le j\le m,\ 1\le h\le c_j\}$$
+(pile $j$, height $h$), so $|\mathcal C(c)|=c_1+\cdots+c_m$. A partition is determined by its cell set: $\lambda_j=|\{h:(j,h)\in\mathcal C(\lambda)\}|$.
+
+**0.3.** For a partition $\nu$: if $(1,h)\in\mathcal C(\nu)$ and $1\le h'\le h$ then $(1,h')\in\mathcal C(\nu)$ (definition of $\mathcal C$ with $j=1$).
+
+**0.4.** Diagonals: for $d\ge1$ let $D_d=\{(j,h)\in\mathbb N_{\ge1}^2: j+h-1=d\}=\{(j,d+1-j):1\le j\le d\}$, so $|D_d|=d$, and every cell of $\mathbb N_{\ge1}^2$ lies in exactly one $D_d$ (namely $d=j+h-1\ge1$).
+
+**0.5.** Weight: $E(c)=\sum_{(j,h)\in\mathcal C(c)}(j+h-1)$. Summing over $h$ first,
+$$E(c)=\sum_{j=1}^m\sum_{h=1}^{c_j}(j-1+h)=\sum_{j=1}^m (j-1)c_j+\sum_{j=1}^m\frac{c_j(c_j+1)}2 .$$
+
+**0.6.** Unsorted shift: for a partition $\lambda=(\lambda_1,\ldots,\lambda_s)$ of $n$ let $t=|\{j:\lambda_j\ge2\}|$. Because $\lambda$ is weakly decreasing, $\lambda_j\ge2\iff j\le t$. Put
+$$U(\lambda)=(s,\ \lambda_1-1,\ \ldots,\ \lambda_t-1),$$
+a sequence of $t+1$ positive integers. Its entries are exactly the positive numbers among $\lambda_1-1,\ldots,\lambda_s-1$ together with $s$, so by the definition of the shift, $B(\lambda)$ is the weakly decreasing rearrangement of $U(\lambda)$; write $B(\lambda)=\operatorname{sort}(U(\lambda))$.
+
+**0.7.** The map $R:\mathbb N_{\ge1}^2\to\mathbb N_{\ge1}^2$: $R(j,h)=(j+1,h-1)$ if $h\ge2$, and $R(j,1)=(1,j)$.
+
+## 1. $B$ is a self-map; orbits reach cyclic partitions (R1)
+
+**1.1.** $B(\lambda)$ is a partition of $n$: its parts are positive (the $\lambda_j-1$ kept are positive and $s\ge1$), it is weakly decreasing by 0.6, and its sum is $\sum_{j\le t}(\lambda_j-1)+s=\sum_{j\le s}(\lambda_j-1)+s=n$, since $\lambda_j-1=0$ for $j>t$.
+
+**1.2.** The set $P(n)$ of partitions of $n$ is finite (each is a sequence of at most $n$ entries from $\{1,\ldots,n\}$). For $\lambda\in P(n)$, the elements $B^0(\lambda),B^1(\lambda),\ldots,B^{|P(n)|}(\lambda)$ are $|P(n)|+1$ elements of $P(n)$, so by the pigeonhole principle $B^a(\lambda)=B^b(\lambda)$ for some $0\le a<b$. Then $\mu=B^a(\lambda)$ satisfies $B^{b-a}(\mu)=\mu$ with $b-a\ge1$, i.e. $\mu$ is cyclic.
+
+## 2. The unsorted shift moves cells by $R$ (R2)
+
+**2.1.** Claim: $R$ restricts to a bijection $\mathcal C(\lambda)\to\mathcal C(U(\lambda))$. Write $U(\lambda)=(c_1,\ldots,c_{t+1})$ with $c_1=s$, $c_{j+1}=\lambda_j-1$ ($1\le j\le t$).
+- If $(j,h)\in\mathcal C(\lambda)$ with $h\ge2$: then $\lambda_j\ge h\ge2$, so $j\le t$ (0.6), and $R(j,h)=(j+1,h-1)$ has $2\le j+1\le t+1$ and $1\le h-1\le\lambda_j-1=c_{j+1}$; so $R(j,h)\in\mathcal C(U(\lambda))$ with first coordinate $\ge2$.
+- If $(j,1)\in\mathcal C(\lambda)$: $1\le j\le s=c_1$, so $R(j,1)=(1,j)\in\mathcal C(U(\lambda))$ with first coordinate $1$.
+- Inverse map $\mathcal C(U(\lambda))\to\mathcal C(\lambda)$: $(1,h)\mapsto(h,1)$ (valid: $h\le c_1=s$, and $\lambda_h\ge1$); $(j',h')\mapsto(j'-1,h'+1)$ for $j'\ge2$ (valid: $j'-1\le t$ and $h'+1\le c_{j'}+1=\lambda_{j'-1}$). Composing in both orders gives the identity (check on the two cases $h=1$ / $h\ge2$, respectively $j'=1$ / $j'\ge2$). So $R:\mathcal C(\lambda)\to\mathcal C(U(\lambda))$ is a bijection.
+
+**2.2.** $R$ preserves $j+h-1$: $(j+1)+(h-1)-1=j+h-1$ and $1+j-1=j+1-1$. Hence $R(D_d)\subseteq D_d$ for each $d$, and by 2.1, $E(U(\lambda))=E(\lambda)$.
+
+## 3. Sorting lemma (R3)
+
+**Lemma 3.** Let $c=(c_1,\ldots,c_m)$ be positive integers with sum $n$ and let $\lambda=\operatorname{sort}(c)$ be its weakly decreasing rearrangement. Then $E(\lambda)\le E(c)$, with equality if and only if $c$ is weakly decreasing (i.e. $c=\lambda$).
+
+**3.1.** By 0.5 and since $\sum_j c_j(c_j+1)/2$ is unchanged by rearranging, $E(c)-E(\lambda)=\sum_j(j-1)c_j-\sum_j(j-1)\lambda_j$.
+
+**3.2.** Exchanging the order of summation, $\sum_{j=1}^m (j-1)c_j=\sum_{j=1}^m\sum_{i=1}^{j-1}c_j=\sum_{i=1}^{m-1}\sum_{j=i+1}^m c_j=\sum_{i=1}^{m-1}\bigl(n-P_i(c)\bigr)$ with $P_i(c)=c_1+\cdots+c_i$. The same identity holds for $\lambda$.
+
+**3.3.** For each $i$, $P_i(c)\le P_i(\lambda)$: there is a permutation $\sigma$ with $c_l=\lambda_{\sigma(l)}$; list $\sigma(1),\ldots,\sigma(i)$ increasingly as $j_1<\cdots<j_i$; then $j_l\ge l$, so $\lambda_{j_l}\le\lambda_l$ ($\lambda$ weakly decreasing), and summing, $P_i(c)=\sum_l\lambda_{j_l}\le\sum_{l\le i}\lambda_l=P_i(\lambda)$.
+
+**3.4.** By 3.2 and 3.3, $E(c)-E(\lambda)=\sum_{i=1}^{m-1}(P_i(\lambda)-P_i(c))\ge0$.
+
+**3.5.** Equality case. If $c$ is weakly decreasing then $c=\lambda$ (the weakly decreasing rearrangement of a multiset is unique) and equality holds. If $c$ is not weakly decreasing, pick $i$ with $c_i<c_{i+1}$ ($1\le i\le m-1$). The $i$ entries $c_1,\ldots,c_{i-1},c_{i+1}$ (at distinct positions) have sum $P_i(c)-c_i+c_{i+1}>P_i(c)$, and by the argument of 3.3 applied to these $i$ positions, that sum is $\le P_i(\lambda)$. So $P_i(c)<P_i(\lambda)$, and by 3.4 $E(c)>E(\lambda)$. $\square$
+
+## 4. Energy along orbits; no sorting on cycles (R4)
+
+**4.1.** For every partition $\lambda$: $E(B(\lambda))=E(\operatorname{sort}(U(\lambda)))\le E(U(\lambda))=E(\lambda)$ (Lemma 3, then 2.2), with equality iff $U(\lambda)$ is weakly decreasing, in which case $B(\lambda)=U(\lambda)$ as sequences and so, by 2.1, $\mathcal C(B(\lambda))=R(\mathcal C(\lambda))$.
+
+**4.2.** Let $\lambda$ be cyclic, $B^p(\lambda)=\lambda$, $p\ge1$. By 4.1, $E(\lambda)\ge E(B\lambda)\ge\cdots\ge E(B^p\lambda)=E(\lambda)$, so $E(B^{i+1}\lambda)=E(B^i\lambda)$ for $0\le i<p$. For arbitrary $i\ge0$, $B^i\lambda=B^{i\bmod p}\lambda$ (induction on $i$ using $B^p\lambda=\lambda$), so $E(B^{i+1}\lambda)=E(B^i\lambda)$ for all $i\ge0$. By the equality case of 4.1, $\mathcal C(B^{i+1}\lambda)=R(\mathcal C(B^i\lambda))$ for all $i\ge0$, hence by induction
+$$\mathcal C(B^t\lambda)=R^t(\mathcal C(\lambda))\qquad(t\ge0).$$
+
+## 5. $R$ rotates each diagonal (R5)
+
+**5.1.** Index $D_d$ by its first coordinate: $x_a=(a,d+1-a)$, $1\le a\le d$. For $a<d$ the height $d+1-a\ge2$, so $R(x_a)=(a+1,d-a)=x_{a+1}$; for $a=d$, $R(x_d)=R(d,1)=(1,d)=x_1$. So $R|_{D_d}$ is the cyclic rotation $x_a\mapsto x_{a+1}$ (indices mod $d$ in $\{1,\ldots,d\}$), a bijection of $D_d$, and by induction on $t$, $R^t(x_a)=x_{a'}$ with $a'\equiv a+t\pmod d$.
+
+**5.2.** Consequently, for cyclic $\lambda$ and $t\ge0$, by 4.2 and 5.1 (each $R^t$ maps $D_d$ bijectively onto itself and maps cells in different diagonals to different diagonals):
+$$\mathcal C(B^t\lambda)\cap D_d=R^t\bigl(\mathcal C(\lambda)\cap D_d\bigr),$$
+and for $x\in D_d$: $x\in\mathcal C(\lambda)\iff R^t(x)\in\mathcal C(B^t\lambda)$ (injectivity of $R^t$ on $D_d$).
+
+## 6. Key lemma (R6)
+
+**Lemma 6.** Let $\lambda$ be cyclic and $d\ge1$. If $D_d\not\subseteq\mathcal C(\lambda)$ then $D_{d+1}\cap\mathcal C(\lambda)=\emptyset$.
+
+**Proof.** Suppose $x_a=(a,d+1-a)\in D_d\setminus\mathcal C(\lambda)$ and $y_b=(b,d+2-b)\in D_{d+1}\cap\mathcal C(\lambda)$. Since $\gcd(d,d+1)=1$, the Chinese remainder theorem gives $t\ge0$ with $t\equiv1-a\pmod d$ and $t\equiv1-b\pmod{d+1}$. By 5.1, $R^t(x_a)=(1,d)$ and $R^t(y_b)=(1,d+1)$. By 5.2, $(1,d)\notin\mathcal C(B^t\lambda)$ and $(1,d+1)\in\mathcal C(B^t\lambda)$. But $B^t\lambda$ is a partition (1.1), and by 0.3, $(1,d+1)\in\mathcal C(B^t\lambda)$ forces $(1,d)\in\mathcal C(B^t\lambda)$. Contradiction. $\square$
+
+## 7. Structure of cyclic partitions (R7)
+
+**7.1.** Let $\lambda$ be a cyclic partition of $n$. $\mathcal C(\lambda)$ is finite and $D_d$ is nonempty, so $K=\min\{d\ge1: D_d\not\subseteq\mathcal C(\lambda)\}$ exists. $D_1=\{(1,1)\}\subseteq\mathcal C(\lambda)$ since $\lambda_1\ge1$, so $K\ge2$.
+
+**7.2.** Claim: $D_e\cap\mathcal C(\lambda)=\emptyset$ for all $e>K$. Induction on $e$. For $e=K+1$: Lemma 6 with $d=K$. For $e>K+1$: by induction $D_{e-1}\cap\mathcal C(\lambda)=\emptyset$; since $D_{e-1}\neq\emptyset$, $D_{e-1}\not\subseteq\mathcal C(\lambda)$, and Lemma 6 with $d=e-1$ gives $D_e\cap\mathcal C(\lambda)=\emptyset$.
+
+**7.3.** By 0.4, 7.1, 7.2: $\mathcal C(\lambda)=D_1\cup\cdots\cup D_{K-1}\cup S$ with $S=\mathcal C(\lambda)\cap D_K\subsetneq D_K$, so $n=|\mathcal C(\lambda)|=T_{K-1}+|S|$ with $0\le|S|\le K-1$.
+
+**7.4.** Rank. $T_0<T_1<T_2<\cdots$ (as $T_m-T_{m-1}=m\ge1$) and $T_0=0$, so the intervals $(T_{m-1},T_m]$, $m\ge1$, are disjoint and cover $\mathbb N_{\ge1}$: the rank is well defined. Let $n=T_{k-1}+r$, $1\le r\le k$, i.e. $n$ has rank $k$.
+- If $|S|\ge1$: $T_{K-1}<n\le T_{K-1}+K-1<T_K$, so the rank is $K$: $k=K$ and $r=n-T_{k-1}=|S|$.
+- If $|S|=0$: $n=T_{K-1}$ with $K-1\ge1$, and $T_{K-2}<n\le T_{K-1}$, so $k=K-1$ and $r=n-T_{k-1}=T_k-T_{k-1}=k$; here $\mathcal C(\lambda)=D_1\cup\cdots\cup D_k$.
+
+In both cases:
+$$D_1\cup\cdots\cup D_{k-1}\subseteq\mathcal C(\lambda)\subseteq D_1\cup\cdots\cup D_k,\qquad |\mathcal C(\lambda)\cap D_k|=r.\tag{$*$}$$
+
+**7.5.** Reading off the parts. Define $\varepsilon_j=1$ if $(j,k+1-j)\in\mathcal C(\lambda)$ and $\varepsilon_j=0$ otherwise ($1\le j\le k$); by $(*)$, $\sum_j\varepsilon_j=r$. For $1\le j\le k$ the cells $(j,h)$ with $h\le k-j$ lie in $D_{j+h-1}$ with $j+h-1\le k-1$, so are in $\mathcal C(\lambda)$; the cell $(j,k+1-j)\in D_k$ is present iff $\varepsilon_j=1$; cells $(j,h)$ with $h\ge k+2-j$ lie in $D_e$, $e\ge k+1$, so are absent. Hence $\lambda_j=k-j+\varepsilon_j$ for $1\le j\le k$ (where $\lambda_j:=0$ if $j>s$). For $j>k$, every cell $(j,h)$ lies in $D_e$ with $e\ge j\ge k+1$, so $\lambda_j=0$. Therefore $\lambda=\lambda(\varepsilon)$ as defined in the statement line.
+
+## 8. The converse and the action of $B$ (R8)
+
+**8.1.** Let $W(k,r)=\{\varepsilon\in\{0,1\}^k:\sum_j\varepsilon_j=r\}$ and for $\varepsilon\in W(k,r)$ let $\lambda(\varepsilon)$ be the sequence of positive numbers among $k-j+\varepsilon_j$, $j=1,\ldots,k$, in this order. For $j\le k-1$, $k-j+\varepsilon_j\ge1$, and the $k$-th value is $\varepsilon_k$, so only the last entry can be dropped (exactly when $\varepsilon_k=0$). The sequence is weakly decreasing since $(k-j+\varepsilon_j)-(k-j-1+\varepsilon_{j+1})=1+\varepsilon_j-\varepsilon_{j+1}\ge0$, and its sum is $\sum_{j=1}^k(k-j)+r=T_{k-1}+r=n$. So $\lambda(\varepsilon)$ is a partition of $n$.
+
+**8.2.** Injectivity: from $\lambda=\lambda(\varepsilon)$ (with $\lambda_j:=0$ beyond its length) we recover $\varepsilon_j=\lambda_j-(k-j)$, $1\le j\le k$.
+
+**8.3.** Let $\rho:W(k,r)\to W(k,r)$, $\rho(\varepsilon)=(\varepsilon_k,\varepsilon_1,\ldots,\varepsilon_{k-1})$. Claim: $B(\lambda(\varepsilon))=\lambda(\rho\varepsilon)$. Write $\lambda=\lambda(\varepsilon)$, with $s=k-1+\varepsilon_k$ parts. The parts of $B(\lambda)$ are $s=k-1+\varepsilon_k$ together with the positive values among $\lambda_j-1$: for $1\le j\le k-1$, $\lambda_j-1=k-1-j+\varepsilon_j$; if $\varepsilon_k=1$ there is also $\lambda_k-1=0$, which is not positive. So the multiset of parts of $B(\lambda)$ is $\{k-1+\varepsilon_k\}\cup\{k-(j+1)+\varepsilon_j:1\le j\le k-1,\ \text{value}>0\}$. With $\varepsilon'=\rho\varepsilon$ ($\varepsilon'_1=\varepsilon_k$, $\varepsilon'_{j+1}=\varepsilon_j$), the parts of $\lambda(\varepsilon')$ are the positive values among $k-1+\varepsilon'_1=k-1+\varepsilon_k$ (positive, as $k-1+\varepsilon_k=s\ge1$) and $k-(j+1)+\varepsilon'_{j+1}=k-(j+1)+\varepsilon_j$, $1\le j\le k-1$: the same multiset. A partition is determined by its multiset of parts, so $B(\lambda(\varepsilon))=\lambda(\rho\varepsilon)$. (For $k=1$: $W(1,1)=\{(1)\}$, $\lambda=(1)$, $B((1))=(1)$, consistent.)
+
+**8.4.** By 8.3 and induction, $B^i(\lambda(\varepsilon))=\lambda(\rho^i\varepsilon)$; since $\rho^k=\mathrm{id}$ (each application moves every letter one place cyclically), $B^k(\lambda(\varepsilon))=\lambda(\varepsilon)$ with $k\ge1$, so $\lambda(\varepsilon)$ is cyclic.
+
+## 9. Answer to (ii)(a) (R9)
+
+**Theorem 9.** For $k\ge1$, $1\le r\le k$, $n=T_{k-1}+r$, the cyclic partitions of $n$ are exactly the partitions $\lambda(\varepsilon)$, $\varepsilon\in W(k,r)$; equivalently, the partitions whose Young diagram consists of the staircase $\delta_{k-1}$ (all cells on diagonals $D_1,\ldots,D_{k-1}$) plus exactly $r$ of the $k$ cells of diagonal $D_k$. There are exactly $\binom kr$ of them.
+
+**Proof.** "Only if": 7.5. "If": 8.4. The count follows from the injectivity 8.2 and $|W(k,r)|=\binom kr$. $\square$
+
+## 10. Answer to (ii)(b) (R10)
+
+**10.1.** Let $\mathrm{Cyc}(n)$ be the set of cyclic partitions and $\Lambda:W(k,r)\to\mathrm{Cyc}(n)$, $\varepsilon\mapsto\lambda(\varepsilon)$: a bijection by Theorem 9 and 8.2, with $B\circ\Lambda=\Lambda\circ\rho$ (8.3). Every cycle (0.1) consists of cyclic partitions: if $B^p\mu=\mu$ then $B^p(B^i\mu)=B^i(B^p\mu)=B^i\mu$. For cyclic $\mu=\Lambda(\varepsilon)$, the cycle through $\mu$ is $\{B^i\mu:i\ge0\}=\Lambda(\{\rho^i\varepsilon:0\le i<k\})$, the image of the orbit of $\varepsilon$ under the cyclic group $G=\langle\rho\rangle$ (of order dividing $k$; we let $G$ act through $j\mapsto\rho^j$, $j\in\mathbb Z/k$). Two cyclic partitions lie in the same cycle iff their $\varepsilon$'s lie in the same orbit, and orbits partition $W(k,r)$. Hence the number of distinct cycles equals the number of orbits of $\mathbb Z/k$ acting on $W(k,r)$ by $j\cdot\varepsilon=\rho^j\varepsilon$.
+
+**10.2.** Orbit-counting lemma (Burnside's lemma, standard; proof included): for a finite group $H$ acting on a finite set $X$, $\#\text{orbits}=\frac1{|H|}\sum_{g\in H}|\mathrm{Fix}(g)|$. Proof: $\sum_g|\mathrm{Fix}(g)|=|\{(g,x):gx=x\}|=\sum_x|\mathrm{Stab}(x)|=\sum_x|H|/|Hx|$ (orbit–stabiliser theorem), and $\sum_{x\in O}1/|O|=1$ for each orbit $O$.
+
+**10.3.** Fixed points. Index positions by $\mathbb Z/k$; $(\rho^j\varepsilon)_i=\varepsilon_{i-j}$. So $\rho^j\varepsilon=\varepsilon$ iff $\varepsilon_i=\varepsilon_{i-j}$ for all $i$, iff $\varepsilon$ is constant on each coset of the subgroup $\langle j\rangle\le\mathbb Z/k$. With $g=\gcd(j,k)$ (and $\gcd(0,k)=k$), $\langle j\rangle=g\mathbb Z/k\mathbb Z$ has order $k/g$ and there are $g$ cosets. A word constant on cosets is determined by the set of cosets where it equals $1$; it has $r$ ones iff that set has $r/(k/g)$ elements. Hence $|\mathrm{Fix}(\rho^j)|=\binom{g}{rg/k}$ if $(k/g)\mid r$, and $0$ otherwise.
+
+**10.4.** For each divisor $g$ of $k$, the $j\in\{0,\ldots,k-1\}$ with $\gcd(j,k)=g$ are $j=gj'$ with $0\le j'<k/g$ and $\gcd(j',k/g)=1$; there are $\varphi(k/g)$ of them. Substituting $d=k/g$ (so $d\mid k$ and the condition $(k/g)\mid r$ reads $d\mid r$):
+$$\#\text{cycles}=N(k,r)=\frac1k\sum_{d\mid\gcd(k,r)}\varphi(d)\binom{k/d}{r/d}.$$
+Checks: $r=k$ gives $\frac1k\sum_{d\mid k}\varphi(d)=1$ (by $\sum_{d\mid k}\varphi(d)=k$: partition $\{1,\ldots,k\}$ by $\gcd(\cdot,k)$ as in 10.4); $\gcd(k,r)=1$ gives $\binom kr/k$. $\square$
+
+**10.5.** (Remark, not needed.) The cycle through $\lambda(\varepsilon)$ has length equal to the least $p\ge1$ with $\rho^p\varepsilon=\varepsilon$ (by 8.2–8.3), a divisor of $k$.
+
+## 11. Part (i) (R11)
+
+Let $n=T_k$, i.e. $r=k$ in Theorem 9 (rank of $T_k$ is $k$ by 7.4). $W(k,k)=\{(1,\ldots,1)\}$ and $\lambda(1,\ldots,1)=(k,k-1,\ldots,1)=\delta_k$, so $\delta_k$ is the only cyclic partition of $T_k$ (and $B(\delta_k)=\delta_k$ by 8.3). For any partition $\lambda$ of $T_k$, 1.2 gives $a\ge0$ with $B^a(\lambda)$ cyclic, hence $B^a(\lambda)=\delta_k$. $\square$
+
+## Established / not established
+
+Established: (i) and (ii)(a),(b) for all $k\ge1$, $1\le r\le k$, with the answer above. The brute-force script `code/check_c1.py` (all $n\le45$) agrees but the proof does not rely on it. Not addressed: time-to-cycle questions (cells C2 and beyond). Known gaps: none found.
+
+---
+
+## 6. How to verify
+
+**The proof** is written and self-contained; it is checked by reading and does not rely on any computation.
+
+**Shipped files and integrity.** `submission/` holds byte-identical copies of the accepted artefacts:
+`proof.md`, `claims.md`, `code/check_c1.py`, `code/README.md`. Their sha256 hashes are listed in
+`submission/SHA256SUMS` and equal those in the accepted `MANIFEST.sha256`.
+
+```
+cd submission && shasum -a 256 -c SHA256SUMS
+```
+Expected output: `proof.md: OK`, `claims.md: OK`, `code/check_c1.py: OK`, `code/README.md: OK`.
+Measured: all four OK, exit 0, real 0.03 s (log: `verify/logs/sha256_check.txt`).
+
+**Sanity check (not load-bearing).** `code/check_c1.py` (Python standard library only, exact integer arithmetic),
+for every \(n\in[1,\mathrm{NMAX}]\): enumerates all partitions of \(n\); finds the cyclic ones by iterating \(B\);
+checks they equal the predicted set \(\{\lambda(\varepsilon)\}\); counts the cycles and compares with \(N(k,r)\); for
+triangular \(n\) checks that every orbit reaches \(\delta_k\). It proves nothing beyond \(n\le\mathrm{NMAX}\).
+
+Command (run from `submission/`):
+```
+/usr/bin/time -p python3 code/check_c1.py 45
+```
+Expected output: 46 lines, one per \(n=1,\ldots,45\), e.g.
+```
+n=1 k=1 r=1 #partitions=1 #cyclic=1 #cycles=1 OK
+n=2 k=2 r=1 #partitions=2 #cyclic=2 #cycles=1 OK
+...
+n=45 k=9 r=9 #partitions=89134 #cyclic=1 #cycles=1 OK
+ALL OK up to 45
+```
+Measured on this submission's copy (Python 3.14.0, macOS/Darwin 23.4.0):
+- project venv interpreter (`.venv/bin/python3`): exit 0, real 19.11 s (log: `verify/logs/check_c1_45_venv.txt`,
+  timing `verify/logs/check_c1_45_venv.time`);
+- system `python3`: exit 0, real 20.86 s (log: `verify/logs/check_c1_45_stdlib.txt`, timing
+  `verify/logs/check_c1_45_stdlib.time`).
+
+The two outputs are byte-identical. Both are well under the 10-minute limit.
+
+**LaTeX.** `submission.tex` compiled in `latex_build/` with
+`latexmk -pdf -interaction=nonstopmode -halt-on-error submission.tex` (pdfTeX 1.40.29, TeX Live 2026): exit 0,
+11 pages, no warnings in the log, real 0.65 s (log: `verify/logs/latexmk.txt`; PDF: `latex_build/submission.pdf`).
+The appendix listing of `code/check_c1.py` in `submission.tex` was generated from the file itself and is
+character-identical to it.
+
+Typesetting fidelity (run from `out/`): `/usr/bin/time -p python3 verify/fidelity_check.py` reports that all 453
+math segments of `proof.md` occur in `submission.tex` (whitespace-normalised), all 34 step labels and 12 section
+numbers are preserved, and the appendix listing equals the script; exit 0, real 0.03 s
+(log: `verify/logs/fidelity_check.txt`).
+
+## 7. Limitations
+
+- Established: (i), (ii)(a), (ii)(b) of Cell C1 for all \(k\ge1\), \(1\le r\le k\). Not addressed: time-to-cycle
+  questions (cells C2 and beyond).
+- The count in (ii)(b) is for the reading of "distinct cycles" fixed in convention 0.1 of the proof: a cycle is the
+  forward orbit of a cyclic partition, and two cycles are distinct if they are distinct as sets.
+- The computer check covers only \(1\le n\le45\) and proves nothing beyond that range; the proof does not rely on it.
+- Standard results (pigeonhole principle, Chinese remainder theorem, orbit–stabiliser theorem) are used without
+  proof and without bibliographic reference.
+- No literature search is part of the material this document was prepared from; no priority claim is made.
+- Editorial change: the proof's last paragraph named the script `out/code/check_c1.py`; here it reads
+  `code/check_c1.py`. No other change to the proof text (the LaTeX version is a typesetting conversion only).
+- This document was assembled by the scribe from the accepted artefacts; the scribe added no mathematics and did
+  not referee the proof.
