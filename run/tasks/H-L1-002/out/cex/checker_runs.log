@@ -1,0 +1,47 @@
+Q3_gray.txt d=3 VERIFIED 21 bound=14 ok=yes
+Q3_hill.txt d=3 VERIFIED 14 bound=14 ok=yes
+Q3_lex.txt d=3 VERIFIED 16 bound=14 ok=yes
+Q3_rand0.txt d=3 VERIFIED 18 bound=14 ok=yes
+Q3_rand1.txt d=3 VERIFIED 18 bound=14 ok=yes
+Q3_rand2.txt d=3 VERIFIED 18 bound=14 ok=yes
+Q3_rand3.txt d=3 VERIFIED 16 bound=14 ok=yes
+Q3_rand4.txt d=3 VERIFIED 16 bound=14 ok=yes
+Q3_revlex.txt d=3 VERIFIED 16 bound=14 ok=yes
+Q3_weight.txt d=3 VERIFIED 16 bound=14 ok=yes
+Q3_witness.txt d=3 VERIFIED 14 bound=14 ok=yes
+Q4_gray.txt d=4 VERIFIED 278 bound=34 ok=yes
+Q4_hill.txt d=4 VERIFIED 34 bound=34 ok=yes
+Q4_lex.txt d=4 VERIFIED 65 bound=34 ok=yes
+Q4_rand0.txt d=4 VERIFIED 46 bound=34 ok=yes
+Q4_rand1.txt d=4 VERIFIED 58 bound=34 ok=yes
+Q4_rand2.txt d=4 VERIFIED 77 bound=34 ok=yes
+Q4_rand3.txt d=4 VERIFIED 74 bound=34 ok=yes
+Q4_rand4.txt d=4 VERIFIED 50 bound=34 ok=yes
+Q4_revlex.txt d=4 VERIFIED 65 bound=34 ok=yes
+Q4_weight.txt d=4 VERIFIED 65 bound=34 ok=yes
+Q4_witness.txt d=4 VERIFIED 34 bound=34 ok=yes
+Q5_gray.txt d=5 VERIFIED 43435 bound=82 ok=yes
+Q5_hill.txt d=5 VERIFIED 88 bound=82 ok=yes
+Q5_lex.txt d=5 VERIFIED 326 bound=82 ok=yes
+Q5_rand0.txt d=5 VERIFIED 226 bound=82 ok=yes
+Q5_rand1.txt d=5 VERIFIED 271 bound=82 ok=yes
+Q5_rand2.txt d=5 VERIFIED 302 bound=82 ok=yes
+Q5_rand3.txt d=5 VERIFIED 182 bound=82 ok=yes
+Q5_rand4.txt d=5 VERIFIED 291 bound=82 ok=yes
+Q5_revlex.txt d=5 VERIFIED 326 bound=82 ok=yes
+Q5_weight.txt d=5 VERIFIED 326 bound=82 ok=yes
+Q6_gray.txt d=6 VERIFIED 1046774430 bound=194 ok=yes
+Q6_hill.txt d=6 VERIFIED 204 bound=194 ok=yes
+Q6_lex.txt d=6 VERIFIED 1957 bound=194 ok=yes
+Q6_rand0.txt d=6 VERIFIED 838 bound=194 ok=yes
+Q6_rand1.txt d=6 VERIFIED 956 bound=194 ok=yes
+Q6_rand2.txt d=6 VERIFIED 832 bound=194 ok=yes
+Q6_rand3.txt d=6 VERIFIED 955 bound=194 ok=yes
+Q6_rand4.txt d=6 VERIFIED 782 bound=194 ok=yes
+Q6_revlex.txt d=6 VERIFIED 1957 bound=194 ok=yes
+Q6_weight.txt d=6 VERIFIED 1957 bound=194 ok=yes
+Q7_hill.txt d=7 VERIFIED 488 bound=450 ok=yes
+
+real	0m2.333s
+user	0m1.049s
+sys	0m0.271s

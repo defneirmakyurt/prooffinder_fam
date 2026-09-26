@@ -1,0 +1,11 @@
+('witness Q3', 14)
+('witness Q4', 34)
+('Q3 bound 14', {'lex': 16, 'rev': 16, 'weight': 16, 'gray': 21, 'random15_min': 14})
+('Q4 bound 34', {'lex': 65, 'rev': 65, 'weight': 65, 'gray': 278, 'random15_min': 43})
+('Q5 bound 82', {'lex': 326, 'rev': 326, 'weight': 326, 'gray': 43435, 'random15_min': 144})
+('Q6 bound 194', {'lex': 1957, 'rev': 1957, 'weight': 1957, 'gray': 1046774430, 'random15_min': 752})
+all checker counts >= d*2^(d-1)+2 and agree with referee count
+
+real	0m3.956s
+user	0m1.385s
+sys	0m0.313s

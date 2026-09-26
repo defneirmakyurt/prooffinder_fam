@@ -1,0 +1,7 @@
+m from Step-7 identity: (T*d - 2*T + 1)/(d - 1)  ; (d-1)*m - (T*(d-2)+1) = 0
+T*(d-1) - (T*(d-2)+1) - (T-1) = 0
+with (d-1)m = T(d-2)+1: T-1 - (d-1)(T-m) = 0
+
+real	0m0.866s
+user	0m0.521s
+sys	0m0.068s
