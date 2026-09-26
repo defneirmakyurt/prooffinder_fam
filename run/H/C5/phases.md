@@ -14,3 +14,4 @@
 | H-C5-012 | 3 | literature | LITERATURE | ANALYST | - | - | 14:30 |
 | H-C5-013 | 2 | referee | CLEAN-ROOM | VERIFY | - | H-C5-007 | 14:54 |
 | H-C5-014 | GATE | referee | CLEAN-ROOM | GATE | - | H-C5-007 | 14:54 |
+| H-C5-015 | 5 | scribe | RECORD | SUBMISSION | - | - | 14:55 |
