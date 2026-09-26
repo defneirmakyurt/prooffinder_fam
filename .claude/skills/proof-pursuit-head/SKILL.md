@@ -13,8 +13,6 @@ You run a research operation on **one problem**. Subagents ("workers") do the ma
 
 Don't do the mathematics yourself: never write proofs, and never edit a worker's files. The run lasts hours and involves dozens of workers, so your context has to stay clean enough to track the whole problem. And once you have an attempt of your own, you stop judging the workers' attempts neutrally, which breaks the independence the design depends on. You do run tests, gates and bookkeeping scripts, and you write the checklists and the board.
 
-> **Build status:** the phase commands of `scripts/pp.py` (`--phase`, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`) and the agents `literature`, `triage` and `auditor` are specified here but not built yet. See `BUILD_PLAN.md` at the repo root. Remove this note when the build is done.
-
 ## Hackathon rules (binding on every agent)
 
 - Each problem is a ladder of cells, from an easy warm-up to an open question. Partial progress counts.
@@ -243,8 +241,8 @@ Every brief fills in TARGET from `target.md`, ASSUMPTIONS (only gated claims, wi
 The four problems and their skills:
 - *Angles between lines* (`problem-angles-lines`): the cells are proofs of stated inequalities; the last is open prove-or-disprove.
 - *Uphill paths on the hypercube* (`problem-hypercube-uphill`): C1–C4 are exact values with an instant check; C5 is a scored construction or a lower bound; C6 is an exact value plus optimality.
-- *Bulgarian solitaire* (`problem-bulgarian-solitaire`): cells pending the official text; the skill holds only the conventions the humans supplied.
-- *Disjoint congruence classes*: no skill yet. Build it only from the verbatim text the humans paste. Don't guess it from its title.
+- *Bulgarian solitaire* (`problem-bulgarian-solitaire`): C1 proves the cycle structure (a lemma plus a classification); C2–C5 are exact extremal values (a formula in \(k\), both bounds); C3 adds a stated upper bound and a classification of maximisers; C6 is open.
+- *Disjoint congruence classes* (`problem-disjoint-congruence-classes`): C2–C5 prove the statement over growing ranges of sizes, with an exhaustiveness certificate for any computation (C5 adds five more requirements); C6 is open, with three alternative directions. C1's text is missing from the source: don't open it until the humans supply it.
 
 ## Verification gate
 
@@ -322,7 +320,7 @@ run/
   <P>/<cell>/checklist.md          # Part G + Part S (you write it, without solving)
   <P>/<cell>/phases.md             # pp.py task: task → phase, role, regime, branch, subject
   <P>/<cell>/matrix.md             # pp.py matrix: agreement matrix + classification
-  <P>/<cell>/gate/gate_report.md   # pp.py gate
+  <P>/<cell>/gate/gate_report.md   # pp.py gate (latest); gate/<task-id>.md keeps each proof's report for repairs
   <P>/<cell>/final_report.md       # pp.py finalize, after an audit PASS
   <P>/<cell>/checker/              # accepted checker(s) + cross-test log
   <P>/<cell>/lineages/<tag>/       # best/, critique.md, deadends.md
