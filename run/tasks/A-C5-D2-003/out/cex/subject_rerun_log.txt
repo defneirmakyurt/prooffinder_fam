@@ -1,0 +1,6 @@
+Exhaustive grid (denom=60): trials=39711
+max F found (units of pi) = 2  (bound to prove: 2)
+achieved at g/pi = (Fraction(0, 1), Fraction(1, 2), Fraction(0, 1), Fraction(1, 2))
+F(doubled-axes config) / pi = 2  (expect 2)
+F(evenly-spaced config) / pi = 2  (expect 2)
+All checks passed: max over grid <= 2*pi, both known extremal configs attain exactly 2*pi.
