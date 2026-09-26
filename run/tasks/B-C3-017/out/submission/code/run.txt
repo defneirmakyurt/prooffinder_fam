@@ -1,0 +1,37 @@
+k=4 n=7 D_B=4 max(tau-1)=6 bound=7
+k=4 n=8 D_B=5 max(tau-1)=6 bound=7
+k=4 n=9 D_B=7 max(tau-1)=7 bound=7 | T_k-1: extremal=1 pred(nu_k)=1 equal=True d(lstar)=7 ext=[(3, 2, 2, 1, 1)]
+k=5 n=11 D_B=8 max(tau-1)=10 bound=14
+k=5 n=12 D_B=8 max(tau-1)=10 bound=14
+k=5 n=13 D_B=9 max(tau-1)=10 bound=14
+k=5 n=14 D_B=14 max(tau-1)=14 bound=14 | T_k-1: extremal=6 pred(nu_k)=6 equal=True d(lstar)=14 ext=[(4, 3, 3, 2, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 2, 2, 2, 1, 1)]
+k=6 n=16 D_B=15 max(tau-1)=17 bound=23
+k=6 n=17 D_B=12 max(tau-1)=15 bound=23
+k=6 n=18 D_B=13 max(tau-1)=15 bound=23
+k=6 n=19 D_B=16 max(tau-1)=17 bound=23
+k=6 n=20 D_B=23 max(tau-1)=23 bound=23 | T_k-1: extremal=34 pred(nu_k)=34 equal=True d(lstar)=23
+k=7 n=22 D_B=24 max(tau-1)=27 bound=34
+k=7 n=23 D_B=18 max(tau-1)=21 bound=34
+k=7 n=24 D_B=18 max(tau-1)=21 bound=34
+k=7 n=25 D_B=19 max(tau-1)=21 bound=34
+k=7 n=26 D_B=26 max(tau-1)=27 bound=34
+k=7 n=27 D_B=34 max(tau-1)=34 bound=34 | T_k-1: extremal=175 pred(nu_k)=175 equal=True d(lstar)=34
+k=8 n=29 D_B=35 max(tau-1)=39 bound=47
+k=8 n=30 D_B=28 max(tau-1)=31 bound=47
+k=8 n=31 D_B=24 max(tau-1)=28 bound=47
+k=8 n=32 D_B=25 max(tau-1)=28 bound=47
+k=8 n=33 D_B=29 max(tau-1)=31 bound=47
+k=8 n=34 D_B=38 max(tau-1)=39 bound=47
+k=8 n=35 D_B=47 max(tau-1)=47 bound=47 | T_k-1: extremal=831 pred(nu_k)=831 equal=True d(lstar)=47
+k=9 n=37 D_B=48 max(tau-1)=53 bound=62
+k=9 n=38 D_B=40 max(tau-1)=44 bound=62
+k=9 n=39 D_B=32 max(tau-1)=36 bound=62
+k=9 n=40 D_B=32 max(tau-1)=36 bound=62
+k=9 n=41 D_B=33 max(tau-1)=36 bound=62
+k=9 n=42 D_B=42 max(tau-1)=44 bound=62
+k=9 n=43 D_B=52 max(tau-1)=53 bound=62
+k=9 n=44 D_B=62 max(tau-1)=62 bound=62 | T_k-1: extremal=3911 pred(nu_k)=3911 equal=True d(lstar)=62
+ALL OK
+real 16.70
+user 16.35
+sys 0.03

@@ -1,0 +1,213 @@
+Rc files read (in order):
+  NONE
+Latexmk: This is Latexmk, John Collins, 9 March 2026. Version 4.88.
+No existing .aux file, so I'll make a simple one, and require run of *latex.
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Category 'other':
+  Rerun of 'pdflatex' forced or previously required:
+    Reason or flag: 'Initial setup'
+
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -halt-on-error -recorder  "submission.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./submission.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/base/size11.clo))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.d
+ef) (./submission.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsb.fd)
+Overfull \hbox (74.49301pt too wide) in paragraph at lines 45--46
+\OT1/cmr/m/n/10.95 10.1006/aama.1998.0597 (preprint of 2 March 1998 at \OT1/cmt
+t/m/n/10.95 https://people.math.sc.edu/griggs/cycling.pdf\OT1/cmr/m/n/10.95 );
+[1{/usr/local/texlive/2026basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2] [3] [4] [5] [6] [7]
+Overfull \hbox (219.11551pt too wide) in paragraph at lines 227--228
+\OML/cmm/m/it/10.95 k \OT1/cmr/m/n/10.95 = 4$: $\OMS/cmsy/m/n/10.95 E[] \OT1/cm
+r/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \
+OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.9
+5 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OMS/cmsy/m/
+n/10.95 g \OT1/cmr/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\OML/cmm/m/it/10.95 ^^U[]\O
+MS/cmsy/m/n/10.95 g$\OT1/cmr/m/n/10.95 . $\OML/cmm/m/it/10.95 k \OT1/cmr/m/n/10
+.95 = 5$: $\OMS/cmsy/m/n/10.95 E[] \OT1/cmr/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\O
+T1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.9
+5 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it
+/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cm
+m/m/it/10.95 ; \OT1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\
+OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.
+95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/
+n/10.95 1)\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1
+/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ;
+ \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10
+.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cmm/m
+/it/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML
+/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 
+2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/1
+0.95 1)\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cm
+r/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \O
+T1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95
+ ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cmm/m/it
+/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cm
+m/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\O
+ML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
+5 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OMS/cmsy/m/n/10.95 g$\OT1/cmr/m/
+n/10.95 ,
+[8] [9] [10] (./submission.aux) )
+(see the transcript file for additional information) </Users/radu.cucu/Library/
+texlive/2026basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/lo
+cal/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.
+pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr6.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2026basic/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026basic/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2026basic/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2026basic/tex
+mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on submission.pdf (10 pages, 267774 bytes).
+Transcript written on submission.log.
+Latexmk: Getting log file 'submission.log'
+Latexmk: Examining 'submission.fls'
+Latexmk: Examining 'submission.log'
+Latexmk: Log file says output to 'submission.pdf'
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Changed files or newly in use/created:
+  submission.aux
+
+------------
+Run number 2 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -halt-on-error -recorder  "submission.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./submission.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/base/size11.clo))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2026basic/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.d
+ef) (./submission.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsb.fd)
+Overfull \hbox (74.49301pt too wide) in paragraph at lines 45--46
+\OT1/cmr/m/n/10.95 10.1006/aama.1998.0597 (preprint of 2 March 1998 at \OT1/cmt
+t/m/n/10.95 https://people.math.sc.edu/griggs/cycling.pdf\OT1/cmr/m/n/10.95 );
+[1{/usr/local/texlive/2026basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2] [3] [4] [5] [6] [7]
+Overfull \hbox (219.11551pt too wide) in paragraph at lines 227--228
+\OML/cmm/m/it/10.95 k \OT1/cmr/m/n/10.95 = 4$: $\OMS/cmsy/m/n/10.95 E[] \OT1/cm
+r/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \
+OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.9
+5 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OMS/cmsy/m/
+n/10.95 g \OT1/cmr/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\OML/cmm/m/it/10.95 ^^U[]\O
+MS/cmsy/m/n/10.95 g$\OT1/cmr/m/n/10.95 . $\OML/cmm/m/it/10.95 k \OT1/cmr/m/n/10
+.95 = 5$: $\OMS/cmsy/m/n/10.95 E[] \OT1/cmr/m/n/10.95 = \OMS/cmsy/m/n/10.95 f\O
+T1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.9
+5 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it
+/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cm
+m/m/it/10.95 ; \OT1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\
+OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.
+95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/
+n/10.95 1)\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (4\OML/cmm/m/it/10.95 ; \OT1
+/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ;
+ \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10
+.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cmm/m
+/it/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML
+/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 
+2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/1
+0.95 1)\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cm
+r/m/n/10.95 3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 ; \O
+T1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95
+ ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OML/cmm/m/it
+/10.95 ; \OT1/cmr/m/n/10.95 (3\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 3\OML/cm
+m/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\O
+ML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
+5 1\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1)\OMS/cmsy/m/n/10.95 g$\OT1/cmr/m/
+n/10.95 ,
+[8] [9] [10] (./submission.aux) )
+(see the transcript file for additional information) </Users/radu.cucu/Library/
+texlive/2026basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/lo
+cal/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.
+pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr6.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2026basic/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026basic/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2026basic/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2026basic/tex
+mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on submission.pdf (10 pages, 267774 bytes).
+Transcript written on submission.log.
+Latexmk: Getting log file 'submission.log'
+Latexmk: Examining 'submission.fls'
+Latexmk: Examining 'submission.log'
+Latexmk: Log file says output to 'submission.pdf'
+Latexmk: All targets (submission.pdf) are up-to-date
+
+real 0.62
+user 0.46
+sys 0.07
+exit=0

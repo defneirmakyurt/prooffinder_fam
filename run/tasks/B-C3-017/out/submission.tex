@@ -1,0 +1,260 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.5cm]{geometry}
+\newtheorem*{answer}{Answer}
+\newcommand{\ds}{\displaystyle}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\title{Bulgarian solitaire, Cell 3: A General Upper Bound}
+\author{Team submission (task B-C3-017; accepted artefact B-C3-007)}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Statement (Cell 3, verbatim)}
+
+\textbf{Definitions (problem statement).} A \emph{partition} of a positive integer $n$ is a weakly decreasing sequence $\lambda=(\lambda_1,\ldots,\lambda_s)$ of positive integers with $\lambda_1+\cdots+\lambda_s=n$ ($s$ piles). The \emph{shift} $B(\lambda)$ is the partition whose parts are the positive numbers among $\lambda_1-1,\ldots,\lambda_s-1$ together with one extra part equal to $s$. $\lambda$ is \emph{cyclic} if $B^i(\lambda)=\lambda$ for some $i\ge 1$;
+$d_B(\lambda)=\min\{i\ge 0: B^i(\lambda)\text{ is cyclic}\}$, $D_B(n)=\max\{d_B(\lambda):\lambda\text{ a partition of } n\}$.
+$T_k=k(k+1)/2$, $\delta_k=(k,k-1,\ldots,2,1)$; the \emph{rank} of $n$ is the unique $k$ with $T_{k-1}<n\le T_k$.
+
+\textbf{Cell 3 (verbatim).} Now the numbers strictly between two consecutive triangular numbers.
+\begin{itemize}
+\item[(a)] Prove that for every $k\ge 4$ and every non-triangular $n$ with $T_{k-1}<n<T_k$,
+\[ D_B(n)\le k^2-2k-1. \]
+\item[(b)] Determine $D_B(T_k-1)$ exactly.
+\item[(c)] Determine also, for that $n$, which partitions attain the maximum.
+\end{itemize}
+
+\section*{Status}
+\textbf{CELL STATUS: SOLVED.}\qquad \textbf{CLAIM STATUS: PROVED.}
+
+\section*{Answers}
+\begin{answer}
+Write $\nu_k:=(k+1,k-1,k-2,\dots,3,1)$ and $\lambda^*_k:=(k-1,k-2,k-2,k-3,\dots,2,1,1)$.
+\begin{itemize}
+\item[(a)] For every $k\ge 4$, every $n$ with $T_{k-1}<n<T_k$ and every partition $\lambda\vdash n$: $d_B(\lambda)\le k^2-2k-1$ (Theorem 5.1; the case $k=4$ is done by hand).
+\item[(b)] $D_B(T_k-1)=k^2-2k-1$ for every $k\ge4$, attained by $\lambda^*_k$ (7.1, 6.4). Small $k$ separately: $k=1$: $T_1-1=0$ is not a positive integer, nothing to determine (7.2); $k=2$: $D_B(2)=0$ (7.3); $k=3$: $D_B(5)=3$ (7.4), which differs from $3^2-2\cdot3-1=2$.
+\item[(c)] (Proved criterion.) For every $k\ge4$ the partitions $\lambda\vdash T_k-1$ with $d_B(\lambda)=D_B(T_k-1)$ are exactly those with
+\[ B^{k^2-2k-2}(\lambda)=\nu_k \]
+(Theorem 9.3). This characterises the maximiser set exactly; it is not a closed-form list (see Limitations). For $k=4$ the set is $\{(3,2,2,1,1)\}$ and for $k=5$ it has $6$ elements, listed in 9.4 (computed). For $k=2$ the maximisers are $(2)$ and $(1,1)$ (7.3); for $k=3$ only $(1,1,1,1,1)$ (7.4).
+\end{itemize}
+\end{answer}
+
+\section*{Cited results versus our contribution}
+\begin{itemize}
+\item \textbf{Method (cited).} The method follows J.~R.~Griggs and C.-C.~Ho, \emph{The cycling of partitions and compositions under repeated shifts}, Adv.\ Appl.\ Math.\ \textbf{21} (1998) 205--227, DOI 10.1006/aama.1998.0597 (preprint of 2 March 1998 at \texttt{https://people.math.sc.edu/griggs/cycling.pdf}); Sections 3--4: Prop.~3.2, Lemmas 3.3--3.6, Lemma 4.3 and \textbf{Theorem 4.4} ((1) $D_B(n)\le k^2-2k-1$ for non-triangular $n$, $k\ge4$; (2) equality for $r=k-1$ with the witness $(k-1,k-2,k-2,k-3,\dots,2,1,1)$). According to the source table of the accepted artefact, Griggs--Ho handle $k=4$ of Thm~4.4(1) by a computer table (their Fig.~1), and give Thm~4.4(2) only as ``imitating the proof of Theorem 3.1''. \textbf{Every lemma used is re-proved in full below}; nothing is used from Griggs--Ho without proof.
+\item \textbf{Earlier cell (used as an assumption).} The gated Cell 1 classification of cyclic partitions: for $k\ge2$, $n=T_{k-1}+r$, $1\le r\le k$, a partition $\mu\vdash n$ is cyclic iff $\mu=\mu(e)$ for some $e\in\{0,1\}^k$ with $\sum e_i=r$ (notation in Step 0). This is the earlier cell's result (per Griggs--Ho Thm~2.1 it goes back to J.~Brandt, \emph{Cycles of partitions}, Proc.\ Amer.\ Math.\ Soc.\ \textbf{85} (1982) 483--486). It is referred to below as ``the Cell 1 result''.
+\item \textbf{Our contribution.} The ``pile/row'' write-up of every lemma; the steps that Griggs--Ho leave as ``similar'', ``continue this process'', ``imitating the proof of Theorem 3.1'' written out; the case $k=4$ of (a) by hand; the written proof of the witness (Step 6); part (c) (Step 9); the small cases $k=1,2,3$ of (b). The characterisation of the maximiser set in (c) was not found in the sources searched by the accepted artefact (Griggs--Ho 1998; the Me\v{s}trovi\'c 2026 survey, arXiv:2607.17194, via a fetch summary; the Drensky 2015 and Harris--Nguyen 2023 abstracts; OEIS search).
+\end{itemize}
+
+\section*{Proof}
+Throughout, $\lambda^{(i)}:=B^i(\lambda)$.
+
+\subsection*{Step 0. Consequences of the Cell 1 result}
+Let $k\ge2$, $n=T_{k-1}+r$, $1\le r\le k$. For $e\in\{0,1\}^k$ with $\sum e_i=r$ put $\mu(e)=(k-1+e_1,k-2+e_2,\dots,1+e_{k-1},e_k)$ (final $0$ dropped). By the Cell 1 result, $\mu\vdash n$ is cyclic iff $\mu=\mu(e)$ for such $e$.
+
+\textbf{0.1 (F1).} A cyclic $\mu(e)$ has $k-1+e_k\in\{k-1,k\}$ parts (entries $k-i+e_i\ge1$ for $i\le k-1$, last entry $e_k$), its $i$-th part is $k-i+e_i\le k+1-i$ for $i\le k$, and it has no $(k+1)$-st part. In particular all parts are $\le k$.
+
+\textbf{0.2 (F2).} $B(\mu(e))=\mu(e')$ with $e'=(e_k,e_1,\dots,e_{k-1})$.
+
+\emph{Proof.} $\mu(e)$ has $s=k-1+e_k$ parts. Subtracting $1$ from the parts $k-i+e_i$ ($1\le i\le k-1$) gives $k-(i+1)+e_i$, which is $0$ only for $i=k-1,e_{k-1}=0$; subtracting $1$ from the part $e_k$ (if present) gives $0$. Adding the part $s=k-1+e_k$: the parts of $B(\mu(e))$ are the positive entries of $(k-1+e_k,\;k-2+e_1,\;k-3+e_2,\dots,0+e_{k-1})$, which is the sequence of $\mu(e')$; since $e'$ has sum $r$, this is again of the cyclic form. $\square$
+
+\textbf{0.3 (F3).} If $\mu$ is cyclic then $B^j(\mu)$ is cyclic for all $j\ge0$ (by 0.2 and induction). Hence for any $\lambda$: $\lambda^{(i)}:=B^i(\lambda)$ is cyclic for all $i\ge d_B(\lambda)$, and $d_B(\lambda)\le t$ whenever $\lambda^{(t)}$ is cyclic.
+
+\textbf{0.4 (F4, recognition).} Let $\mu\vdash n$ have all parts $\le k$ and let $\mu'_h=\#\{i:\mu_i\ge h\}$. If $\mu'_h\in\{k-h,\,k-h+1\}$ for $1\le h\le k$, then $\mu$ is cyclic.
+
+\emph{Proof.} $\mu'_1\le k$, so $\mu$ has at most $k$ parts. For $1\le i\le k-1$ put $h=k-i\in[1,k-1]$: $\mu'_{h}\ge k-h=i$, so $\mu_i\ge k-i$. For $2\le i\le k$ put $h=k-i+2\in[2,k]$: $\mu'_h\le k-h+1=i-1<i$, so $\mu_i<h$, i.e.\ $\mu_i\le k-i+1$; for $i=1$, $\mu_1\le k$ by hypothesis. So $e_i:=\mu_i-(k-i)\in\{0,1\}$ for $1\le i\le k$ (for $i=k$: $0\le\mu_k\le1$), $\sum_i e_i=n-T_{k-1}=r$, and $\mu=\mu(e)$. $\square$
+
+\subsection*{Step 1. The pile/row model (bookkeeping diagram of Griggs--Ho, Sec.~3)}
+Fix $\lambda=(\lambda_1,\dots,\lambda_s)\vdash n$. Put $\lambda^{(i)}=B^i(\lambda)$ and $c_{i+1}=$ number of parts of $\lambda^{(i)}$ ($i\ge0$); so $c_1=s$ and $c_i\ge1$.
+
+\emph{Piles.} Original pile $m$ ($1\le m\le s$) is \emph{alive} at rows $1,\dots,\lambda_m$. Born pile $j$ ($j\ge1$) is alive at rows $j+1,\dots,j+c_j$. The \emph{end row} of a pile is its last alive row ($\lambda_m$, resp.\ $j+c_j$). $R_r$ = set of piles alive at row $r$; $z_r$ = number of piles with end row $r$.
+
+\textbf{1.1 Lemma.} For every $i\ge0$ the parts of $\lambda^{(i)}$ are in bijection with $R_{i+1}$, the pile $P$ giving the part $\mathrm{end}(P)-i$. In particular $|R_{i+1}|=c_{i+1}$.
+
+\emph{Proof.} Induction on $i$. $i=0$: $R_1$ consists of the original piles (a born pile $j\ge1$ is alive only from row $j+1\ge2$), and pile $m$ gives $\lambda_m-0$. Step $i\to i+1$: the parts of $B(\lambda^{(i)})$ are $a-1$ for the parts $a\ge2$ of $\lambda^{(i)}$, plus one part $c_{i+1}$. A pile $P\in R_{i+1}$ lies in $R_{i+2}$ iff $\mathrm{end}(P)\ge i+2$ iff its part $a=\mathrm{end}(P)-i\ge2$, and then gives $a-1=\mathrm{end}(P)-(i+1)$. The born pile $i+1$ is alive at rows $i+2,\dots,i+1+c_{i+1}$, so it is in $R_{i+2}$ and gives $c_{i+1}$. No other pile is in $R_{i+2}$: born piles $j\ge i+2$ start at row $j+1\ge i+3$, and a pile alive at row $i+2$ but not at row $i+1$ must start at row $i+2$, i.e.\ be born pile $i+1$. $\square$
+
+\textbf{1.2 Corollary.} (1) $R_{r+1}=(R_r\setminus E_r)\cup\{\text{born pile }r\}$, where $E_r$ = piles with end row $r$ (all in $R_r$); hence $c_{r+1}=c_r-z_r+1$, i.e.\ $z_r=c_r+1-c_{r+1}$. (2) (GH Prop.~3.2(1)) $c_{r+1}\le c_r+1$. (3) A pile alive at rows $a$ and $b>a$ is alive at every row in $[a,b]$; a pile in $R_a$ that is not in $E_a\cup E_{a+1}\cup\dots\cup E_{b-1}$ is in $R_b$.
+
+\emph{Proof.} (1) from 1.1 ($R_{r+1}$ = piles of $R_r$ with end $\ge r+1$, plus born pile $r$); (2) since $z_r\ge0$; (3) alive rows of a pile form an interval. $\square$
+
+\textbf{1.3 Terminology.} A \emph{pattern} $(x;p,L)$ with $x\ge2$, $p\ge1$, $L\ge2$ means $(c_p,c_{p+1},\dots,c_{p+L})=(x-1,x,\dots,x,x+1)$, i.e.\ $c_p=x-1$, $c_{p+1}=\dots=c_{p+L-1}=x$, $c_{p+L}=x+1$. By 1.2(1) this is equivalent to $c_p=x-1$ together with $z_p=0$, $z_{p+m}=1$ ($1\le m\le L-2$), $z_{p+L-1}=0$.
+
+\textbf{1.4 (Sandwich, GH Prop.~3.2(3)).} If $i<j$ and $c_i<x<c_j$, there is a pattern $(x;p,q-p)$ with $i\le p<q\le j$.
+
+\emph{Proof.} Let $p=\max\{m\in[i,j-1]:c_m\le x-1\}$ (exists: $m=i$). Then $c_m\ge x$ for $p<m\le j$. $x\le c_{p+1}\le c_p+1\le x$ gives $c_p=x-1,c_{p+1}=x$. Let $q=\min\{m\in(p,j]:c_m\ge x+1\}$ (exists: $m=j$); $q\ge p+2$ since $c_{p+1}=x$. For $p<m<q$, $x\le c_m\le x$; and $x+1\le c_q\le c_{q-1}+1=x+1$. $\square$
+
+\subsection*{Step 2. Descent lemma (GH Lemmas 3.5 and 3.6, re-proved and merged)}
+
+\textbf{2.1 Lemma.} Let $(x;p,L)$ be a pattern with $p\ge x+1$. Then $L\ge3$ and there is a pattern $(y;p',L')$ with $2\le y\le x$, $p-x\le p'\le p-2$, $2\le L'\le L-1$.
+
+\emph{Proof.} (a) \emph{Choice of $p'$.} $p\ge x+1\ge3$. Born pile $p-1$ is in $R_p$ ($c_{p-1}\ge1$). The born piles $1,\dots,p-1$ are $p-1\ge x$ piles while $|R_p|=c_p=x-1$, so some born pile $i\le p-1$ is not in $R_p$, and $i\le p-2$. Let $p'=\max\{i\le p-2:\ \text{born pile } i\notin R_p\}\ge1$. Born piles $p'+1,\dots,p-1$ are in $R_p$; they are $p-1-p'$ distinct elements of $R_p$, so $p-1-p'\le x-1$, i.e.\ $y:=p-p'\le x$; also $y\ge2$.
+
+(b) \emph{Two exact values.} Pile $p'$ starts at row $p'+1\le p-1$ and is not alive at row $p$, so $p'+c_{p'}\le p-1$: $c_{p'}\le y-1$. Pile $p'+1\in R_p$, and $z_p=0$, so it is in $R_{p+1}$: $p'+1+c_{p'+1}\ge p+1$, $c_{p'+1}\ge y$. With 1.2(2): $c_{p'}=y-1$, $c_{p'+1}=y$, and pile $p'+1$ has end row exactly $p+1$.
+
+(c) \emph{Induction.} For $1\le m\le L-1$ let $H(m)$: $c_{p'+1}=\dots=c_{p'+m}=y$ and, for $1\le l\le m$, pile $p'+l$ has end row $p+l$. $H(1)$ holds by (b).
+\begin{itemize}
+\item If $H(L-1)$ held, pile $p'+L-1$ would end at row $p+L-1$, contradicting $z_{p+L-1}=0$. So the induction below must stop earlier. (For $L=2$: $H(1)=H(L-1)$ holds, contradiction; hence $L\ge3$. This is GH Lemma 3.6.)
+\item Assume $H(m)$ with $m\le L-2$. Let $j=p'+m+1\le p+m-1$ (as $p'\le p-2$). \emph{Claim: pile $j\in R_{p+m+1}$.} The piles ending at rows $p,\dots,p+m$: none at row $p$ ($z_p=0$), and for $1\le l\le m$ exactly one at row $p+l$ ($z_{p+l}=1$ as $p+l\le p+L-2$), which by $H(m)$ is pile $p'+l\ne j$. If $j\le p-1$, pile $j\in R_p$ by choice of $p'$; if $p\le j\le p+m-1$, pile $j\in R_{j+1}$ with $j+1\in[p+1,p+m]$. In both cases, by 1.2(3), $j$ is alive at row $p+m+1$. Hence $c_j\ge p+m+1-j=y$, and $c_j\le c_{j-1}+1=y+1$.
+\item If $c_j=y+1$: $(c_{p'},\dots,c_{p'+m+1})=(y-1,y,\dots,y,y+1)$ is a pattern $(y;p',m+1)$ with $2\le m+1\le L-1$. Done.
+\item If $c_j=y$: pile $j$ ends at row $j+y=p+m+1$, so $H(m+1)$ holds.
+\end{itemize}
+Since $H(L-1)$ is impossible, the first alternative occurs for some $m\le L-2$. $\square$
+
+\textbf{2.2 Corollary (GH counting in proof of Thm 3.7/4.4).} If $(x;p,L)$ is a pattern with $x\le X$, then $p\le(L-1)X$.
+
+\emph{Proof.} Build a chain $P_0=(x_0;p_0,L_0)=(x;p,L)$, and while $p_j\ge x_j+1$ let $P_{j+1}$ be the pattern of 2.1. Then $x_{j+1}\le x_j\le X$, $L_{j+1}\le L_j-1$, $p_j\le p_{j+1}+x_j\le p_{j+1}+X$. Since every pattern has $L\ge2$ and a pattern with $L=2$ has $p\le x$ (2.1), the chain stops at some $P_f$ with $p_f\le x_f\le X$ and $f\le L_0-2$. So $p\le fX+X\le(L-1)X$. $\square$
+
+\subsection*{Step 3. A long pattern forces a long original pile (GH Lemma 3.4)}
+
+\textbf{3.1 Lemma.} Let $k\ge3$ and let $(k-1;p,k)$ be a pattern, i.e.\ $(c_p,\dots,c_{p+k})=(k-2,k-1,\dots,k-1,k)$. Then $p+k\le n+1$, with equality only if $\lambda=(1^n)$.
+
+\emph{Proof.} Here $z_p=0$, $z_{p+m}=1$ ($1\le m\le k-2$), $z_{p+k-1}=0$. For $j\in[p+1,p+k-1]$, $c_j=k-1$, so pile $j$ is alive at rows $j+1,\dots,j+k-1\ni p+k$. As $|R_{p+k}|=c_{p+k}=k$, $R_{p+k}=\{p+1,\dots,p+k-1\}\cup\{X\}$ for one further pile $X$; $X$ is not born pile $p$ (end row $p+c_p=p+k-2$), nor born $\ge p+k$ (not yet alive), so $X$ is original or born $j\le p-1$. By 1.2(1) with $z_{p+k-1}=0$: $R_{p+k-1}=R_{p+k}\setminus\{p+k-1\}=\{p+1,\dots,p+k-2\}\cup\{X\}$. With $z_{p+k-2}=1$ ($k\ge3$) and pile $p\in R_{p+k-2}$ ending at row $p+k-2$ (it is alive at rows $p+1,\dots,p+k-2$, nonempty as $k\ge3$), $E_{p+k-2}=\{p\}$ and $R_{p+k-2}=\{p,\dots,p+k-3\}\cup\{X\}$.
+
+If $X$ is original pile $m$: $\lambda_m\ge p+k$ and $\lambda_m\le n$, so $p+k\le n$.
+
+If $X$ is born pile $j\le p-1$ with $j\ge2$: pile $j-1$ ($\le p-2$) is not $X$ and not in $\{p,\dots\}$, so $j-1\notin R_{p+k-2}$; it is alive at row $j\le p+k-2$, hence its end row is $\le p+k-3$: $c_{j-1}\le p+k-j-2$. But $X=j\in R_{p+k}$ gives $c_j\ge p+k-j$, so $c_j\ge c_{j-1}+2$, contradicting 1.2(2). Hence $j=1$ and $c_1=s\ge p+k-1$; $s\le n$ gives $p+k\le n+1$, with equality only if $s=n$, i.e.\ $\lambda=(1^n)$. $\square$
+
+\subsection*{Step 4. Structure at the entry into the cycle (GH Lemma 3.3(2) and 4.3, re-proved)}
+From here on $k\ge3$, $n=T_{k-1}+r$, $1\le r\le k-1$.
+
+\textbf{4.1 Definition/Lemma.} $\tau:=\min\{i\ge1:\lambda^{(i-1)}\text{ cyclic},\ c_i=k-1,\ c_{i+1}=k\}$ exists, and $d_B(\lambda)\le\tau-1$.
+
+\emph{Proof.} Let $d=d_B(\lambda)$, $\lambda^{(d)}=\mu(e)$. By 0.2, $\lambda^{(d+j)}=\mu(e^{(j)})$ with $e^{(j)}$ the $j$-fold cyclic rotation of $e$, whose last coordinate is $e_{k-j\bmod k}$ (indices in $1..k$). So $c_{d+j+1}=k-1+e_{(k-j)\bmod k}$ is periodic in $j$ with period $k$ and, since $1\le r\le k-1$, takes both values $k-1$ and $k$. Take $j_0\ge d+1$ with $c_{j_0}=k-1$ and $j_1=\min\{j>j_0:c_j=k\}$; then $i=j_1-1\ge d+1$ has $c_i=k-1$, $c_{i+1}=k$, and $\lambda^{(i-1)}$ is cyclic by 0.3. So $\tau$ exists, and $d\le\tau-1$ by 0.3. $\square$
+
+\textbf{4.2 Lemma.} If $\tau\ge k+1$, at least one holds:
+\begin{itemize}
+\item[(i)] there is a pattern $(k;p,L)$ with $\tau-k\le p$ and $p+L\le\tau-1$;
+\item[(ii)] there is a pattern $(k-1;p,L)$ with $\tau-k+1\le p$ and $p+L\le\tau+1$.
+\end{itemize}
+
+\emph{Proof.} $|R_\tau|=c_\tau=k-1$, born pile $\tau-1\in R_\tau$, and born piles $\tau-k,\dots,\tau-1$ (all $\ge1$) are $k$ piles, so one of them with index $\le\tau-2$ is not in $R_\tau$. Let $i=\max\{j\in[\tau-k,\tau-2]:\text{born pile }j\notin R_\tau\}$. As in 2.1(b) (with $z_\tau=c_\tau+1-c_{\tau+1}=0$): $c_i\le\tau-1-i$, pile $i+1\in R_{\tau+1}$ so $c_{i+1}\ge\tau-i$, hence $c_i=\tau-i-1$, $c_{i+1}=\tau-i$.
+
+\emph{Case A: $i\ge\tau-k+1$.} Then $c_i\le k-2<k-1<k=c_{\tau+1}$; 1.4 on $(i,\tau+1)$ gives (ii) with $p\ge i$.
+
+\emph{Case B: $i=\tau-k$.} Then $c_{\tau-k}=k-1$, $c_{\tau-k+1}=k$, and born piles $\tau-k+1,\dots,\tau-1$ (that is $k-1=|R_\tau|$ piles) are in $R_\tau$, so $R_\tau=\{\tau-k+1,\dots,\tau-1\}$.
+\begin{itemize}
+\item[B1:] some $j\in[\tau-k+2,\tau-1]$ has $c_j\le k-2$: 1.4 on $(j,\tau+1)$ with $x=k-1$ gives (ii).
+\item[B2:] some $j\in[\tau-k+2,\tau-1]$ has $c_j\ge k+1$: 1.4 on $(\tau-k,j)$ with $x=k$ gives (i) (with $p\ge\tau-k$, $p+L\le j\le\tau-1$).
+\item[B3:] otherwise $c_j\in\{k-1,k\}$ for all $j\in[\tau-k,\tau-1]$. We show $\lambda^{(\tau-k-1)}$ is cyclic; together with $c_{\tau-k}=k-1$, $c_{\tau-k+1}=k$ and $\tau-k\ge1$ this contradicts the minimality of $\tau$. By 1.1, the parts of $\lambda^{(\tau-k-1)}$ correspond to $R_{\tau-k}$, pile $P$ giving $\mathrm{end}(P)-\tau+k+1$. No pile of $R_{\tau-k}$ is in $R_\tau=\{\tau-k+1,\dots,\tau-1\}$, since born pile $j$ is alive only from row $j+1>\tau-k$; so by 1.2(3) every $P\in R_{\tau-k}$ has end row in $[\tau-k,\tau-1]$, and its part $h:=\mathrm{end}(P)-\tau+k+1\in[1,k]$. Conversely a pile with end row $\rho\in[\tau-k,\tau-1]$ is in $R_{\tau-k}$ unless it starts after row $\tau-k$, i.e.\ is a born pile $j\ge\tau-k$; among these, pile $\tau-k$ ends at $\tau-k+c_{\tau-k}=\tau-1$, piles $\tau-k+1,\dots,\tau-1$ are in $R_\tau$ (end $\ge\tau$), piles $j\ge\tau$ end at $\ge\tau+1$. So the number of parts equal to $h$ is $a_h=z_{\tau-k-1+h}-[h=k]$, and for $1\le h\le k$, using $z_\rho=c_\rho+1-c_{\rho+1}$ and telescoping,
+\[
+\mu'_h:=\sum_{g=h}^{k}a_g=\sum_{g=h}^{k}\bigl(c_{\tau-k-1+g}+1-c_{\tau-k+g}\bigr)-1=c_{\tau-k-1+h}-c_\tau+(k-h)=c_{\tau-k-1+h}+1-h,
+\]
+using $c_\tau=k-1$. As $\tau-k-1+h\in[\tau-k,\tau-1]$, $c_{\tau-k-1+h}\in\{k-1,k\}$, so $\mu'_h\in\{k-h,k-h+1\}$; all parts are $\le k$, and $\lambda^{(\tau-k-1)}\vdash n$. By 0.4 it is cyclic. $\square$
+\end{itemize}
+
+\subsection*{Step 5. Theorem (target (a)); GH Thm 4.4(1), with $k=4$ done by hand}
+
+\textbf{5.1 Theorem.} Let $k\ge4$, $T_{k-1}<n<T_k$, $\lambda\vdash n$. Then $\tau-1\le k^2-2k-1$, hence $d_B(\lambda)\le k^2-2k-1$. Moreover, if $\tau-1=k^2-2k-1$ then $\tau\ge k+1$ and: for $k\ge5$ case (i) of 4.2 holds; for $k=4$ case (i) holds or case (ii) holds with $L=k$ and $p=\tau-k+1$.
+
+\emph{Proof.} $n=T_{k-1}+r$, $1\le r\le k-1$. If $\tau\le k$: $\tau-1\le k-1<k^2-2k-1$ ($k\ge4$). Else 4.2 applies.
+
+(i) Pattern $(k;p,L)$, $\tau-k\le p$, $p+L\le\tau-1$, so $L\le k-1$. If $L=k-1$: $p=\tau-k$ and $c_{\tau-1}=k+1$; but born pile $\tau-1$ gives the part $c_{\tau-1}$ of $\lambda^{(\tau-1)}$ (1.1), which is cyclic, so $c_{\tau-1}\le k$ by 0.1: contradiction. So $L\le k-2$, and 2.2 with $X=k$ gives $p\le(k-3)k$. Then $\tau-1\le p+k-1\le k^2-2k-1$.
+
+(ii) Pattern $(k-1;p,L)$, $\tau-k+1\le p$, $p+L\le\tau+1$, so $L\le k$.
+\begin{itemize}
+\item $L=k$: $p=\tau-k+1$; by 3.1, $\tau-1=p+k-2\le n-1\le T_k-2$. For $k\ge5$: $T_k-2<k^2-2k-1\iff k^2-5k+2>0$, true. For $k=4$: $n\le9$, $\tau-1\le n-1\le8$, and $=8$ forces $n=9$ and equality in 3.1, i.e.\ $\lambda=(1^9)$; otherwise $\tau-1\le7=k^2-2k-1$. For $\lambda=(1^9)$ directly:
+\[(1^9)\to(9)\to(8,1)\to(7,2)\to(6,2,1)\to(5,3,1)\to(4,3,2)\to(3,3,2,1)\]
+(each arrow is one application of $B$, checked from the definition), and $(4,3,2)=\mu(1,1,1,0)$ is cyclic ($k=4,r=3$, Cell 1 result). So $\lambda^{(6)}$ is cyclic, $c_7=3$ (parts of $(4,3,2)$), $c_8=4$ (parts of $(3,3,2,1)$), hence $\tau\le7$ and $\tau-1\le6<7$; so $\lambda=(1^9)$ does not reach this case with $\tau-1=8$ at all, and in every sub-case $\tau-1\le7$.
+\item $L=k-1$: $p\in\{\tau-k+1,\tau-k+2\}$. If $p=\tau-k+1$ then $c_\tau=c_{p+L}=k\ne k-1$: impossible. If $p=\tau-k+2$ then $c_p=k-2$ and born pile $p$ ends at row $p+k-2=\tau$, so $z_\tau\ge1$, but $z_\tau=c_\tau+1-c_{\tau+1}=0$: impossible.
+\item $L\le k-2$: 2.2 with $X=k-1$: $p\le(L-1)(k-1)\le(k-3)(k-1)$. From $\tau-k+1\le p$: $\tau-1\le p+k-2\le(k-3)(k-1)+k-2=k^2-3k+1<k^2-2k-1$ (as $k>2$).
+\end{itemize}
+In all cases $\tau-1\le k^2-2k-1$, and $d_B(\lambda)\le\tau-1$ by 4.1. The ``moreover'' is read off: $\tau\le k$ gives $\tau-1<k^2-2k-1$; in case (ii), $L=k-1$ is impossible, $L\le k-2$ gives strict inequality, and $L=k$ gives strict inequality for $k\ge5$ (it forces $p=\tau-k+1$). $\square$
+
+\subsection*{Step 6. The witness (target (b), lower bound); GH Thm 4.4(2) ``imitating Thm 3.1'', written out}
+Diagonal picture: cell $(i,j)$ of a diagram lies on diagonal $i+j-1$ (rows = parts). Let $k\ge3$.
+
+\textbf{6.1 Configurations.} For $H\subseteq\{1,\dots,k\}$ and $\pi\in\{1,\dots,k+1\}$ let $\ell_i(H,\pi)=(k-i)^++[i\le k,\,i\notin H]+[\pi=i]$ for $1\le i\le k+1$. Condition (S): if $\pi\le k$ then $\pi\notin H$; if $\pi\ge2$ then $\pi-1\notin H$.
+
+Under (S), $\ell_1\ge\ell_2\ge\dots\ge\ell_{k+1}\ge0$: for $i\le k-1$, $\ell_i-\ell_{i+1}=1+[i\notin H]+[\pi=i]-[i+1\notin H]-[\pi=i+1]$ is negative only if $i\in H$ and $\pi=i+1$, excluded by (S); $\ell_k-\ell_{k+1}=[k\notin H]+[\pi=k]-[\pi=k+1]$ is negative only if $k\in H,\pi=k+1$, excluded by (S). So the positive $\ell_i$ form a partition $\Lambda(H,\pi)$; the same holds for $\Lambda(H):=$ positive entries of $\ell_i(H)=(k-i)^++[i\le k,i\notin H]$ (no $\pi$).
+
+Rotation: $H+1:=\{h+1:h\in H,h<k\}\cup\{1:k\in H\}$, $\pi^+:=\pi+1$ if $\pi\le k$, $\pi^+:=1$ if $\pi=k+1$.
+
+\textbf{6.2 Lemma.} Assume (S). (1) If not ($\pi=1$ and $k\in H$) then $B(\Lambda(H,\pi))=\Lambda(H+1,\pi^+)$ and $(H+1,\pi^+)$ satisfies (S). (2) If $\pi=1$ and $k\in H$ then $B(\Lambda(H,\pi))=\Lambda((H+1)\setminus\{1\})$.
+
+\emph{Proof.} Number of parts: $\ell_i\ge k-i\ge1$ for $i\le k-1$; $\ell_k=[k\notin H]+[\pi=k]$ is positive iff $k\notin H$ (if $\pi=k$ then $k\notin H$ by (S)); $\ell_{k+1}=[\pi=k+1]$. So $s=k-1+[k\notin H]+[\pi=k+1]$. The parts of $B$ are $s$ and the positive values $\ell_i-1$.
+
+Compare with $\ell'_j:=\ell_j(H+1,\pi^+)$: $\ell'_1=(k-1)+[1\notin H+1]+[\pi^+=1]=(k-1)+[k\notin H]+[\pi=k+1]=s$. For $1\le i\le k-1$: $\ell'_{i+1}=(k-i-1)+[i+1\notin H+1]+[\pi^+=i+1]=(k-i-1)+[i\notin H]+[\pi=i]=\ell_i-1$. For $i=k$: $\ell'_{k+1}=[\pi^+=k+1]=[\pi=k]$, while $\ell_k-1=[k\notin H]+[\pi=k]-1$, which is $[\pi=k]$ if $k\notin H$, and $\le0$ (no part) with $[\pi=k]=0$ if $k\in H$ (by (S)); so the positive values agree. $\ell_{k+1}-1\le0$ gives no part. Hence the multiset of parts of $B(\Lambda(H,\pi))$ is the multiset of positive $\ell'_j$.
+
+(1) (S) for $(H+1,\pi^+)$: if $\pi^+\le k$: for $\pi\le k-1$, $\pi+1\in H+1\iff\pi\in H$, false by (S); for $\pi=k+1$, $1\in H+1\iff k\in H$, false by (S) ($\pi-1=k$). If $\pi^+\ge2$ (so $\pi\le k$): $\pi^+-1=\pi\in H+1$ iff ($\pi\ge2$ and $\pi-1\in H$) or ($\pi=1$ and $k\in H$); the first is excluded by (S), the second by hypothesis. So by 6.1 $\ell'$ is weakly decreasing and $B(\Lambda(H,\pi))=\Lambda(H+1,\pi^+)$.
+
+(2) Here $\pi=1$, $1\notin H$ (S), $k\in H$: $s=k-1$, $\ell_1-1=k$, $\ell'=(k-1,\,k,\,\ell_2-1,\dots)$ as multiset. The partition is the sorted multiset $(k,k-1,\ell_2-1,\ell_3-1,\dots)$ (note $\ell_2-1\le k-2$). On the other hand $\ell_j((H+1)\setminus\{1\})$ equals $k-1+1=k$ for $j=1$ ($1\notin(H+1)\setminus\{1\}$), $k-2+[2\notin H+1]=k-2+[1\notin H]=k-1$ for $j=2$, and $\ell'_j$ for $3\le j\le k$ (as $\pi^+=2$), and $0$ for $j=k+1$ ($=\ell'_{k+1}=[\pi=k]=0$). Both are the same multiset, and $\ell((H+1)\setminus\{1\})$ is decreasing by 6.1 (no $\pi$). $\square$
+
+\textbf{6.3 Non-cyclicity.} Let $|H|\ge1$, so $|\Lambda(H,\pi)|=T_{k-1}+(k-|H|)+1\in(T_{k-1},T_k]$ has rank $k$ and 0.1 applies. Then $\Lambda(H,\pi)$ (any $\pi$, under (S)) is not cyclic: if $\pi\le k$, its $\pi$-th part is $(k-\pi)+1+1>k+1-\pi$ ($\pi\notin H$ by (S)), violating 0.1; if $\pi=k+1$ it has a $(k+1)$-st part, violating 0.1. $\Lambda(H)$ with $|\Lambda(H)|=T_{k-1}+(k-|H|)$ equals $\mu(e)$ with $e_i=[i\notin H]$, hence is cyclic (Cell 1 result, $r=k-|H|\ge1$ when $H\ne\{1..k\}$).
+
+\textbf{6.4 Proposition.} For $k\ge3$, $\lambda^*_k:=\Lambda(\{1,2\},k+1)=(k-1,k-2,k-2,k-3,\dots,2,1,1)\vdash T_k-1$ satisfies $d_B(\lambda^*_k)=k^2-2k-1$ and $B^{k^2-2k-2}(\lambda^*_k)=\nu_k$.
+
+\emph{Proof.} Rows: $\ell_1=k-1$, $\ell_2=k-2$, $\ell_i=k-i+1$ ($3\le i\le k$), $\ell_{k+1}=1$: this is $\lambda^*_k$, of size $T_{k-1}+(k-2)+1=T_k-1$. (S): $\pi=k+1$ needs $k\notin\{1,2\}$, true for $k\ge3$.
+
+Let $H_t=\{1+t,2+t\}\bmod k$ (representatives in $1..k$) and $\pi_t\equiv t\pmod{k+1}$ in $1..k+1$ (so $\pi_0=k+1$). As long as no exceptional step occurs, 6.2(1) and induction give $\lambda^{(t)}=\Lambda(H_t,\pi_t)$ with (S). The exceptional condition at time $t$ is $\pi_t=1$ and $k\in H_t$: $\pi_t=1\iff t=(k+1)v+1$, $v\ge0$; then $t\equiv v+1\pmod k$, and $k\in H_t\iff t\equiv-1\text{ or }-2\pmod k\iff v\equiv k-2\text{ or }k-3\pmod k$. The least $v\ge0$ is $v=k-3$, so the first exceptional time is $t^*=(k+1)(k-3)+1=k^2-2k-2$. For $0\le t\le t^*$, $\lambda^{(t)}=\Lambda(H_t,\pi_t)$ is not cyclic (6.3). By 6.2(2), $\lambda^{(t^*+1)}=\Lambda(H')$ with $|H'|=1$, cyclic (6.3). By 0.3, $d_B(\lambda^*_k)=t^*+1=k^2-2k-1$.
+
+At $t^*$: $t^*\equiv-2\pmod k$, so $H_{t^*}=\{k-1,k\}$, $\pi_{t^*}=1$, rows $\ell_1=(k-1)+1+1=k+1$, $\ell_i=k-i+1$ ($2\le i\le k-2$), $\ell_{k-1}=1$, $\ell_k=\ell_{k+1}=0$: this is $\nu_k=(k+1,k-1,\dots,3,1)$. $\square$
+
+\subsection*{Step 7. Target (b)}
+\textbf{7.1} $k\ge4$: $D_B(T_k-1)=k^2-2k-1$: ``$\le$'' is 5.1 with $n=T_k-1$ (non-triangular, rank $k$); ``$\ge$'' is 6.4.
+
+\textbf{7.2} $k=1$: $T_1-1=0$ is not a positive integer; nothing to determine.
+
+\textbf{7.3} $k=2$, $n=2$: by the Cell 1 result ($k=2,r=1$) the cyclic partitions are $(1+e_1,e_2)$, $e_1+e_2=1$: $(2)$ and $(1,1)$, i.e.\ all partitions of $2$. $D_B(2)=0$, attained by both.
+
+\textbf{7.4} $k=3$, $n=5$ ($r=2$): cyclic are $(2+e_1,1+e_2,e_3)$ with two ones: $(3,2),(3,1,1),(2,2,1)$. Directly: $B(4,1)=(3,2)$; $B(5)=(4,1)$; $B(2,1,1,1)=(4,1)$; $B(1,1,1,1,1)=(5)$. So $d_B=0$ on the three cyclic ones, $d_B(4,1)=1$, $d_B(5)=d_B(2,1,1,1)=2$, $d_B(1^5)=3$. These are all $7$ partitions of $5$: $D_B(5)=3$ ($\ne 3^2-6-1=2$), attained only by $(1^5)$.
+
+\subsection*{Step 8. (not needed) remark}
+For $k=3$ Theorem 5.1 fails ($D_B(5)=3>2$); GH note the same. The proof of 5.1 uses $k\ge4$ only in the final numeric comparisons.
+
+\subsection*{Step 9. Target (c)}
+
+\textbf{9.1 Proposition.} Let $k\ge4$, $m=k^2-2k-2$. If $\lambda\vdash T_k-1$ and $B^m(\lambda)=\nu_k$, then $d_B(\lambda)=k^2-2k-1$.
+
+\emph{Proof.} $\nu_k$ has first part $k+1>k$, so it is not cyclic (0.1). If $\lambda^{(i)}$ were cyclic for some $i\le m$, then $\lambda^{(m)}=\nu_k$ would be cyclic (0.3). So $d_B(\lambda)\ge m+1$. $B(\nu_k)$: $\nu_k$ has $1+(k-3)+1=k-1$ parts; subtracting $1$ gives $k,k-2,\dots,2$ and $0$ (dropped); adding $k-1$: $B(\nu_k)=(k,k-1,\dots,2)=\mu(1,\dots,1,0)$, cyclic. So $d_B(\lambda)=m+1$. $\square$
+
+\textbf{9.2 Proposition.} Let $k\ge4$, $\lambda\vdash T_k-1$ with $d_B(\lambda)=k^2-2k-1$. Then $B^{k^2-2k-2}(\lambda)=\nu_k$.
+
+\emph{Proof.} By 4.1 and 5.1, $k^2-2k-1=d_B(\lambda)\le\tau-1\le k^2-2k-1$, so $\tau=k^2-2k\ge k+1$. \emph{Case (i) of 4.2 holds.} For $k\ge5$ this is the ``moreover'' of 5.1. For $k=4$ ($n=9$, $\tau=8$), by the ``moreover'' the only alternative is case (ii) with $L=4$, $p=\tau-k+1=5$, i.e.\ a pattern $(3;5,4)$; then the proof of 3.1 (with $p+k=9$) shows that the extra pile $X\in R_9$ is either an original pile with $\lambda_m\ge9$, forcing $\lambda=(9)$, or born pile $1$ with $s=c_1\ge8$, forcing $\lambda\in\{(2,1^7),(1^9)\}$. From the chain in 5.1, $(9)\to(8,1)\to(7,2)\to(6,2,1)\to(5,3,1)\to(4,3,2)$ gives $d_B((9))\le5$; $B((2,1^7))=(8,1)$ gives $d_B((2,1^7))\le5$; and $d_B((1^9))\le6$. All are $<7=d_B(\lambda)$, a contradiction; so case (i) holds for $k=4$ as well. So there is a pattern $(k;p,L)$ with $\tau-k\le p$, $p+L\le\tau-1$; the proof of 5.1 showed $L\le k-2$ and $p\le(L-1)k$ (2.2). From $\tau-1\le p+k-1$ and $p\le(L-1)k\le(k-3)k=\tau-k$: $p=\tau-k$ and $L=k-2$. So $c_{\tau-k}=k-1$, $c_{\tau-k+1}=\dots=c_{\tau-3}=k$, $c_{\tau-2}=k+1$.
+
+Born piles $j=\tau-k+1,\dots,\tau-1$ are in $R_\tau$: for $j\le\tau-3$, $j+c_j=j+k\ge\tau+1$; for $j=\tau-2$, $j+c_j=\tau+k-1\ge\tau$; for $j=\tau-1$, alive at row $\tau$. These are $k-1=c_\tau$ piles, so they are all of $R_\tau$. By 1.1 the parts of $\lambda^{(\tau-1)}$ are $j+c_j-(\tau-1)$: $c_{\tau-1}$ (for $j=\tau-1$), $k$ (for $j=\tau-2$), and $k-m'$ for $j=\tau-1-m'$, $2\le m'\le k-2$. Their sum is $T_k-1$, so $c_{\tau-1}=T_k-1-k-(T_{k-2}-1)=k-1$ and $\lambda^{(\tau-1)}=(k,k-1,k-2,\dots,2)$.
+
+Now $\lambda^{(\tau-2)}$ has $c_{\tau-1}=k-1$ parts, and its parts $\ge2$, decreased by $1$, together with the part $k-1$ form $\lambda^{(\tau-1)}$. Removing one part $k-1$ from $(k,k-1,\dots,2)$ leaves $k,k-2,\dots,2$, so the parts $\ge2$ of $\lambda^{(\tau-2)}$ are $k+1,k-1,\dots,3$ ($k-2$ parts), and the remaining one part is $1$. So $\lambda^{(\tau-2)}=\nu_k$, $\tau-2=k^2-2k-2$. $\square$
+
+\textbf{9.3 Theorem (c), $k\ge4$.} The maximisers of $d_B$ on partitions of $T_k-1$ are exactly
+\[
+\mathcal E_k=\{\lambda\vdash T_k-1:B^{k^2-2k-2}(\lambda)=\nu_k\},\qquad \nu_k=(k+1,k-1,k-2,\dots,3,1);
+\]
+$\lambda^*_k\in\mathcal E_k$ (6.4).
+
+\emph{Proof.} 7.1, 9.1, 9.2. $\square$
+
+\textbf{9.4 Small cases of $\mathcal E_k$} (computed; illustration and cross-check only, the proof of 9.3 does not use it). $k=4$: $\mathcal E_4=\{(3,2,2,1,1)\}=\{\lambda^*_4\}$. $k=5$: $\mathcal E_5=\{(4,3,3,2,1,1),(4,3,2,2,2,1),(4,3,2,2,1,1,1),(3,3,3,2,2,1),(3,3,3,2,1,1,1),(3,3,2,2,2,1,1)\}$, the first being $\lambda^*_5$. Both lists are printed by \texttt{code/check.py} (output \texttt{code/run.txt}) and agree with an exhaustive exact computation of $d_B$ on all partitions of $9$ and $14$ (that computation identifies cyclic partitions via the Cell 1 list).
+
+\textbf{9.5} $k=2$: maximisers $\{(2),(1,1)\}$ (7.3); $k=3$: $\{(1^5)\}$ (7.4).
+
+\textbf{9.6 On ``explicit functions of $k$''.} $\mathcal E_k$ is described dynamically (the set of partitions at depth exactly $k^2-2k-2$ above $\nu_k$ in the $B$-tree). $|\mathcal E_k|=1,6,34,175,831,3911$ for $k=4,\dots,9$ (computation, not a proof of anything). The answer to (c) is therefore a proved criterion that characterises the maximiser set exactly; a closed-form list of $\mathcal E_k$ is not obtained. Griggs--Ho (Thm 3.8 and remark after it) report that for the analogous triangular case even three natural necessary array conditions are not sufficient ($k=8$).
+
+\subsection*{Step 10. What is established}
+\begin{itemize}
+\item PROVED (all $k$ stated): Step 0 (from the Cell 1 result), 1.1--1.4, 2.1, 2.2, 3.1, 4.1, 4.2, Theorem 5.1 ((a) for every $k\ge4$, by hand, including $k=4$), 6.4, (b) for all $k\ge1$ (7.1--7.4), (c) for every $k\ge4$ (9.3, by hand, including $k=4$) and $k=2,3$ (7.3, 7.4).
+\item Not established: a closed-form list of $\mathcal E_k$ (9.6); (c) is answered by the explicit criterion $B^{k^2-2k-2}(\lambda)=\nu_k$.
+\item Sanity only (not used): \texttt{check.py} confirms (a), (b), (c) and $\tau-1\le k^2-2k-1$ for $4\le k\le9$, matching GH Fig.~1.
+\end{itemize}
+
+\section*{How to verify (sanity check, not load-bearing)}
+\texttt{code/check.py} is stdlib-only exact integer computation. From the directory \texttt{submission/code/}:
+\begin{verbatim}
+/usr/bin/time -p python3 check.py 9
+\end{verbatim}
+Expected output: the 34 lines recorded in \texttt{code/run.txt}, ending with \texttt{ALL OK}. Measured on our re-run (Python 3.14.0): real 38.62\,s. The proof above does not depend on this computation.
+
+\section*{Limitations}
+\begin{itemize}
+\item (c) is answered by a proved criterion ($B^{k^2-2k-2}(\lambda)=\nu_k$), which characterises the maximiser set exactly; it is not a closed-form list of the maximisers as explicit functions of $k$.
+\item The sizes $|\mathcal E_k|=1,6,34,175,831,3911$ ($k=4,\dots,9$) and the lists for $k=4,5$ are numerical evidence only; nothing is proved from them.
+\item The proof uses the Cell 1 classification of cyclic partitions as the earlier cell's result.
+\end{itemize}
+
+\section*{References}
+\begin{enumerate}
+\item J.~R.~Griggs, C.-C.~Ho, The cycling of partitions and compositions under repeated shifts, \emph{Adv.\ Appl.\ Math.} \textbf{21} (1998) 205--227, DOI 10.1006/aama.1998.0597. Preprint (2 March 1998): \texttt{https://people.math.sc.edu/griggs/cycling.pdf}.
+\item J.~Brandt, Cycles of partitions, \emph{Proc.\ Amer.\ Math.\ Soc.} \textbf{85} (1982) 483--486 (cited via Griggs--Ho Thm~2.1; not opened).
+\end{enumerate}
+
+\end{document}
