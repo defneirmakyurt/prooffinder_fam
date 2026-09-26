@@ -1,0 +1,8 @@
+d=5 SA best count 88 -> Q5_ref.txt
+d=6 SA best count 204 -> Q6_ref.txt
+real 1.011 s
+== accepted checker
+VERIFIED 88
+real 0.020 s
+VERIFIED 204
+real 0.030 s

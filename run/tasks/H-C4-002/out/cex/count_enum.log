@@ -1,0 +1,6 @@
+inbox/subject/Q7.txt d=7 first=0100010 last=1000111 valleys=16 uphill(enumerated)=464 |S|=56 S_independent=True T_forest=True lemmaA_bound=464
+inbox/subject/Q8.txt d=8 first=10011010 last=00111111 valleys=16 uphill(enumerated)=1040 |S|=112 S_independent=True T_forest=True lemmaA_bound=1040
+
+real	0m0.019s
+user	0m0.017s
+sys	0m0.000s

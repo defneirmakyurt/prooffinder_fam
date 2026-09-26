@@ -1,0 +1,20 @@
+d=1: F_d = 2, nodes=5, witness: 0 1
+
+real	0m0.003s
+user	0m0.002s
+sys	0m0.000s
+d=2: F_d = 3, nodes=8, witness: 0 1 2
+
+real	0m0.004s
+user	0m0.002s
+sys	0m0.000s
+d=3: F_d = 5, nodes=112, witness: 0 1 2 4 7
+
+real	0m0.004s
+user	0m0.002s
+sys	0m0.000s
+d=4: F_d = 10, nodes=3544, witness: 0 1 2 4 7 8 11 13 14 15
+
+real	0m0.010s
+user	0m0.002s
+sys	0m0.000s

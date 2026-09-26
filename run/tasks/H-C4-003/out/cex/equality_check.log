@@ -1,0 +1,4 @@
+Q7.txt: |S|=56 (2^d-|S|=72), S independent=True, down-degrees on S=[7], T forest=True (e=56, comps=16), LemmaA bound=464
+Q8.txt: |S|=112 (2^d-|S|=144), S independent=True, down-degrees on S=[8], T forest=True (e=128, comps=16), LemmaA bound=1040
+subject F_5 witness: size=18, induced forest=True
+real 0.017 s

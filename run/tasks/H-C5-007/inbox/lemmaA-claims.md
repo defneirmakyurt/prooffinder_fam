@@ -1,28 +1,26 @@
-# Uphill paths on the hypercube: C2, C3, C4 hand-in (values + lower-bound proof)
+# Claims: H-C4-001 (U(Q_7), U(Q_8))
 
-STATUS (head, run time 0:52): GATED VALID — two clean-room referees (H-C4-002, H-C4-003) ACCEPTed this proof, including the d = 5, 6 instances. Values PROVED.
-The proof text below is copied verbatim from worker artefact run/tasks/H-C4-001/out/claims.md
-(sections A, C, B, D); only this header and the per-cell summary are the head's.
+Headline: **U(Q_7) = 464 and U(Q_8) = 1040.**
+Upper halves: explicit labellings (checker output below). Lower halves: Lemma A (written proof) +
+Lemma C (doubling, written proof) + one exhaustive exact computation (F_5 = 18, over ALL vertex
+subsets of Q_4 and ALL pairs of induced forests of Q_4), which rests on a single named assumption:
+**"the lower bound is exhaustive over all induced forests of Q_5, given the correctness of
+lb_forest.py (stdlib Python, 0.7 s)"**. It was cross-checked by an independent SAT/CEGAR program.
+No library lemma is used in any proof; the library entry H-uphill-checker (= inbox/checker/verify.py)
+is used only to score the artefacts.
 
-## Values (portal format)
-- C2: `88`   (labelling Q5.txt, checker VERIFIED 88)
-- C3: `204`  (labelling Q6.txt, checker VERIFIED 204)
-- C4: `464, 1040`  (labellings Q7.txt VERIFIED 464, Q8.txt VERIFIED 1040)
-(C1, already submitted: 14, 34.)
-
-## Per-cell use of the proof
-- Upper bounds: the labelling files (line i = vertex with label i), counted by the checker.
-- Lower bounds: Lemma A with F_5 = 18 (section B) and Lemma C (F_d <= 2F_{d-1}):
-  d=5: 2^5 + 4(32-18) = 88; d=6: F_6 <= 36, 2^6 + 5(64-36) = 204;
-  d=7: F_7 <= 72, 128 + 6*56 = 464; d=8: F_8 <= 144, 256 + 7*112 = 1040.
-  Worker's own statement of the d <= 6 instances: | C10. (by-product, same argument, outside the target) U(Q_d) = 5, 14, 34, 88, 204 for d = 2..6 | upper CHECKED (runlog R0-2..R0-6, checker VERIFIED 5/14/34/88/204); lower PROVED from Lemma A with F_2 = 3, F_3 = 5, F_4 = 10, F_5 = 18 (lb_forest.py, exhaustive) and F_6 <= 2 F_5 = 36 (Lemma C) | runlog R0, LB1 |
-
-## Computation (section B), how to run
-`python3 lb_forest.py` (stdlib only, exact; re-run by the head: 0.44 s, output F_4 = 10, F_5 = 18, no forest of
-size 19 or 20). Independent cross-check `crosscheck_F5_sat.py` (needs python-sat): m=19 UNSAT, m=18 SAT, 0.28 s.
-Code: run/tasks/H-C4-001/out/code/.
-
-## Proof (verbatim from H-C4-001)
+| claim | status | where shown |
+|---|---|---|
+| C1. Q7.txt is a valid labelling of Q_7 with exactly 464 uphill paths | CHECKED | `python3 code/verify.py Q7.txt` -> `VERIFIED 464` (runlog run R4-d7) |
+| C2. Q8.txt is a valid labelling of Q_8 with exactly 1040 uphill paths | CHECKED | `python3 code/verify.py Q8.txt` -> `VERIFIED 1040` (runlog run R4-d8) |
+| C3. Alternatives Q7_alt1.txt (464), Q8_alt1.txt (1040), different runs/objective weights | CHECKED | verify.py outputs in runlog |
+| C4. Lemma A: every labelling of Q_d (d >= 1) has >= 2^d + (d-1)(2^d - F_d) uphill paths | PROVED | below, section A |
+| C5. Lemma C: F_d <= 2 F_{d-1} for d >= 2 | PROVED | below, section C |
+| C6. F_4 = 10 and F_5 = 18 (exhaustive; also F_1..F_3 = 2, 3, 5) | CHECKED | `python3 code/lb_forest.py` (runlog run LB1); cross-check `crosscheck_F5_sat.py` (run LB2) |
+| C7. U(Q_7) >= 464 | PROVED (from C4, C5, C6) | section D |
+| C8. U(Q_8) >= 1040 | PROVED (from C4, C5, C6) | section D |
+| C9. U(Q_7) = 464, U(Q_8) = 1040 | PROVED (C1, C2, C7, C8) | |
+| C10. (by-product, same argument, outside the target) U(Q_d) = 5, 14, 34, 88, 204 for d = 2..6 | upper CHECKED (runlog R0-2..R0-6, checker VERIFIED 5/14/34/88/204); lower PROVED from Lemma A with F_2 = 3, F_3 = 5, F_4 = 10, F_5 = 18 (lb_forest.py, exhaustive) and F_6 <= 2 F_5 = 36 (Lemma C) | runlog R0, LB1 |
 
 Notation. Q_d, labelling f, valley, uphill path exactly as in inbox/statement.md. n = 2^d,
 E = d 2^{d-1}. For a vertex v: down(v) = #neighbours w with f(w) < f(v), up(v) = d - down(v).
@@ -121,3 +119,10 @@ F_7 <= 4 F_5 = 72 and F_8 <= 8 F_5 = 144 (Lemma C + B). By Lemma A:
 Together with C1, C2: U(Q_7) = 464, U(Q_8) = 1040. (Equality in Lemma A for Q7.txt / Q8.txt: the
 set S of the handed-in labellings has 56 / 112 vertices, is independent, and T = V \ S is an induced
 forest; see lemmaA_sanity output.)
+
+## Construction principle (how the artefacts were found; not needed for the proof)
+Lemma B: if T is an induced forest with complement S, labelling each tree of T in BFS order from a
+root, then S, gives exactly 2^d + (d-1)|S| uphill paths when S is independent (each T-vertex has
+N = 1; each S-vertex has all d neighbours below it, in T, so N = d; total |T| + d|S|). The search
+(code/fvs_sa.c) minimises |S| by simulated annealing and decodes by this rule; the checker count is
+what is reported, not this formula.

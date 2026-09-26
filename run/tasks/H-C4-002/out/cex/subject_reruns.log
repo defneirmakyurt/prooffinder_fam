@@ -1,0 +1,41 @@
+== checker Q7.txt
+VERIFIED 464
+
+real	0m0.026s
+user	0m0.017s
+sys	0m0.005s
+== checker Q8.txt
+VERIFIED 1040
+
+real	0m0.020s
+user	0m0.016s
+sys	0m0.004s
+== lb_forest.py
+Q_1: F_1 = 2 (exhaustive over all 4 subsets)
+Q_2: F_2 = 3 (exhaustive over all 16 subsets)
+Q_3: F_3 = 5 (exhaustive over all 256 subsets)
+Q_4: 25015 induced forests (incl. empty); F_4 = 10; counts by size >= 7: {7: 6848, 8: 4090, 9: 1008, 10: 8}
+Q_5: no induced forest with 20 vertices (all pairs of Q_4-forests with |T0|+|T1| = 20 rejected)
+Q_5: no induced forest with 19 vertices (all pairs of Q_4-forests with |T0|+|T1| = 19 rejected)
+Q_5: F_5 = 18; witness T0=0b1011011101001 T1=0b1110100110010111
+pairs examined = 16928, passed edge-count filter = 1100
+elapsed 0.4 s
+
+real	0m0.444s
+user	0m0.435s
+sys	0m0.000s
+== crosscheck_F5_sat.py
+m=19: UNSAT after 707 iterations, 786 cycle clauses, 0.3s
+m=18: SAT, induced forest of size 18 found after 4 iterations, 0.0s
+
+real	0m0.300s
+user	0m0.280s
+sys	0m0.000s
+== lemmaA_sanity.py
+random trials: 1580, violations: 0
+inbox/subject/Q7.txt: d=7 count=464 |S|=56 bound 2^d+(d-1)|S|=464 T-forest=True
+inbox/subject/Q8.txt: d=8 count=1040 |S|=112 bound 2^d+(d-1)|S|=1040 T-forest=True
+
+real	0m0.086s
+user	0m0.085s
+sys	0m0.000s

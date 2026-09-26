@@ -1,0 +1,13 @@
+d=4 run 0 (20000 iters each): min count found=34 (claimed LB 34); min slack found=0 (0.4s)
+d=4 run 1 (20000 iters each): min count found=34 (claimed LB 34); min slack found=0 (0.3s)
+d=4 run 2 (20000 iters each): min count found=34 (claimed LB 34); min slack found=0 (0.3s)
+d=5 run 0 (20000 iters each): min count found=88 (claimed LB 88); min slack found=0 (0.7s)
+d=5 run 1 (20000 iters each): min count found=88 (claimed LB 88); min slack found=0 (0.6s)
+d=5 run 2 (20000 iters each): min count found=88 (claimed LB 88); min slack found=0 (0.6s)
+d=6 run 0 (15000 iters each): min count found=204 (claimed LB 204); min slack found=0 (1.0s)
+d=6 run 1 (15000 iters each): min count found=204 (claimed LB 204); min slack found=0 (1.0s)
+d=7 run 0 (8000 iters each): min count found=622 (claimed LB 464); min slack found=18 (1.3s)
+d=7 SA started from subject artefact (Q7.txt): min count found=464 (claimed 464) (0.4s)
+d=8 SA started from subject artefact (Q8.txt): min count found=1040 (claimed 1040) (0.5s)
+total elapsed 7.1s
+real 7.082 s

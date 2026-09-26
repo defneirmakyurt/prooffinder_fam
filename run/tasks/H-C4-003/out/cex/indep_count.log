@@ -1,0 +1,3 @@
+inbox/subject/Q7.txt: d=7 valleys=16 uphill paths (explicit enumeration)=464 longest=4
+inbox/subject/Q8.txt: d=8 valleys=16 uphill paths (explicit enumeration)=1040 longest=4
+real 0.020 s

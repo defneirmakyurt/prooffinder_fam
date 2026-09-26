@@ -1,0 +1,13 @@
+F_1 = 2 (all 4 subsets)
+F_2 = 3 (all 16 subsets)
+F_3 = 5 (all 256 subsets)
+F_4 = 10 (all 65536 subsets)
+Q_3 induced forests by size: {0: 1, 1: 8, 2: 28, 3: 56, 4: 64, 5: 32}
+sum=20: 4-tuples tested=1048576 acyclic=0
+sum=19: 4-tuples tested=8388608 acyclic=0
+size-18 induced forest witness mask = 0x97e9e916
+elapsed 260.6 s
+
+real	4m20.633s
+user	4m18.561s
+sys	0m0.047s

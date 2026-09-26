@@ -1,0 +1,8 @@
+Part 1: Q_3, all 40320 labellings: violations=0, min count=14, #labellings with equality in (ii)=22080 (1.5s)
+Part 2: d=4, 300 random labellings: violations=0, min count seen=37 (0.0s)
+Part 2: d=5, 300 random labellings: violations=0, min count seen=148 (0.1s)
+Part 2: d=6, 300 random labellings: violations=0, min count seen=554 (0.6s)
+Part 2: d=7, 60 random labellings: violations=0, min count seen=2664 (0.0s)
+Part 2: d=8, 60 random labellings: violations=0, min count seen=13298 (0.1s)
+total elapsed 2.3s
+real 2.349 s

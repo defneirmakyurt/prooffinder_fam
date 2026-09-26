@@ -1,11 +1,11 @@
-# Board: problem H, updated 13:33, run time 0:26 of 7:00
+# Board: problem H, updated 13:44, run time 0:36 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
 | H-C1 | 1 | T0: done in dry run | submitted; gated | SOLVED | PROVED: U(Q3)=14, U(Q4)=34 (LB = H-L1 at d=3,4; labellings checker-verified, pinned) | – | Q3 14, Q4 34 (checker re-scored) | none | none (submitted) | 0:00 (dry run) |
-| H-C2 | 2 | T1: 32 vertices, local search feasible; LB via H-L1 | gate (via H-C4-001 C10) | PARTIAL | BEST-FOUND 88 (3 lineages); LB under referee | – | 88 (H-C2-001, H-C2-002, H-C5-002) | excess-DP (H-C2-001), decycling (H-C2-002) | referees H-C4-002/003 check d=5 instance | 0:35 |
-| H-C3 | 3 | T1: 64 vertices; LB via H-L1 | gate (via H-C4-001 C10) | PARTIAL | BEST-FOUND 204 (3 lineages); LB under referee | – | 204 (H-C3-001, H-C2-002, H-C5-002) | forest-peak exhaustive (H-C3-001) | referees H-C4-002/003 check d=6 instance | 0:35 |
-| H-C4 | 5 | T2: two values, Q8 256 vertices; /E/+2 pattern may break | 2 + GATE | PARTIAL | BEST-FOUND 464, 1040 (3 lineages); LB under referee | – | Q7 464, Q8 1040 (H-C4-001, H-C2-002, H-C5-002) | induced-forest bound, doubling (H-C4-001) | referees H-C4-002 (VERIFY), H-C4-003 (GATE) | 0:35 |
+| H-C2 | 2 | T1: 32 vertices, local search feasible; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 88 (gated H-C4-001 claim C10, d=5; both referees ACCEPT C10) | – | 88 (H-C2-001, H-C2-002, H-C5-002) | excess-DP (H-C2-001), decycling (H-C2-002) | none | 0:35 |
+| H-C3 | 3 | T1: 64 vertices; LB via H-L1 | submitted (portal: correct); gated | SOLVED | PROVED 204 (gated H-C4-001 claim C10, d=6; both referees ACCEPT C10) | – | 204 (H-C3-001, H-C2-002, H-C5-002) | forest-peak exhaustive (H-C3-001) | none | 0:35 |
+| H-C4 | 5 | T2: two values, Q8 256 vertices; /E/+2 pattern may break | submitted (portal: correct); gated | SOLVED | PROVED 464, 1040 (gate VALID: H-C4-002 + H-C4-003 ACCEPT) | – | Q7 464, Q8 1040 (H-C4-001, H-C2-002, H-C5-002) | induced-forest bound, doubling (H-C4-001) | none | 0:35 |
 | H-C5 | 8 | T2: scored construction, beat 2400 | 1, 1L done; WAVE + 3 | PARTIAL | BEST-FOUND 2400 (= organisers; reproduced, checker) | – | 2400 (H-C5-002 parity/code construction) | decycling-local-search (H-C5-003), symmetric-SAT (H-C5-004), recursive-product (H-C5-005); blind H-C5-001 running | literature analyst H-C5-006 on nabla(Q_9) primary sources | 0:37 |
 | H-C6 | 13 | T3: open; stretch only | - | NOT ATTEMPTED | OPEN | – | – | none | only if C5 lands | 0:00 |
 | H-L1 | 0 (lemma for C1-C4) | T1: written sketch exists (dry-run H-C1-006 Remark) | gated | SOLVED | PROVED (gate VALID 13:21: H-L1-002 + H-L1-003 ACCEPT) | – | U(Q_d) >= d*2^(d-1)+2 for all d >= 3 (accepted/proof.md) | edge-count+divisibility | use as gated ASSUMPTION for C2-C5 (non-blind briefs) | 0:14 |
@@ -13,7 +13,6 @@
 ## Partial cells: established / remaining gap
 
 ## Awaiting gate
-- [13:32] H-C4-001 (Lemma A: #uphill >= 2^d+(d-1)(2^d-F_d); Lemma C: F_d <= 2F_{d-1}; F_5 = 18 exhaustive, re-run by head 0.44 s + SAT cross-check 0.28 s): referees H-C4-002, H-C4-003, scope d = 5..8 (C2, C3, C4).
 
 ## Contested cells (tell the humans)
 
@@ -26,5 +25,7 @@
 - [13:21] H-L1 gated VALID at 13:21 (run 0:14): U(Q_d) >= d*2^(d-1)+2 for every d >= 3. Consequences: C1 SOLVED (14, 34 attained, pinned run/H/C1/accepted/); any labelling with 82 (Q5), 194 (Q6), 450 (Q7), 1026 (Q8) paths proves that value optimal.
 - [13:32] L2 lemma cell dropped: H-C4-001's written argument covers d = 5..8 directly, so it goes to referees as is (cheaper, and the text refereed is the text handed in).
 - [13:32] C5 reduction (from H-C5-002 1L + H-C4-001 Lemma A, not gated): 512 + 8*nabla(Q_9) <= U(Q_9); a labelling with <= 2399 paths needs a decycling set of Q_9 of size <= 235 (published: 225 <= nabla(Q_9) <= 237, Bau et al. 2000 via survey; Pike 2003 apparently 236, not opened). Upper route = beat the published decycling bound; lower route = nabla(Q_9) >= 233.
+- [13:36] Humans submitted C2 = 88, C3 = 204, C4 = 464, 1040; the portal marked all correct (run ~0:40). Portal confirmation is external evidence for the values, not a proof: the lower-bound argument (H-C4-001) still goes through the gate for the record and for C5/C6, which build on it.
+- [13:42] Humans asked for speed, proofs only (run ~0:50): Phase 5 reports/audits, triage and cross-verification skipped for C1-C4; gate = two referees per proof. C5 lower route opened: prover H-C5-007 (EXPLOIT on H-C5-002's lower-route notes).
 
 ## Obstacle notes (parked cells)
