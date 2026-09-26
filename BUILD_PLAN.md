@@ -129,7 +129,7 @@ Working rules from the user's global instructions:
   - each branch's `.tex` moved to `sources/`;
   - `run/PROBLEM` added;
   - pushed with the user's OK.
-- [ ] **After the build:** merge `main` into all 4 branches again, and push. The user has authorised pushes for syncing.
+- [x] **After the build:** merge `main` into all 4 branches again, and push. The user has authorised pushes for syncing. (Done 2026-09-26 after merging a teammate's push to `main`; D's `run/PROBLEM` updated.)
 
 ### B7. Restart Claude Code
 
