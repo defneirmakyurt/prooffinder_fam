@@ -21,7 +21,8 @@ WRITE ONLY: tasks/<task-id>/out/
 TARGET: <exact statement to prove / construct / check / refute>
 RULES: <cell rules binding this worker, e.g. "citing a published proof of the target does not count";
         "any computation must be exact or interval arithmetic, code included, runtime < 10 min">
-RETURN: only the report block from section 3, at most 200 words. Full work goes in out/.
+RETURN: only the report block from section 3, at most 200 words plus a LADDER of at most 10 lines.
+        Full work goes in out/.
 ```
 
 ## 2. Role-specific brief sections
@@ -39,6 +40,9 @@ If you are not certain a reference exists, write UNSURE. Never merge "checked by
 
 **Prover**
 ```
+First write out/plan.md: TARGET as a ladder of numbered rungs (lemmas, special cases, reductions)
+with dependencies. Work through it in order, marking each rung
+PROVED / CHECKED / GAP / REFUTED / NOT STARTED.
 Write out/proof.md. First line: the exact statement you prove, no more.
 Then numbered steps; each justified by a definition, an earlier step, or a named lemma with exact reference.
 Mark anything you are not sure of [GAP].
@@ -52,6 +56,9 @@ Regime additions:
 
 **Searcher**
 ```
+First write out/plan.md: TARGET as a ladder of numbered rungs (checker sanity, small cases,
+reductions, search stages) with dependencies. Work through it in order, marking each rung
+PROVED / CHECKED / GAP / REFUTED / NOT STARTED.
 Inbox holds checker/ (use it as your scoring function) and, if EXPLOIT, the lineage's best program and artefact.
 Write a program that generates candidates; do not hand-craft objects.
 Save: out/best.<ext> (artefact in the cell's required format), out/search/ (code),
@@ -63,6 +70,9 @@ Regime additions as for Prover.
 
 **Breaker**
 ```
+First write out/plan.md: the attack as a ladder of numbered rungs (sub-claims or families to test)
+with dependencies. Work through it in order, marking each rung
+PROVED / CHECKED (tested, no violation) / GAP / REFUTED / NOT STARTED.
 Try to refute TARGET: random instances, optimisation of the violation, structured families.
 Save the worst case with exact values in out/worst.<ext> and a script that reproduces it.
 If nothing breaks it, list exactly what you tested (families, sizes, instance counts).
@@ -100,6 +110,9 @@ Add no claim that is not in the accepted artefacts.
 TASK: <id>   ROLE: <role>   REGIME: <regime>
 OUTCOME: CLAIM | PARTIAL | NO-PROGRESS | REFUTED
 CLAIM: <one precise sentence, or "none">
+LADDER: <Prover/Searcher/Breaker only; one line per rung, ≤10 lines, ≤15 words each>
+  R1 <PROVED | CHECKED | GAP | REFUTED | NOT STARTED> — <sub-claim>
+  R2 ...
 ARTEFACTS: <paths in out/>
 IDEA-TAG: <2–4 words naming the approach>
 KNOWN GAPS: <numbered list, or "none found">
@@ -108,6 +121,9 @@ SCORE: <searchers: value from the provided checker; others: n/a>
 ```
 
 The head uses IDEA-TAG to spot convergence and to name lineages. SCORE is always recomputed before it is trusted.
+The 200-word limit excludes LADDER lines; the full ladder stays in out/plan.md.
+LADDER statuses are the worker's claims: a PROVED rung is unrefereed and a CHECKED rung is unrerun
+until the head says otherwise. GAP rungs become EXPLOIT repair targets.
 
 ## 4. Referee verdict
 
@@ -132,10 +148,10 @@ Keep each entry to one line. CONTRARIAN briefs receive these lines verbatim.
 ```
 # Board: updated <time>, run time <h:mm> of 7:00
 
-| Cell | Pts | Status | Best so far | Live lineages | Next wave | Time used |
-|------|-----|--------|-------------|---------------|-----------|-----------|
-| H-C1 | 1 | ... | ... | ... | ... | 0:00 |
-| A-C1 | 2 | ... | ... | ... | ... | 0:00 |
+| Cell | Pts | Tier | Status | Best so far | Live lineages | Next wave | Time used |
+|------|-----|------|--------|-------------|---------------|-----------|-----------|
+| H-C1 | 1 | T0: <reason> | ... | ... | ... | ... | 0:00 |
+| A-C1 | 2 | T1: <reason> | ... | ... | ... | ... | 0:00 |
 
 ## Awaiting gate
 ## Decisions for the team

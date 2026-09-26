@@ -89,11 +89,65 @@ Keep at most **three live lineages per cell**, and spread EXPLOIT workers across
 - **Retire a lineage** after two waves without improvement. Move its dead ends to the cell's list so CONTRARIAN workers inherit them.
 - **Merge** two lineages only when they turn out to be the same idea under different tags.
 
+## Decomposition
+
+Break targets into smaller claims mostly *inside* a worker's task. Don't spawn one worker per sub-claim.
+
+- Every Prover, Searcher and Breaker first writes `out/plan.md`: its target as a ladder of numbered rungs (lemmas, special cases, reductions), with dependencies. It then works through the ladder in order, marking each rung `PROVED` / `CHECKED` / `GAP` / `REFUTED` / `NOT STARTED`. The report's `LADDER` gives one line per rung.
+- Promote a rung to its own task, with its own entry in `target.md` and its own task id, only when:
+  - the same lemma blocks several lineages;
+  - the lemma is doubtful enough to send a Breaker first;
+  - it should be attacked from several angles in parallel;
+  - it needs its own independent referee or checker.
+- Otherwise, feed rungs back through EXPLOIT: a `GAP` rung is the repair target for the lineage's next worker.
+- A ladder of `PROVED` rungs is still a claim. Referees check the whole assembled proof, not only the rungs. Re-run any rung marked `CHECKED` yourself, as you would any score.
+- The suggested ladders in a problem skill are hypotheses. Put them in EXPLOIT or promoted-lemma briefs, never in a FRESH brief whose angle differs.
+
+## Problem skills
+
+When you open problem P, load skill `problem-<slug>` with the Skill tool. If the skill list hasn't refreshed, Read `.claude/skills/problem-<slug>/SKILL.md` directly.
+
+If the skill doesn't exist, create it first:
+- Copy `.claude/skills/problem-template/SKILL.md` and fill it in from the verbatim statement, timeboxed to about 10 minutes.
+- Don't solve anything while writing it. Label every mathematical idea as a hypothesis or an angle.
+- Leave the literature to the Scout. Its references stay unverified until checked.
+
+Use the skill to fill the ledger and the briefs:
+- the verbatim text goes to `statement.md`;
+- the cell targets go to `target.md`;
+- the checker spec goes into Checker-builder briefs;
+- the pitfalls and problem rules go into the RULES line of every brief for that problem;
+- the hand-in format goes to the Scribe;
+- **one** angle from the angle bank goes into each FRESH or CONTRARIAN brief, never the whole bank.
+
+Workers can't read skills. They see only what you copy into their brief. When the run turns up a new pitfall, append it to the problem skill.
+
+## Triage (before the first wave)
+
+Before dispatching anything on a cell, estimate how hard it is, and size the first wave to match. Spend at most about 5 minutes per problem, using only cheap signals:
+- points, and whether the cell is checked instantly, judged or open;
+- the cell type and ladder from the problem skill;
+- the size of the search space, and whether brute force is plainly feasible;
+- whether the Scout reports the statement as known;
+- how much the cell depends on lower cells.
+
+Triage is an estimate, not an attempt: don't solve anything to decide a tier. Write the tier and a one-line reason on the board.
+
+| Tier | Typical signal | First wave | Time box |
+|---|---|---|---|
+| T0 direct | tiny finite computation or a short standard argument | computational: 2 Checker-builders + 1 Searcher; proof: 1 Prover + Breaker only if a lemma is doubtful | 15–20 min |
+| T1 routine | known technique should suffice; moderate search | 2 workers with distinct angles (+ checkers / Breaker as the loop requires) | 30–45 min |
+| T2 hard | no obvious route; large search; high points | the full cold start below (3–4 FRESH + Breaker) | 60–75 per attempt |
+| T3 open | marked open, or the Scout finds it open | only after lower cells are cleared; split per "Open prove-or-disprove" | per Board and budget |
+
+- **Escalate** one tier when a wave returns no `CLAIM` and no rung beyond what's already known, or when every proof comes back `MAJOR`/`WRONG`. Never de-escalate mid-cell.
+- Triage sizes the waves only. **The verification gate is identical for every tier.** A T0 claim still needs two agreeing checkers, or two referees.
+
 ## The loop (per cell)
 
-1. **Type the cell** (see Problem types) and fix the exact target statement.
+1. **Type the cell** (see Problem types), fix the exact target statement, and **triage** it (see Triage).
 2. **Set up:** dispatch the Scout, and for anything computational, two Checker-builders. Don't dispatch searchers until a cross-tested checker exists.
-3. **Wave 1 (cold start):** 3–4 FRESH workers with distinct angles, plus a Breaker on any lemma or prove-or-disprove target.
+3. **Wave 1 (cold start):** 3–4 FRESH workers with distinct angles, plus a Breaker on any lemma or prove-or-disprove target. Use fewer for T0/T1 cells (see Triage).
 4. **Evaluate:** re-score artefacts with the checker and send proofs to referees. Update the ledger: lineages, dead ends, idea tags, board.
 5. **Choose the next wave's mix** from the table below.
 6. **Gate:** apply the verification gate before anything is marked established.
