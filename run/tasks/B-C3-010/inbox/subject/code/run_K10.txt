@@ -1,0 +1,49 @@
+k=2 n=2 D_B(n)=0  [n=T_k-1] #extremal=2
+k=3 n=4 D_B(n)=2
+k=3 n=5 D_B(n)=3  [n=T_k-1] #extremal=1
+k=4 n=7 D_B(n)=4 bound=7 OK
+k=4 n=8 D_B(n)=5 bound=7 OK
+k=4 n=9 D_B(n)=7 bound=7 OK  [n=T_k-1] #extremal=1 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=5 n=11 D_B(n)=8 bound=14 OK
+k=5 n=12 D_B(n)=8 bound=14 OK
+k=5 n=13 D_B(n)=9 bound=14 OK
+k=5 n=14 D_B(n)=14 bound=14 OK  [n=T_k-1] #extremal=6 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=6 n=16 D_B(n)=15 bound=23 OK
+k=6 n=17 D_B(n)=12 bound=23 OK
+k=6 n=18 D_B(n)=13 bound=23 OK
+k=6 n=19 D_B(n)=16 bound=23 OK
+k=6 n=20 D_B(n)=23 bound=23 OK  [n=T_k-1] #extremal=34 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=7 n=22 D_B(n)=24 bound=34 OK
+k=7 n=23 D_B(n)=18 bound=34 OK
+k=7 n=24 D_B(n)=18 bound=34 OK
+k=7 n=25 D_B(n)=19 bound=34 OK
+k=7 n=26 D_B(n)=26 bound=34 OK
+k=7 n=27 D_B(n)=34 bound=34 OK  [n=T_k-1] #extremal=175 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=8 n=29 D_B(n)=35 bound=47 OK
+k=8 n=30 D_B(n)=28 bound=47 OK
+k=8 n=31 D_B(n)=24 bound=47 OK
+k=8 n=32 D_B(n)=25 bound=47 OK
+k=8 n=33 D_B(n)=29 bound=47 OK
+k=8 n=34 D_B(n)=38 bound=47 OK
+k=8 n=35 D_B(n)=47 bound=47 OK  [n=T_k-1] #extremal=831 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=9 n=37 D_B(n)=48 bound=62 OK
+k=9 n=38 D_B(n)=40 bound=62 OK
+k=9 n=39 D_B(n)=32 bound=62 OK
+k=9 n=40 D_B(n)=32 bound=62 OK
+k=9 n=41 D_B(n)=33 bound=62 OK
+k=9 n=42 D_B(n)=42 bound=62 OK
+k=9 n=43 D_B(n)=52 bound=62 OK
+k=9 n=44 D_B(n)=62 bound=62 OK  [n=T_k-1] #extremal=3911 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+k=10 n=46 D_B(n)=63 bound=79 OK
+k=10 n=47 D_B(n)=54 bound=79 OK
+k=10 n=48 D_B(n)=45 bound=79 OK
+k=10 n=49 D_B(n)=40 bound=79 OK
+k=10 n=50 D_B(n)=41 bound=79 OK
+k=10 n=51 D_B(n)=46 bound=79 OK
+k=10 n=52 D_B(n)=57 bound=79 OK
+k=10 n=53 D_B(n)=68 bound=79 OK
+k=10 n=54 D_B(n)=79 bound=79 OK  [n=T_k-1] #extremal=18163 D==k^2-2k-1:True d(lambda*)==D:True all B^(D-1)=nu_k:True
+ALL CHECKS PASSED
+real 39.42
+user 20.55
+sys 2.52

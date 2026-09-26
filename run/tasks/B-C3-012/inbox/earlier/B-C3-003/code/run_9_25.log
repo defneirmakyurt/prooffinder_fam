@@ -1,0 +1,40 @@
+k=4 n=9 D=7 bound=7 X_k=(3, 2, 2, 1, 1) d(X_k)=7 #extremal=1 OK
+   extremal: [(3, 2, 2, 1, 1)]
+k=4: max over T_(k-1)<n<T_k of D(n) = 7 <= 7
+k=5 n=14 D=14 bound=14 X_k=(4, 3, 3, 2, 1, 1) d(X_k)=14 #extremal=6 OK
+   extremal: [(3, 3, 2, 2, 2, 1, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 3, 2, 1, 1)]
+k=5: max over T_(k-1)<n<T_k of D(n) = 14 <= 14
+k=6 n=20 D=23 bound=23 X_k=(5, 4, 4, 3, 2, 1, 1) d(X_k)=23 #extremal=34 OK
+k=6: max over T_(k-1)<n<T_k of D(n) = 23 <= 23
+k=7 n=27 D=34 bound=34 X_k=(6, 5, 5, 4, 3, 2, 1, 1) d(X_k)=34 #extremal=175 OK
+k=7: max over T_(k-1)<n<T_k of D(n) = 34 <= 34
+k=8 n=35 D=47 bound=47 X_k=(7, 6, 6, 5, 4, 3, 2, 1, 1) d(X_k)=47 #extremal=831 OK
+k=8: max over T_(k-1)<n<T_k of D(n) = 47 <= 47
+k=9 n=44 D=62 bound=62 X_k=(8, 7, 7, 6, 5, 4, 3, 2, 1, 1) d(X_k)=62 #extremal=3911 OK
+k=9: max over T_(k-1)<n<T_k of D(n) = 62 <= 62
+k=4: d(X_k)=7, class-L max=7, unique maximiser X_k: True OK
+k=5: d(X_k)=14, class-L max=14, unique maximiser X_k: True OK
+k=6: d(X_k)=23, class-L max=23, unique maximiser X_k: True OK
+k=7: d(X_k)=34, class-L max=34, unique maximiser X_k: True OK
+k=8: d(X_k)=47, class-L max=47, unique maximiser X_k: True OK
+k=9: d(X_k)=62, class-L max=62, unique maximiser X_k: True OK
+k=10: d(X_k)=79, class-L max=79, unique maximiser X_k: True OK
+k=11: d(X_k)=98, class-L max=98, unique maximiser X_k: True OK
+k=12: d(X_k)=119, class-L max=119, unique maximiser X_k: True OK
+k=13: d(X_k)=142, class-L max=142, unique maximiser X_k: True OK
+k=14: d(X_k)=167, class-L max=167, unique maximiser X_k: True OK
+k=15: d(X_k)=194, class-L max=194, unique maximiser X_k: True OK
+k=16: d(X_k)=223, class-L max=223, unique maximiser X_k: True OK
+k=17: d(X_k)=254, class-L max=254, unique maximiser X_k: True OK
+k=18: d(X_k)=287, class-L max=287, unique maximiser X_k: True OK
+k=19: d(X_k)=322, class-L max=322, unique maximiser X_k: True OK
+k=20: d(X_k)=359, class-L max=359, unique maximiser X_k: True OK
+k=21: d(X_k)=398, class-L max=398, unique maximiser X_k: True OK
+k=22: d(X_k)=439, class-L max=439, unique maximiser X_k: True OK
+k=23: d(X_k)=482, class-L max=482, unique maximiser X_k: True OK
+k=24: d(X_k)=527, class-L max=527, unique maximiser X_k: True OK
+k=25: d(X_k)=574, class-L max=574, unique maximiser X_k: True OK
+ALL OK
+real 25.35
+user 24.68
+sys 0.07

@@ -1,0 +1,16 @@
+PART2 k=3..150 OK
+PART3 k=3..16: 588311 case-B partitions OK
+PART4 20000 random partitions OK
+k=3 n=5 p(n)=7 D_B=3 F=2 d(lam*)=2 dB_def(lam*)=2 #max=1
+k=4 n=9 p(n)=30 D_B=7 F=7 d(lam*)=7 dB_def(lam*)=7 #max=1
+k=5 n=14 p(n)=135 D_B=14 F=14 d(lam*)=14 dB_def(lam*)=14 #max=6
+k=6 n=20 p(n)=627 D_B=23 F=23 d(lam*)=23 dB_def(lam*)=23 #max=34
+k=7 n=27 p(n)=3010 D_B=34 F=34 d(lam*)=34 dB_def(lam*)=34 #max=175
+k=8 n=35 p(n)=14883 D_B=47 F=47 d(lam*)=47 dB_def(lam*)=47 #max=831
+k=9 n=44 p(n)=75175 D_B=62 F=62 d(lam*)=62 dB_def(lam*)=62 #max=3911
+k=10 n=54 p(n)=386155 D_B=79 F=79 d(lam*)=79 dB_def(lam*)=79 #max=18163
+PART1 OK
+ALL OK
+real 86.53
+user 80.91
+sys 0.66

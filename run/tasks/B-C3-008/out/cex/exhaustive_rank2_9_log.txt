@@ -1,0 +1,20 @@
+k=2 n=2 D_B=0 F=-1 #max=2 d(lambda*)=None Phi1-maximisers=[] maximisers=[(2,), (1, 1)]
+k=2: rank-2 non-triangular n in (1,3) done
+k=3 n=5 D_B=3 F=2 #max=1 d(lambda*)=2 Phi1-maximisers=[] maximisers=[(1, 1, 1, 1, 1)]
+k=3: rank-3 non-triangular n in (3,6) done
+k=4 n=9 D_B=7 F=7 #max=1 d(lambda*)=7 Phi1-maximisers=[(3, 2, 2, 1, 1)] maximisers=[(3, 2, 2, 1, 1)]
+k=4: rank-4 non-triangular n in (6,10) done
+k=5 n=14 D_B=14 F=14 #max=6 d(lambda*)=14 Phi1-maximisers=[(4, 3, 3, 2, 1, 1)]
+k=5: rank-5 non-triangular n in (10,15) done
+k=6 n=20 D_B=23 F=23 #max=34 d(lambda*)=23 Phi1-maximisers=[(5, 4, 4, 3, 2, 1, 1)]
+k=6: rank-6 non-triangular n in (15,21) done
+k=7 n=27 D_B=34 F=34 #max=175 d(lambda*)=34 Phi1-maximisers=[(6, 5, 5, 4, 3, 2, 1, 1)]
+k=7: rank-7 non-triangular n in (21,28) done
+k=8 n=35 D_B=47 F=47 #max=831 d(lambda*)=47 Phi1-maximisers=[(7, 6, 6, 5, 4, 3, 2, 1, 1)]
+k=8: rank-8 non-triangular n in (28,36) done
+k=9 n=44 D_B=62 F=62 #max=3911 d(lambda*)=62 Phi1-maximisers=[(8, 7, 7, 6, 5, 4, 3, 2, 1, 1)]
+k=9: rank-9 non-triangular n in (36,45) done
+ALL OK ranks 2..9
+real 7.15
+user 6.66
+sys 0.06

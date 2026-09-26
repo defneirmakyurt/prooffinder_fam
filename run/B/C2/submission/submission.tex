@@ -1,0 +1,272 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\emergencystretch=3em
+
+\newcommand{\step}[2]{\par\medskip\noindent\textbf{#1}\ \textit{#2}\ }
+\newcommand{\DB}{D_B}
+\newcommand{\dB}{d_B}
+\newcommand{\rot}{\mathrm{rot}}
+\newcommand{\Iv}[1]{[#1]}
+\newcommand{\qedend}{\hfill$\square$}
+
+\title{Problem B, Cell 2: $\DB$ at triangular $n$\\[2pt]
+\large $\DB(T_k)=k^2-k$ for every $k\ge 1$}
+\author{Mathematics research team (task B-C2), written up by the Scribe}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fbox{\begin{minipage}{0.9\textwidth}
+\textbf{Cell status:} SOLVED.\qquad \textbf{Claim status:} PROVED.\\[3pt]
+\textbf{Answer.} For every $k\ge 1$,
+\[
+\DB(T_k)=k^2-k \qquad\text{(no exceptions; $k=1$ gives $0$, $k=2$ gives $2$).}
+\]
+\textbf{Explicit extremal partition.} $\lambda^{(1)}=(1)$ and, for $k\ge 2$,
+\[
+\lambda^{(k)}=(k-1,\,k-1,\,k-2,\,\ldots,\,2,\,1,\,1),
+\]
+i.e.\ $\lambda_1=k-1$, $\lambda_j=k+1-j$ for $2\le j\le k$, $\lambda_{k+1}=1$; it satisfies $\dB(\lambda^{(k)})=k^2-k$.
+Both bounds are proved in full in Section~\ref{sec:proof}; no cited result is used as a proof step.
+\end{minipage}}
+\end{center}
+
+\section{Statement}
+
+\noindent\textbf{Definitions} (verbatim from the official statement).
+A \emph{partition} of $n\ge 1$ is a weakly decreasing sequence $\lambda=(\lambda_1,\ldots,\lambda_s)$ of positive integers with sum $n$ ($s$ piles).
+The \emph{shift} $B(\lambda)$ is the partition whose parts are the positive numbers among $\lambda_1-1,\ldots,\lambda_s-1$ together with one extra part equal to $s$.
+$\lambda$ is \emph{cyclic} if $B^i(\lambda)=\lambda$ for some $i\ge 1$.
+\[
+\dB(\lambda)=\min\{\,i\ge 0: B^i(\lambda)\text{ is cyclic}\,\},\qquad
+\DB(n)=\max\{\,\dB(\lambda):\lambda\text{ a partition of } n\,\}.
+\]
+$T_k=k(k+1)/2$, $\delta_k=(k,k-1,\ldots,2,1)$.
+
+\medskip
+\noindent\textbf{Cell text} (verbatim). ``Next, how long the process can take to reach a cycle, starting with the triangular numbers. Determine $\DB(T_k)$ for every $k$, with proof of both bounds.''
+
+\medskip
+\noindent\textbf{Exact target.}
+\begin{itemize}
+\item Give an explicit formula $F(k)$ (with any small-$k$ exceptions stated separately and exactly) such that $\DB(T_k)=F(k)$ for \emph{every} $k\ge 1$.
+\item UPPER bound: prove $\dB(\lambda)\le F(k)$ for every partition $\lambda$ of $T_k$, for every $k\ge 1$.
+\item LOWER bound: give an explicit partition $\lambda^{(k)}$ of $T_k$, as a function of $k$, and prove $\dB(\lambda^{(k)})=F(k)$ (in particular $\ge F(k)$) for every $k\ge 1$.
+\item Any fact about which partitions of $T_k$ are cyclic must itself be proved in the submission.
+\end{itemize}
+Hand-in: a written proof (LaTeX), stating clearly what is established. Computation may be used only if exhaustive over a finite set the argument has reduced the problem to (code included, $<10$ min); small-$k$ tables alone prove nothing for all $k$.
+
+\section{What is established}
+
+\begin{tabular}{p{0.62\textwidth}p{0.3\textwidth}}
+\hline
+Claim & Status / where \\
+\hline
+$F(k)=k^2-k$ for all $k\ge1$, no exceptions: $\DB(T_k)=k^2-k$ & PROVED; Parts A, B \\
+Shift on diagrams = diagonal rotation, plus left-slide of rows $>s$ when $s<\lambda_1-1$ & PROVED; 0.1 \\
+$\delta_k$ is fixed by $B$ & PROVED; 0.2 \\
+Every orbit of $T_k$ reaches $\delta_k$; $\delta_k$ is the only cyclic partition of $T_k$ & PROVED; 0.3 \\
+$\lambda^{(k)}$ has $\dB=k^2-k$ exactly & PROVED; A.1--A.4 \\
+$c$-sequence formula $(*)$, row comparison / flip form & PROVED; B1, B2 \\
+Sandwich property & PROVED; B3 \\
+Last step before $\delta_k$ has $c_t=k-1$ & PROVED; B4 \\
+Griggs--Ho Lemma 3.3(2), 3.4, 3.5, 3.6 (re-proved) & PROVED; B5--B8 \\
+$\dB(\lambda)\le k^2-k$ for all $\lambda\vdash T_k$ & PROVED; B9 \\
+$\DB(T_k)=k^2-k$ for $k\le 8$; witness orbit for $k\le 40$; lemma statements for $n\le 30$ & COMPUTER-VERIFIED, sanity only (not load-bearing); Section~\ref{sec:verify} \\
+\hline
+\end{tabular}
+
+\section{Cited results versus our contribution}\label{sec:cited}
+
+\paragraph{Cited (existing literature).}
+\begin{itemize}
+\item J.~R.~Griggs and C.-C.~Ho, \emph{The cycling of partitions and compositions under repeated shifts}, Adv.\ Appl.\ Math.\ 21 (1998) 205--227 \cite{GH}.
+Theorem~3.7 there states $\DB(T_k)=k^2-k$; its proof, via Proposition~3.2 and Lemmas~3.3--3.6, is the \textbf{source of the architecture of our upper bound} (Part~B). Theorem~3.1 there gives the lower bound with the same witness $\lambda^{(k)}$ (its orbit is not written out there: ``it is easy to see''). The convergence argument of 0.3 follows the idea of their Theorem~2.1.
+\textbf{Every lemma used from \cite{GH} is re-proved in full here}; in particular their Lemma~3.5 (``Continue this process \ldots'') is written as an explicit induction $I(m)$ in B7.
+\item The same value $\DB(T_k)=k^2-k$ is proved by K.~Igusa (1985) \cite{Igusa} and G.~Etienne (1991) \cite{Etienne}, and by H.-J.~Bentz (1987) \cite{Bentz} (per \cite{GH}; these sources were not opened by the team).
+\end{itemize}
+
+\paragraph{Ours (the team's contribution).} The complete written proof below: the self-contained diagram description of $B$ (0.1), the convergence and uniqueness of the cyclic partition for $T_k$ (0.3, written out), the explicit orbit of the witness (Part~A), and the full re-derivation of Griggs--Ho's Proposition~3.2 and Lemmas~3.3--3.6 and the counting in their Theorem~3.7 (Part~B). The mathematical result itself is the one in \cite{GH,Igusa,Etienne}; we do not claim it as ours.
+
+\section{Proof}\label{sec:proof}
+
+\noindent\textbf{Statement.} For every $k\ge 1$, $\DB(T_k)=k^2-k$ (no exceptions: $k=1$ gives $0$, $k=2$ gives $2$).
+LOWER bound (Part A): witness $\lambda^{(k)}=(k-1,k-1,k-2,\ldots,2,1,1)$ ($\lambda^{(1)}=(1)$), $\dB(\lambda^{(k)})=k^2-k$.
+UPPER bound (Part B): $\dB(\lambda)\le k^2-k$ for all $\lambda\vdash T_k$; the architecture follows Griggs--Ho (1998) Thm~3.7, with every lemma re-derived here in full (their Lemma~3.5 ``continue this process'' written as an explicit induction).
+Part~0.3 proves (self-contained) that $\delta_k$ is the only cyclic partition of $T_k$ and every orbit reaches it, so no result of Cell~1 is assumed.
+
+\medskip
+\noindent\textbf{Notation.} A partition is identified with its diagram $S=\{(i,j): 1\le j\le s,\ 1\le i\le\lambda_j\}$ (column $j$ = pile $j$, row $i$ = level).
+Diagonal of a cell: $w(i,j)=i+j-1$. Diagonal $w$ has the $w$ positions $(w,1),(w-1,2),\ldots,(1,w)$; call the position $(w+1-j,j)$ ``column $j$ of diagonal $w$''.
+$D_k:=$ diagram of $\delta_k$ = all cells with $w\le k$ (column $j$ of $\delta_k$ has height $k+1-j$, top cell on diagonal $k$).
+
+\subsection*{Part 0. The shift on diagrams}
+
+\step{0.1}{Lemma.} Let $\lambda$ have $s$ parts, diagram $S$. Define $S'=\rot(S)$ by $(i,j)\mapsto(i-1,j+1)$ if $i\ge 2$, and $(1,j)\mapsto(j,1)$.
+\begin{itemize}
+\item[(a)] $\rot$ preserves every diagonal and acts on diagonal $w$ as the cyclic shift column $j\to j+1$ ($j<w$), column $w\to$ column $1$.
+\item[(b)] $S'$ has column $1$ of height $s$ and column $j+1$ of height $\lambda_j-1$ ($1\le j\le s$); these are exactly the parts of $B(\lambda)$ (plus zeros).
+\item[(c)] If $s\ge\lambda_1-1$ then $S'$ is a Young diagram, so $\mathrm{diagram}(B(\lambda))=S'$.
+\item[(d)] If $s<\lambda_1-1$ then $\mathrm{diagram}(B(\lambda))$ is obtained from $S'$ by moving every cell $(i,j)$ of $S'$ with $i>s$ to $(i,j-1)$ (all such cells have $j\ge2$); each moved cell drops from diagonal $w$ to $w-1$, and at least one cell moves.
+\end{itemize}
+\begin{proof}
+(a): $(i-1)+(j+1)-1=i+j-1$; $(j,1)$ and $(1,j)$ both lie on diagonal $j$. Column index $j\to j+1$, and $(1,w)$ (column $w$) $\to(w,1)$ (column $1$).
+
+(b): the cells $(1,1),\ldots,(1,s)$ go to $(1,1),\ldots,(s,1)$: column $1$ of height $s$. The cells $(i,j)$, $2\le i\le\lambda_j$, go to $(i-1,j+1)$: column $j+1$ of height $\lambda_j-1$. $B(\lambda)$ has exactly the parts $s$ and the positive $\lambda_j-1$.
+
+(c): column heights of $S'$ are $s,\ \lambda_1-1\ge\lambda_2-1\ge\cdots$; weakly decreasing iff $s\ge\lambda_1-1$; a weakly decreasing list of column heights is a Young diagram with the right parts.
+
+(d): the diagram of the sorted partition has row $i$ of length $r_i=\#\{\text{columns of }S'\text{ of height}\ge i\}$. For $i\le s$, column $1$ has height $\ge i$ and the columns $j\ge2$ with height $\ge i$ form an initial segment $2..m$ (heights decreasing from column $2$ on), so row $i$ of $S'$ is already $\{1..r_i\}$: unchanged. For $i>s$, column $1$ has height $s<i$, so row $i$ of $S'$ is $\{2..r_i+1\}$; in the sorted diagram it is $\{1..r_i\}$: every cell $(i,j)$ with $i>s$ moves to $(i,j-1)$. Since $\lambda_1-1>s$, the cell $(s+1,2)$ exists: at least one move.
+\end{proof}
+
+\step{0.2}{Lemma.} $B(\delta_k)=\delta_k$, so $\delta_k$ is cyclic.
+\begin{proof} Parts $k-1,\ldots,1,0\to$ positive ones $k-1,\ldots,1$, plus new part $s=k$. \end{proof}
+
+\step{0.3}{Lemma (convergence; Griggs--Ho Thm~2.1 argument, written out).} For $n=T_k$ every orbit reaches $\delta_k$, and $\delta_k$ is the only cyclic partition of $T_k$.
+\begin{proof}
+Energy $E(S):=$ sum over cells of their diagonal index. Diagonal $w$ has exactly $w$ positions, so $D_k$ is the set of all $T_k$ positions on diagonals $1..k$. For $S\vdash T_k$ with $S\ne D_k$: $\#(\text{cells of }S\text{ on diagonals}>k)=\#(\text{holes of }S\text{ on diagonals}\le k)=:h\ge1$ and
+\[
+E(S)-E(D_k)=\sum_{\text{cells on diag }w>k}(w-k)+\sum_{\text{holes on diag }w\le k}(k-w)\ \ge\ h\ \ge\ 1.
+\]
+By 0.1, one shift preserves $E$ if no slide occurs and lowers $E$ by $\ge1$ if a slide occurs (0.1(d)).
+
+\emph{Claim:} if $S\ne D_k$ then, for the index $w$ defined next, a slide occurs at one of the steps $0,1,\ldots,w(w+1)-1$ of the orbit of $S$.
+Let $W_0=$ largest diagonal carrying a cell ($W_0\ge k+1$) and $w_0=$ smallest diagonal with a hole ($w_0\le k$). Let $w$ be the largest index $<W_0$ whose diagonal has a hole (exists: $w_0<W_0$). Diagonal $w+1$ carries a cell: if $w+1=W_0$ by definition of $W_0$; otherwise diagonal $w+1$ has no hole (maximality of $w$), so it is full, hence non-empty. Fix a hole on diagonal $w$ at column $a$ and a cell on diagonal $w+1$ at column $b$. If no slide occurs during steps $0..\tau-1$, the diagram at time $\tau$ is $\rot^\tau(S)$ (0.1(c)), in which (by 0.1(a)) that hole sits at column $a+\tau\pmod w$ and that cell at column $b+\tau\pmod{w+1}$. By CRT ($\gcd(w,w+1)=1$) choose $\tau\in[0,w(w+1))$ with $a+\tau\equiv w\pmod w$ and $b+\tau\equiv1\pmod{w+1}$. At time $\tau$, $(1,w)$ (column $w$ of diagonal $w$) is empty, so the number of parts $s\le w-1$ (row $1$ is an initial segment); $(w+1,1)$ (column $1$ of diagonal $w+1$) is occupied, so $\mu_1\ge w+1>s+1$; by 0.1(d) the next step is a slide. So some slide occurs at a step $\le\tau$.
+
+Hence if the orbit never met $\delta_k$, slides would occur infinitely often and $E$ (a non-negative integer, never increasing) would decrease infinitely often: impossible. So $B^t(\lambda)=\delta_k$ for some $t$, and then for all larger $t$ (0.2). If $\mu$ is cyclic, $B^p(\mu)=\mu$ ($p\ge1$) gives $\mu=B^{mp}(\mu)=\delta_k$ for large $m$.
+\end{proof}
+
+\subsection*{Part A. Lower bound: $\dB(\lambda^{(k)})=k^2-k$ for every $k\ge1$}
+
+\step{A.0}{} $k=1$: $T_1=1$, the only partition is $(1)=\delta_1$, cyclic (0.2), $\dB=0=1^2-1$. From now on $k\ge2$.
+
+\step{A.1}{Witness.} $\lambda^{(k)}:=(\lambda_1,\ldots,\lambda_{k+1})$ with $\lambda_1=k-1$, $\lambda_j=k+1-j$ ($2\le j\le k$), $\lambda_{k+1}=1$. It is weakly decreasing ($k-1\ge k-1\ge k-2\ge\cdots\ge1\ge1$), positive, and sums to $(k-1)+(T_k-k)+1=T_k$. ($k=2$: $(1,1,1)$; $k=3$: $(2,2,1,1)$.)
+Its diagram is $D_k$ minus the cell $(k,1)$ (= column $1$ of diagonal $k$) plus the cell $(1,k+1)$ (= column $k+1$ of diagonal $k+1$): columns $2..k$ agree with $\delta_k$, column $1$ is one shorter, column $k+1$ is new of height $1$.
+
+\step{A.2}{Family.} For $a\in\{1..k\}$, $b\in\{1..k+1\}$ let $S(a,b):=D_k\setminus\{\text{column }a\text{ of diagonal }k\}\cup\{\text{column }b\text{ of diagonal }k+1\}$ (a set of $T_k$ cells).
+\emph{Claim:} if $S(a,b)$ is the diagram of a partition $\mu$, then
+(i) $\mu$ has $s=k-\Iv{a=k}+\Iv{b=k+1}$ parts and $\mu_1=k-\Iv{a=1}+\Iv{b=1}$;
+(ii) if not ($a=k$ and $b=1$) then $\mathrm{diagram}(B(\mu))=S(a+1\bmod k,\ b+1\bmod k+1)$ (residues taken in $\{1..k\}$, $\{1..k+1\}$);
+(iii) if $a=k$ and $b=1$ then $B(\mu)=\delta_k$.
+\begin{proof}
+(i) $s=$ number of cells in row $1$. Row-1 cells are $(1,j)$ = column $j$ of diagonal $j$; $D_k$ has $(1,1..k)$; the removed cell is in row $1$ iff $a=k$ (it is $(k+1-a,a)$); the added cell $(k+2-b,b)$ is in row $1$ iff $b=k+1$. Similarly $\mu_1=$ number of cells in column $1$: $D_k$ has $(1..k,1)$; removed cell in column $1$ iff $a=1$; added iff $b=1$.
+
+(ii) Since $k\ge2$, $a=k$ excludes $a=1$. $s\ge k-1$ always and $\mu_1-1\le k$; $s<\mu_1-1$ forces $s=k-1$ (so $a=k$, $b\ne k+1$) and $\mu_1=k+1$ (so $b=1$). So if not ($a=k$ and $b=1$) then $s\ge\mu_1-1$, and by 0.1(c),(a) $\mathrm{diagram}(B(\mu))=\rot(S(a,b))$; $\rot$ maps each full diagonal of $D_k$ onto itself and shifts the hole and the extra cell by one column cyclically: $\rot(S(a,b))=S(a+1,b+1)$ (cyclically).
+
+(iii) $a=k$, $b=1$: $s=k-1$, $\mu_1=k+1>s+1$, so 0.1(d) applies. $\rot(S(k,1))=S(1,2)$ as a set: hole at $(k,1)$, extra cell at $(k,2)$. The cells of $\rot(S(k,1))$ in rows $>s=k-1$: rows $\ge k$. $D_k$ has only $(k,1)$ in rows $\ge k$, and it is the hole; the extra cell $(k,2)$ is in row $k$. So exactly $(k,2)$ moves to $(k,1)$, filling the hole: result $D_k=\delta_k$.
+\end{proof}
+
+\step{A.3}{Orbit.} By A.1, $\lambda^{(k)}=S(1,k+1)$. Put $a_t=1+(t\bmod k)$, $b_t=1+((t+k)\bmod(k+1))$. By A.2(ii) and induction, $\mathrm{diagram}(B^t(\lambda^{(k)}))=S(a_t,b_t)$ for all $t\le t^*$ where $t^*$ is the least $t\ge0$ with $a_t=k$ and $b_t=1$ (at every earlier step the hypothesis of (ii) holds; each $S(a_t,b_t)$ so produced is the diagram of the partition $B^t(\lambda^{(k)})$, so the hypothesis ``$S(a,b)$ is a diagram'' holds by induction).
+
+$a_t=k\iff t\equiv-1\pmod k$; $b_t=1\iff t+k\equiv0\pmod{k+1}\iff t\equiv1\pmod{k+1}$. Since $\gcd(k,k+1)=1$, the solutions form one class mod $k(k+1)$ (CRT). $t_0=k^2-k-1$ is a solution: $k^2-k-1\equiv-1\pmod k$; mod $k+1$, $k\equiv-1$ so $k^2-k-1\equiv1+1-1=1$. For $k\ge2$, $0\le t_0<k(k+1)$, so $t^*=t_0=k^2-k-1$.
+
+By A.2(iii), $B^{k^2-k}(\lambda^{(k)})=\delta_k$. For $0\le t\le k^2-k-1$, $B^t(\lambda^{(k)})$ has diagram $S(a_t,b_t)$, which contains a cell on diagonal $k+1$, so it is not $\delta_k$.
+
+\step{A.4}{Not cyclic before time $k^2-k$.} Let $0\le t<k^2-k$ and $\mu=B^t(\lambda^{(k)})$. If $\mu$ were cyclic, $B^p(\mu)=\mu$ for some $p\ge1$, hence $\mu=B^{mp}(\mu)$ for all $m\ge1$; choose $mp\ge k^2-k-t$; then $B^{mp}(\mu)=B^{mp-(k^2-k-t)}(\delta_k)=\delta_k$ by A.3 and 0.2. So $\mu=\delta_k$, contradicting A.3. Hence $\dB(\lambda^{(k)})=k^2-k$ ($B^{k^2-k}(\lambda^{(k)})=\delta_k$ is cyclic by 0.2).
+(This part uses no fact about which partitions of $T_k$ are cyclic beyond 0.2.) Hence $\DB(T_k)\ge k^2-k$ for all $k\ge1$.
+
+\subsection*{Part B. Upper bound $\dB(\lambda)\le k^2-k$ for $\lambda\vdash T_k$}
+
+(Architecture of Griggs--Ho Thm~3.7, all lemmas re-derived.)
+By 0.3, $\dB(\lambda)=\min\{t: B^t(\lambda)=\delta_k\}$ for $\lambda\vdash T_k$.
+
+\step{B1}{($c$-sequence).} For $\lambda\vdash n$ with $s$ parts let $c_u:=$ number of parts of $B^{u-1}(\lambda)$, $u\ge1$ (so $c_1=s$). By induction on $t$, the parts of $B^t(\lambda)$ are the positive numbers among $\{\lambda_j-t: j\le s\}\cup\{c_u-(t-u): 1\le u\le t\}$. ($t=0$ trivial; step: $B$ subtracts $1$ from each part, drops non-positive values, which is the same as subtracting $1$ from every listed number and keeping positive ones, and adds the part $c_t=c_t-0$.) Hence
+\[
+c_{t+1}=\#\{j:\lambda_j\ge t+1\}+\#\{u\le t: c_u\ge t+1-u\}.\tag{$*$}
+\]
+Write $f_{i,j}=\Iv{\lambda_j\ge i}$ and $e_{i,u}=\Iv{c_u\ge i-u}$ ($u<i$); then $c_i=\sum_j f_{i,j}+\sum_{u<i}e_{i,u}$ (``row $i$''), and for fixed column ($j$ or $u$) the entries are $1$ on an initial segment of rows (monotone in $i$). Every $c_u\ge1$ ($n\ge1$), so $e_{i,i-1}=1$.
+
+\step{B2}{(row comparison; Griggs--Ho ``comparing rows'').} $c_{i+1}\le c_i+1$, with equality iff $f_{i+1,j}=f_{i,j}$ for all $j$ and $e_{i+1,u}=e_{i,u}$ for all $u<i$.
+\begin{proof} Row $i+1$ consists of the entries $f_{i+1,j}\le f_{i,j}$, $e_{i+1,u}\le e_{i,u}$ ($u<i$) (monotonicity in the row index) and the new entry $e_{i+1,i}=1$. So
+\[c_{i+1}=1+(\text{sum of entries each}\le\text{the corresponding entry of row }i)\le1+c_i,\]
+with equality iff all those entries are equal. \end{proof}
+(This is Griggs--Ho Prop.~3.2(1).)
+\emph{Flip form:} call an old column (a $\lambda$-column $j$, or a $c$-column $u<i$) a \emph{flip} at row $i$ if its entry is $1$ in row $i$ and $0$ in row $i+1$; for a $c$-column $u$ this happens iff $u+c_u=i$ (``column $u$ ends at row $i$''), for a $\lambda$-column iff $\lambda_j=i$. With $L_i:=$ number of flips at row $i$, $c_{i+1}=c_i+1-L_i$. In particular $c_{i+1}=c_i+1$ iff $L_i=0$ (rows $i$ and $i+1$ agree on all old columns), and $c_{i+1}=c_i$ iff $L_i=1$ (they agree on all old columns except exactly one flip).
+
+\step{B3}{(Sandwich; Griggs--Ho Prop.~3.2(3)).} If $i<j$ and $c_i<x<c_j$ then there are $p<q$ with $i\le p$, $q\le j$, $q\ge p+2$ and $(c_p,\ldots,c_q)=(x-1,x,\ldots,x,x+1)$.
+\begin{proof} Let $p$ be the largest index in $[i,j)$ with $c_p\le x-1$ (exists: $p=i$ qualifies). Then $c_{p+1}\ge x$ (if $p+1<j$ by maximality; if $p+1=j$ since $c_j>x$), and $c_{p+1}\le c_p+1\le x$ by B2, so $c_p=x-1$, $c_{p+1}=x$. All indices in $(p,j)$ have $c\ge x$. Let $q$ be the least index $>p+1$ with $c_q\ne x$; $q\le j$ since $c_j>x$. $c_q\ge x$ (as $q\le j$ and either $q<j$ or $q=j$) and $c_q\le c_{q-1}+1=x+1$, so $c_q=x+1$, $q\ge p+2$. \end{proof}
+
+\step{B4}{(end of the orbit; Griggs--Ho Lemma~3.3(1)).} For $n=T_k$ and $t=\dB(\lambda)\ge1$: $c_{t+1}=c_{t+2}=\cdots=k$ and $c_t=k-1$.
+\begin{proof} $B^t(\lambda)=\delta_k$ has $k$ parts and is fixed (0.2), so $c_u=k$ for $u\ge t+1$. Let $\mu=B^{t-1}(\lambda)\ne\delta_k$ (minimality of $t$, and $\delta_k$ cyclic). $B(\mu)=\delta_k$ contains the part $c_t$, so $c_t\le k$; B2 gives $c_t\ge c_{t+1}-1=k-1$. If $c_t=k$ then $\mu$ has $k$ parts whose values minus $1$ give $k-1$ positive values equal to $k-1,\ldots,1$ and one zero, i.e.\ $\mu=\delta_k$, contradiction. So $c_t=k-1$. \end{proof}
+
+\step{B5}{(Griggs--Ho Lemma~3.3(2); proof written out).} For $n=T_k$ and $t=\dB(\lambda)\ge k+1$, at least one holds:
+(i) $(c_p..c_q)=(k-1,k,\ldots,k,k+1)$ for some $t-k\le p<q\le t-1$, $q\ge p+2$;
+(ii) $(c_p..c_q)=(k-2,k-1,\ldots,k-1,k)$ for some $t-k+1\le p<q\le t+1$, $q\ge p+2$.
+\begin{proof} By B4, $c_t=k-1$ and $c_u=k$ for $u\ge t+1$. Row $t$ contains the $k$ entries $e_{t,t-k},\ldots,e_{t,t-1}$ ($t-k\ge1$), whose sum is $\le c_t=k-1$, so one of them is $0$; $e_{t,t-1}=1$ (B1), so there is $i\in[t-k,t-2]$ with $e_{t,i}=0$; take $i$ maximal, so $e_{t,u}=1$ for $u\in[i+1,t-1]$. Since $c_{t+1}=c_t+1$, $L_t=0$ (B2): $e_{t+1,i+1}=e_{t,i+1}=1$. Hence $c_{i+1}\ge(t+1)-(i+1)=t-i$, and $e_{t,i}=0$ gives $c_i\le t-i-1$; with $c_{i+1}\le c_i+1$ (B2): $c_i=t-i-1$, $c_{i+1}=t-i$.
+
+\emph{Case $i\ge t-k+1$:} $c_i=t-i-1\le k-2<k-1<k=c_{t+1}$; B3 with $x=k-1$ on $[i,t+1]$ gives (ii) with $p\ge i\ge t-k+1$, $q\le t+1$.
+
+\emph{Case $i=t-k$:} $c_{t-k}=k-1$, $c_{t-k+1}=k$. If some $j\in[t-k+2,t-1]$ has $c_j\le k-2$: B3 with $x=k-1$ on $[j,t+1]$ gives (ii) with $p\ge j\ge t-k+2$. If some such $j$ has $c_j\ge k+1$: B3 with $x=k$ on $[t-k,j]$ ($c_{t-k}=k-1<k<c_j$) gives (i) with $p\ge t-k$, $q\le j\le t-1$. Otherwise $c_j\in\{k-1,k\}$ for all $j\in[t-k+2,t-1]$, and $c_{t-k+1}=k$; so $c_u\le k$ for all $u\in[t-k+1,t-1]$. Row $t$ has exactly $c_t=k-1$ ones and $e_{t,u}=1$ for the $k-1$ indices $u\in[t-k+1,t-1]$; so these are all the ones of row $t$. By B1 the parts of $\mu:=B^{t-1}(\lambda)$ are the positive numbers among $\lambda_j-(t-1)$ and $c_u-(t-1-u)$ ($u\le t-1$), and a column contributes a positive part iff its entry in row $t$ is $1$. So the parts of $\mu$ are $c_u-(t-1-u)$, $u\in[t-k+1,t-1]$, and their sum is $\le\sum_{v=0}^{k-2}(k-v)=k+(k-1)+\cdots+2=T_k-1<T_k=|\mu|$, a contradiction.
+\end{proof}
+
+\step{B6}{(Griggs--Ho Lemma~3.4; proof written out).} For $\lambda\vdash n\ge1$, if $(c_p,\ldots,c_{p+m})=(m-2,m-1,\ldots,m-1,m)$ then $p+m\le n+1$.
+\begin{proof} $c_p=m-2\ge1$, so $m\ge3$. Column $p$ ends at row $p+m-2$: $e_{p+m-2,p}=1$, $e_{p+m-1,p}=0$ (so also $e_{p+m,p}=0$). For $u\in[p+1,p+m-1]$, $c_u=m-1$, so column $u$ has ones in rows $u+1..u+m-1$, which contain row $p+m$: $e_{p+m,u}=1$ ($m-1$ ones). Row $p+m$ has $c_{p+m}=m$ ones, so exactly one further $1$, in a column $Z$ not in $[p,p+m-1]$.
+
+If $Z$ is a $\lambda$-column $j$: $\lambda_j\ge p+m$, and $\lambda_j\le n$, so $p+m\le n$.
+
+If $Z$ is a $c$-column $u_0$ (then $u_0\le p-1$): suppose $u_0\ge2$. Then $e_{p+m,u_0-1}=0$ (the only ones of row $p+m$ are $u_0$ and $[p+1,p+m-1]$). $c_{p+m}=c_{p+m-1}+1$, so $L_{p+m-1}=0$ and row $p+m-1$ agrees with row $p+m$ on old columns: $e_{p+m-1,u_0}=1$, $e_{p+m-1,u_0-1}=0$. $c_{p+m-1}=c_{p+m-2}$ ($=m-1$, as $p+m-2\ge p+1$), so $L_{p+m-2}=1$, and column $p$ is a flip at row $p+m-2$; so it is the only one, and rows $p+m-2$, $p+m-1$ agree on the columns $u_0$, $u_0-1$ (both $\ne p$): $e_{p+m-2,u_0-1}=0$. So $c_{u_0}\ge(p+m)-u_0$ and $c_{u_0-1}\le(p+m-2)-(u_0-1)-1=p+m-u_0-2$, i.e.\ $c_{u_0}\ge c_{u_0-1}+2$, contradicting B2. Hence $u_0=1$, and $e_{p+m,1}=1$ gives $c_1\ge p+m-1$; $c_1=s\le n$, so $p+m\le n+1$.
+\end{proof}
+
+\step{B7}{(Griggs--Ho Lemma~3.5; proof written out, their ``continue this process'' made an induction).} For $\lambda\vdash n\ge1$: if $q\ge p+3$ and $(c_p..c_q)=(x-1,x,\ldots,x,x+1)$ then either $p\le x$ or there is a pattern $(c_{p'}..c_{q'})=(x'-1,x',\ldots,x',x'+1)$ with $x'\le x$, $2\le q'-p'<q-p$ and $p-x\le p'<q'\le p+1$.
+\begin{proof} Assume $p\ge x+1$. The $x$ entries $e_{p,p-x},\ldots,e_{p,p-1}$ ($p-x\ge1$) lie in row $p$, which has $c_p=x-1$ ones, so one is $0$; $e_{p,p-1}=1$, so take $p'$ maximal in $[p-x,p-2]$ with $e_{p,p'}=0$; then $e_{p,u}=1$ for $u\in[p'+1,p-1]$. $c_{p+1}=c_p+1$ gives $L_p=0$: $e_{p+1,u}=1$ for $u\in[p'+1,p]$ ($u=p$ is the new entry). As in B5, $e_{p+1,p'+1}=1$ and $e_{p,p'}=0$ give, with B2, $c_{p'}=y-1$ and $c_{p'+1}=y$ where $y:=p-p'\in[2,x]$.
+
+\emph{Invariant $I(m)$} ($m\ge1$): $p+m\le q-1$; $c_{p'+1}=\cdots=c_{p'+m}=y$; and $e_{p+m,u}=1$ for all $u\in[p'+m,p+m-1]$. $I(1)$ holds (its first clause because $q\ge p+3$). Note $c_{p'+m}=y$ means column $p'+m$ ends at row $p'+m+y=p+m$, so it is a flip at row $p+m$.
+
+\emph{Step.} Assume $I(m)$. (a) If $p+m=q-1$: $c_q=c_{q-1}+1$ forces $L_{q-1}=0$, but column $p'+m$ is a flip at row $q-1$: contradiction. So $p+m\le q-2$ (which is the first clause of $I(m+1)$), hence $c_{p+m}=c_{p+m+1}=x$ and $L_{p+m}=1$; the unique flip is column $p'+m$, so row $p+m+1$ agrees with row $p+m$ on the other old columns: $e_{p+m+1,u}=1$ for $u\in[p'+m+1,p+m]$ ($u=p+m$ is the new entry). (b) $e_{p+m+1,p'+m+1}=1$ gives $c_{p'+m+1}\ge y$, and B2 gives $c_{p'+m+1}\le c_{p'+m}+1=y+1$. If $c_{p'+m+1}=y+1$, stop with $q':=p'+m+1$; else $I(m+1)$ holds.
+
+\emph{Termination:} by (a), $I(m)$ forces $m\le q-2-p$, so the process stops at some $m\le q-p-2$, giving the pattern $(c_{p'},\ldots,c_{q'})=(y-1,y,\ldots,y,y+1)$ with $q'-p'=m+1\in[2,q-p-1]$, i.e.\ $2\le q'-p'<q-p$. Put $x'=y\le x$; $p'\ge p-x$. Finally $q'\le p+1$: the indices $p'+1..q'-1$ carry the value $y$ and $q'$ carries $y+1$; if $q'\ge p+2$ then indices $p$ and $p+1$ would both lie in $[p'+1,q'-1]$ ($p'\le p-2$), forcing $c_p=c_{p+1}=y$, but $c_p=x-1\ne x=c_{p+1}$.
+\end{proof}
+
+\step{B8}{(Griggs--Ho Lemma~3.6; proof written out).} If $(c_p,c_{p+1},c_{p+2})=(x-1,x,x+1)$ then $p\le x$.
+\begin{proof} Suppose $p>x$, i.e.\ $p-1>x-1=c_p$. Row $p$ contains the $p-1$ entries $e_{p,1},\ldots,e_{p,p-1}$ (all counted in $c_p$), so at most $c_p<p-1$ of them are $1$: some $e_{p,i}=0$ with $i\le p-1$; since $e_{p,p-1}=1$ (B1), $i\le p-2$. Take $i$ maximal: $e_{p,i}=0$, $e_{p,i+1}=1$. By B2 equality ($c_{p+1}=c_p+1$, then $c_{p+2}=c_{p+1}+1$): $e_{p+1,i+1}=e_{p,i+1}=1$ and $e_{p+2,i+1}=e_{p+1,i+1}=1$. So $c_{i+1}\ge(p+2)-(i+1)=p-i+1$, while $e_{p,i}=0$ gives $c_i\le p-i-1$. Then $c_{i+1}\ge c_i+2$, contradicting B2. \end{proof}
+
+\step{B9}{(assembly; Griggs--Ho proof of Thm~3.7, counting written out).} Let $\lambda\vdash T_k$, $t=\dB(\lambda)$.
+\begin{itemize}
+\item $k=1,2$: exhaustive by hand: $k=1$ only $(1)$, $d=0$. $k=2$: $(2,1)$ fixed; $(3)\to(2,1)$; $(1,1,1)\to(3)\to(2,1)$; max $2=k^2-k$.
+\item $k\ge3$ and $t\le k$: $t\le k<k^2-k$.
+\item $k\ge3$, $t\ge k+1$: by B5 (i) or (ii) holds.
+\begin{itemize}
+\item (ii) with $q=p+k$: then $p=t-k+1$ (forced by the ranges $p\ge t-k+1$, $q\le t+1$), and B6 ($m=k$) gives $p+k\le n+1$, so $t=p+k-1\le n=k(k+1)/2\le k^2-k$ (since $k\ge3$).
+\item otherwise $q-p\le k-1$ and $p\ge t-k$. Set $P_0=(p,q,x)$ ($x=k$ or $k-1$; $x\le k$). While the current pattern $(p_i,q_i,x_i)$ has $q_i-p_i\ge3$ and $p_i>x_i$, apply B7 to get $(p_{i+1},q_{i+1},x_{i+1})$ with $x_{i+1}\le x_i\le k$, $q_{i+1}-p_{i+1}\le q_i-p_i-1$, $p_{i+1}\ge p_i-x_i\ge p_i-k$. The length $q_i-p_i$ starts $\le k-1$, drops by $\ge1$ per step, and stays $\ge2$, so at most $k-3$ steps occur. The process stops at some $m\le k-3$ with $p_m\le x_m\le k$ (either B7's first alternative, or $q_m-p_m=2$ and B8). Hence $p_0\le p_m+mk\le k+(k-3)k=k^2-2k$, and $t\le p_0+k\le k^2-k$.
+\end{itemize}
+\end{itemize}
+So $\dB(\lambda)\le k^2-k$ for all $\lambda\vdash T_k$, i.e.\ $\DB(T_k)\le k^2-k$. With Part A: $\DB(T_k)=k^2-k$ for every $k\ge1$. \qedend
+
+\medskip
+\noindent\textbf{Conclusion.} Established here (written proofs, no citation used as proof): $\DB(T_k)=k^2-k$ for every $k\ge1$; lower bound by the explicit witness $\lambda^{(k)}$ (Part A), upper bound by Part B (Griggs--Ho architecture, all lemmas re-derived). The most delicate step is B7 (index bookkeeping). The same result is proved in Griggs--Ho Thm~3.7, Igusa (1985), Etienne (1991).
+
+\section{How to verify (computations; sanity only, not load-bearing)}\label{sec:verify}
+
+No step of the proof above uses a computation; the scripts below only check instances and prove nothing for all $k$. They are stdlib-only Python~3 and are shipped in the folder \texttt{code/} of this submission. Run from the submission folder (measured with Python 3.14.0 on macOS, Darwin 23.4.0; wall-clock times from \texttt{/usr/bin/time -p}):
+
+\begin{itemize}
+\item \texttt{python3 code/witness.py 40} --- simulates $B$ on $\lambda^{(k)}$, checks $\dB(\lambda^{(k)})=k^2-k$ and that $B^t(\lambda^{(k)})$ has diagram $S(a_t,b_t)$ of A.3 for $t<k^2-k$, for $k=1..40$. Expected output: \texttt{k=1..40 checked, failures: 0}. Runtime $1.91$ s.
+\item \texttt{python3 code/dbt.py 8} --- exhaustive $\DB(T_k)$ for $k=1..8$: values $0,2,6,12,20,30,42,56=k^2-k$ (number of maximisers $1,1,1,3,16,65,293,1267$); e.g.\ $k=3$: only $(2,2,1,1)$. Expected: each line shows \texttt{D\_B=} equal to \texttt{k\^{}2-k=}. Runtime $0.64$ s.
+\item \texttt{python3 code/gh\_lemmas.py 30 80} --- checks the statements of B5 ($n=T_k\le28$, all 4411 partitions with $\dB\ge k+1$), B6, B7, B8 (all partitions of $n\le30$, $c_1..c_{80}$). Expected output:
+\texttt{partitions checked 28628 n<= 30 seq length 80 violations L3.6: 0 L3.5: 0} and
+\texttt{L3.4 violations: 0\ \ L3.3(2): cases 4411 violations 0}. Runtime $3.84$ s.
+\end{itemize}
+All arithmetic is exact integer arithmetic; total runtime well under the 10-minute limit.
+
+\section{Limitations}
+
+\begin{itemize}
+\item The result is complete for the cell as stated: both bounds are proved for every $k\ge1$, with no exceptions. Nothing is claimed beyond $n=T_k$ (e.g.\ no statement about which partitions attain the maximum for general $k$, and nothing about non-triangular $n$).
+\item The upper-bound architecture is that of Griggs--Ho \cite{GH}; the proof here re-derives every lemma, and its correctness rests on the written argument, which the reader should check (the delicate step is B7). The computer checks of Section~\ref{sec:verify} are finite-range sanity checks only.
+\item The references \cite{Igusa,Etienne,Bentz} were not opened by the team; their content is reported as described in \cite{GH} and the survey \cite{Mestrovic}.
+\item Editorial changes relative to the accepted proof text (no change to the mathematics): a reference to an internal assumption of the team was removed from the first line of Part~B (0.3 already proves what is needed); in B7 the bound $p+m\le q-1$, which step (a) of the proof derives for $I(m+1)$, is stated as part of the invariant $I(m)$; code paths point to the shipped \texttt{code/} folder.
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{GH} J.~R.~Griggs and C.-C.~Ho, The cycling of partitions and compositions under repeated shifts, \emph{Adv.\ Appl.\ Math.} 21 (1998) 205--227. Journal version: \url{https://www.sciencedirect.com/science/article/pii/S0196885898905978}; author preprint (dated Mar.~2, 1998): \url{https://people.math.sc.edu/griggs/cycling.pdf}. Used: Thm~2.1, Thm~3.1, Prop.~3.2, Lemmas~3.3--3.6, Thm~3.7.
+\bibitem{Igusa} K.~Igusa, Solution of the Bulgarian solitaire conjecture, \emph{Math.\ Mag.} 58 (1985) 259--271.
+\bibitem{Etienne} G.~Etienne, Tableaux de Young et solitaire bulgare, \emph{J.\ Combin.\ Theory Ser.\ A} 58 (1991) 181--197. \url{https://www.sciencedirect.com/science/article/pii/009731659190059P}
+\bibitem{Bentz} H.-J.~Bentz, Proof of the Bulgarian Solitaire conjectures, \emph{Ars Combin.} 23 (1987) 151--170.
+\bibitem{Mestrovic} R.~Mestrovic, A short survey of the game Bulgarian solitaire and related games, arXiv:2607.17194 (2026). \url{https://arxiv.org/html/2607.17194}
+\end{thebibliography}
+
+\end{document}

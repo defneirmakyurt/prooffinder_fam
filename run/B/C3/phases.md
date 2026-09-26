@@ -9,3 +9,7 @@
 | B-C3-007 | 1L | literature | LITERATURE | SOLVE | - | - | 16:02 |
 | B-C3-008 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C3-002 | 16:04 |
 | B-C3-009 | GATE | referee | CLEAN-ROOM | GATE | - | B-C3-002 | 16:04 |
+| B-C3-010 | REPAIR | prover | EXPLOIT | - | - | B-C3-004 | 16:08 |
+| B-C3-011 | REPAIR | prover | EXPLOIT | - | - | B-C3-004 | 16:11 |
+| B-C3-012 | 3 | literature | LITERATURE | ANALYST | - | - | 16:11 |
+| B-C3-013 | WAVE | prover | FRESH | - | - | - | 16:11 |
