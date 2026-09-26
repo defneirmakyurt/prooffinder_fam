@@ -1,7 +1,8 @@
-# Board: problem ?, updated 14:47, run time 0:00 of 7:00
+# Board: problem B, updated 15:28, run time 1:43 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
+| C1 | 1 | T1: 1 pt; classical-style classification, base case (i) then general (ii) | 0 done, 1 running | NOT ATTEMPTED | OPEN | – |  |  | 2 blind provers | 0:00 |
 
 ## Partial cells: established / remaining gap
 
