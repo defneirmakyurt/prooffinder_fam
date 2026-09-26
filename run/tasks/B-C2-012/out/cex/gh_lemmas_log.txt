@@ -1,0 +1,2 @@
+partitions checked 28628 n<= 30 seq length 80 violations L3.6: 0 L3.5: 0
+L3.4 violations: 0  L3.3(2): cases 4411 violations 0

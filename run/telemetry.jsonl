@@ -59,3 +59,25 @@
 {"event": "task", "at": "2026-09-26T15:57:47", "run_time": "2:12", "task": "B-C2-012", "cell": "B-C2", "phase": "GATE", "role": "referee", "regime": "CLEAN-ROOM", "mode": "GATE", "branch": "-", "subject": "B-C2-003", "angle": "-", "lessons": {"role": "0", "problem": "-"}, "lib": [], "timebox": 20}
 {"event": "done", "at": "2026-09-26T15:59:59", "run_time": "2:14", "task": "B-C2-006", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null}
 {"event": "done", "at": "2026-09-26T16:00:18", "run_time": "2:15", "task": "B-C2-006", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 102958, "ms": 683478, "tool_uses": 12}
+{"event": "done", "at": "2026-09-26T16:02:30", "run_time": "2:17", "task": "B-C3-004", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null}
+{"event": "done", "at": "2026-09-26T16:02:43", "run_time": "2:17", "task": "B-C3-004", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 133742, "ms": 1184768, "tool_uses": 20}
+{"event": "task", "at": "2026-09-26T16:02:43", "run_time": "2:17", "task": "B-C3-007", "cell": "B-C3", "phase": "1L", "role": "literature", "regime": "LITERATURE", "mode": "SOLVE", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "0", "problem": "0"}, "lib": [], "timebox": 40}
+{"event": "done", "at": "2026-09-26T16:03:22", "run_time": "2:18", "task": "B-C3-003", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null}
+{"event": "done", "at": "2026-09-26T16:03:26", "run_time": "2:18", "task": "B-C3-003", "out": ["claims.md", "code", "plan.md", "proof.md", "stuck.md"], "verdict": null, "tokens": 88552, "ms": 1241307, "tool_uses": 20}
+{"event": "done", "at": "2026-09-26T16:03:47", "run_time": "2:18", "task": "B-C2-004", "out": ["cex", "verdict.md"], "verdict": "ACCEPT"}
+{"event": "gate", "at": "2026-09-26T16:03:47", "run_time": "2:18", "task": "B-C2-002", "cell": "B-C2", "decision": "VALID", "accepts": ["B-C2-004", "B-C2-005"]}
+{"event": "done", "at": "2026-09-26T16:03:51", "run_time": "2:18", "task": "B-C2-004", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 61079, "ms": 910307, "tool_uses": 17}
+{"event": "task", "at": "2026-09-26T16:04:07", "run_time": "2:18", "task": "B-C3-008", "cell": "B-C3", "phase": "2", "role": "referee", "regime": "CLEAN-ROOM", "mode": "VERIFY", "branch": "-", "subject": "B-C3-002", "angle": "-", "lessons": {"role": "0", "problem": "-"}, "lib": [], "timebox": 20}
+{"event": "task", "at": "2026-09-26T16:04:07", "run_time": "2:18", "task": "B-C3-009", "cell": "B-C3", "phase": "GATE", "role": "referee", "regime": "CLEAN-ROOM", "mode": "GATE", "branch": "-", "subject": "B-C3-002", "angle": "-", "lessons": {"role": "0", "problem": "-"}, "lib": [], "timebox": 20}
+{"event": "done", "at": "2026-09-26T16:05:27", "run_time": "2:20", "task": "B-C2-010", "out": ["cex", "verdict.md"], "verdict": "ACCEPT"}
+{"event": "done", "at": "2026-09-26T16:06:53", "run_time": "2:21", "task": "B-C2-012", "out": ["cex", "verdict.md"], "verdict": "ACCEPT"}
+{"event": "done", "at": "2026-09-26T16:06:53", "run_time": "2:21", "task": "B-C2-010", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 75881, "ms": 451104, "tool_uses": 17}
+{"event": "gate", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2", "decision": "VALID", "accepts": ["B-C2-010", "B-C2-012"]}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "pin", "at": "2026-09-26T16:06:59", "run_time": "2:21", "task": "B-C2-003", "cell": "B-C2"}
+{"event": "done", "at": "2026-09-26T16:07:09", "run_time": "2:21", "task": "B-C2-012", "out": ["cex", "verdict.md"], "verdict": "ACCEPT", "tokens": 75626, "ms": 528797, "tool_uses": 14}
+{"event": "task", "at": "2026-09-26T16:07:09", "run_time": "2:22", "task": "B-C2-013", "cell": "B-C2", "phase": "5", "role": "scribe", "regime": "RECORD", "mode": "SUBMISSION", "branch": "-", "subject": "-", "angle": "-", "lessons": {"role": "1", "problem": "0"}, "lib": [], "timebox": 15}

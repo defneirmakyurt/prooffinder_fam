@@ -1,16 +1,6 @@
 (A) Steps 2-4 on 31628 partitions: OK
 (B) Step 13 formula/bound/equality k=2..60: OK
-Traceback (most recent call last):
-  File "/Users/radu.cucu/Developer/bainsahackathon/run/tasks/B-C2-004/out/cex/lemmas.py", line 64, in <module>
-    try: l = from_diag(D)
-             ~~~~~~~~~^^^
-  File "/Users/radu.cucu/Developer/bainsahackathon/run/tasks/B-C2-004/out/cex/lemmas.py", line 21, in from_diag
-    l = tuple(rows[i] for i in range(1, len(rows) + 1))
-        ^^^^^
-  File "/Users/radu.cucu/Developer/bainsahackathon/run/tasks/B-C2-004/out/cex/lemmas.py", line 21, in <genexpr>
-    l = tuple(rows[i] for i in range(1, len(rows) + 1))
-              ~~~~^^^
-KeyError: 2
-real 4.57
-user 4.25
-sys 0.02
+(C) Steps 10-14 on all 2406 partitions of R_k, k=2..9: OK
+real 6.02
+user 5.94
+sys 0.01

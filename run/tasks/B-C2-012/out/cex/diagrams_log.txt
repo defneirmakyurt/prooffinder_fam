@@ -1,0 +1,3 @@
+0.1: partitions n<=30: 28628, violations 0
+0.3: non-delta partitions of T_k, k<=8: 22712, no slide within w(w+1) steps: 0, energy-rule violations: 0
+A.2: k=2..40, admissible (a,b): 21320, violations 0

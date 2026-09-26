@@ -12,3 +12,4 @@
 | B-C2-010 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C2-003 | 15:57 |
 | B-C2-011 | GATE | referee | CLEAN-ROOM | GATE | - | B-C2-003 | 15:57 |
 | B-C2-012 | GATE | referee | CLEAN-ROOM | GATE | - | B-C2-003 | 15:57 |
+| B-C2-013 | 5 | scribe | RECORD | SUBMISSION | - | - | 16:07 |

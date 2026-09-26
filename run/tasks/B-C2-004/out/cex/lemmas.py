@@ -18,8 +18,8 @@ def parts(n, m=None):
 def from_diag(D):
     rows = {}
     for (i, j) in D: rows[i] = rows.get(i, 0) + 1
-    l = tuple(rows[i] for i in range(1, len(rows) + 1))
-    assert diagram(l) == D, "not a Young diagram"
+    l = tuple(rows.get(i, 0) for i in range(1, len(rows) + 1))
+    assert diagram(l) == D and all(l[q] >= l[q + 1] for q in range(len(l) - 1)), "not a Young diagram"
     return l
 def E(l): return sum(i + j - 1 for (i, j) in diagram(l))
 def checkA(l):

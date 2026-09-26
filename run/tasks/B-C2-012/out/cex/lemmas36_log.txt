@@ -1,0 +1,9 @@
+n<=36 partitions:99132
+star: instances 376230, violations 0
+B2: instances 371723, violations 0
+B4: instances 22712, violations 0
+B5: instances 21955, violations 0
+B6: instances 5812, violations 0
+B7: instances 199838, violations 0
+B8: instances 151310, violations 0
+B9: instances 21955, violations 0

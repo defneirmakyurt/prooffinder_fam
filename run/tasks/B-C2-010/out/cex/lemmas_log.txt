@@ -1,0 +1,12 @@
+T_k: k=1 n=1 B5-cases(t>=k+1)=0 max B7-chain steps=0 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=2 n=3 B5-cases(t>=k+1)=0 max B7-chain steps=0 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=3 n=6 B5-cases(t>=k+1)=4 max B7-chain steps=0 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=4 n=10 B5-cases(t>=k+1)=27 max B7-chain steps=1 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=5 n=15 B5-cases(t>=k+1)=140 max B7-chain steps=2 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=6 n=21 B5-cases(t>=k+1)=710 max B7-chain steps=3 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+T_k: k=7 n=28 B5-cases(t>=k+1)=3530 max B7-chain steps=4 violations={'E': 0, 'slide': 0, 'B4': 0, 'B5': 0, 'B9': 0}
+all n<=26, c_1..c_70: instances {'star': 821170, 'B2': 809439, 'B6': 1464, 'B7': 9354, 'B7c': 9354, 'B8': 13402}
+violations {'star': 0, 'B2': 0, 'B6': 0, 'B7': 0, 'B7c': 0, 'B8': 0, 'slide': 0, 'energy': 0}
+real 9.17
+user 6.85
+sys 0.23

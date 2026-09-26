@@ -1,0 +1,12 @@
+k=1 T_k=1 #partitions=1 cyclic=[(1,)] D_B=0 k^2-k=0 d(witness)=0 #maximisers=1 sample=[(1,)] ok=True
+k=2 T_k=3 #partitions=3 cyclic=[(2, 1)] D_B=2 k^2-k=2 d(witness)=2 #maximisers=1 sample=[(1, 1, 1)] ok=True
+k=3 T_k=6 #partitions=11 cyclic=[(3, 2, 1)] D_B=6 k^2-k=6 d(witness)=6 #maximisers=1 sample=[(2, 2, 1, 1)] ok=True
+  d((2,1,1,1,1))= 3  d((6))= 3  d((1^6))= 4
+k=4 T_k=10 #partitions=42 cyclic=[(4, 3, 2, 1)] D_B=12 k^2-k=12 d(witness)=12 #maximisers=3 sample=[(3, 3, 2, 1, 1), (3, 2, 2, 2, 1), (3, 2, 2, 1, 1, 1)] ok=True
+k=5 T_k=15 #partitions=176 cyclic=[(5, 4, 3, 2, 1)] D_B=20 k^2-k=20 d(witness)=20 #maximisers=16 sample=[(4, 4, 3, 2, 1, 1), (4, 4, 2, 2, 2, 1), (4, 4, 2, 2, 1, 1, 1), (4, 3, 3, 3, 1, 1)] ok=True
+k=6 T_k=21 #partitions=792 cyclic=[(6, 5, 4, 3, 2, 1)] D_B=30 k^2-k=30 d(witness)=30 #maximisers=65 sample=[(5, 5, 4, 3, 2, 1, 1), (5, 5, 4, 2, 2, 2, 1), (5, 5, 4, 2, 2, 1, 1, 1), (5, 5, 3, 3, 3, 1, 1)] ok=True
+k=7 T_k=28 #partitions=3718 cyclic=[(7, 6, 5, 4, 3, 2, 1)] D_B=42 k^2-k=42 d(witness)=42 #maximisers=293 sample=[(6, 6, 5, 4, 3, 2, 1, 1), (6, 6, 5, 4, 2, 2, 2, 1), (6, 6, 5, 4, 2, 2, 1, 1, 1), (6, 6, 5, 3, 3, 3, 1, 1)] ok=True
+k=8 T_k=36 #partitions=17977 cyclic=[(8, 7, 6, 5, 4, 3, 2, 1)] D_B=56 k^2-k=56 d(witness)=56 #maximisers=1267 sample=[(7, 7, 6, 5, 4, 3, 2, 1, 1), (7, 7, 6, 5, 4, 2, 2, 2, 1), (7, 7, 6, 5, 4, 2, 2, 1, 1, 1), (7, 7, 6, 5, 3, 3, 3, 1, 1)] ok=True
+k=9 T_k=45 #partitions=89134 cyclic=[(9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=72 k^2-k=72 d(witness)=72 #maximisers=5686 sample=[(8, 8, 7, 6, 5, 4, 3, 2, 1, 1), (8, 8, 7, 6, 5, 4, 2, 2, 2, 1), (8, 8, 7, 6, 5, 4, 2, 2, 1, 1, 1), (8, 8, 7, 6, 5, 3, 3, 3, 1, 1)] ok=True
+k=10 T_k=55 #partitions=451276 cyclic=[(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=90 k^2-k=90 d(witness)=90 #maximisers=25475 sample=[(9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1), (9, 9, 8, 7, 6, 5, 4, 2, 2, 2, 1), (9, 9, 8, 7, 6, 5, 4, 2, 2, 1, 1, 1), (9, 9, 8, 7, 6, 5, 3, 3, 3, 1, 1)] ok=True
+k=1..10, failures: 0

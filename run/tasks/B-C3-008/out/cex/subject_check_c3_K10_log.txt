@@ -1,0 +1,61 @@
+k=2 n=2 D_B=0 k^2-2k-1=-1 #maximizers=2 maximizers=[(1, 1), (2,)]
+k=3 n=5 D_B=3 k^2-2k-1=2 #maximizers=1 maximizers=[(1, 1, 1, 1, 1)]
+   (L) k=3 n=5 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=4 n=8 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+k=4 n=9 D_B=7 k^2-2k-1=7 #maximizers=1 maximizers=[(3, 2, 2, 1, 1)]
+   (L) k=4 n=9 r=3: 9 case-B Phi=1 partitions match closed formula; max=7
+k=4: (A) checked for all n in (6,10)
+   (L) k=5 n=12 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=5 n=13 r=3: 12 case-B Phi=1 partitions match closed formula; max=8
+k=5 n=14 D_B=14 k^2-2k-1=14 #maximizers=6 maximizers=[(3, 3, 2, 2, 2, 1, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 3, 2, 1, 1)]
+   (L) k=5 n=14 r=4: 24 case-B Phi=1 partitions match closed formula; max=14
+k=5: (A) checked for all n in (10,15)
+   (L) k=6 n=17 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=6 n=18 r=3: 15 case-B Phi=1 partitions match closed formula; max=9
+   (L) k=6 n=19 r=4: 40 case-B Phi=1 partitions match closed formula; max=16
+k=6 n=20 D_B=23 k^2-2k-1=23 #maximizers=34
+   d(mu_k)=13 (2k+1=13); trunk characterization holds: True
+   (L) k=6 n=20 r=5: 50 case-B Phi=1 partitions match closed formula; max=23
+k=6: (A) checked for all n in (15,21)
+   (L) k=7 n=23 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=7 n=24 r=3: 18 case-B Phi=1 partitions match closed formula; max=10
+   (L) k=7 n=25 r=4: 60 case-B Phi=1 partitions match closed formula; max=18
+   (L) k=7 n=26 r=5: 100 case-B Phi=1 partitions match closed formula; max=26
+k=7 n=27 D_B=34 k^2-2k-1=34 #maximizers=175
+   d(mu_k)=15 (2k+1=15); trunk characterization holds: True
+   (L) k=7 n=27 r=6: 90 case-B Phi=1 partitions match closed formula; max=34
+k=7: (A) checked for all n in (21,28)
+   (L) k=8 n=30 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=8 n=31 r=3: 21 case-B Phi=1 partitions match closed formula; max=11
+   (L) k=8 n=32 r=4: 84 case-B Phi=1 partitions match closed formula; max=20
+   (L) k=8 n=33 r=5: 175 case-B Phi=1 partitions match closed formula; max=29
+   (L) k=8 n=34 r=6: 210 case-B Phi=1 partitions match closed formula; max=38
+k=8 n=35 D_B=47 k^2-2k-1=47 #maximizers=831
+   d(mu_k)=17 (2k+1=17); trunk characterization holds: True
+   (L) k=8 n=35 r=7: 147 case-B Phi=1 partitions match closed formula; max=47
+k=8: (A) checked for all n in (28,36)
+   (L) k=9 n=38 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=9 n=39 r=3: 24 case-B Phi=1 partitions match closed formula; max=12
+   (L) k=9 n=40 r=4: 112 case-B Phi=1 partitions match closed formula; max=22
+   (L) k=9 n=41 r=5: 280 case-B Phi=1 partitions match closed formula; max=32
+   (L) k=9 n=42 r=6: 420 case-B Phi=1 partitions match closed formula; max=42
+   (L) k=9 n=43 r=7: 392 case-B Phi=1 partitions match closed formula; max=52
+k=9 n=44 D_B=62 k^2-2k-1=62 #maximizers=3911
+   d(mu_k)=19 (2k+1=19); trunk characterization holds: True
+   (L) k=9 n=44 r=8: 224 case-B Phi=1 partitions match closed formula; max=62
+k=9: (A) checked for all n in (36,45)
+   (L) k=10 n=47 r=2: 2 case-B Phi=1 partitions match closed formula; max=2
+   (L) k=10 n=48 r=3: 27 case-B Phi=1 partitions match closed formula; max=13
+   (L) k=10 n=49 r=4: 144 case-B Phi=1 partitions match closed formula; max=24
+   (L) k=10 n=50 r=5: 420 case-B Phi=1 partitions match closed formula; max=35
+   (L) k=10 n=51 r=6: 756 case-B Phi=1 partitions match closed formula; max=46
+   (L) k=10 n=52 r=7: 882 case-B Phi=1 partitions match closed formula; max=57
+   (L) k=10 n=53 r=8: 672 case-B Phi=1 partitions match closed formula; max=68
+k=10 n=54 D_B=79 k^2-2k-1=79 #maximizers=18163
+   d(mu_k)=21 (2k+1=21); trunk characterization holds: True
+   (L) k=10 n=54 r=9: 324 case-B Phi=1 partitions match closed formula; max=79
+k=10: (A) checked for all n in (45,55)
+ALL OK
+real 38.73
+user 33.48
+sys 1.22
