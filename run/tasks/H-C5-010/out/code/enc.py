@@ -211,3 +211,63 @@ def write_dimacs(path, nvars, clauses):
         f.write("p cnf %d %d\n" % (nvars, len(clauses)))
         for c in clauses:
             f.write(" ".join(map(str, c)) + " 0\n")
+
+
+def unary_upward(inputs, cap, pool, clauses):
+    """Totalizer (balanced binary tree) over literal list `inputs`; returns o[1..top] with
+    clauses 'at least j inputs true => o[j]' (o[top] also covers counts >= top), top = min(len, cap).
+    Validity: o[j] := [#true inputs >= j] satisfies every clause."""
+    nodes = [[None, l] for l in inputs]
+    if not nodes:
+        return [None]
+    while len(nodes) > 1:
+        nxt = []
+        for p in range(0, len(nodes) - 1, 2):
+            A, B = nodes[p], nodes[p + 1]
+            la, lb = len(A) - 1, len(B) - 1
+            top = min(la + lb, cap)
+            o = [None] + [pool.new() for _ in range(top)]
+            for i in range(0, la + 1):
+                for j in range(0, lb + 1):
+                    s = i + j
+                    if s == 0:
+                        continue
+                    s = min(s, top)
+                    lits = []
+                    if i > 0:
+                        lits.append(-A[i])
+                    if j > 0:
+                        lits.append(-B[j])
+                    clauses.append(lits + [o[s]])
+            nxt.append(o)
+        if len(nodes) % 2:
+            nxt.append(nodes[-1])
+        nodes = nxt
+    return nodes[0]
+
+
+def global_exact_and_edges(d, m, pool, clauses, es=True):
+    """Valid for the WLOG class 'induced forests with EXACTLY m vertices' (proof.md 2.4):
+    (E1) sum x_v <= m;
+    (E2) with w_e := [both ends of e outside T] (clause x_u OR x_v OR w_e),
+         sum_e w_e <= d*2^(d-1) - (d-1)*m - 1   (= e(T) <= m-1 rewritten by double counting)."""
+    n = 1 << d
+    o = unary_upward([v + 1 for v in range(n)], m + 1, pool, clauses)
+    if len(o) - 1 >= m + 1:
+        clauses.append([-o[m + 1]])
+    if es:
+        B = d * (1 << (d - 1)) - (d - 1) * m - 1
+        ws = []
+        for u in range(n):
+            for j in range(d):
+                v = u ^ (1 << j)
+                if u < v:
+                    w = pool.new()
+                    clauses.append([u + 1, v + 1, w])
+                    ws.append(w)
+        if B < 0:
+            clauses.append([])
+            return
+        p = unary_upward(ws, B + 1, pool, clauses)
+        if len(p) - 1 >= B + 1:
+            clauses.append([-p[B + 1]])

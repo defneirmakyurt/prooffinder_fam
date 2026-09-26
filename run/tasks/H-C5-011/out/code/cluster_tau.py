@@ -76,31 +76,50 @@ def tau(Mp):
             if a != b and wt(vs[a] ^ vs[b]) == 2: adj[a] |= 1 << b
     return n - alpha(vs, adj)
 
-def tau_star(C):
+def tau_star(C, thr):
+    """Returns (flag, witness): flag False iff some valid M' has tau(G_2[M']) > thr (witness returned);
+    flag True certifies tau*(C) <= thr.  Branch and bound: tau(G_2[M' u R]) <= tau(G_2[M']) + |R|."""
     Cs = set(C)
     cand = sorted({o ^ (1 << i) for o in C for i in range(D)})
-    best = [0, None]
-    def local_set(Mp):
-        s = set(Mp)
+    bad = [None]
+    def labels(Mp):
+        # components of Q_9[Mp u (N_O(Mp) minus C)] -> dict vertex -> label (BFS)
+        verts = set(Mp)
         for x in Mp:
             for i in range(D):
                 w = x ^ (1 << i)
-                if w not in Cs: s.add(w)
-        return s
+                if w not in Cs: verts.add(w)
+        lab = {}; c = 0
+        for v in verts:
+            if v in lab: continue
+            lab[v] = c; st = [v]
+            while st:
+                u = st.pop()
+                for i in range(D):
+                    w = u ^ (1 << i)
+                    if w in verts and w not in lab: lab[w] = c; st.append(w)
+            c += 1
+        return lab
+    def addable(x, lab):
+        seen = set()
+        for i in range(D):
+            w = x ^ (1 << i)
+            if w in Cs or w not in lab: continue
+            l = lab[w]
+            if l in seen: return False
+            seen.add(l)
+        return True
     def rec(start, Mp):
-        maximal = True
-        for idx in range(start, len(cand)):
-            x = cand[idx]
-            Mp.append(x)
-            if acyclic(local_set(Mp)):
-                rec(idx + 1, Mp)
-            Mp.pop()
-        # evaluate tau at every node whose set cannot be extended by any LATER candidate is not enough
-        # for maximality, so evaluate at every node (tau is monotone, cost is small).
+        if bad[0] is not None: return
+        lab = labels(Mp)
+        later = [idx for idx in range(start, len(cand)) if addable(cand[idx], lab)]
         t = tau(Mp)
-        if t > best[0]: best[0] = t; best[1] = list(Mp)
+        if t > thr: bad[0] = list(Mp); return
+        if t + len(later) <= thr: return
+        for idx in later:
+            Mp.append(cand[idx]); rec(idx + 1, Mp); Mp.pop()
     rec(0, [])
-    return best[0], best[1]
+    return bad[0] is None, bad[0]
 
 def main():
     KMAX = int(sys.argv[1]) if len(sys.argv) > 1 else 4
@@ -120,12 +139,11 @@ def main():
                         key = canon(C2)
                         if key not in new: new[key] = C2
             layer = new
-        worst = None; cnt = 0; hist = {}
+        cnt = 0; nviol = 0; wit = None
         for key, C in layer.items():
-            t, Mp = tau_star(C)
+            ok, Mp = tau_star(C, k)
             cnt += 1
-            hist[t - k] = hist.get(t - k, 0) + 1
-            if worst is None or t - k > worst[0]: worst = (t - k, C, Mp)
-        print("k=%d classes=%d  histogram of tau*(C)-k: %s  max tau*(C)-k = %d  (witness C=%s M'=%s)"
-              % (k, cnt, dict(sorted(hist.items())), worst[0], worst[1], worst[2]), flush=True)
+            if not ok:
+                nviol += 1; wit = (C, Mp)
+        print("k=%d classes=%d  clusters with tau*(C) > k: %d %s" % (k, cnt, nviol, "" if wit is None else "witness C=%s M'=%s" % wit), flush=True)
 main()

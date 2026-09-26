@@ -34,12 +34,15 @@ def main():
     ap.add_argument("--drat", required=True)
     ap.add_argument("--work", required=True)
     ap.add_argument("--tlimit", type=int, default=500)
+    ap.add_argument("--exact", type=int, default=0)
     a = ap.parse_args()
     t0 = time.time()
     d, m = a.d, a.m
     kset = [int(x) for x in a.kset.split(",") if x]
     pool = enc.Pool(1 << d)
     clauses = []
+    if a.exact:
+        enc.global_exact_and_edges(d, m, pool, clauses)
     if kset:
         enc.build_subcube_counters(d, set(kset), pool, clauses)
     if a.sb:
