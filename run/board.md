@@ -1,4 +1,4 @@
-# Board: problem H, updated 14:36, run time 1:28 of 7:00
+# Board: problem H, updated 14:54, run time 1:46 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -13,6 +13,7 @@
 ## Partial cells: established / remaining gap
 
 ## Awaiting gate
+- [14:54] H-C5-007 (PARTIAL: labellings of Q_9 whose S_f has <= 3 vertices of one parity have >= 2376 paths): referees H-C5-013 (VERIFY), H-C5-014 (GATE), judged against its own partial statement.
 
 ## Contested cells (tell the humans)
 
