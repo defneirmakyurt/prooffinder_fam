@@ -99,19 +99,19 @@ Working rules from the user's global instructions:
 
 ### B3. Agents (locked cores; humans have authorised this build)
 
-- [ ] `prover.md`, `searcher.md`: BLIND regime, BRANCH mode (with `no_natural_route.md`), and outputs `claims.md`, `stuck.md`, `code/README.md`.
-- [ ] `breaker.md`: ADVERSARY mode with its four files (contrapositive, cex search, local analysis, minimal failing) and the verdict labels.
-- [ ] `referee.md`:
+- [x] `prover.md`, `searcher.md`: BLIND regime, BRANCH mode (with `no_natural_route.md`), and outputs `claims.md`, `stuck.md`, `code/README.md`.
+- [x] `breaker.md`: ADVERSARY mode with its four files (contrapositive, cex search, local analysis, minimal failing) and the verdict labels.
+- [x] `referee.md`:
   - VERIFY / GATE modes run the 7-step protocol (Parts G + S, equality cases, cross-cell consistency, own cex search in `out/cex/`);
   - CROSS mode (branch lens, translate the key idea, CROSS verdict);
   - verdict blocks per reference §4.
-- [ ] `scribe.md`: SUBMISSION mode (current) and REPORT mode (`final_report.md`, reference §14, citations by path and step; uncited claims deleted).
-- [ ] New `literature.md`, replacing `scout.md`, which gets deleted:
+- [x] `scribe.md`: SUBMISSION mode (current) and REPORT mode (`final_report.md`, reference §14, citations by path and step; uncited claims deleted).
+- [x] New `literature.md`, replacing `scout.md`, which gets deleted:
   - tools Read, Write, Glob, Grep, Bash, WebSearch, WebFetch;
   - modes SOLVE (1L) and ANALYST (3).
-- [ ] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
-- [ ] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
-- [ ] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
+- [x] New `triage.md`: tools Read, Write, Glob; never solves; output per reference §11.
+- [x] New `auditor.md`: tools Read, Write, Glob, Grep; output per reference §15.
+- [x] Every agent keeps: the lessons-first read order, the guard hook, `omitClaudeMd: true`, `model: inherit`, honest-run rules, and the report block (reference §3).
 
 ### B4. Lessons
 
