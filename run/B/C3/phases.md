@@ -13,3 +13,6 @@
 | B-C3-011 | REPAIR | prover | EXPLOIT | - | - | B-C3-004 | 16:11 |
 | B-C3-012 | 3 | literature | LITERATURE | ANALYST | - | - | 16:11 |
 | B-C3-013 | WAVE | prover | FRESH | - | - | - | 16:11 |
+| B-C3-014 | 5 | scribe | RECORD | SUBMISSION | - | - | 16:27 |
+| B-C3-015 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C3-007 | 16:29 |
+| B-C3-016 | GATE | referee | CLEAN-ROOM | GATE | - | B-C3-007 | 16:29 |

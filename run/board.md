@@ -1,4 +1,4 @@
-# Board: problem B, updated 16:21, run time 2:36 of 7:00
+# Board: problem B, updated 16:29, run time 2:44 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -13,6 +13,7 @@
 - [16:09] B-C3: established D_B(T_k-1) >= k^2-2k-1 for k>=3, witness (k-1,k-2,k-2,k-3,...,2,1,1); gaps: (a), upper (b) (1L running), (c) (conditional prover running).
 
 ## Awaiting gate
+- [16:29] [16:28] B-C3-007 (1L): full proof of (a), (b) both halves, (c) as {lambda: B^{k^2-2k-2}(lambda)=(k+1,k-1,...,3,1)}; RAN check.py 9 reproduced by head (ALL OK, 18 s); referees B-C3-015, B-C3-016 dispatched in parallel.
 
 ## Contested cells (tell the humans)
 
