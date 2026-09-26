@@ -1,0 +1,11 @@
+# Subject column (7th field) of each row in cell/phases.md:
+B-C1-001 subject=-
+B-C1-002 subject=-
+B-C1-003 subject=B-C1-002
+B-C1-004 subject=B-C1-002
+B-C1-005 subject=B-C1-001
+B-C1-006 subject=B-C1-001
+B-C1-007 subject=-
+B-C1-008 subject=-
+# rows whose Subject column is B-C1-007:
+0

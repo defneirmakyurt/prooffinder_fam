@@ -1,0 +1,11 @@
+exit=0
+--- tail of latexmk_stdout.txt (includes /usr/bin/time -p output)
+
+real 0.59
+user 0.43
+sys 0.07
+--- from submission.log
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  26 SEP 2026 15:50
+Output written on submission.pdf (11 pages, 281414 bytes).
+lines matching 'warning' (case-insensitive) in submission.log: 0
+submission.tex copy byte-identical to record/tasks/B-C1-008/out/submission.tex

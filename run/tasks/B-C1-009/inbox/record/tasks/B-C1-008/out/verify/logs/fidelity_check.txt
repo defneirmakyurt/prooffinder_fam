@@ -1,0 +1,8 @@
+math segments: 453 missing in tex: 0
+step labels: 34 missing: []
+sections: 12 missing: []
+appendix listing identical to script: True
+real 0.03
+user 0.02
+sys 0.00
+exit=0

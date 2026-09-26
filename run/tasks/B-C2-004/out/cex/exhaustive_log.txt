@@ -1,0 +1,15 @@
+k=1 n=1 p(n)=1 cyclic=[(1,)] D_B=0 k^2-k=0 #maximisers=1 d_B(witness)=0 witness_is_maximiser=True maximisers(first 3)=[(1,)] OK
+k=2 n=3 p(n)=3 cyclic=[(2, 1)] D_B=2 k^2-k=2 #maximisers=1 d_B(witness)=2 witness_is_maximiser=True maximisers(first 3)=[(1, 1, 1)] OK
+k=3 n=6 p(n)=11 cyclic=[(3, 2, 1)] D_B=6 k^2-k=6 #maximisers=1 d_B(witness)=6 witness_is_maximiser=True maximisers(first 3)=[(2, 2, 1, 1)] OK
+k=4 n=10 p(n)=42 cyclic=[(4, 3, 2, 1)] D_B=12 k^2-k=12 #maximisers=3 d_B(witness)=12 witness_is_maximiser=True maximisers(first 3)=[(3, 3, 2, 1, 1), (3, 2, 2, 2, 1), (3, 2, 2, 1, 1, 1)] OK
+k=5 n=15 p(n)=176 cyclic=[(5, 4, 3, 2, 1)] D_B=20 k^2-k=20 #maximisers=16 d_B(witness)=20 witness_is_maximiser=True maximisers(first 3)=[(4, 4, 3, 2, 1, 1), (4, 4, 2, 2, 2, 1), (4, 4, 2, 2, 1, 1, 1)] OK
+k=6 n=21 p(n)=792 cyclic=[(6, 5, 4, 3, 2, 1)] D_B=30 k^2-k=30 #maximisers=65 d_B(witness)=30 witness_is_maximiser=True maximisers(first 3)=[(5, 5, 4, 3, 2, 1, 1), (5, 5, 4, 2, 2, 2, 1), (5, 5, 4, 2, 2, 1, 1, 1)] OK
+k=7 n=28 p(n)=3718 cyclic=[(7, 6, 5, 4, 3, 2, 1)] D_B=42 k^2-k=42 #maximisers=293 d_B(witness)=42 witness_is_maximiser=True maximisers(first 3)=[(6, 6, 5, 4, 3, 2, 1, 1), (6, 6, 5, 4, 2, 2, 2, 1), (6, 6, 5, 4, 2, 2, 1, 1, 1)] OK
+k=8 n=36 p(n)=17977 cyclic=[(8, 7, 6, 5, 4, 3, 2, 1)] D_B=56 k^2-k=56 #maximisers=1267 d_B(witness)=56 witness_is_maximiser=True maximisers(first 3)=[(7, 7, 6, 5, 4, 3, 2, 1, 1), (7, 7, 6, 5, 4, 2, 2, 2, 1), (7, 7, 6, 5, 4, 2, 2, 1, 1, 1)] OK
+k=9 n=45 p(n)=89134 cyclic=[(9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=72 k^2-k=72 #maximisers=5686 d_B(witness)=72 witness_is_maximiser=True maximisers(first 3)=[(8, 8, 7, 6, 5, 4, 3, 2, 1, 1), (8, 8, 7, 6, 5, 4, 2, 2, 2, 1), (8, 8, 7, 6, 5, 4, 2, 2, 1, 1, 1)] OK
+k=10 n=55 p(n)=451276 cyclic=[(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=90 k^2-k=90 #maximisers=25475 d_B(witness)=90 witness_is_maximiser=True maximisers(first 3)=[(9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1), (9, 9, 8, 7, 6, 5, 4, 2, 2, 2, 1), (9, 9, 8, 7, 6, 5, 4, 2, 2, 1, 1, 1)] OK
+example chain: [(2, 1, 1, 1, 1), (5, 1), (4, 2), (3, 2, 1), (3, 2, 1)]
+ALL OK
+real 2.49
+user 2.33
+sys 0.05

@@ -8,3 +8,4 @@
 | B-C1-006 | GATE | referee | CLEAN-ROOM | GATE | - | B-C1-001 | 15:35 |
 | B-C1-007 | 1L | literature | LITERATURE | SOLVE | - | - | 15:35 |
 | B-C1-008 | 5 | scribe | RECORD | SUBMISSION | - | - | 15:39 |
+| B-C1-009 | 5 | scribe | RECORD | REPORT | - | - | 15:45 |

@@ -1,0 +1,3 @@
+gate/B-C1-001.md and gate/B-C1-002.md: byte-identical
+gate/B-C1-001.md and gate/gate_report.md: byte-identical
+exit=0

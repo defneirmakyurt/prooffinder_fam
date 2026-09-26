@@ -1,0 +1,16 @@
+# Output comparison (timing and exit lines stripped) against recorded logs
+IDENTICAL: check_c1_45.txt vs record/tasks/B-C1-004/out/cex/subject_run_45.log
+IDENTICAL: B-C1-003_search_50_14_7.txt vs record/tasks/B-C1-003/out/cex/log_search_N50_K14_seed7.txt
+IDENTICAL: B-C1-004_check_45_14_16_30_13.txt vs record/tasks/B-C1-004/out/cex/check.log
+IDENTICAL: B-C1-005_referee_check_50_35_16.txt vs record/tasks/B-C1-005/out/cex/referee_run.log
+IDENTICAL: B-C1-006_indep_check_50_28.txt vs record/tasks/B-C1-006/out/cex/indep_log.txt
+IDENTICAL: B-C1-006_steps_check.txt vs record/tasks/B-C1-006/out/cex/steps_log.txt
+IDENTICAL: B-C1-007_check_c1_lit_50.txt vs record/tasks/B-C1-007/out/code/run50.log
+# Byte identity of copies under out/verify vs inbox/record
+accepted check_c1.py identical
+identical: B-C1-003/out/cex/search.py
+identical: B-C1-004/out/cex/check.py
+identical: B-C1-005/out/cex/referee_check.py
+identical: B-C1-006/out/cex/indep_check.py
+identical: B-C1-006/out/cex/steps_check.py
+identical: B-C1-007/out/code/check_c1_lit.py

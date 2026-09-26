@@ -1,0 +1,26 @@
+# deadends.md size (bytes):
+       0
+# task rows in cell/phases.md (copy shipped to B-C1-009):
+8
+ B-C1-001 | 1 | prover | BLIND | - | - | - 
+ B-C1-002 | 1 | prover | BLIND | - | - | - 
+ B-C1-003 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C1-002 
+ B-C1-004 | GATE | referee | CLEAN-ROOM | GATE | - | B-C1-002 
+ B-C1-005 | 2 | referee | CLEAN-ROOM | VERIFY | - | B-C1-001 
+ B-C1-006 | GATE | referee | CLEAN-ROOM | GATE | - | B-C1-001 
+ B-C1-007 | 1L | literature | LITERATURE | SOLVE | - | - 
+ B-C1-008 | 5 | scribe | RECORD | SUBMISSION | - | - 
+# task folders in record/tasks:
+B-C1-001
+B-C1-002
+B-C1-003
+B-C1-004
+B-C1-005
+B-C1-006
+B-C1-007
+B-C1-008
+# phases.md rows with Phase 3:
+0
+# case-insensitive matches of 'near miss' in record:
+       0
+exit=0

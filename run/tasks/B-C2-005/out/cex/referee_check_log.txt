@@ -1,0 +1,56 @@
+A k=1 T_k=1 p(T_k)=1 cyclic=[(1,)] D_B=0 k^2-k=0 d_B(witness)=0 #maximisers=1 OK maximisers=[(1,)]
+   d_B((n))=0  d_B((1^n))=0
+A k=2 T_k=3 p(T_k)=3 cyclic=[(2, 1)] D_B=2 k^2-k=2 d_B(witness)=2 #maximisers=1 OK maximisers=[(1, 1, 1)]
+   d_B((n))=1  d_B((1^n))=2
+A k=3 T_k=6 p(T_k)=11 cyclic=[(3, 2, 1)] D_B=6 k^2-k=6 d_B(witness)=6 #maximisers=1 OK maximisers=[(2, 2, 1, 1)]
+   d_B((n))=3  d_B((1^n))=4
+A k=4 T_k=10 p(T_k)=42 cyclic=[(4, 3, 2, 1)] D_B=12 k^2-k=12 d_B(witness)=12 #maximisers=3 OK maximisers=[(3, 2, 2, 1, 1, 1), (3, 2, 2, 2, 1), (3, 3, 2, 1, 1)]
+   d_B((n))=6  d_B((1^n))=7
+A k=5 T_k=15 p(T_k)=176 cyclic=[(5, 4, 3, 2, 1)] D_B=20 k^2-k=20 d_B(witness)=20 #maximisers=16 OK maximisers=[(3, 3, 2, 2, 2, 1, 1, 1), (3, 3, 2, 2, 2, 2, 1), (3, 3, 3, 2, 1, 1, 1, 1), (3, 3, 3, 2, 2, 1, 1), (3, 3, 3, 2, 2, 2), (3, 3, 3, 3, 1, 1, 1), (3, 3, 3, 3, 2, 1), (4, 3, 2, 2, 1, 1, 1, 1), (4, 3, 2, 2, 2, 1, 1), (4, 3, 2, 2, 2, 2), (4, 3, 3, 2, 1, 1, 1), (4, 3, 3, 2, 2, 1), (4, 3, 3, 3, 1, 1), (4, 4, 2, 2, 1, 1, 1), (4, 4, 2, 2, 2, 1), (4, 4, 3, 2, 1, 1)]
+   d_B((n))=10  d_B((1^n))=11
+A k=6 T_k=21 p(T_k)=792 cyclic=[(6, 5, 4, 3, 2, 1)] D_B=30 k^2-k=30 d_B(witness)=30 #maximisers=65 OK maximisers=[(4, 3, 3, 2, 2, 2, 2, 1, 1, 1), (4, 3, 3, 2, 2, 2, 2, 2, 1), (4, 3, 3, 3, 2, 2, 1, 1, 1, 1), (4, 3, 3, 3, 2, 2, 2, 1, 1), (4, 3, 3, 3, 2, 2, 2, 2), (4, 3, 3, 3, 3, 1, 1, 1, 1, 1), (4, 3, 3, 3, 3, 2, 1, 1, 1), (4, 3, 3, 3, 3, 2, 2, 1), (4, 3, 3, 3, 3, 3, 1, 1), (4, 3, 3, 3, 3, 3, 2), (4, 4, 3, 2, 2, 2, 1, 1, 1, 1), (4, 4, 3, 2, 2, 2, 2, 1, 1), (4, 4, 3, 2, 2, 2, 2, 2), (4, 4, 3, 3, 2, 1, 1, 1, 1, 1), (4, 4, 3, 3, 2, 2, 1, 1, 1), (4, 4, 3, 3, 2, 2, 2, 1), (4, 4, 3, 3, 3, 1, 1, 1, 1), (4, 4, 3, 3, 3, 2, 1, 1), (4, 4, 3, 3, 3, 2, 2), (4, 4, 3, 3, 3, 3, 1), (4, 4, 4, 2, 2, 1, 1, 1, 1, 1), (4, 4, 4, 2, 2, 2, 1, 1, 1), (4, 4, 4, 2, 2, 2, 2, 1), (4, 4, 4, 3, 2, 1, 1, 1, 1), (4, 4, 4, 3, 2, 2, 1, 1), (4, 4, 4, 3, 2, 2, 2), (4, 4, 4, 3, 3, 1, 1, 1), (4, 4, 4, 3, 3, 2, 1), (4, 4, 4, 4, 2, 1, 1, 1), (4, 4, 4, 4, 2, 2, 1), (4, 4, 4, 4, 3, 1, 1), (5, 3, 3, 2, 2, 2, 1, 1, 1, 1), (5, 3, 3, 2, 2, 2, 2, 1, 1), (5, 3, 3, 2, 2, 2, 2, 2), (5, 3, 3, 3, 2, 1, 1, 1, 1, 1), (5, 3, 3, 3, 2, 2, 1, 1, 1), (5, 3, 3, 3, 2, 2, 2, 1), (5, 3, 3, 3, 3, 1, 1, 1, 1), (5, 3, 3, 3, 3, 2, 1, 1), (5, 3, 3, 3, 3, 2, 2), (5, 3, 3, 3, 3, 3, 1), (5, 4, 3, 2, 2, 1, 1, 1, 1, 1), (5, 4, 3, 2, 2, 2, 1, 1, 1), (5, 4, 3, 2, 2, 2, 2, 1), (5, 4, 3, 3, 2, 1, 1, 1, 1), (5, 4, 3, 3, 2, 2, 1, 1), (5, 4, 3, 3, 2, 2, 2), (5, 4, 3, 3, 3, 1, 1, 1), (5, 4, 3, 3, 3, 2, 1), (5, 4, 4, 2, 2, 1, 1, 1, 1), (5, 4, 4, 2, 2, 2, 1, 1), (5, 4, 4, 2, 2, 2, 2), (5, 4, 4, 3, 2, 1, 1, 1), (5, 4, 4, 3, 2, 2, 1), (5, 4, 4, 3, 3, 1, 1), (5, 4, 4, 4, 2, 1, 1), (5, 5, 3, 2, 2, 1, 1, 1, 1), (5, 5, 3, 2, 2, 2, 1, 1), (5, 5, 3, 2, 2, 2, 2), (5, 5, 3, 3, 2, 1, 1, 1), (5, 5, 3, 3, 2, 2, 1), (5, 5, 3, 3, 3, 1, 1), (5, 5, 4, 2, 2, 1, 1, 1), (5, 5, 4, 2, 2, 2, 1), (5, 5, 4, 3, 2, 1, 1)]
+   d_B((n))=15  d_B((1^n))=16
+A k=7 T_k=28 p(T_k)=3718 cyclic=[(7, 6, 5, 4, 3, 2, 1)] D_B=42 k^2-k=42 d_B(witness)=42 #maximisers=293 OK
+   d_B((n))=21  d_B((1^n))=22
+A k=8 T_k=36 p(T_k)=17977 cyclic=[(8, 7, 6, 5, 4, 3, 2, 1)] D_B=56 k^2-k=56 d_B(witness)=56 #maximisers=1267 OK
+   d_B((n))=28  d_B((1^n))=29
+A k=9 T_k=45 p(T_k)=89134 cyclic=[(9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=72 k^2-k=72 d_B(witness)=72 #maximisers=5686 OK
+   d_B((n))=36  d_B((1^n))=37
+A k=10 T_k=55 p(T_k)=451276 cyclic=[(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)] D_B=90 k^2-k=90 d_B(witness)=90 #maximisers=25475 OK
+   d_B((n))=45  d_B((1^n))=46
+B k=1 first i with B^i(witness)=delta_k : 0  k^2-k=0 OK
+B k=2 first i with B^i(witness)=delta_k : 2  k^2-k=2 OK
+B k=3 first i with B^i(witness)=delta_k : 6  k^2-k=6 OK
+B k=4 first i with B^i(witness)=delta_k : 12  k^2-k=12 OK
+B k=5 first i with B^i(witness)=delta_k : 20  k^2-k=20 OK
+B k=50 first i with B^i(witness)=delta_k : 2450  k^2-k=2450 OK
+B k=100 first i with B^i(witness)=delta_k : 9900  k^2-k=9900 OK
+B k=150 first i with B^i(witness)=delta_k : 22350  k^2-k=22350 OK
+B witness k=1..150: ALL OK
+C k=2 |R_k|=3 Step-12 track rule verified on all of R_k
+C k=3 |R_k|=7 Step-12 track rule verified on all of R_k
+C k=4 |R_k|=16 Step-12 track rule verified on all of R_k
+C k=5 |R_k|=39 Step-12 track rule verified on all of R_k
+C k=6 |R_k|=95 Step-12 track rule verified on all of R_k
+C k=7 |R_k|=233 Step-12 track rule verified on all of R_k
+C k=8 |R_k|=577 Step-12 track rule verified on all of R_k
+C k=9 |R_k|=1436 Step-12 track rule verified on all of R_k
+C k=10 |R_k|=3590 Step-12 track rule verified on all of R_k
+D k=2 max tau=2 at [(1, 3)] (k^2-k=2)
+D k=3 max tau=6 at [(1, 4)] (k^2-k=6)
+D k=4 max tau=12 at [(1, 5)] (k^2-k=12)
+D k=5 max tau=20 at [(1, 6)] (k^2-k=20)
+D k=6 max tau=30 at [(1, 7)] (k^2-k=30)
+D k=10 max tau=90 at [(1, 11)] (k^2-k=90)
+D k=20 max tau=380 at [(1, 21)] (k^2-k=380)
+D k=30 max tau=870 at [(1, 31)] (k^2-k=870)
+D k=40 max tau=1560 at [(1, 41)] (k^2-k=1560)
+D k=50 max tau=2450 at [(1, 51)] (k^2-k=2450)
+D k=60 max tau=3540 at [(1, 61)] (k^2-k=3540)
+D tau formula k=2..60 (+simulation k<=25): ALL OK
+E statement example orbit [(2, 1, 1, 1, 1), (5, 1), (4, 2), (3, 2, 1), (3, 2, 1)] OK
+SUMMARY {'A': True, 'B': True, 'C': True, 'D': True, 'E': True}
+real 20.18
+user 19.86
+sys 0.13
+exit=0

@@ -1,0 +1,7 @@
+(A) Prop 7 time-choice verified for 358750 tuples (d<d'<=40)
+(B) fixed-point counts verified for 1<=r<=k<=14, all j
+(C) gcd-class counts verified for k<=200
+real 0.85
+user 0.80
+sys 0.00
+exit=0

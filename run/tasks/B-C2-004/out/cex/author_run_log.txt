@@ -1,0 +1,15 @@
+k=1 T_k=1 #partitions=1 D_B(T_k)=0 k^2-k=0 d_B(witness)=0 max d_B on two-track region=0 OK
+k=2 T_k=3 #partitions=3 D_B(T_k)=2 k^2-k=2 d_B(witness)=2 max d_B on two-track region=2 OK
+k=3 T_k=6 #partitions=11 D_B(T_k)=6 k^2-k=6 d_B(witness)=6 max d_B on two-track region=6 OK
+k=4 T_k=10 #partitions=42 D_B(T_k)=12 k^2-k=12 d_B(witness)=12 max d_B on two-track region=12 OK
+k=5 T_k=15 #partitions=176 D_B(T_k)=20 k^2-k=20 d_B(witness)=20 max d_B on two-track region=20 OK
+k=6 T_k=21 #partitions=792 D_B(T_k)=30 k^2-k=30 d_B(witness)=30 max d_B on two-track region=30 OK
+k=7 T_k=28 #partitions=3718 D_B(T_k)=42 k^2-k=42 d_B(witness)=42 max d_B on two-track region=42 OK
+k=8 T_k=36 #partitions=17977 D_B(T_k)=56 k^2-k=56 d_B(witness)=56 max d_B on two-track region=56 OK
+k=9 T_k=45 #partitions=89134 D_B(T_k)=72 k^2-k=72 d_B(witness)=72 max d_B on two-track region=72 OK
+k=10 T_k=55 #partitions=451276 D_B(T_k)=90 k^2-k=90 d_B(witness)=90 max d_B on two-track region=90 OK
+k=11 T_k=66 #partitions=2323520 D_B(T_k)=110 k^2-k=110 d_B(witness)=110 max d_B on two-track region=110 OK
+ALL OK
+real 13.92
+user 13.01
+sys 0.43

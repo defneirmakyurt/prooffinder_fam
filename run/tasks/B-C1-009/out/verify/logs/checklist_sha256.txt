@@ -1,0 +1,5 @@
+b4363b1c6bbf33d0bb041a03ba5477dc1b5a5fa0aa8738ade2c580314c5bb44a  inbox/record/cell/checklist.md
+real 0.03
+user 0.00
+sys 0.01
+exit=0

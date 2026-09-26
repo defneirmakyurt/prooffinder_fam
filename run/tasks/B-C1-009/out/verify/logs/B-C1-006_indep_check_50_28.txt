@@ -1,0 +1,55 @@
+n=1 k=1 r=1 |P|=1 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=2 k=2 r=1 |P|=2 cyclic=2 cycles=1 formula=1 lengths=[2] OK
+n=3 k=2 r=2 |P|=3 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=4 k=3 r=1 |P|=5 cyclic=3 cycles=1 formula=1 lengths=[3] OK
+n=5 k=3 r=2 |P|=7 cyclic=3 cycles=1 formula=1 lengths=[3] OK
+n=6 k=3 r=3 |P|=11 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=7 k=4 r=1 |P|=15 cyclic=4 cycles=1 formula=1 lengths=[4] OK
+n=8 k=4 r=2 |P|=22 cyclic=6 cycles=2 formula=2 lengths=[2, 4] OK
+n=9 k=4 r=3 |P|=30 cyclic=4 cycles=1 formula=1 lengths=[4] OK
+n=10 k=4 r=4 |P|=42 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=11 k=5 r=1 |P|=56 cyclic=5 cycles=1 formula=1 lengths=[5] OK
+n=12 k=5 r=2 |P|=77 cyclic=10 cycles=2 formula=2 lengths=[5, 5] OK
+n=13 k=5 r=3 |P|=101 cyclic=10 cycles=2 formula=2 lengths=[5, 5] OK
+n=14 k=5 r=4 |P|=135 cyclic=5 cycles=1 formula=1 lengths=[5] OK
+n=15 k=5 r=5 |P|=176 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=16 k=6 r=1 |P|=231 cyclic=6 cycles=1 formula=1 lengths=[6] OK
+n=17 k=6 r=2 |P|=297 cyclic=15 cycles=3 formula=3 lengths=[3, 6, 6] OK
+n=18 k=6 r=3 |P|=385 cyclic=20 cycles=4 formula=4 lengths=[2, 6, 6, 6] OK
+n=19 k=6 r=4 |P|=490 cyclic=15 cycles=3 formula=3 lengths=[3, 6, 6] OK
+n=20 k=6 r=5 |P|=627 cyclic=6 cycles=1 formula=1 lengths=[6] OK
+n=21 k=6 r=6 |P|=792 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=22 k=7 r=1 |P|=1002 cyclic=7 cycles=1 formula=1 lengths=[7] OK
+n=23 k=7 r=2 |P|=1255 cyclic=21 cycles=3 formula=3 lengths=[7, 7, 7] OK
+n=24 k=7 r=3 |P|=1575 cyclic=35 cycles=5 formula=5 lengths=[7, 7, 7, 7, 7] OK
+n=25 k=7 r=4 |P|=1958 cyclic=35 cycles=5 formula=5 lengths=[7, 7, 7, 7, 7] OK
+n=26 k=7 r=5 |P|=2436 cyclic=21 cycles=3 formula=3 lengths=[7, 7, 7] OK
+n=27 k=7 r=6 |P|=3010 cyclic=7 cycles=1 formula=1 lengths=[7] OK
+n=28 k=7 r=7 |P|=3718 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=29 k=8 r=1 |P|=4565 cyclic=8 cycles=1 formula=1 lengths=[8] OK
+n=30 k=8 r=2 |P|=5604 cyclic=28 cycles=4 formula=4 lengths=[4, 8, 8, 8] OK
+n=31 k=8 r=3 |P|=6842 cyclic=56 cycles=7 formula=7 lengths=[8, 8, 8, 8, 8, 8, 8] OK
+n=32 k=8 r=4 |P|=8349 cyclic=70 cycles=10 formula=10 lengths=[2, 4, 8, 8, 8, 8, 8, 8, 8, 8] OK
+n=33 k=8 r=5 |P|=10143 cyclic=56 cycles=7 formula=7 lengths=[8, 8, 8, 8, 8, 8, 8] OK
+n=34 k=8 r=6 |P|=12310 cyclic=28 cycles=4 formula=4 lengths=[4, 8, 8, 8] OK
+n=35 k=8 r=7 |P|=14883 cyclic=8 cycles=1 formula=1 lengths=[8] OK
+n=36 k=8 r=8 |P|=17977 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=37 k=9 r=1 |P|=21637 cyclic=9 cycles=1 formula=1 lengths=[9] OK
+n=38 k=9 r=2 |P|=26015 cyclic=36 cycles=4 formula=4 lengths=[9, 9, 9, 9] OK
+n=39 k=9 r=3 |P|=31185 cyclic=84 cycles=10 formula=10 lengths=[3, 9, 9, 9, 9, 9, 9, 9, 9, 9] OK
+n=40 k=9 r=4 |P|=37338 cyclic=126 cycles=14 formula=14 lengths=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9] OK
+n=41 k=9 r=5 |P|=44583 cyclic=126 cycles=14 formula=14 lengths=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9] OK
+n=42 k=9 r=6 |P|=53174 cyclic=84 cycles=10 formula=10 lengths=[3, 9, 9, 9, 9, 9, 9, 9, 9, 9] OK
+n=43 k=9 r=7 |P|=63261 cyclic=36 cycles=4 formula=4 lengths=[9, 9, 9, 9] OK
+n=44 k=9 r=8 |P|=75175 cyclic=9 cycles=1 formula=1 lengths=[9] OK
+n=45 k=9 r=9 |P|=89134 cyclic=1 cycles=1 formula=1 lengths=[1] OK
+n=46 k=10 r=1 |P|=105558 cyclic=10 cycles=1 formula=1 lengths=[10] OK
+n=47 k=10 r=2 |P|=124754 cyclic=45 cycles=5 formula=5 lengths=[5, 10, 10, 10, 10] OK
+n=48 k=10 r=3 |P|=147273 cyclic=120 cycles=12 formula=12 lengths=[10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10] OK
+n=49 k=10 r=4 |P|=173525 cyclic=210 cycles=22 formula=22 lengths=[5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10] OK
+n=50 k=10 r=5 |P|=204226 cyclic=252 cycles=26 formula=26 lengths=[2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10] OK
+ALL OK up to n = 50 ; literal-definition cyclic check up to n = 28 ; necklace formula vs brute force for 1<=r<=k<=16 OK; Lemma 2 random 20000 OK
+real 25.41
+user 25.17
+sys 0.09
+exit=0

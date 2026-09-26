@@ -1,0 +1,4 @@
+witness orbit description verified for all t<=k^2-k, k=1..120: OK
+real 530.67
+user 436.94
+sys 6.64

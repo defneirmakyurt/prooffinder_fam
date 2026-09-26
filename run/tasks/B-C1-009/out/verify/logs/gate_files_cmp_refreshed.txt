@@ -1,0 +1,13 @@
+# Gate files after the head's refresh (checked by B-C1-009)
+27eef633b77ee22cdfdb83eaf64491ed8ab6a8a7db30f19ba1880af2d10ccb74  B-C1-001.md
+3e4a5bcfb9ea37886b945bce60e84d5075a13fb0705c625e31a336e714a69886  B-C1-002.md
+3e4a5bcfb9ea37886b945bce60e84d5075a13fb0705c625e31a336e714a69886  gate_report.md
+real 0.12
+user 0.01
+sys 0.02
+B-C1-002.md and gate_report.md: byte-identical
+B-C1-001.md and B-C1-002.md: differ
+# Gate: B-C1, proof B-C1-001, 15:42
+# Gate: B-C1, proof B-C1-002, 15:54
+# Gate: B-C1, proof B-C1-002, 15:54
+exit=0

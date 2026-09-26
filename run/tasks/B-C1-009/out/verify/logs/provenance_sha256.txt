@@ -1,0 +1,14 @@
+acaa6d595a7b90b45f4027d5515a34cd9eef7c19d4818666966d097def6d29f8  record/cell/accepted/proof.md
+84e871aa7ac8e068bbb03abd48110a9d893753d46442386b3d6a6db1fa0a9a08  record/cell/accepted/claims.md
+82beb33d1c69d8956b4f06908e6d2aa76ef43bc1b6a66ad65e78b6bc20d69a6e  record/cell/accepted/check_c1.py
+bb11120601f68e1621128065d16c8ff2ba41c973dbd12a9970a8aa6015ea27f1  record/cell/accepted/README.md
+c794485817e2e91b56e4a26d09b28f4241b5c89166e0827181ec984aab8712cb  record/tasks/B-C1-001/out/proof.md
+acaa6d595a7b90b45f4027d5515a34cd9eef7c19d4818666966d097def6d29f8  record/tasks/B-C1-002/out/proof.md
+84e871aa7ac8e068bbb03abd48110a9d893753d46442386b3d6a6db1fa0a9a08  record/tasks/B-C1-002/out/claims.md
+82beb33d1c69d8956b4f06908e6d2aa76ef43bc1b6a66ad65e78b6bc20d69a6e  record/tasks/B-C1-002/out/code/check_c1.py
+bb11120601f68e1621128065d16c8ff2ba41c973dbd12a9970a8aa6015ea27f1  record/tasks/B-C1-002/out/code/README.md
+0ffed249e46c6a3137e3ef8f023475900306015cb6e318a0f8b81efb12b25a35  record/tasks/B-C1-007/out/proof.md
+real 0.03
+user 0.01
+sys 0.01
+exit=0
