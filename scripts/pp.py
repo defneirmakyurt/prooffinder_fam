@@ -7,7 +7,9 @@
                     [--record] [--checker DIR]
                     [--target T] [--timebox MIN] [--assumptions A] [--rules R] [--angle A] [--forbid F]
                     [--forbid-file F] [--inbox SRC[=NAME]] [--lib ENTRY] [--status S --cell-status C] [--extra TEXT]
-      phases: 0 1 1L 2 2A 2B 2B-XV 2C 3 GATE REPAIR WAVE 5 AUDIT (role, regime and mode follow from the phase)
+      phases: 0 1 1L 2 2A 2S 2B 2B-XV 2C 3 GATE REPAIR WAVE 5 AUDIT (role, regime and mode follow from the phase)
+  pp.py choose P CELL --map TASK --take "S<n>=ACTION: reason" [...]   head's decision on every card of a 2S space map
+      ACTION: 2B VERIFIER WAVE DEADEND HOLD DROP → run/P/CELL/spaces.md, branches.txt (kept branches), deadends.md
   pp.py done TASK [--tokens N] [--ms N] [--tool-uses N] [--score S]   telemetry: a worker returned
   pp.py telemetry [--by KEY ...] [--tasks]      yield per role/regime/angle/lessons version/library entry
   pp.py lib add NAME SRC [SRC ...] --kind code|lemma --what T --evidence E   verified material → run/library/<P>-NAME
@@ -67,6 +69,7 @@ ROLES = {
     "referee": {"CLEAN-ROOM"},
     "literature": {"LITERATURE"},
     "triage": {"BLIND"},
+    "space": {"BLIND"},
     "scribe": {"RECORD"},
     "auditor": {"RECORD"},
 }
@@ -78,6 +81,7 @@ PHASES = {
     "1L": ({"literature"}, "LITERATURE", "SOLVE", set()),
     "2": ({"referee"}, "CLEAN-ROOM", "VERIFY", set()),
     "2A": ({"triage"}, "BLIND", None, set()),
+    "2S": ({"space"}, "BLIND", None, set()),
     "2B": ({"prover", "searcher"}, "BLIND", "BRANCH", set()),
     "2B-XV": ({"referee"}, "CLEAN-ROOM", "CROSS", set()),
     "2C": ({"breaker"}, "BLIND", "ADVERSARY", set()),
@@ -103,6 +107,15 @@ ADVERSARY_LABELS = ("PROOF-ROUTE-FOUND", "COUNTEREXAMPLE-CANDIDATE", "LOCALLY-OP
 GROUP_KEYS = ("role", "regime", "phase", "angle", "branch", "cell", "lessons", "lib")
 LIB_KINDS = ("code", "lemma")
 LIB_ROLES = {"prover", "searcher", "breaker"}
+CARD_FIELDS = ("SPACE", "BRANCH", "FIDELITY", "FEEDS", "CHECK", "TIGHT", "TOOLS", "COST", "PAYOFF", "LENS", "FIRST TASK")
+CHOICE_ACTIONS = {
+    "2B": "Phase 2B solver on the card's branch, its LENS as the branch note",
+    "VERIFIER": "verifier-only branch: cross-verifies the 2B proofs",
+    "WAVE": "FRESH angle for an extra wave (prover, searcher or breaker)",
+    "DEADEND": "the card's obstruction goes to deadends.md, so CONTRARIAN briefs inherit it",
+    "HOLD": "kept for re-admission if every chosen branch fails",
+    "DROP": "not useful for this cell",
+}
 LIBRARY_NOTE = ("LIBRARY: inbox/library/<entry>/ holds verified material from the shared technique library; its "
                 "ENTRY.md says what it is and how it was verified. Use it only if it helps. Copy any library file your "
                 "code needs into out/code/ so the code runs on its own, and name the entry in claims.md for every "
@@ -394,8 +407,8 @@ def validate_task(a, role, regime, mode, rows):
         row = phase_row(rows, a.subject) or {}
         if row.get("Role") != "scribe" or row.get("Mode") != "REPORT":
             die("the auditor's --subject must be a Scribe REPORT task")
-    if a.obstacles and a.phase not in ("2A", "2C"):
-        die("--obstacles is only for phases 2A (triage) and 2C (adversary)")
+    if a.obstacles and a.phase not in ("2A", "2S", "2C"):
+        die("--obstacles is only for phases 2A (triage), 2S (space map) and 2C (adversary)")
     if a.earlier and role != "literature":
         die("--earlier is only for literature tasks (1L, 3)")
     for t in a.earlier:
@@ -406,8 +419,8 @@ def validate_task(a, role, regime, mode, rows):
         check_same_cell(a.P, a.cell, t, "--obstacles")
     if a.record and not (mode == "REPORT" or a.phase == "AUDIT"):
         die("--record is only for Scribe REPORT and Auditor tasks")
-    if a.checker and role not in ("searcher", "breaker", "referee"):
-        die("--checker is only for searchers, breakers and referees")
+    if a.checker and role not in ("searcher", "breaker", "referee", "space"):
+        die("--checker is only for searchers, breakers, referees and space maps")
     if a.subject_file and role not in ("referee", "prover", "searcher", "breaker"):
         die("--subject-file goes with --subject, on referee and repair tasks")
     for name in a.subject_file:
@@ -490,7 +503,7 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
     if a.phase == "3":
         dest = os.path.join(inbox, "earlier", "cell")
         os.makedirs(dest, exist_ok=True)
-        for name in ("matrix.md", "gate"):
+        for name in ("matrix.md", "spaces.md", "gate"):
             src = os.path.join(cell_dir(a.P, a.cell), name)
             if os.path.exists(src):
                 copy_into(f"{src}={name}", dest)
@@ -532,7 +545,8 @@ def build_inbox(a, role, regime, mode, task_id, inbox):
                                 ignore=shutil.ignore_patterns("tmp"))
         cdest = os.path.join(rec, "cell")
         os.makedirs(cdest, exist_ok=True)
-        for name in ("target.md", "checklist.md", "phases.md", "matrix.md", "deadends.md", "gate", "accepted"):
+        for name in ("target.md", "checklist.md", "phases.md", "spaces.md", "matrix.md", "deadends.md", "gate",
+                     "accepted"):
             src = os.path.join(cell_dir(a.P, a.cell), name)
             if os.path.exists(src) and not (os.path.isdir(src) and not os.listdir(src)):
                 copy_into(f"{src}={name}", cdest)
@@ -572,7 +586,7 @@ def cmd_task(a):
     placed = build_inbox(a, role, regime, mode, task_id, inbox)
 
     extra_lines = {"prover": "LADDER / RAN", "searcher": "LADDER / RAN", "breaker": "LADDER / RAN",
-                   "referee": "CHECKLIST / RAN"}.get(role, "RAN")
+                   "referee": "CHECKLIST / RAN", "space": "CARDS / RAN"}.get(role, "RAN")
     rules = "; ".join([DEFAULT_RULES] + a.rules)
     lines = [
         f"TASK: {task_id}      ROLE: {role}      REGIME: {regime}",
@@ -653,6 +667,147 @@ def cmd_deadend(a):
         with open(path, "a") as fh:
             fh.write(entry)
     print(entry.rstrip())
+
+
+# ---------- space map choice (Phase 2S) ----------
+
+def parse_cards(path):
+    """Cards in a space map's out/spaces.md: '### S<n> <tag>' then 'FIELD: value' lines (first one of each counts)."""
+    cards, cur = {}, None
+    for ln in read(path).splitlines():
+        m = re.match(r"#{2,4}\s+(S\d+)\b[\s:—-]*(.*)", ln)
+        if m:
+            cur = cards.setdefault(m.group(1), {"tag": m.group(2).strip() or m.group(1)})
+            continue
+        f = re.match(r"\s*[*_]*([A-Z][A-Z ]*[A-Z])[*_]*:\s*(.*)", ln) if cur is not None else None
+        if f and f.group(1) in CARD_FIELDS and f.group(1) not in cur:
+            cur[f.group(1)] = f.group(2).strip()
+    return cards
+
+
+def card_word(card, field):
+    m = re.match(r"[*_`\s]*([A-Za-z][A-Za-z/-]*)", card.get(field, ""))
+    return m.group(1).upper() if m else ""
+
+
+def text_markers(text):
+    return [label for label, pat in BLIND_MARKERS if pat.search(text)]
+
+
+def cmd_choose(a):
+    require_cell(a.P, a.cell)
+    row = phase_row(read_phases(a.P, a.cell), a.map)
+    if not row or row["Phase"] != "2S":
+        die(f"--map {a.map}: not a Phase 2S task of {a.P}-{a.cell}")
+    path = os.path.join(task_dir(a.map), "out", "spaces.md")
+    if not os.path.isfile(path):
+        die(f"{a.map} has no out/spaces.md")
+    cards = parse_cards(path)
+    if not cards:
+        die(f"{a.map}: no '### S<n> <tag>' cards in out/spaces.md")
+
+    decisions = {}
+    for take in a.take:
+        m = re.match(r"\s*(S\d+)\s*=\s*([A-Z0-9]+)\s*:\s*(\S.*)", take)
+        if not m:
+            die(f"--take '{take}': use 'S<n>=ACTION: reason'; the reason is required")
+        cid, action, reason = m.groups()
+        if cid not in cards:
+            die(f"--take {cid}: {a.map} has no card {cid}")
+        if action not in CHOICE_ACTIONS:
+            die(f"--take {cid}: ACTION must be one of {' '.join(CHOICE_ACTIONS)}")
+        if cid in decisions:
+            die(f"{cid} has two decisions")
+        decisions[cid] = (action, reason.strip().replace("|", "/"))
+    missing = [c for c in cards if c not in decisions]
+    if missing:
+        die(f"decide every card of the map; missing: {', '.join(missing)}")
+
+    kept = {}
+    for cid, (action, _) in decisions.items():
+        card = cards[cid]
+        branch, check, tight = card_word(card, "BRANCH"), card_word(card, "CHECK"), card_word(card, "TIGHT")
+        if action in ("2B", "VERIFIER"):
+            if branch not in BRANCHES or branch == "COMPUTATIONAL":
+                die(f"{cid}: {action} needs BRANCH to be one of the five branches, not '{card.get('BRANCH', '')}'; "
+                    "a search-only card goes to WAVE")
+            if branch in kept:
+                die(f"{cid}: branch {branch} is already taken by another card; one card per branch "
+                    "(send the other to WAVE)")
+            if check == "FAILED":
+                die(f"{cid}: CHECK FAILED; a failed translation is dead (DEADEND or DROP)")
+            kept[branch] = "solver" if action == "2B" else "verifier-only"
+        if action == "2B":
+            lacking = [f for f in CARD_FIELDS if not card.get(f)]
+            if lacking:
+                die(f"{cid}: the card lacks {', '.join(lacking)}")
+            if check != "PASSED":
+                die(f"{cid}: 2B needs CHECK PASSED (card: '{card['CHECK']}'); an unchecked card goes to WAVE at most")
+            if card_word(card, "FIDELITY") == "HEURISTIC":
+                die(f"{cid}: a HEURISTIC translation cannot carry a proof; send it to WAVE")
+            if tight == "NO":
+                die(f"{cid}: TIGHT NO; a relaxation that is not tight cannot carry an exact proof "
+                    "(WAVE for a bound-only task, or DEADEND)")
+        if action == "WAVE" and check == "FAILED":
+            die(f"{cid}: CHECK FAILED; a failed translation is dead (DEADEND or DROP)")
+        if action in ("2B", "VERIFIER", "WAVE"):
+            if not card.get("LENS"):
+                die(f"{cid}: no LENS line; nothing blind-safe to hand a worker")
+            hits = text_markers(card["LENS"])
+            if hits:
+                die(f"{cid}: LENS has literature markers ({', '.join(hits)}); it would go into blind briefs")
+        if action == "DEADEND" and not (tight == "NO" or check == "FAILED"):
+            die(f"{cid}: DEADEND needs TIGHT NO or CHECK FAILED on the card, i.e. an obstruction to record")
+    if "solver" in kept.values() and len(kept) < 2:
+        die("a 2B proof needs another kept branch to cross-verify it; choose a second 2B card or a VERIFIER")
+
+    base, stamp = cell_dir(a.P, a.cell), now()
+    choice = os.path.join(base, "branches.txt")
+    if kept:
+        with open(choice, "w") as fh:
+            fh.write(f"# head choice from {a.map}, {stamp} (pp.py choose)\n")
+            fh.write("".join(f"{b}\t{k}\n" for b, k in kept.items()))
+    elif os.path.isfile(choice):
+        os.remove(choice)
+    for cid, (action, _) in decisions.items():
+        if action == "DEADEND":
+            card = cards[cid]
+            why = card["TIGHT"] if card_word(card, "TIGHT") == "NO" else card["CHECK"]
+            with open(os.path.join(base, "deadends.md"), "a") as fh:
+                fh.write(f"- [{card['tag']}] {card.get('SPACE', cid)} — {why} ({a.map} {cid})\n")
+
+    record = os.path.join(base, "spaces.md")
+    lines = [] if os.path.isfile(record) else [f"# Space choices: {a.P}-{a.cell}", ""]
+    lines += [f"## {stamp}, map {a.map}", "",
+              "| Card | Tag | Branch | Fidelity | Check | Tight | Cost | Payoff | Decision | Reason |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
+    for cid, card in cards.items():
+        action, reason = decisions[cid]
+        vals = [card_word(card, f) or "?" for f in ("BRANCH", "FIDELITY", "CHECK", "TIGHT", "COST", "PAYOFF")]
+        lines.append(f"| {cid} | {card['tag']} | " + " | ".join(vals) + f" | {action} | {reason} |")
+    lines += ["", "Kept branches: " + (", ".join(f"{b} {k}" for b, k in kept.items())
+                                       or "none (the matrix falls back to the latest 2A triage)"), "",
+              "Lenses handed to workers (2B: --branch-note; WAVE: --angle):"]
+    lines += [f"- {cid} {decisions[cid][0]} [{cards[cid]['tag']}]: {cards[cid]['LENS']}"
+              for cid in cards if decisions[cid][0] in ("2B", "VERIFIER", "WAVE")] or ["- none"]
+    with open(record, "a") as fh:
+        fh.write("\n".join(lines) + "\n\n")
+    log_event("choose", cell=f"{a.P}-{a.cell}", map=a.map, kept=kept,
+              decisions={cid: d[0] for cid, d in decisions.items()})
+
+    print(f"{a.P}-{a.cell}: " + ", ".join(f"{cid} {d[0]}" for cid, d in decisions.items()))
+    print("kept branches: " + (", ".join(f"{b} {k}" for b, k in kept.items()) or "none"))
+    for cid, (action, _) in decisions.items():
+        card = cards[cid]
+        first = card_word(card, "FIRST TASK").lower()
+        if action == "2B":
+            role = first if first in ("prover", "searcher") else "prover"
+            print(f"next: pp.py task {a.P} {a.cell} --phase 2B --role {role} --branch {card_word(card, 'BRANCH')} "
+                  f"--angle {shlex.quote(card['tag'])} --branch-note {shlex.quote(card['LENS'])} --stop ...")
+        elif action == "WAVE":
+            role = first if first in ("prover", "searcher", "breaker") else "prover"
+            print(f"later: pp.py task {a.P} {a.cell} --phase WAVE --role {role} --regime FRESH "
+                  f"--angle {shlex.quote(card['tag'] + ': ' + card['LENS'])} --stop ...")
 
 
 # ---------- board ----------
@@ -820,27 +975,32 @@ def verdict_of(task, cross=False):
     return m.group(1) if m else None
 
 
-def selected_branches(rows):
-    triage = [r["Task"] for r in rows if r["Phase"] == "2A"]
-    if not triage:
-        return None, {}
-    path = os.path.join(task_dir(triage[-1]), "out", "selected_branches.txt")
+def selected_branches(p, cell, rows):
+    """Kept branches: the head's choice from a 2S space map (branches.txt) wins; else the latest 2A triage."""
+    choice = os.path.join(cell_dir(p, cell), "branches.txt")
+    if os.path.isfile(choice):
+        source, path = "head choice, branches.txt", choice
+    else:
+        triage = [r["Task"] for r in rows if r["Phase"] == "2A"]
+        if not triage:
+            return None, {}
+        source, path = triage[-1], os.path.join(task_dir(triage[-1]), "out", "selected_branches.txt")
     kept = {}
     if os.path.isfile(path):
         for ln in read(path).splitlines():
             parts = ln.split()
             if len(parts) >= 2 and parts[0] in BRANCHES:
                 kept[parts[0]] = parts[1]
-    return triage[-1], kept
+    return source, kept
 
 
 def compute_matrix(p, cell):
     rows = read_phases(p, cell)
-    triage, kept = selected_branches(rows)
+    triage, kept = selected_branches(p, cell, rows)
     if not triage:
-        die(f"{p}-{cell}: no Phase 2A task in phases.md")
+        die(f"{p}-{cell}: no kept branches: no Phase 2A task in phases.md and no branches.txt from 'pp.py choose'")
     if not kept:
-        die(f"{triage}: out/selected_branches.txt is missing or empty")
+        die(f"{triage}: the kept-branch file (selected_branches.txt or branches.txt) is missing or empty")
     # Phase 2B-D: a dropped branch re-admitted as a solver counts as selected from its first 2B task
     for r in rows:
         if r["Phase"] == "2B" and r["Branch"] in BRANCHES and r["Branch"] != "COMPUTATIONAL" and r["Branch"] not in kept:
@@ -1533,6 +1693,14 @@ def main():
     s.add_argument("--files", nargs="*", default=[], help="extra fixed artefacts to test")
     s.add_argument("--log")
     s.set_defaults(func=cmd_crosstest)
+
+    s = sub.add_parser("choose")
+    s.add_argument("P")
+    s.add_argument("cell")
+    s.add_argument("--map", required=True, help="the Phase 2S task whose out/spaces.md holds the cards")
+    s.add_argument("--take", action="append", default=[],
+                   help="'S<n>=ACTION: reason', one per card; ACTION: " + " ".join(CHOICE_ACTIONS))
+    s.set_defaults(func=cmd_choose)
 
     s = sub.add_parser("matrix")
     s.add_argument("P")

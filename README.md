@@ -24,6 +24,7 @@ The system is built around one idea: **nothing reaches the board as established 
  rates ALGEBRAIC /          one per selected branch          one per other branch   ROBUST / CONTESTED /
  TOPOLOGICAL / ANALYSIS /   (BLIND + branch lens)            ("translate the key    UNSUPPORTED
  NUMBER-THEORY / DISCRETE                                     idea")
+ on T2/T3 cells, in place of 2A: PHASE 2S Space map (cards per space) ──► head decides each card (pp.py choose)
                      │  not ROBUST
                      ▼
  PHASE 2C Adversary: contrapositive · counterexample search · local analysis · minimal failing lemma
@@ -80,6 +81,7 @@ Cross-problem decisions (which problems get the most effort, which two to go dee
 | **1L Literature solver** | 1 literature agent | web + Phase 1 results | `sources.md`, its own attempt, and `divergence.md` (blind vs. literature, compared, never merged) |
 | **2 Verifiers** | 1 referee per result | proof + claims + code + Parts G and S | `verdict.md` from the 7-step protocol, plus its own counterexample search |
 | **2A Branch triage** | 1 triage agent | `stuck.md` and verdicts, not proofs | a relevance, entry point and risk for each of the 5 branches; `selected_branches.txt` |
+| **2S Space map** (T2/T3 cells, in place of 2A) | 1 space agent, dispatched alongside Phase 1; then the head | statement, cell, Part G, optional checker and `stuck.md` (never proofs) | 4–8 space cards: fidelity (EQUIVALENT / RELAXATION / RESTRICTION / HEURISTIC), a translation check run on small cases, tightness, tools, cost, payoff, a blind-safe lens. The head decides every card with `pp.py choose` (2B / VERIFIER / WAVE / DEADEND / HOLD / DROP), which writes `branches.txt` and `spaces.md` |
 | **2B Perspectives** | 1 solver per selected branch, then cross-verifiers from every other branch | BLIND + branch lens | proofs or `no_natural_route.md`; cross verdicts; the agreement matrix |
 | **2C Adversary** | breaker in ADVERSARY mode | `stuck.md`, not proofs | contrapositive attempt, counterexample search with near misses, local optimality analysis, minimal failing sub-lemma |
 | **3 Literature analyst** | literature agent | everything for the cell | what is known; sub-problems (known / hard to access / unknown); attempts; a precise note on why the cell can't be solved now |
@@ -91,6 +93,7 @@ Cross-problem decisions (which problems get the most effort, which two to go dee
 **Which phases run where:**
 - Phases 0, 1, 1L, 2 and the gate run on every cell.
 - 2A–2C run on cells worth 3+ points, or where solvers disagree.
+- 2S runs on T2/T3 cells and replaces 2A there: the head, not the agent, chooses the branches from the space cards.
 - Phase 3 runs on every cell that isn't solved.
 - Phase 5 runs on every cell that reaches a terminal outcome.
 
@@ -109,6 +112,7 @@ Cross-problem decisions (which problems get the most effort, which two to go dee
 | Referee | VERIFY / GATE (7-step protocol) and CROSS (branch lens) | Read, Write (`verdict.md`, `cex/` only), Glob, Grep, Bash |
 | Literature | SOLVE (Phase 1L) and ANALYST (Phase 3); the only role with web access | Read, Write, Glob, Grep, Bash, WebSearch, WebFetch |
 | Triage | Branch relevance for Phase 2A; never solves | Read, Write, Glob |
+| Space | Phase 2S: carries the cell into several mathematical spaces, checks each translation by code, reports what each space's tools can deliver; never solves, never chooses | Read, Write, Edit, Glob, Grep, Bash |
 | Scribe | SUBMISSION (hand-in) and REPORT (`final_report.md`) | Read, Write, Edit, Glob, Bash |
 | Auditor | Checks every citation in a final report, and re-runs its `RAN` lines | Read, Write, Glob, Grep, Bash |
 
@@ -120,7 +124,7 @@ Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitCl
 
 | Regime | Sees | Used for |
 |---|---|---|
-| BLIND | statement, cell, Part G, optional branch lens, checker, library code the head picks (§8); triage/adversary also get `stuck.md`/verdicts (never proofs) | Phase 1, 2A, 2B, 2C |
+| BLIND | statement, cell, Part G, optional branch lens, checker, library code the head picks (§8); triage/space/adversary also get `stuck.md`/verdicts (never proofs) | Phase 1, 2A, 2S, 2B, 2C |
 | FRESH / CONTRARIAN | statement + an assigned angle / a list of forbidden approaches | extra waves |
 | EXPLOIT | one lineage's best + its critique or gate report | repair |
 | CLEAN-ROOM | only the object under evaluation (+ Parts G/S for referees) | referees, checker-builders |
@@ -285,3 +289,8 @@ If this system runs again, start with I4 and I6: the telemetry log from this run
   - telemetry: `run/telemetry.jsonl`, `pp.py done`, `pp.py telemetry`; `task`, `gate` and `pin` record events;
   - technique library: `pp.py lib add | list | import`, `task --lib`, `pp.py lessons`;
   - I2, I3, I4, I6 and I7 deferred, with reasons in §8.
+- **2026-09-26, Phase 2S space map (proposed):**
+  - a `space` agent maps a hard cell into 4–8 spaces and reports cards with fidelity, a checked translation, tightness, tools, cost and payoff;
+  - the head evaluates each card and decides with `pp.py choose`, which writes `branches.txt`, which the matrix reads in place of the triage;
+  - only a card's LENS reaches workers;
+  - tests in `test_pp.py`.
