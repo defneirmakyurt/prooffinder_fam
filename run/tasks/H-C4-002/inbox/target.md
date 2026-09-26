@@ -1,0 +1,4 @@
+H-C4 "U(Q_7) and U(Q_8)" (5 points, checked instantly). Verbatim: "Two larger cubes: Q_7 has 128 vertices and 448 edges, Q_8 has 256 vertices and 1024 edges. Determine U(Q_7) and U(Q_8)." Definitions (labelling, valley, uphill path, U(G), Q_d) exactly as in inbox/statement.md.
+Exact target: the integers U(Q_7) and U(Q_8). For each d in {7, 8}, determining U(Q_d) = V means both halves: (a) an explicit labelling of Q_d with exactly V uphill paths, and (b) a proof (possibly computer-assisted) that every labelling of Q_d has at least V uphill paths. Both values are required.
+Hand-in (verbatim): "the values, and for each value an explicit labelling that attains it as a list of the 2^d vertices in increasing label order, written as 0/1 strings."
+Artefact format: Q7.txt (128 lines, 7-character 0/1 strings) and Q8.txt (256 lines, 8-character strings); line i (1-based) is the vertex that gets label i.

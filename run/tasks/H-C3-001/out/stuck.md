@@ -1,0 +1,1 @@
+none: the upper search plateaued at 204 across all runs, and the exhaustive lower bound meets it. Not examined: whether Q6.txt and Q6_alt1.txt are inequivalent under Aut(Q_6) (both have V=12, 28 peaks).
