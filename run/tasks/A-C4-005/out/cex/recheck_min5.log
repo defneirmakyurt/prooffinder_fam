@@ -1,0 +1,4 @@
+min over restarts of (D - pi) in mpmath: 3.577273942e-11  float value: 9.137757217558828e-11  max non-consecutive |<.,.>|: 1.46e-61  phis: ['1.68889e-6', '2.11814e-5', '1.57078', '3.57731e-11', '1.57079']
+real 1.26
+user 1.25
+sys 0.01

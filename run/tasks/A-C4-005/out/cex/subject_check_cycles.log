@@ -1,0 +1,6 @@
+5-cycles tested: 199998  max |sum phi - (pi+F)| = 3.2107649872159527e-12  min(sum phi - pi) = 1.913517801099829e-06
+grid min of F on [0,pi/2]x(0,pi/2]: -9.186228167035182e-15
+6-cycles tested: 99991  max description error = 4.3016701312126315e-12  min(sum phi - pi) = 9.050538401389474e-06
+real 5.72
+user 5.70
+sys 0.01

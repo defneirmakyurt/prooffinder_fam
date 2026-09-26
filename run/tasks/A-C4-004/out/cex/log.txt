@@ -1,0 +1,16 @@
+[1] A axes e1,e1,e2,e2,e3: S-bound = [+/- 1.78e-15]  contains0=True
+[1] A 60deg triple + z twice: S-bound = [+/- 8.94e-15]  contains0=True
+[1] B axes e1,e1,e2,e2,e3,e4: S-bound = [+/- 2.07e-14]  contains0=True
+[1] B two 60deg triples: S-bound = [+/- 2.79e-14]  contains0=True
+[2] d=3 N=5: 60000 configs, min(D - pi) = 9.218e-07  (negative would be a counterexample)
+[2] d=4 N=6: 60000 configs, min(D - pi) = 3.281e-06  (negative would be a counterexample)
+[3] d=3: best S = 12.566314921104, bound 4pi = 12.566370614359, excess = -5.569e-05
+[3] d=4: best S = 20.420033229521, bound 13pi/2 = 20.420352248334, excess = -3.190e-04
+[4] 5-cycles: 100000 tested, max formula error = 5.726e-11, min(D-pi) = 5.114e-07
+[4] grid min F on [0,pi/2]x(0,pi/2) (601x599) = -1.776e-14
+[5] 6-cycles: 100000 tested, max formula error = 5.733e-10, 8.5 sign violations = 0, min(D-pi) = 1.787e-06
+[6] 5.2 minor nonzero check: 0 failures out of 3000
+[6] Lemma T concavity violations: 0 out of 100000 triples
+real 12.88
+user 12.82
+sys 0.04

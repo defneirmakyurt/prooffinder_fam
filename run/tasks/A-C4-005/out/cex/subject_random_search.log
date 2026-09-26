@@ -1,0 +1,5 @@
+N=5 d=3: best S found = 12.5662013460, bound 4pi = 12.5663706144, excess = -1.693e-04
+N=6 d=4: best S found = 20.4198304811, bound 13pi/2 = 20.4203522483, excess = -5.218e-04
+real 2.80
+user 2.79
+sys 0.00

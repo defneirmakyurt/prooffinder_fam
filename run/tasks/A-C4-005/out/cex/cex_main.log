@@ -1,0 +1,5 @@
+N=5 d=3 bound 4pi: random max - bound = -1.562e-01; hill-climb max - bound = -3.011e-04; near-extremiser climb max - bound = -2.211e-04
+N=6 d=4 bound 13pi/2: random max - bound = -6.653e-01; hill-climb max - bound = -1.294e-03; near-extremiser climb max - bound = -9.235e-04
+real 14.63
+user 14.54
+sys 0.08

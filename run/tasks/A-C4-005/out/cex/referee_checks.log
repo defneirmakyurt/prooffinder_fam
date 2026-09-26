@@ -1,0 +1,20 @@
+== 1. equality configurations (mpmath, 50 digits)
+  (a) e1,e1,e2,e2,e3: S - bound = 2.1382e-50
+  (b) e1,e1,e2,e2,e3,e4: S - bound = 0.0
+  (a) 3 planar at 60deg + z twice: S - bound = 2.1382e-50
+  (b) 60deg triple (x1,x2) + 60deg triple (x3,x4): S - bound = 0.0
+== 2. Phi(s) on I at non-orthogonal extremisers (step 3.5 consistency)
+  (a) 3 planar at 60deg + z twice: J_1=[3, 4], R=[1, 2], Phi range on [-pi/6,pi/6]: max-min = 8.88e-16; Phi(pi/6+0.05)-Phi(0) = -1.000e-01
+  (b) 60deg triple (x1,x2) + 60deg triple (x3,x4): J_1=[3, 4, 5], R=[1, 2], Phi range on [-pi/6,pi/6]: max-min = 8.88e-16; Phi(pi/6+0.05)-Phi(0) = -1.000e-01
+== 3. independent random 5-cycles in R^3
+  tested 200000; max relation error 4.26e-11; max |D-(pi+F(phi3,phi5))| 8.51e-11; min(D-pi) = 5.535e-07
+== 4. independent random 6-cycles in R^4
+  tested 100000; max 8.3 error 8.07e-11; max (8.3.1) residual 6.43e-11; sign-claim violations 0; 8.4 bound violations 0; min(D-pi) = 1.465e-05
+== 5. hill-climb minimising D over 5-cycles (R^3) and 6-cycles (R^4), degenerate edges not excluded, minima re-evaluated at 50 digits
+  5-cycle: min D found (float) = 3.141592651420, D - pi = -2.169e-09, phis = [0.0011, 0.0, 1.5708, 0.0, 1.5697]
+     same generators at 50 digits: D - pi = 1.02447e-10, max non-consecutive |<.,.>| = 6.68e-52
+  6-cycle: min D found (float) = 3.141592947488, D - pi = 2.939e-07, phis = [0.4433, 0.0, 0.1905, 1.3803, 0.0, 1.1275]
+     same generators at 50 digits: D - pi = 2.93898e-7, max non-consecutive |<.,.>| = 1.86e-51
+real 10.04
+user 9.97
+sys 0.05

@@ -1,0 +1,25 @@
+== check_cycles.py
+5-cycles tested: 199998  max |sum phi - (pi+F)| = 3.2107649872159527e-12  min(sum phi - pi) = 1.913517801099829e-06
+grid min of F on [0,pi/2]x(0,pi/2]: -9.186228167035182e-15
+6-cycles tested: 99991  max description error = 4.3016701312126315e-12  min(sum phi - pi) = 9.050538401389474e-06
+real 5.62
+user 5.58
+sys 0.03
+== check_identities.py
+det4 - ((1-p^2)(1-r^2)-q^2) = 0
+psi'' - formula = 0
+g'' - formula = 0
+identity (1+cucv)^2-su^2sv^2-(cu+cv)^2 = 0
+dw/du - sv(cu+cv)/(1+cucv)^2 = 0
+d/du[sv/(1+cucv)] - sv cv su/(1+cucv)^2 = 0
+cos(phi1+phi2) - w = 0
+checks: [0, 0, 0, 0]
+real 0.57
+user 0.54
+sys 0.02
+== random_search.py
+N=5 d=3: best S found = 12.5662013460, bound 4pi = 12.5663706144, excess = -1.693e-04
+N=6 d=4: best S found = 20.4198304811, bound 13pi/2 = 20.4203522483, excess = -5.218e-04
+real 2.74
+user 2.72
+sys 0.01
