@@ -1,4 +1,4 @@
-# Board: problem B, updated 16:29, run time 2:44 of 7:00
+# Board: problem B, updated 16:33, run time 2:48 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -7,6 +7,7 @@
 | C3 | 3 | T2: 3 pts, three parts (bound for all non-triangular n; exact value; all maximisers) | 1 done: 3 blind PARTIAL (lower bound k^2-2k-1 proved x3, upper GAP; exhaustive k<=10); 1L literature running | PARTIAL | (b) LOWER half PROVED: D_B(T_k-1) >= k^2-2k-1, k>=3 (gate on B-C3-002 scoped to lower half, referees 008+009); (a), (b) upper, (c) pending | – | witness (k-1,k-2,k-2,...,2,1,1); exhaustive k<=10 |  | referees on 1L proof | 0:00 |
 | C4 | 5 | T2: 5 pts, exact value both bounds for all k>=5 | PAUSED by humans (focus B2, B3); Phase 1 stopped | NOT ATTEMPTED | OPEN | – |  |  | resume after B3 | 0:00 |
 | C5 | 8 | T2/T3: 8 pts, four stated requirements incl. C3-extension analysis | PAUSED by humans (focus B2, B3); Phase 1 stopped | NOT ATTEMPTED | OPEN | – |  |  | resume after B3 | 0:00 |
+| C6 | 13 | T3: open question, 13 pts; human-directed start at 16:40 | 0 done; 1 dispatched (3 blind provers 002-004, incremental proof.md); 2S map 001 running | NOT ATTEMPTED | OPEN |  |  |  | log each breakthrough in run/B/C6/progress.md; 1L after Phase 1; referees on any family result | 0:00 |
 
 ## Partial cells: established / remaining gap
 - [16:03] B-C2: established D_B(T_k) >= k^2-k for all k (gate on B-C2-002 = LOWER half only, both referees scoped their ACCEPT to it); gap: upper bound, under review in B-C2-003.
