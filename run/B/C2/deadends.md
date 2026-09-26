@@ -1,0 +1,2 @@
+- [diagonal-rotation-CRT] invariant 't + max pair-collision time <= k^2-k' along orbits — false (violations for k=3..8); bounding entry time into the two-track region plus in-region time — both terms reach their maxima (T_{k-1} and k^2-k), so the sum overshoots k^2-k (B-C2-002)
+- [diagonal-rotation-energy] diagonal energy plus waiting time between sorts — excess energy can be of order k^3, no k^2-k bound; conjugate charge/queue model with a lap-gap potential — works only for isolated +/- units, breaks once units merge (|f_c| >= 2) (B-C2-001)
