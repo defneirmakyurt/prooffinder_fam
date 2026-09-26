@@ -140,6 +140,10 @@ def cmd_task(a):
         die(f"{role} cannot run under {regime}; allowed: {', '.join(sorted(ROLES[role]))}")
     if regime == "FRESH" and role in ("prover", "searcher") and not a.angle:
         die("a FRESH prover/searcher needs --angle")
+    if role == "scribe" and not (a.status and a.cell_status):
+        die("a scribe brief needs --status and --cell-status")
+    if a.cell_status == "PARTIAL" and not (a.established and a.gap):
+        die("a PARTIAL scribe brief needs --established and --gap")
     if regime == "CONTRARIAN" and not (a.forbid or a.forbid_file):
         die("a CONTRARIAN brief needs --forbid or --forbid-file")
 
@@ -181,8 +185,10 @@ def cmd_task(a):
             add = "FORBIDDEN APPROACHES (already tried, do not use):\n" + "\n".join(forbidden)
         if add:
             lines += ["", add]
-    if a.status:
-        lines += ["", f"STATUS TO USE (do not upgrade): {a.status}"]
+    if role == "scribe":
+        lines += ["", f"CELL STATUS: {a.cell_status}", f"CLAIM STATUS (do not upgrade): {a.status}"]
+        if a.cell_status == "PARTIAL":
+            lines += ["ESTABLISHED: " + "; ".join(a.established), f"REMAINING GAP: {a.gap}"]
     for extra in a.extra:
         lines += ["", extra]
     with open(os.path.join(tdir, "brief.md"), "w") as fh:
@@ -208,8 +214,13 @@ def cmd_deadend(a):
     print(entry.rstrip())
 
 
-BOARD_COLS = ["Cell", "Pts", "Tier", "Status", "Best so far", "Live lineages", "Next wave", "Time used"]
-NOTE_SECTIONS = {"gate": "## Awaiting gate", "decision": "## Decisions for the team",
+BOARD_COLS = ["Cell", "Pts", "Tier", "Cell status", "Claim status", "Best so far", "Live lineages", "Next wave",
+              "Time used"]
+CELL_STATUSES = ("SOLVED", "PARTIAL", "NOT ATTEMPTED")
+NOTE_SECTIONS = {"partial": "## Partial cells: established / remaining gap",
+                 "gate": "## Awaiting gate",
+                 "lessons": "## Lessons (changes since last checkpoint; pending Referee/Checker-builder lessons)",
+                 "decision": "## Decisions for the team",
                  "obstacle": "## Obstacle notes (parked cells)"}
 
 
@@ -242,7 +253,8 @@ def cmd_board(a):
             cells = [c.strip() for c in ln.strip().strip("|").split("|")]
             rows[cells[0]] = cells + [""] * (len(BOARD_COLS) - len(cells))
         row = rows.get(a.cell, [a.cell] + [""] * (len(BOARD_COLS) - 1))
-        for col, val in zip(BOARD_COLS[1:], [a.pts, a.tier, a.status, a.best, a.lineages, a.next, a.time]):
+        for col, val in zip(BOARD_COLS[1:], [a.pts, a.tier, a.cell_status, a.claim_status, a.best, a.lineages,
+                                             a.next, a.time]):
             if val is not None:
                 row[BOARD_COLS.index(col)] = val.replace("|", "/")
         rows[a.cell] = row
@@ -350,7 +362,10 @@ def main():
     s.add_argument("--forbid", action="append", default=[], help="forbidden-approach line; repeatable")
     s.add_argument("--forbid-file", action="append", default=[], help="deadends.md to inline; repeatable")
     s.add_argument("--inbox", action="append", default=[], help="SRC or SRC=NAME to copy into inbox/; repeatable")
-    s.add_argument("--status", help="scribe: the gate-approved status")
+    s.add_argument("--status", help="scribe: the gate-approved claim status")
+    s.add_argument("--cell-status", choices=CELL_STATUSES, help="scribe: SOLVED / PARTIAL / NOT ATTEMPTED")
+    s.add_argument("--established", action="append", default=[], help="scribe, PARTIAL: established claim; repeatable")
+    s.add_argument("--gap", help="scribe, PARTIAL: the exact remaining gap")
     s.add_argument("--extra", action="append", default=[], help="extra paragraph appended to the brief")
     s.set_defaults(func=cmd_task)
 
@@ -365,8 +380,9 @@ def main():
 
     s = sub.add_parser("board")
     s.add_argument("cell", nargs="?")
-    for f in ("pts", "tier", "status", "best", "lineages", "next", "time"):
+    for f in ("pts", "tier", "claim-status", "best", "lineages", "next", "time"):
         s.add_argument("--" + f)
+    s.add_argument("--cell-status", choices=CELL_STATUSES)
     s.add_argument("--note", nargs=2, metavar=("SECTION", "TEXT"))
     s.set_defaults(func=cmd_board)
 
