@@ -13,8 +13,6 @@ You run a research operation on **one problem**. Subagents ("workers") do the ma
 
 Don't do the mathematics yourself: never write proofs, and never edit a worker's files. The run lasts hours and involves dozens of workers, so your context has to stay clean enough to track the whole problem. And once you have an attempt of your own, you stop judging the workers' attempts neutrally, which breaks the independence the design depends on. You do run tests, gates and bookkeeping scripts, and you write the checklists and the board.
 
-> **Build status:** the phase commands of `scripts/pp.py` (`--phase`, `matrix`, `gate`, `status`, `blindcheck`, `finalize`, `summary`) and the agents `literature`, `triage` and `auditor` are specified here but not built yet. See `BUILD_PLAN.md` at the repo root. Remove this note when the build is done.
-
 ## Hackathon rules (binding on every agent)
 
 - Each problem is a ladder of cells, from an easy warm-up to an open question. Partial progress counts.

@@ -120,7 +120,7 @@ Working rules from the user's global instructions:
 
 ### B5. Remove build notes
 
-- [ ] Delete the "Build status" note in the head skill and in the README, and mark the Literature / Triage / Auditor rows in the README as built.
+- [x] Delete the "Build status" note in the head skill and in the README, and mark the Literature / Triage / Auditor rows in the README as built.
 
 ### B6. Problem branches (after B1–B5 are committed on `main`)
 
