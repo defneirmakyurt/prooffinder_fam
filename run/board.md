@@ -1,4 +1,4 @@
-# Board: problem H, updated 14:30, run time 1:22 of 7:00
+# Board: problem H, updated 14:36, run time 1:28 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -17,6 +17,7 @@
 ## Contested cells (tell the humans)
 
 ## Lessons (changes since last checkpoint; pending Referee/Checker-builder/Auditor lessons)
+- [14:36] Checkpoint 1 (run 1:28): no lesson changes; no pending gate-role lessons. Isolation: run/guard.log absent (0 denials); blindcheck on H-C2-001, H-C3-001, H-C4-001, H-C5-001: 0 real hits (1 false positive: 'SEED in 1..6'). Library: no entries added or imported.
 
 ## Decisions for the team
 - [13:08] Checker: library entry H-uphill-checker installed as the accepted checker in C2-C6 (dry-run cross-test covers d=1..9, 208 cases, 0 disagreements); no new checker-builders dispatched.
