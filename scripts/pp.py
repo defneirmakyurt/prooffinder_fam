@@ -4,11 +4,13 @@
   pp.py open P CELL [CELL ...]                       create run/P/ and cell folders
   pp.py task P CELL --role R --regime X --target T   create run/tasks/P-CELL-nnn/ with brief + inbox
   pp.py deadend P CELL --tag T --task ID "approach — why"
-  pp.py board CELL [--pts ..] [--tier ..] [--status ..] [--best ..] [--lineages ..] [--next ..] [--time ..]
-  pp.py board --note SECTION "text"                 SECTION: gate | decision | obstacle
+  pp.py board CELL [--pts ..] [--tier ..] [--cell-status ..] [--claim-status ..] [--best ..] [--lineages ..]
+                   [--next ..] [--time ..]
+  pp.py board --note SECTION "text"                 SECTION: partial | gate | lessons | decision | obstacle
   pp.py pin P CELL FILE [FILE ...]                   copy into accepted/ and record sha256
   pp.py pin --verify DIR                             re-check a MANIFEST.sha256
   pp.py crosstest CHECKER_A CHECKER_B --gen CMD [--n 200] [--log PATH]
+  pp.py report                                       run/<P>/report.md per problem + run/SUMMARY.md from the ledger
 """
 import argparse
 import datetime as dt
@@ -85,6 +87,10 @@ def cmd_open(a):
         path = os.path.join(RUN, a.P, name)
         if not os.path.exists(path):
             open(path, "w").close()
+    lessons = os.path.join(RUN, a.P, "lessons.md")
+    if not os.path.exists(lessons):
+        with open(lessons, "w") as fh:
+            fh.write(f"version: 0\n# Lessons: problem {a.P}\n\n(no lessons yet)\n")
     for cell in a.cells:
         base = os.path.join(RUN, a.P, cell)
         for sub in ("checker", "lineages", "accepted"):
@@ -343,6 +349,67 @@ def cmd_crosstest(a):
     sys.exit(1 if disagreements else 0)
 
 
+def board_state():
+    lines = open(os.path.join(RUN, "board.md")).read().split("\n")
+    rows = {}
+    for ln in lines:
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if ln.startswith("|") and not ln.startswith("|-") and cells[0] != "Cell":
+            rows[cells[0]] = dict(zip(BOARD_COLS, cells + [""] * (len(BOARD_COLS) - len(cells))))
+    notes, current = {}, None
+    for ln in lines:
+        if ln.startswith("## "):
+            current = next((k for k, h in NOTE_SECTIONS.items() if h == ln), None)
+        elif current and ln.startswith("- "):
+            notes.setdefault(current, []).append(ln)
+    return rows, notes
+
+
+def problem_report(p, rows, notes):
+    cells = sorted(set(c for c in os.listdir(os.path.join(RUN, p)) if os.path.isdir(os.path.join(RUN, p, c)))
+                   | set(k.split("-", 1)[1] for k in rows if k.startswith(f"{p}-")))
+    by_status = {st: [] for st in CELL_STATUSES}
+    table = ["| Cell | Pts | Cell status | Claim status | Best so far |", "|---|---|---|---|---|"]
+    for cell in cells:
+        row = rows.get(f"{p}-{cell}", {})
+        status = row.get("Cell status") or "NOT ATTEMPTED"
+        by_status.setdefault(status, []).append(cell)
+        table.append(f"| {cell} | {row.get('Pts', '')} | {status} | {row.get('Claim status', '')} | "
+                     f"{row.get('Best so far', '')} |")
+    mine = lambda key: [n for n in notes.get(key, []) if re.search(rf"\b{re.escape(p)}-C", n)] or ["- none"]
+    out = [f"# Problem {p}: report (generated {now()} from run/board.md; statuses as gated)", "",
+           f"- **Solved:** {', '.join(by_status['SOLVED']) or 'none'}",
+           f"- **Partial:** {', '.join(by_status['PARTIAL']) or 'none'}",
+           f"- **Not attempted:** {', '.join(by_status['NOT ATTEMPTED']) or 'none'}", "", *table, "",
+           "## Partial cells: established / remaining gap", *mine("partial"), "",
+           "## Obstacles: why the remaining cells are not solved now", *mine("obstacle"), "",
+           "## Accepted artefacts (sha256-pinned)"]
+    for cell in cells:
+        manifest = os.path.join(RUN, p, cell, "accepted", "MANIFEST.sha256")
+        if os.path.exists(manifest):
+            out += [f"- {cell}:"] + [f"  - `{ln.strip()}`" for ln in open(manifest) if ln.strip()]
+    with open(os.path.join(RUN, p, "report.md"), "w") as fh:
+        fh.write("\n".join(out) + "\n")
+    return by_status
+
+
+def cmd_report(a):
+    rows, notes = board_state()
+    problems = sorted(d for d in os.listdir(RUN)
+                      if os.path.isdir(os.path.join(RUN, d)) and d != "tasks" and not d.startswith("."))
+    summary = [f"# Summary (generated {now()}, run time {run_elapsed()} of 7:00)", "",
+               "| Problem | Solved | Partial | Not attempted | Report |", "|---|---|---|---|---|"]
+    for p in problems:
+        st = problem_report(p, rows, notes)
+        summary.append(f"| {p} | {', '.join(st['SOLVED']) or '–'} | {', '.join(st['PARTIAL']) or '–'} | "
+                       f"{', '.join(st['NOT ATTEMPTED']) or '–'} | {p}/report.md |")
+    summary += ["", "Every status above is copied from the gated board. Nothing here is established unless it is "
+                "SOLVED or listed as ESTABLISHED in a problem report."]
+    with open(os.path.join(RUN, "SUMMARY.md"), "w") as fh:
+        fh.write("\n".join(summary) + "\n")
+    print(f"wrote run/SUMMARY.md and report.md for {', '.join(problems) or 'no problems'}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -403,6 +470,9 @@ def main():
     s.add_argument("--files", nargs="*", default=[], help="extra fixed artefacts to test")
     s.add_argument("--log")
     s.set_defaults(func=cmd_crosstest)
+
+    s = sub.add_parser("report")
+    s.set_defaults(func=cmd_report)
 
     a = ap.parse_args()
     if a.cmd == "board" and not a.cell and not a.note:
