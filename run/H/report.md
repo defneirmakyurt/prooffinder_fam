@@ -1,4 +1,4 @@
-# Problem H: report (generated 14:24 from run/board.md; statuses as gated)
+# Problem H: report (generated 14:25 from run/board.md; statuses as gated)
 
 - **Solved:** C1, C2, C3, C4, L1
 - **Partial:** none
@@ -29,7 +29,7 @@
 ## Obstacles: why the remaining cells are not solved now
 - [14:01] H-C5 lower route: TRIED: parity split + clique cover (H-C5-007). STALLS AT: R9, tau(G_2[F∩E]) <= z+2 for 4 <= z <= 116. PROVED (unrefereed): forests missing <= 3 vertices of one parity have <= 279 vertices, so such labellings have >= 2376 paths. Unconditional LB still 2312. KNOWN: 225/226 <= nabla(Q_9) <= 236 (Pike 2003, Hertz 2021; H-C5-006).
 - [14:04] H-C5 (H-C5-006 analyst): published 225 <= nabla(Q_9) <= 236 (Hertz 2021 Table 4, citing Pike 2003; Pike itself paywalled, unopened). No source gives a decycling set <= 235 or nabla(Q_9) >= 227. Independent decycling sets have size >= 2^(d-1) - A(d,4) = 236 (A(9,4) = 20 cited), so an upper-route S_f must contain an edge. Searches for a 277-vertex induced forest: none found.
-- [14:24] H-C5 CLOSED (run ~1:45): TRIED: parity/code construction + decycling SA (H-C5-002), FVS SAT+LS (H-C5-001), decycling local search (H-C5-003), symmetric SAT (H-C5-004), recursive product (H-C5-005), lower-route parity split (H-C5-007), literature (H-C5-006). STALLS AT: a decycling set of Q_9 with <= 235 vertices (upper) or nabla(Q_9) >= 233 (lower). NEEDS: improving the published 225 <= nabla(Q_9) <= 236 (Pike 2003; Hertz 2021).
+- [14:24] H-C5 CLOSED (run 1:17): TRIED: parity/code construction + decycling SA (H-C5-002), FVS SAT+LS (H-C5-001), decycling local search (H-C5-003), symmetric SAT (H-C5-004), recursive product (H-C5-005), lower-route parity split (H-C5-007), literature (H-C5-006). STALLS AT: a decycling set of Q_9 with <= 235 vertices (upper) or nabla(Q_9) >= 233 (lower). NEEDS: improving the published 225 <= nabla(Q_9) <= 236 (Pike 2003; Hertz 2021).
 
 ## Accepted artefacts (sha256-pinned)
 - C1:
