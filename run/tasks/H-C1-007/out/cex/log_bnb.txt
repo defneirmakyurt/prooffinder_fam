@@ -1,0 +1,12 @@
+/Users/raducucu/bainsahackathon/run/tasks/H-C1-007/out/cex/bnb_q4.py:15: SyntaxWarning: "\ " is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\ "? A raw string is also an option.
+  Pruning bound.  Let S = placed set, T = V \ S, and for u in T let
+scorer cross-check: 300 random labellings per d=2,3,4, memoised count == literal enumeration of explicit path tuples
+d=3 target=15 (control, reduced) : COMPLETED, FOUND a labelling with 14 (< 15) uphill paths ['000', '001', '010', '011', '101', '110', '100', '111'] (nodes=20, 0.0s)
+d=4 target=35 (control, reduced) : COMPLETED, FOUND a labelling with 34 (< 35) uphill paths ['0000', '0001', '0010', '0100', '0111', '1000', '1111', '1011', '0011', '1101', '0101', '1001', '1110', '0110', '1010', '1100'] (nodes=741636, 1.8s)
+d=3 target=14 (reduced)       : COMPLETED, no labelling of Q_3 has < 14 uphill paths => U(Q_3) >= 14  (nodes=697, 0.0s)
+d=3 target=14 (NO reduction)  : COMPLETED, no labelling of Q_3 has < 14 uphill paths => U(Q_3) >= 14  (nodes=13601, 0.0s)
+d=4 target=34 (reduced)       : PARTIAL - node cap 60000000 hit after 143.4s; proves nothing
+d=4 target=34 (NO reduction)  : PARTIAL - node cap 60000000 hit after 141.8s; proves nothing
+real 287.19
+user 241.32
+sys 4.27

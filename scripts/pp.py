@@ -91,6 +91,7 @@ PHASES = {
 BRANCHES = ("ALGEBRAIC", "TOPOLOGICAL", "ANALYSIS", "NUMBER-THEORY", "DISCRETE", "COMPUTATIONAL")
 OBSTACLE_FILES = ("stuck.md", "verdict.md", "no_natural_route.md")
 SUBJECT_ITEMS = ("proof.md", "claims.md", "code")
+SUBJECT_VERSION_FILES = ("proof.md", "claims.md")
 SUBJECT_ARTEFACTS = ("best.txt", "best.json", "best.csv", "best.py", "best.md")
 PROCESS_FILES = ("plan.md", "runlog.md", "stuck.md")
 CELL_STATUSES = ("SOLVED", "PARTIAL", "COUNTEREXAMPLE", "NOT SOLVED", "NOT ATTEMPTED")
@@ -936,8 +937,12 @@ def cmd_gate(a):
     check_same_cell(a.P, a.cell, a.subject, "--subject")
     rows = read_phases(a.P, a.cell)
     items = checklist_items(a.P, a.cell)
-    proof = os.path.join(task_dir(a.subject), "out", "proof.md")
-    current = sha256(proof) if os.path.isfile(proof) else None
+    # The object under evaluation is proof.md for a written proof, claims.md for a computational
+    # subject (a Searcher writes no proof.md). Version-checking proof.md alone silently discounted
+    # every ACCEPT on a computational claim.
+    subject_file = next((n for n in SUBJECT_VERSION_FILES
+                         if os.path.isfile(os.path.join(task_dir(a.subject), "out", n))), None)
+    current = sha256(os.path.join(task_dir(a.subject), "out", subject_file)) if subject_file else None
     refs = [r for r in rows if r["Role"] == "referee" and r["Mode"] in ("VERIFY", "GATE") and r["Subject"] == a.subject]
     lines, score_lines, accepts, wrong = [], [], [], []
     for r in refs:
@@ -946,7 +951,7 @@ def cmd_gate(a):
         v = verdict_of(t) or "none"
         scores = checklist_scores(text, items)
         complete = bool(items) and all(s in ("PASS", "N/A") for s in scores.values())
-        seen = os.path.join(task_dir(t), "inbox", "subject", "proof.md")
+        seen = os.path.join(task_dir(t), "inbox", "subject", subject_file or "proof.md")
         same = current is not None and os.path.isfile(seen) and sha256(seen) == current
         match = (verdict_field(text, "STATEMENT MATCH") or "").lower().startswith("yes")
         lines.append(f"{t} {r['Mode']} {v} (checklist complete: {'yes' if complete else 'no'}; "
@@ -983,6 +988,9 @@ def cmd_gate(a):
         decision, rule = "GAP", "; ".join(missing)
     nxt = {"VALID": "PROVED on board", "GAP": "repair + Phase 2C with this report",
            "INVALID": "tell the humans; repair + Phase 2C with this report"}[decision]
+    # Every referee accepted and only the count falls short: nothing to repair, the proof needs another read.
+    if decision == "GAP" and accepts and len(accepts) == len(refs) and missing == [f"{len(accepts)} counted ACCEPT(s) of 2 needed"]:
+        nxt = "dispatch another referee on this same version; no repair needed"
     report = [f"# Gate: {a.P}-{a.cell}, proof {a.subject}, {now()}",
               "Referees: " + (" | ".join(lines) or "none"),
               f"Matrix: {matrix}; this proof: {this_proof}",

@@ -410,13 +410,17 @@ def matrix_gate_tests():
     tp = last_task(pp("task", "A", "C7", "--phase", "1", "--role", "prover", *STOP))
     fake_proof(tp)
     ra = last_task(pp("task", "A", "C7", "--phase", "2", "--subject", tp, *STOP))
-    rb = last_task(pp("task", "A", "C7", "--phase", "GATE", "--subject", tp, *STOP))
     verdict(ra, "ACCEPT")
+    out = pp("gate", "A", "C7", "--subject", tp, "--statement-checked")
+    check("DECISION: GAP" in out and "Next: dispatch another referee" in out,
+          "a single ACCEPT → GAP asks for another referee, not a repair")
+    rb = last_task(pp("task", "A", "C7", "--phase", "GATE", "--subject", tp, *STOP))
     verdict(rb, "ACCEPT")
     out = pp("gate", "A", "C7", "--subject", tp, "--statement-checked")
     check("DECISION: VALID" in out and "Matrix: not run" in out, "no 2B: 2 ACCEPT + statement → VALID")
     verdict(rb, "MINOR")
-    check("DECISION: GAP" in pp("gate", "A", "C7", "--subject", tp, "--statement-checked"), "ACCEPT + MINOR → GAP")
+    out = pp("gate", "A", "C7", "--subject", tp, "--statement-checked")
+    check("DECISION: GAP" in out and "Next: repair + Phase 2C" in out, "ACCEPT + MINOR → GAP, repair")
 
 
 def telemetry_library_tests():
@@ -442,6 +446,17 @@ def telemetry_library_tests():
     pp("done", ra, "--tokens", "8000")
     pp("done", "A-C11-999", ok=False, label="done on a task that does not exist")
     check("DECISION: VALID" in pp("gate", "A", "C11", "--subject", tp, "--statement-checked"), "C11 gate VALID")
+
+    print("\n== gate on a computational subject (no proof.md)")
+    ts = last_task(pp("task", "A", "C11", "--phase", "1", "--role", "searcher", *STOP))
+    write(T(ts, "out", "claims.md"), "| claim | status |\n| U = 34 | CHECKED |\n")
+    write(T(ts, "out", "best.txt"), "0000\n1111\n")
+    for phase in ("2", "GATE"):
+        tr = last_task(pp("task", "A", "C11", "--phase", phase, "--subject", ts, *STOP))
+        verdict(tr, "ACCEPT")
+    g = pp("gate", "A", "C11", "--subject", ts, "--statement-checked")
+    check("DECISION: VALID" in g, "a computational subject can be gated (claims.md is its version)")
+    check("proof version: current" in g, "the referee's copy of claims.md is version-checked")
     tbk = last_task(pp("task", "A", "C11", "--phase", "2C", "--obstacles", tp, *STOP))
     write(T(tbk, "out", "verdict.md"), "STUCK\nno route beyond step 2\n")
     pp("done", tbk)

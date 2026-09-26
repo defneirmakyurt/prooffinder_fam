@@ -1,0 +1,14 @@
+Q_3: simulated annealing, 200 restarts x 4000 steps, 700133 exact evaluations, 1.6s
+     best found = 14 ; target <= 13 NOT reached
+     lowest values ever visited: [(14, 276664), (16, 199214), (17, 97515), (18, 60135)]
+     best labelling: ['010', '110', '000', '101', '011', '111', '100', '001']
+Q_4: simulated annealing, 400 restarts x 12000 steps, 4499578 exact evaluations, 25.6s
+     best found = 34 ; target <= 33 NOT reached
+     lowest values ever visited: [(34, 1294655), (37, 315215), (38, 5661), (39, 5650)]
+     best labelling: ['0011', '1100', '0111', '1101', '0010', '1110', '1011', '0001', '1111', '1000', '1001', '0100', '0101', '0110', '1010', '0000']
+
+closing Remark (outside the cell): (d-1) | 2^(d-1)(d-2)+1 for d = 2..40
+   d for which the equality condition of Step 6 can hold at all: [2]
+real 27.29
+user 23.69
+sys 0.36
