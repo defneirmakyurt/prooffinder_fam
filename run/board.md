@@ -1,11 +1,11 @@
-# Board: problem B, updated 16:26, run time 1:12 of 7:00
+# Board: problem B, updated 16:40, run time 1:27 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
 | C1 | 1 | T1: 1 pt; classical-style classification, base case (i) then general (ii) | SUBMISSION done (LaTeX + PDF in run/B/C1/submission/); Phase 5 report pending | SOLVED | PROVED | – | B-C1-002 VALID (003, 004); B-C1-001 VALID (005, 006) | diagonal-energy (both provers) | Phase 5 report + audit; add Brandt 1982 context if humans want | 0:26 |
 | C2 | 2 | T1: 2 pts; one exact-value family, both bounds | SUBMISSION done: run/B/C2/submission/ (LaTeX + PDF) | SOLVED | PROVED | – | D_B(T_k)=k^2-k, all k; witness (k-1,k-1,k-2,...,2,1,1) | diagonal-rotation-CRT | - | 0:23 |
 | C3 | 3 | T2: 3 pts, three parts (bound for all non-triangular n; exact value; all maximisers) | 1 done: 3 blind PARTIAL (lower bound k^2-2k-1 proved x3, upper GAP; exhaustive k<=10); 1L literature running | PARTIAL | (b) LOWER half PROVED: D_B(T_k-1) >= k^2-2k-1, k>=3 (gate on B-C3-002 scoped to lower half, referees 008+009); (a), (b) upper, (c) pending | – | witness (k-1,k-2,k-2,...,2,1,1); exhaustive k<=10 |  | referees on 1L proof | 0:00 |
-| C4 | 5 | T2: 5 pts, exact value both bounds for all k>=5 | 1 running: B-C4-005..007 (Defne's session, lean track) | NOT ATTEMPTED | OPEN | – |  |  | TAKEN by Defne's session: first proof -> VERIFY + GATE referees together -> gate -> Scribe; do not resume C4 here | 0:00 |
+| C4 | 5 | T2: 5 pts, exact value both bounds for all k>=5 | LOWER half at gate (008 VERIFY + 009 GATE on B-C4-007); prover 006 running | NOT ATTEMPTED | CONJECTURED F(k)=(k-1)(k-3) (exhaustive k=5..12); LOWER proved by 005 and 007 (unrefereed); UPPER partial | – | witness (k-2,k-2,k-3,...,3,2,2,1), found independently by 005 and 007; weaker UPPER (k-1)(k-2) for all k (005) | diagonal energy + lap rotation (006, under repair 010); energy levels (007, lower half at gate); monotone coupling (005) | LOWER: referees 008/009; UPPER: repair 010 (EXPLOIT on 006) + literature 011 in parallel | 0:00 |
 | C5 | 8 | T2/T3: 8 pts, four stated requirements incl. C3-extension analysis | PAUSED by humans (focus B2, B3); Phase 1 stopped | NOT ATTEMPTED | OPEN | – |  |  | resume after B3 | 0:00 |
 
 ## Partial cells: established / remaining gap
