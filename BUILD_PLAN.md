@@ -115,8 +115,8 @@ Working rules from the user's global instructions:
 
 ### B4. Lessons
 
-- [ ] Rename `.claude/lessons/scout.md` to `literature.md`.
-- [ ] Add `triage.md` and `auditor.md` (at `version: 0`) and `pending/auditor.md`.
+- [x] Rename `.claude/lessons/scout.md` to `literature.md`.
+- [x] Add `triage.md` and `auditor.md` (at `version: 0`) and `pending/auditor.md`.
 
 ### B5. Remove build notes
 
