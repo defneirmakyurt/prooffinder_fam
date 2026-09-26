@@ -17,9 +17,11 @@ vectors c XOR o (c in C), with columns then sorted -- i.e. min over (o, row orde
 matrix.  Two clusters are equivalent under x -> pi(x) XOR v (pi a coordinate permutation, v even) iff their
 canonical forms agree (see README).
 
-tau*(C): depth-first enumeration of all valid M' (the family is closed under subsets, so every valid set is
-reached by adding candidates in increasing index order, each step checked for acyclicity with a fresh
-union-find); tau(G_2[M']) = |M'| - alpha(G_2[M']) with alpha computed by exhaustive branching.
+tau*(C) <= k is certified by tau_star(C, k): depth-first search over valid M' in increasing candidate order
+(validity is closed under subsets), incremental component labels for the acyclicity test, and two pruning
+bounds (tau + #addable later candidates; clique-cover bound with the local Lemma-2 cap); proof.md Step 12(c).
+tau(G_2[M']) = |M'| - alpha(G_2[M']) with alpha computed by exhaustive branching.
+The canonical key and the enumeration are described in proof.md Step 12(a),(b).
 """
 import sys, itertools
 D = 9
@@ -100,9 +102,7 @@ def tau_star(C, thr):
     cap = {}
     for o in C:
         c2 = sum(1 for p in C if wt(o ^ p) == 2)
-        t = 1
-        while (t) * (t - 1) // 2 <= c2 and t < D: t += 1   # test t+1: ((t+1)-1)((t+1)-2)/2 = t(t-1)/2
-        cap[o] = t
+        cap[o] = max(t for t in range(1, D + 1) if (t - 1) * (t - 2) // 2 <= c2)
     bad = [None]
     def addable(x, olab):
         seen = set()
@@ -137,73 +137,6 @@ def tau_star(C, thr):
     rec(0, [], {}, 0)
     return bad[0] is None, bad[0]
 
-def tau_star2(C, thr):
-    """Faster certifier (proof.md Step 12(c')): same answer semantics as tau_star.
-    Candidates with >= 2 neighbours in C ('shared') are enumerated exhaustively (no pruning); for each C-valid
-    shared set S', all extensions by 'private' candidates (exactly one neighbour in C) are bounded at once by the
-    tau of a virtual graph (S' plus q_o twins per o); only if that bound exceeds thr are the private extensions
-    searched explicitly."""
-    Cs = set(C); Cl = list(C)
-    cand = sorted({o ^ (1 << i) for o in C for i in range(D)})
-    onb = {x: [x ^ (1 << i) for i in range(D) if (x ^ (1 << i)) not in Cs] for x in cand}
-    cnb = {x: [o for o in Cl if wt(o ^ x) == 1] for x in cand}
-    shared = [x for x in cand if len(cnb[x]) >= 2]
-    private = [x for x in cand if len(cnb[x]) == 1]
-    cap = {}
-    for o in C:
-        c2 = sum(1 for p in C if wt(o ^ p) == 2)
-        cap[o] = max(t for t in range(1, D + 1) if (t - 1) * (t - 2) // 2 <= c2)
-    bad = [None]
-    def addable(x, olab):
-        seen = set()
-        for w in onb[x]:
-            l = olab.get(w)
-            if l is None: continue
-            if l in seen: return False
-            seen.add(l)
-        return True
-    def add(x, olab, newid):
-        L = {olab[w] for w in onb[x] if w in olab}
-        n2 = {w: (newid if l in L else l) for w, l in olab.items()}
-        for w in onb[x]: n2[w] = newid
-        return n2
-    def virtual_tau(Mp, olab, plist):
-        # vertices: Mp, then q_o virtual twins for every o; adjacency = common neighbour in C
-        vs = [(x, set(cnb[x])) for x in Mp]
-        for o in Cl:
-            k_o = sum(1 for x in Mp if o in cnb[x])
-            a_o = sum(1 for x in plist if cnb[x][0] == o and addable(x, olab))
-            q = min(a_o, cap[o] - k_o)
-            for _ in range(max(q, 0)): vs.append((None, {o}))
-        n = len(vs); adj = [0] * n
-        for a in range(n):
-            for b in range(a + 1, n):
-                if vs[a][1] & vs[b][1]: adj[a] |= 1 << b; adj[b] |= 1 << a
-        return n - alpha(list(range(n)), adj)
-    def priv_rec(start, Mp, olab, t):
-        # explicit search over private extensions (fallback)
-        if bad[0] is not None: return
-        if t > thr: bad[0] = list(Mp); return
-        later = [private[i] for i in range(start, len(private)) if addable(private[i], olab)]
-        if t + len(later) <= thr: return
-        if virtual_tau(Mp, olab, later) <= thr: return
-        for i in range(start, len(private)):
-            x = private[i]
-            if x in later:
-                Mp.append(x); priv_rec(i + 1, Mp, add(x, olab, len(Mp)), tau(Mp)); Mp.pop()
-    def sh_rec(start, Mp, olab, t):
-        if bad[0] is not None: return
-        if t > thr: bad[0] = list(Mp); return
-        if virtual_tau(Mp, olab, private) > thr:
-            priv_rec(0, Mp, olab, t)
-            if bad[0] is not None: return
-        for i in range(start, len(shared)):
-            x = shared[i]
-            if addable(x, olab):
-                Mp.append(x); sh_rec(i + 1, Mp, add(x, olab, len(Mp)), tau(Mp)); Mp.pop()
-    sh_rec(0, [], {}, 0)
-    return bad[0] is None, bad[0]
-
 def exact_tau_star(C):
     """Cross-check only: max of tau(G_2[M']) over ALL C-valid M' (no pruning; same validity test)."""
     Cs = set(C)
@@ -230,13 +163,12 @@ def exact_tau_star(C):
     return best[0]
 
 PROG = False
-FAST = False
 def main():
     KMAX = int(sys.argv[1]) if len(sys.argv) > 1 else 4
+    # self-test: threshold k + OFF (OFF < 0 must find violations; OFF = 99: exact unpruned cross-check)
     OFF = int(sys.argv[2]) if len(sys.argv) > 2 else 0
-    global PROG, FAST
-    PROG = 'prog' in sys.argv[3:]
-    FAST = 'fast' in sys.argv[3:]   # self-test: threshold k + OFF (OFF < 0 must find violations; OFF = 99: exact unpruned cross-check)
+    global PROG
+    PROG = 'prog' in sys.argv[3:]   # third argument 'prog': per-class progress on stderr
     o0 = 1
     layer = {canon([o0]): [o0]}
     worst_overall = []
@@ -261,7 +193,7 @@ def main():
             continue
         cnt = 0; nviol = 0; wit = None
         for key, C in layer.items():
-            ok, Mp = (tau_star2 if FAST else tau_star)(C, k + OFF)
+            ok, Mp = tau_star(C, k + OFF)
             cnt += 1
             if not ok:
                 nviol += 1; wit = (C, Mp)

@@ -1,0 +1,116 @@
+CELL C5: BOUNDS FOR U(Q_9) -- PARTIAL RESULTS
+
+SUMMARY
+We do not reach either threshold: we have no labelling of Q_9 with at most 2399 uphill paths, and no
+proof that U(Q_9) >= 2369. What we establish is a reduction of both routes to the decycling number
+nabla(Q_9) (the minimum number of vertices whose removal leaves a forest), plus partial results:
+  - PROVED (refereed by two independent referees): U(Q_9) >= 512 + 8*nabla(Q_9)  (Lemma 1 below).
+  - COMPUTER-VERIFIED: U(Q_9) <= 2400 (attached labelling Q9.txt; the checker counts exactly 2400).
+  - Consequence: a labelling with <= 2399 paths requires nabla(Q_9) <= 235, and nabla(Q_9) >= 233
+    would give U(Q_9) >= 2376 >= 2369. The published bounds are 225 <= nabla(Q_9) <= 236
+    (Pike 2003; Hertz 2021, Table 4), so either route requires improving them.
+Remaining gap: a decycling set of Q_9 with at most 235 vertices (upper route), or a proof that
+nabla(Q_9) >= 233 (lower route).
+
+
+1. LEMMA 1 (induced-forest lower bound)
+Status: PROVED (refereed by two independent referees).
+
+Statement. For every d >= 1 and every labelling f of Q_d, let S = {v : down(v) >= 2}. Then V \ S
+induces a forest in Q_d, and f has at least 2^d + (d-1)|S| uphill paths. Hence
+U(Q_d) >= 2^d + (d-1)*nabla(Q_d), and for d = 9: U(Q_9) >= 512 + 8*nabla(Q_9).
+
+Notation. Q_d, labelling f, valley, uphill path exactly as in the problem statement. n = 2^d,
+E = d 2^{d-1}. For a vertex v: down(v) = #neighbours w with f(w) < f(v), up(v) = d - down(v).
+N(v) = number of uphill paths whose last vertex is v. F_d = maximum number of vertices of a set
+T ⊆ V(Q_d) whose induced subgraph Q_d[T] has no cycle (an "induced forest").
+
+Proof.
+Let d >= 1 and f any labelling of Q_d. Let S = {v : down(v) >= 2}, T = V \ S = {v : down(v) <= 1}.
+Claim: (i) Q_d[T] has no cycle, so |T| <= F_d; (ii) #uphill paths = sum_v N(v) >= 2^d + (d-1)|S|.
+Hence #uphill >= 2^d + (d-1)(2^d - F_d), and U(Q_d) >= 2^d + (d-1)(2^d - F_d).
+
+Step A1 (valleys). Q_d with d >= 1 has no isolated vertex. v is a valley iff every neighbour has a
+larger label iff down(v) = 0. So the valleys are exactly the vertices with down = 0; all lie in T.
+Let V0 = number of valleys.
+
+Step A2 (recurrence). For every v: N(v) = [v is a valley] + sum_{w ~ v, f(w) < f(v)} N(w).
+Proof: an uphill path ending at v has k = 1 or k >= 2. With k = 1 it is (v), which is an uphill
+path iff v is a valley. With k >= 2, deleting the last vertex v leaves (v_1..v_{k-1}), an uphill
+path (v_1 is a valley, consecutive vertices adjacent, labels increasing) ending at w = v_{k-1},
+with w ~ v and f(w) < f(v). Conversely, appending v to an uphill path ending at such a w gives an
+uphill path ending at v (adjacency and strict increase hold at the new step). These two maps are
+mutually inverse, so the paths with k >= 2 ending at v are in bijection with the disjoint union over
+lower neighbours w of the uphill paths ending at w.
+
+Step A3 (N(v) >= 1 for all v, and N(v) >= down(v) when down(v) >= 1). Starting at v, repeatedly
+move to some neighbour with a smaller label while one exists. Labels strictly decrease, so this
+stops after at most n - 1 moves, at a vertex u with no neighbour of smaller label, i.e. (A1) a
+valley. Reading the visited vertices backwards gives an uphill path from u to v. So N(v) >= 1 for
+all v. If down(v) >= 1 then by A2, N(v) >= sum over the down(v) lower neighbours of N(w) >= down(v).
+
+Step A4 (summation). Summing A2 over v and exchanging the order of summation (each pair (w, v)
+with w ~ v, f(w) < f(v) is an edge, counted once, at its lower endpoint w):
+   sum_v N(v) = V0 + sum_w N(w) up(w) = V0 + sum_w up(w) + sum_w (N(w) - 1) up(w)
+             = V0 + E + sum_w (N(w) - 1) up(w),
+since sum_w up(w) = E (every edge has exactly one lower endpoint; labels are distinct).
+
+Step A5 (bounding the excess). For w in T: (N(w) - 1) up(w) >= 0 by A3. For w in S, k = down(w)
+satisfies 2 <= k <= d, so by A3 N(w) - 1 >= k - 1 >= 1 and up(w) = d - k >= 0, hence
+(N(w) - 1) up(w) >= (k - 1)(d - k) >= d - k. Therefore
+   sum_v N(v) >= V0 + E + sum_{w in S} (d - down(w)) = V0 + E + d|S| - sum_{w in S} down(w).
+
+Step A6 (counting down-degrees). sum_{all w} down(w) = E (each edge counted once, at its upper
+endpoint). In T, down(w) is 0 for the V0 valleys (A1) and 1 for the other |T| - V0 vertices, so
+sum_{w in T} down(w) = |T| - V0 and sum_{w in S} down(w) = E - |T| + V0. Substituting in A5:
+   sum_v N(v) >= V0 + E + d|S| - E + |T| - V0 = d|S| + |T| = 2^d + (d - 1)|S|.
+This is (ii).
+
+Step A7 (T induces a forest). Suppose Q_d[T] contains a cycle C (a closed walk v_1..v_m v_1 with
+m >= 3 distinct vertices, all in T, consecutive ones adjacent). Let v be the vertex of C with the
+largest label. Its two neighbours on C are distinct (m >= 3), adjacent to v, and have smaller
+labels, so down(v) >= 2, i.e. v in S, contradicting v in T. So Q_d[T] is acyclic and |T| <= F_d,
+|S| >= 2^d - F_d. Combining with (ii): #uphill >= 2^d + (d-1)(2^d - F_d) (using d - 1 >= 0). ∎
+
+
+2. UPPER BOUND 2400
+Status: COMPUTER-VERIFIED. The attached labelling Q9.txt (512 lines, line i = the vertex with label i)
+has exactly 2400 uphill paths, as counted by our exact checker. This equals the organisers' bound;
+it is not an improvement. It comes from a decycling set of size 236 with no edge inside it
+(the even-weight vertices minus a distance-4 code of 20 words), for which Lemma 1 holds with equality.
+
+
+3. CONSEQUENCES FOR d = 9, AND AN UNCONDITIONAL BOUND
+Status: proof below, not independently refereed (short counting argument).
+
+Step 8 (lower bound via decycling). A decycling set of G is a set whose removal leaves a forest; nabla(G) is the
+minimum size. By Lemma 1 (T = V \ S_f induces a forest), S_f is a decycling set, so |S_f| >= nabla(Q_d), and by Lemma 1:
+  U(Q_d) >= 2^d + (d-1) nabla(Q_d).                                                                (5)
+In particular, for d = 9:
+ * any labelling with P(f) <= 2399 has 8|S_f| <= 2399 - 512 = 1887, so |S_f| <= 235: it exhibits a decycling
+   set of Q_9 of size <= 235, i.e. it would prove nabla(Q_9) <= 235;
+ * any proof of nabla(Q_9) >= 233 gives U(Q_9) >= 512 + 8*233 = 2376 >= 2369 (the LOWER route).
+ * The organisers' numbers fit (5) exactly: 2368 = 512 + 8*232 and 2400 = 512 + 8*236. (Whether their lower bound
+   comes from nabla(Q_9) >= 232 is not known to us; the statement says it is unpublished.)
+
+Step 9 (self-contained weak lower bound). If S is a decycling set of Q_d then the forest Q_d - S has at most
+n - |S| - 1 edges and at least |E| - d|S| edges, so |E| - d|S| <= n - |S| - 1, i.e.
+|S| >= (|E| - n + 1)/(d-1). For d = 9: |S| >= 1793/8, so |S| >= 225, and (5) gives U(Q_9) >= 512 + 1800 = 2312.
+(This is the bound of Beineke and Vandell, Lemma 2.1(2), as quoted in S. Bau's survey 'The decycling number
+of graphs', arXiv math/0703544; proved here.)
+It is weaker than the organisers' 2368.
+
+
+4. DECYCLING SETS WITH NO INNER EDGE
+Status: statement only here; proof available, not independently refereed. A(9,4) = 20 is cited
+(Best, Brouwer, MacWilliams, Odlyzko, Sloane, bounds for binary codes of length less than 25).
+Statement. Every decycling set of Q_d that contains no edge has at least 2^(d-1) - A(d,4) vertices,
+where A(d,4) is the largest binary code of length d with minimum distance 4. For d = 9 this is
+256 - 20 = 236. Consequently, by Lemma 1, a labelling of Q_9 with at most 2399 uphill paths needs a
+decycling set of at most 235 vertices that contains at least one edge.
+
+
+5. A LOWER BOUND FOR A RESTRICTED CLASS OF LABELLINGS
+Status: statement only here; proof available, not independently refereed (two referees are
+checking it now).
+Statement. every induced forest F of Q_9 whose complement S = V \ F has at most 3 vertices of even weight, or at most 3 vertices of odd weight, has |F| <= 279; consequently every labelling f of Q_9 for which S_f = {v : v has >= 2 neighbours with smaller label} has at most 3 vertices of one parity has at least 2376 uphill paths. U(Q_9) >= 2369 itself is NOT proved (it would follow from the missing Lemma R9 in Step 11).

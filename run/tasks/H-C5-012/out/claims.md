@@ -13,7 +13,8 @@
 | No source found (any n) with a non-independent minimum decycling set of Q_n, or with nabla(Q_n) < 2^{n-1} - A(n,4); none with a bound on nabla(Q_9) newer than Hertz 2021; no SAT/ILP determination of the forest number of Q_9 | not found in the sources listed in sources.md ("Not found") | sources.md |
 | Exact ILP branch-and-cut on vertex-weighted Q_8, Q_9 (Melo-Ribeiro 2021) did not close any instance in 1 h (gaps 2-6 %) | COMPUTER-VERIFIED by the authors (code public: UNSURE) | sources.md, arXiv 2102.09194 Table 8 |
 | With F0 = odd vertices u C (C an even (9,4) code of size 20 found by SAT; |F0| = 276, forest checked), for EVERY centre v of Q_9 there is no induced forest of size >= 277 that agrees with F0 outside the Hamming ball B(v,2) | COMPUTER-VERIFIED (code public: y; exact SAT, UNSAT for all 512 balls) | out/code/lns_sat.py, RAN below |
-| Same for radius-3 balls (130 free vertices), for the centres listed in the RAN line | COMPUTER-VERIFIED for the centres covered (see RAN) | out/code/lns_sat.py, out/tmp/lns_R3.log |
+| Same for radius-3 balls (130 free vertices): UNSAT for all 512 centres | COMPUTER-VERIFIED (code public: y) | out/code/lns_sat.py, out/tmp/lns_R3.log |
+| Radius-4 balls (256 free vertices): UNSAT for centres 315, 401, 455, 373, 344 (vertex v encoded as the integer with bit i = coordinate i; centre order = random.shuffle with seed 1); 8 further centres TIMED OUT at 20 s each; the other 499 centres not tried | PARTIAL (COMPUTER-VERIFIED for the 5 UNSAT centres only) | out/tmp/lns_R4.log |
 | These LNS results say only that this particular 236-set is not improvable by changing <= 46 (resp. <= 130) vertices inside one ball; they say nothing about nabla(Q_9) | - | - |
 
 ## RAN (wall clock measured with `date +%s.%N`; /usr/bin/time is not installed in this sandbox)
@@ -22,4 +23,6 @@
 * .venv python3 out/code/lns_sat.py 3 512 20 1 (first version; R = 3) -- TIMED OUT at the 300 s shell limit, no summary printed (progress output not yet added); no result used.
 * .venv python3 out/code/lns_sat.py 3 512 30 1 (first version with progress) -- killed by me after the first centre (TIMEOUT at 33 s, 447 CEGAR iterations); superseded.
 * .venv python3 out/code/lns_sat.py 2 512 10 1 (final version: all 4- and 6-cycles pre-added + multi-cut CEGAR; R = 2, all 512 centres) -- COMPLETED, 512/512 UNSAT, 27.9 s.
-* .venv python3 out/code/lns_sat.py 3 512 15 1 (final version; R = 3, all 512 centres, 15 s per ball, 360 s cap) -- see out/tmp/lns_R3.log for the final status line (filled in below).
+* .venv python3 out/code/lns_sat.py 3 512 15 1 (final version; R = 3, all 512 centres, 15 s per ball) -- COMPLETED, 512/512 UNSAT, 99.3 s.
+* .venv python3 out/code/lns_sat.py 4 512 20 1 (final version; R = 4, 20 s per ball, 330 s shell cap) -- TIMED OUT at 330 s: 13 centres done (5 UNSAT, 8 TIMEOUT, 0 FOUND), 499 not reached; 330.0 s.
+* Note: the pre-added short cycles are all 4-cycles plus 12 of the 16 6-cycles of each Q_3 subcube (69,120 clauses); the remaining cycles are added lazily. Every added clause excludes a genuine cycle, so UNSAT answers are sound.

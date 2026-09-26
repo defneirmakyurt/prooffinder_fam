@@ -1,0 +1,6 @@
+FORMAT OK lines=512 d=9 distinct=512
+VALLEYS 96
+UPHILL_PATHS 2400
+STRUCTURE stars20=True odd76=True even236=True
+real 0.040  user 0.016  sys 0.000
+exit=0
