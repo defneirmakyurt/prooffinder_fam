@@ -1,0 +1,48 @@
+D statement example values OK
+C seed=2 trials=20000: Lemma 3 (strict), 2.1, 2.2, 4.1 OK
+B k=1: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=2: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=3: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=4: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=5: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=6: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=7: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=8: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=9: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=10: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=11: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+B k=12: 8.2, 8.3, 10.3, N(k,r)=necklaces for all r OK
+A n=1 k=1 r=1 p(n)=1 cyclic=1 cycles=1 lens=[1] OK
+A n=2 k=2 r=1 p(n)=2 cyclic=2 cycles=1 lens=[2] OK
+A n=3 k=2 r=2 p(n)=3 cyclic=1 cycles=1 lens=[1] OK
+A n=4 k=3 r=1 p(n)=5 cyclic=3 cycles=1 lens=[3] OK
+A n=5 k=3 r=2 p(n)=7 cyclic=3 cycles=1 lens=[3] OK
+A n=6 k=3 r=3 p(n)=11 cyclic=1 cycles=1 lens=[1] OK
+A n=7 k=4 r=1 p(n)=15 cyclic=4 cycles=1 lens=[4] OK
+A n=8 k=4 r=2 p(n)=22 cyclic=6 cycles=2 lens=[2, 4] OK
+A n=9 k=4 r=3 p(n)=30 cyclic=4 cycles=1 lens=[4] OK
+A n=10 k=4 r=4 p(n)=42 cyclic=1 cycles=1 lens=[1] OK
+A n=11 k=5 r=1 p(n)=56 cyclic=5 cycles=1 lens=[5] OK
+A n=12 k=5 r=2 p(n)=77 cyclic=10 cycles=2 lens=[5, 5] OK
+A n=13 k=5 r=3 p(n)=101 cyclic=10 cycles=2 lens=[5, 5] OK
+A n=14 k=5 r=4 p(n)=135 cyclic=5 cycles=1 lens=[5] OK
+A n=15 k=5 r=5 p(n)=176 cyclic=1 cycles=1 lens=[1] OK
+A n=16 k=6 r=1 p(n)=231 cyclic=6 cycles=1 lens=[6] OK
+A n=17 k=6 r=2 p(n)=297 cyclic=15 cycles=3 lens=[3, 6, 6] OK
+A n=18 k=6 r=3 p(n)=385 cyclic=20 cycles=4 lens=[2, 6, 6, 6] OK
+A n=19 k=6 r=4 p(n)=490 cyclic=15 cycles=3 lens=[3, 6, 6] OK
+A n=20 k=6 r=5 p(n)=627 cyclic=6 cycles=1 lens=[6] OK
+A n=21 k=6 r=6 p(n)=792 cyclic=1 cycles=1 lens=[1] OK
+A n=22 k=7 r=1 p(n)=1002 cyclic=7 cycles=1 lens=[7] OK
+A n=23 k=7 r=2 p(n)=1255 cyclic=21 cycles=3 lens=[7, 7, 7] OK
+A n=24 k=7 r=3 p(n)=1575 cyclic=35 cycles=5 lens=[7, 7, 7, 7, 7] OK
+A n=25 k=7 r=4 p(n)=1958 cyclic=35 cycles=5 lens=[7, 7, 7, 7, 7] OK
+A n=26 k=7 r=5 p(n)=2436 cyclic=21 cycles=3 lens=[7, 7, 7] OK
+A n=27 k=7 r=6 p(n)=3010 cyclic=7 cycles=1 lens=[7] OK
+A n=28 k=7 r=7 p(n)=3718 cyclic=1 cycles=1 lens=[1] OK
+A n=29 k=8 r=1 p(n)=4565 cyclic=8 cycles=1 lens=[8] OK
+A n=30 k=8 r=2 p(n)=5604 cyclic=28 cycles=4 lens=[4, 8, 8, 8] OK
+ALL OK NMAX=30 KMAX=12 SEED=2
+real 0.79
+user 0.78
+sys 0.00
