@@ -1,4 +1,4 @@
-# Board: problem H, updated 14:02, run time 0:54 of 7:00
+# Board: problem H, updated 14:04, run time 0:57 of 7:00
 
 | Cell | Pts | Tier | Phase | Cell status | Claim status | Robustness | Best so far | Live lineages | Next | Time used |
 |------|-----|------|-------|-------------|--------------|------------|-------------|---------------|------|-----------|
@@ -31,3 +31,4 @@
 
 ## Obstacle notes (parked cells)
 - [14:01] H-C5 lower route: TRIED: parity split + clique cover (H-C5-007). STALLS AT: R9, tau(G_2[F∩E]) <= z+2 for 4 <= z <= 116. PROVED (unrefereed): forests missing <= 3 vertices of one parity have <= 279 vertices, so such labellings have >= 2376 paths. Unconditional LB still 2312. KNOWN: 225/226 <= nabla(Q_9) <= 236 (Pike 2003, Hertz 2021; H-C5-006).
+- [14:04] H-C5 (H-C5-006 analyst): published 225 <= nabla(Q_9) <= 236 (Hertz 2021 Table 4, citing Pike 2003; Pike itself paywalled, unopened). No source gives a decycling set <= 235 or nabla(Q_9) >= 227. Independent decycling sets have size >= 2^(d-1) - A(d,4) = 236 (A(9,4) = 20 cited), so an upper-route S_f must contain an edge. Searches for a 277-vertex induced forest: none found.
