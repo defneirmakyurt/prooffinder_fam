@@ -8,3 +8,4 @@
 | A-C1-006 | GATE | referee | CLEAN-ROOM | GATE | - | A-C1-001 | 12:43 |
 | A-C1-007 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C1-003 | 12:46 |
 | A-C1-008 | 5 | scribe | RECORD | REPORT | - | - | 12:51 |
+| A-C1-009 | AUDIT | auditor | RECORD | - | - | A-C1-008 | 13:28 |

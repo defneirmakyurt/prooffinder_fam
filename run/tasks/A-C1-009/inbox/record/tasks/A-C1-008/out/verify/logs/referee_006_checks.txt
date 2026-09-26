@@ -1,0 +1,27 @@
+step8 cut identity: 3000+28 exact rational (x,y) pairs, denominators<=997, |x|,|y|<=5: failures=0
+step7 overlap lemma: 1003 exact rational theta in [0,1/2] (units of pi): failures=0
+step11 identity S = (1/2)int k(N-k): 1000 exact random configs N<=12 (30% with forced repeats): identity failures=0, bound violations=0
+step9 k(N-k)<=floor(N^2/4): N in 0..300, k in -100..400: failures=0
+step4 (float sanity only): max |arccos|cos(pi z)| - pi rho(z)| over 3000 z in [-20,20] = 1.260e-13
+grid D=12 exhaustive exact: N=0 max S/pi=0 bound=0 violations=0 attained=True
+grid D=12 exhaustive exact: N=1 max S/pi=0 bound=0 violations=0 attained=True
+grid D=12 exhaustive exact: N=2 max S/pi=1/2 bound=1/2 violations=0 attained=True
+grid D=12 exhaustive exact: N=3 max S/pi=1 bound=1 violations=0 attained=True
+grid D=12 exhaustive exact: N=4 max S/pi=2 bound=2 violations=0 attained=True
+grid D=12 exhaustive exact: N=5 max S/pi=3 bound=3 violations=0 attained=True
+grid D=12 exhaustive exact: N=6 max S/pi=9/2 bound=9/2 violations=0 attained=True
+grid D=12 exhaustive exact: N=7 max S/pi=6 bound=6 violations=0 attained=True
+float ascent (exploratory): N=2 best S/pi=0.499998579 bound=0.5 ratio=0.999997159
+float ascent (exploratory): N=3 best S/pi=1.000000000 bound=1.0 ratio=1.000000000
+float ascent (exploratory): N=4 best S/pi=1.999995184 bound=2.0 ratio=0.999997592
+float ascent (exploratory): N=5 best S/pi=3.000000000 bound=3.0 ratio=1.000000000
+float ascent (exploratory): N=6 best S/pi=4.499989713 bound=4.5 ratio=0.999997714
+float ascent (exploratory): N=7 best S/pi=6.000000000 bound=6.0 ratio=1.000000000
+float ascent (exploratory): N=8 best S/pi=7.999919601 bound=8.0 ratio=0.999989950
+float ascent (exploratory): N=9 best S/pi=10.000000000 bound=10.0 ratio=1.000000000
+float ascent (exploratory): N=10 best S/pi=12.499919040 bound=12.5 ratio=0.999993523
+float ascent (exploratory): N=11 best S/pi=15.000000000 bound=15.0 ratio=1.000000000
+float ascent (exploratory): N=12 best S/pi=17.999814560 bound=18.0 ratio=0.999989698
+real 7.04
+user 5.16
+sys 0.12
