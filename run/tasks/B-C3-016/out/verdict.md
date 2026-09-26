@@ -1,15 +1,17 @@
-VERDICT: MINOR (overall). Per part: (a) ACCEPT; (b) upper half ACCEPT; (b) lower half ACCEPT; (c) MINOR
-STATEMENT MATCH: yes for (a) and (b). For (c) only partly: both inclusions of the maximiser set are proved, but the set is given as {lambda : B^{k^2-2k-2}(lambda) = nu_k}, a dynamical criterion, and not "as explicit functions of k" (target.md). The author flags this as [GAP] in 9.6.
-FIRST PROBLEM: no mathematical step fails. The first shortfall is 9.3/9.6: the maximiser set is not an explicit function of k.
-Fix: the head decides whether the preimage-tree description meets "explicit" (S12 says any description must be structural, and S12's own form is dynamical too), or the description is strengthened.
+VERDICT: ACCEPT (overall). Per part: (a) ACCEPT; (b) upper half ACCEPT; (b) lower half ACCEPT; (c) ACCEPT
+STATEMENT MATCH: yes for (a), (b) and (c), under the humans' reading of (c) relayed by the coordinator. That reading says an explicit criterion, proved in both directions, counts as determining the maximisers. The proof gives the criterion B^{k^2-2k-2}(lambda) = nu_k and proves both inclusions (9.1, 9.2) for every k>=4, with k=2,3 done by hand (7.3, 7.4).
+FIRST PROBLEM: none.
+Note: target.md itself still reads "as explicit functions of k". Under that literal wording (c) would stay MINOR, since the proof's 9.6 marks the closed list as [GAP]. This ACCEPT relies on the clarified reading, and the hand-in must state plainly that the (c) answer is a criterion.
 
 Subject: B-C3-007 (proof.md, claims.md, code/check.py). Mode GATE. Referee B-C3-016, clean-room.
 
 Re-issued under the corrected ASSUMPTIONS (head correction 16:38). Gated B-C1 may be used in both directions (brief.md, inbox/gated_B-C1.md). The proof's only external input is exactly that claim, so its C1 dependency is now inside ASSUMPTIONS. Nothing else in the review changed.
 
+Re-issued again under the humans' clarification of (c), relayed by the coordinator: a characterisation by an explicit criterion, proved in both directions, counts as the answer. Only G1, the (c) verdict, the overall verdict and the (c)-related notes were changed. I also added per-step reasons for the non-mathematical steps (8, 9.4-9.6, 10), because an ACCEPT needs them.
+
 ## 1. Checklist
 
-- G1 PASS for (a) and (b); FAIL for (c) (partial). (a) is proved for every k>=4, every r in 1..k-1 and every lambda. (b) gives F(k)=k^2-2k-1 for k>=4, D_B(2)=0 and D_B(5)=3, and notes that k=1 is vacuous. (c) is only a dynamical characterisation, not an explicit-in-k list.
+- G1 PASS. (a) is proved for every k>=4, every r in 1..k-1 and every lambda. (b) gives F(k)=k^2-2k-1 for k>=4, D_B(2)=0 and D_B(5)=3, and notes that k=1 is vacuous. (c) is an explicit criterion proved in both directions for every k>=4 (with k=2,3 by hand), which is what the clarified reading asks for.
 - G2 PASS. The one "as in 2.1(b)" (in 4.2) is followed by the explicit inequalities c_i<=tau-1-i and c_{i+1}>=tau-i, and I re-derived both. No other unexplained "clearly", "similarly" or "by symmetry".
 - G3 PASS. tau<=k is handled separately (5.1). In 5.1(ii), L=k at k=4 is done by hand through the (1^9) chain. For (b), k=1,2,3 are done by hand in 7.2-7.4. L=2 is covered in 2.1 and 2.2.
 - G4 PASS. In 2.1, L'<=L-1 strictly, so the chain in 2.2 terminates. Condition (S) is preserved by 6.2(1), which I re-derived. tau is well defined (4.1).
@@ -29,7 +31,7 @@ Re-issued under the corrected ASSUMPTIONS (head correction 16:38). Gated B-C1 ma
 - S9 PASS. In my run, within each block k=4..9 the bound is attained only at n=T_k-1. The equality analysis 9.2 forces c_{tau-k}=k-1, c_{tau-k+1..tau-3}=k, c_{tau-2}=k+1, lambda^(tau-2)=nu_k and lambda^(tau-1)=(k,...,2). I verified this for every maximiser, k=4..9.
 - S10 PASS. The proof does not use containment comparison; it uses the pattern-descent machinery (2.1, 2.2, 3.1).
 - S11 PASS. D_B(2)=0 and D_B(5)=3 (only (1^5) attains it); the formula holds from k=4. My run agrees.
-- S12 PASS. The sizes match for k=4..9 (k=10 not run). I verified that the proof's set equals S12's {lambda : B^{k^2-4k-2}(lambda)=mu_k} for k=6..9, and that B^{2k}(mu_k)=nu_k. The description is structural (dynamical). Its "explicitness" is covered under G1.
+- S12 PASS. The sizes match for k=4..9 (k=10 not run). I verified that the proof's set equals S12's {lambda : B^{k^2-4k-2}(lambda)=mu_k} for k=6..9, and that B^{2k}(mu_k)=nu_k. The description is structural (dynamical), which the clarified reading of (c) accepts.
 - S13 PASS. Griggs-Ho Thm 4.4 is not used as the proof; Lemmas 3.3-3.6, 4.3 and Prop 3.2 are re-proved.
 
 ## 2. Per-step re-derivation (why each step holds)
@@ -55,7 +57,12 @@ Re-issued under the corrected ASSUMPTIONS (head correction 16:38). Gated B-C1 ma
 - 7.1-7.4: 7.1 combines 5.1 and 6.4. I re-derived the k=2 and k=3 tables by hand; there are 7 partitions of 5.
 - 9.1: nu_k is not cyclic (first part k+1). B(nu_k)=(k,...,2)=mu(1,..,1,0), which is cyclic.
 - 9.2: at equality, tau=k^2-2k>=k+1. Case (i) is forced: for k>=5 by 5.1; for k=4, case (ii) would force X to be original or born pile 1, giving lambda in {(9),(2,1^7),(1^9)}, all with d_B<=6<7. Then p=tau-k and L=k-2. The k-1 born piles form R_tau. Summing parts gives c_{tau-1}=k-1, so lambda^(tau-1)=(k,...,2). Undoing one B step gives nu_k.
-- 9.3: follows from 7.1, 9.1 and 9.2.
+- 9.3: follows from 7.1, 9.1 and 9.2. It is the (c) answer as an explicit criterion; nu_k and m=k^2-2k-2 are explicit in k.
+- Step 8 (remark, not used): correct. 5.1 fails at k=3 because D_B(5)=3>2 (7.4, and my run).
+- 9.4 (illustration, not used): E_4 and E_5 as listed agree with my independent exhaustive run.
+- 9.5: restates 7.3 and 7.4.
+- 9.6 (scope statement): correct. No closed list is claimed, and the sizes 1,6,34,175,831,3911 match my run. Under the clarified reading the [GAP] label is a statement about scope, not a missing step; the hand-in should drop it.
+- Step 10: an accurate summary of what is established and what is sanity only.
 
 ## 3. Numerical sanity
 
@@ -88,7 +95,8 @@ No counterexample found.
 
 1. (Withdrawn after the head correction.) The use of gated B-C1 in 0.1, 4.1, 5.1(i), 6.3 and 9.1 is inside the corrected ASSUMPTIONS, so it is no longer an issue. For reference, C1 also agrees with my independent computation for n<=45.
 2. Minor wording: 4.2 B3 has a self-corrected sentence ("those are born after row tau-k... precisely"), and 4.2 says "as in 2.1(b)". Both are correct as written, but they should be tidied in the LaTeX.
-3. |E_10|=18163 (S12) was not checked; my run stopped at k=9.
+3. |E_10|=18163 (S12) was not checked; my run stopped at k=9. This is not needed by any proof step.
+4. Under the literal wording of target.md ("explicit functions of k"), (c) would be MINOR. The ACCEPT relies on the humans' clarified reading, relayed by the coordinator. The hand-in must say plainly that the (c) answer is a criterion and must drop the [GAP] label in 9.6.
 
 RAN:
 - out/cex/exhaust.py 1 9: exhaustive for all n=1..45 (ranks 1..9). COMPLETED, real 16.36 s.

@@ -4,3 +4,4 @@
 | B-C6-002 | 1 | prover | BLIND | - | - | - | 16:33 |
 | B-C6-003 | 1 | prover | BLIND | - | - | - | 16:33 |
 | B-C6-004 | 1 | prover | BLIND | - | - | - | 16:33 |
+| B-C6-005 | WAVE | prover | FRESH | - | - | - | 16:43 |
