@@ -1,0 +1,21 @@
+# Checklist: B-C2
+
+## Part G (generic; shared with every agent, blind ones included)
+- G1 The statement proved is exactly the cell's: no extra hypotheses, no weaker inequality, the full parameter range.
+- G2 Every step justified. No unexplained "clearly", "similarly", "routine", "obviously", "by symmetry".
+- G3 Base cases, edge and degenerate cases, exceptional parameter values handled.
+- G4 Every claimed invariant is preserved; every claimed decrease is strict where strictness is needed.
+- G5 Every construction works for every claimed parameter value, not only the tested ones.
+- G6 No circularity, and no citation that is the statement itself.
+- G7 Any computation is exact or interval-based, code included, under 10 minutes; a finite check proves
+     nothing beyond its range; a computer-assisted step has a written reduction to exactly the set searched.
+- G8 Cited results separated from new work, with precise references.
+- G9 The proof says what is established and what is not.
+
+## Part S (specific; referees and the gate only, NEVER shown to blind agents)
+- S1 Exact statement: a formula F(k) with D_B(T_k) = F(k) for every k >= 1 (small-k exceptions stated exactly); UPPER: d_B(lambda) <= F(k) for all lambda |- T_k; LOWER: an explicit lambda^(k) |- T_k with d_B(lambda^(k)) = F(k), proved for every k (source: target.md). The two halves are gated separately.
+- S2 Extremal configurations: unknown to the head (the statement names no maximiser). The referee must verify by exact exhaustive enumeration that the claimed witness attains F(k) and that no partition of T_k exceeds F(k), for every k with T_k <= 55 at least (k <= 10), and compare with the claimed formula.
+- S3 Cases the proof must cover: every k >= 1, including k = 1 (n = 1), k = 2 (n = 3), k = 3 (n = 6); cyclic starts (d_B = 0); partitions with many parts equal to 1 (e.g. (1^n)) and with one large part (e.g. (n)); the witness's orbit must be tracked symbolically in k, not only for tested k.
+- S4 Known traps (source: problem skill §8): transient length is the cycle-ENTRY time, not the first-repeat detection time; s counts parts before subtraction, 1-parts included; the new part s is inserted in sorted position; d_B of a cyclic start is 0; the upper bound must cover EVERY partition of T_k; a formula checked for k <= K is CONJECTURED only; any claim "delta_k is the only cyclic partition of T_k" used in the proof must be proved in the submission (C1 is not yet gated).
+- S5 Consistency (arithmetic from the definitions): C5 at k = 2 is n = 3 = T_2, so C5's value there must equal F(2) (C5 not gated: N/A for now). C1 (not yet gated) states delta_k is the unique cyclic partition of T_k; F(k) must be consistent with that (d_B(lambda) = number of shifts to reach delta_k).
+- S6 Checkable values (from the statement): B((2,1,1,1,1)) = (5,1) -> (4,2) -> (3,2,1) = delta_3 -> (3,2,1); so d_B((2,1,1,1,1)) = 3 and D_B(T_3) = D_B(6) >= 3, hence F(3) >= 3.
