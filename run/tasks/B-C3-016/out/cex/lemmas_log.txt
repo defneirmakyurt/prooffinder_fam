@@ -1,0 +1,6 @@
+L1-L3: all partitions of n=1..32: 43819 partitions, 149217 patterns, violations=0 []
+L4: k=3..12: 28664 configurations (H,pi) with (S), violations=0
+L5: k=3..40: lambda*_k cycle-entry = k^2-2k-1 and B^(k^2-2k-2)=nu_k; failures=[]
+real 1.95
+user 1.84
+sys 0.01

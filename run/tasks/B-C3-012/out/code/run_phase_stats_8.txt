@@ -1,0 +1,9 @@
+k=4: max d=7 (bound 7), max tA=4, max tB=5, max tC=5, max(d-tC)=7, max tC + max(d-tC)=12
+k=5: max d=14 (bound 14), max tA=8, max tB=9, max tC=9, max(d-tC)=14, max tC + max(d-tC)=23
+k=6: max d=23 (bound 23), max tA=15, max tB=14, max tC=15, max(d-tC)=23, max tC + max(d-tC)=38
+k=7: max d=34 (bound 34), max tA=24, max tB=20, max tC=24, max(d-tC)=34, max tC + max(d-tC)=58
+k=8: max d=47 (bound 47), max tA=35, max tB=27, max tC=35, max(d-tC)=47, max tC + max(d-tC)=82
+ALL OK
+real 22.46
+user 22.03
+sys 0.03

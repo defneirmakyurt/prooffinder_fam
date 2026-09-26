@@ -1,0 +1,40 @@
+k=2 n=2 r=1 #P=2 D_B=0 bound=-1 attained=False cyc_def==cell1:True (#cyc=2) d<=tau-1:True max(tau-1)=1 | #max=2 ext=[(2,), (1, 1)]
+k=3 n=4 r=1 #P=5 D_B=2 bound=2 attained=True cyc_def==cell1:True (#cyc=3) d<=tau-1:True max(tau-1)=3
+k=3 n=5 r=2 #P=7 D_B=3 bound=2 attained=False cyc_def==cell1:True (#cyc=3) d<=tau-1:True max(tau-1)=3 | #max=1 D==k^2-2k-1:False ext==pred(nu_k):False d(lstar)=2 parts(B^(D-2))=k+1 & B^(D-1)=nu:False ext=[(1, 1, 1, 1, 1)]
+k=4 n=7 r=1 #P=15 D_B=4 bound=7 attained=False cyc_def==cell1:True (#cyc=4) d<=tau-1:True max(tau-1)=6
+k=4 n=8 r=2 #P=22 D_B=5 bound=7 attained=False cyc_def==cell1:True (#cyc=6) d<=tau-1:True max(tau-1)=6
+k=4 n=9 r=3 #P=30 D_B=7 bound=7 attained=True cyc_def==cell1:True (#cyc=4) d<=tau-1:True max(tau-1)=7 | #max=1 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=7 parts(B^(D-2))=k+1 & B^(D-1)=nu:True ext=[(3, 2, 2, 1, 1)]
+k=5 n=11 r=1 #P=56 D_B=8 bound=14 attained=False cyc_def==cell1:True (#cyc=5) d<=tau-1:True max(tau-1)=10
+k=5 n=12 r=2 #P=77 D_B=8 bound=14 attained=False cyc_def==cell1:True (#cyc=10) d<=tau-1:True max(tau-1)=10
+k=5 n=13 r=3 #P=101 D_B=9 bound=14 attained=False cyc_def==cell1:True (#cyc=10) d<=tau-1:True max(tau-1)=10
+k=5 n=14 r=4 #P=135 D_B=14 bound=14 attained=True cyc_def==cell1:True (#cyc=5) d<=tau-1:True max(tau-1)=14 | #max=6 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=14 parts(B^(D-2))=k+1 & B^(D-1)=nu:True ext=[(4, 3, 3, 2, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 2, 2, 2, 1, 1)]
+k=6 n=16 r=1 #P=231 D_B=15 bound=23 attained=False cyc_def==cell1:True (#cyc=6) d<=tau-1:True max(tau-1)=17
+k=6 n=17 r=2 #P=297 D_B=12 bound=23 attained=False cyc_def==cell1:True (#cyc=15) d<=tau-1:True max(tau-1)=15
+k=6 n=18 r=3 #P=385 D_B=13 bound=23 attained=False cyc_def==cell1:True (#cyc=20) d<=tau-1:True max(tau-1)=15
+k=6 n=19 r=4 #P=490 D_B=16 bound=23 attained=False cyc_def==cell1:True (#cyc=15) d<=tau-1:True max(tau-1)=17
+k=6 n=20 r=5 #P=627 D_B=23 bound=23 attained=True cyc_def==cell1:True (#cyc=6) d<=tau-1:True max(tau-1)=23 | #max=34 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=23 parts(B^(D-2))=k+1 & B^(D-1)=nu:True S12 ext==pred(mu_k):True B^(2k)(mu_k)==nu_k:True
+k=7 n=22 r=1 #P=1002 D_B=24 bound=34 attained=False cyc_def==cell1:True (#cyc=7) d<=tau-1:True max(tau-1)=27
+k=7 n=23 r=2 #P=1255 D_B=18 bound=34 attained=False cyc_def==cell1:True (#cyc=21) d<=tau-1:True max(tau-1)=21
+k=7 n=24 r=3 #P=1575 D_B=18 bound=34 attained=False cyc_def==cell1:True (#cyc=35) d<=tau-1:True max(tau-1)=21
+k=7 n=25 r=4 #P=1958 D_B=19 bound=34 attained=False cyc_def==cell1:True (#cyc=35) d<=tau-1:True max(tau-1)=21
+k=7 n=26 r=5 #P=2436 D_B=26 bound=34 attained=False cyc_def==cell1:True (#cyc=21) d<=tau-1:True max(tau-1)=27
+k=7 n=27 r=6 #P=3010 D_B=34 bound=34 attained=True cyc_def==cell1:True (#cyc=7) d<=tau-1:True max(tau-1)=34 | #max=175 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=34 parts(B^(D-2))=k+1 & B^(D-1)=nu:True S12 ext==pred(mu_k):True B^(2k)(mu_k)==nu_k:True
+k=8 n=29 r=1 #P=4565 D_B=35 bound=47 attained=False cyc_def==cell1:True (#cyc=8) d<=tau-1:True max(tau-1)=39
+k=8 n=30 r=2 #P=5604 D_B=28 bound=47 attained=False cyc_def==cell1:True (#cyc=28) d<=tau-1:True max(tau-1)=31
+k=8 n=31 r=3 #P=6842 D_B=24 bound=47 attained=False cyc_def==cell1:True (#cyc=56) d<=tau-1:True max(tau-1)=28
+k=8 n=32 r=4 #P=8349 D_B=25 bound=47 attained=False cyc_def==cell1:True (#cyc=70) d<=tau-1:True max(tau-1)=28
+k=8 n=33 r=5 #P=10143 D_B=29 bound=47 attained=False cyc_def==cell1:True (#cyc=56) d<=tau-1:True max(tau-1)=31
+k=8 n=34 r=6 #P=12310 D_B=38 bound=47 attained=False cyc_def==cell1:True (#cyc=28) d<=tau-1:True max(tau-1)=39
+k=8 n=35 r=7 #P=14883 D_B=47 bound=47 attained=True cyc_def==cell1:True (#cyc=8) d<=tau-1:True max(tau-1)=47 | #max=831 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=47 parts(B^(D-2))=k+1 & B^(D-1)=nu:True S12 ext==pred(mu_k):True B^(2k)(mu_k)==nu_k:True
+k=9 n=37 r=1 #P=21637 D_B=48 bound=62 attained=False cyc_def==cell1:True (#cyc=9) d<=tau-1:True max(tau-1)=53
+k=9 n=38 r=2 #P=26015 D_B=40 bound=62 attained=False cyc_def==cell1:True (#cyc=36) d<=tau-1:True max(tau-1)=44
+k=9 n=39 r=3 #P=31185 D_B=32 bound=62 attained=False cyc_def==cell1:True (#cyc=84) d<=tau-1:True max(tau-1)=36
+k=9 n=40 r=4 #P=37338 D_B=32 bound=62 attained=False cyc_def==cell1:True (#cyc=126) d<=tau-1:True max(tau-1)=36
+k=9 n=41 r=5 #P=44583 D_B=33 bound=62 attained=False cyc_def==cell1:True (#cyc=126) d<=tau-1:True max(tau-1)=36
+k=9 n=42 r=6 #P=53174 D_B=42 bound=62 attained=False cyc_def==cell1:True (#cyc=84) d<=tau-1:True max(tau-1)=44
+k=9 n=43 r=7 #P=63261 D_B=52 bound=62 attained=False cyc_def==cell1:True (#cyc=36) d<=tau-1:True max(tau-1)=53
+k=9 n=44 r=8 #P=75175 D_B=62 bound=62 attained=True cyc_def==cell1:True (#cyc=9) d<=tau-1:True max(tau-1)=62 | #max=3911 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=62 parts(B^(D-2))=k+1 & B^(D-1)=nu:True S12 ext==pred(mu_k):True B^(2k)(mu_k)==nu_k:True
+ALL OK
+real 14.44
+user 13.52
+sys 0.09

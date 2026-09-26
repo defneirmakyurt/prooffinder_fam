@@ -7,6 +7,6 @@ k=9 n=44 M=62 #partitions=75175 |E_k|=3911 E_k==level_(M-1)(nu_k): True, all GoE
 k=10 n=54 M=79 #partitions=386155 |E_k|=18163 E_k==level_(M-1)(nu_k): True, all GoE: True
 k=11 n=65 M=98 #partitions=2012558 |E_k|=84654 E_k==level_(M-1)(nu_k): True, all GoE: True
 ALL CHECKS PASSED
-real 32.08
-user 26.94
-sys 2.87
+real 30.19
+user 26.87
+sys 1.84

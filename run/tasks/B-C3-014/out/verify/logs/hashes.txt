@@ -1,0 +1,5 @@
+proof.md: OK
+claims.md: OK
+code/README.md: OK
+code/check_c3.py: OK
+shipped copies IDENTICAL

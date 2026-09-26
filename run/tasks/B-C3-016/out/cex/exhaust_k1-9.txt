@@ -1,0 +1,49 @@
+k=1 n=1 #par=1 #cyc=1 C1match=True D_B=0
+k=2 n=2 #par=2 #cyc=2 C1match=True D_B=0 | F(k)=0 (b)ok=True |ext|=2
+k=2 n=3 #par=3 #cyc=1 C1match=True D_B=2
+k=3 n=4 #par=5 #cyc=3 C1match=True D_B=2
+k=3 n=5 #par=7 #cyc=3 C1match=True D_B=3 | F(k)=3 (b)ok=True |ext|=1 d(lstar)=2
+k=3 n=6 #par=11 #cyc=1 C1match=True D_B=6
+k=4 n=7 #par=15 #cyc=4 C1match=True D_B=4 bound=7 (a)ok=True attains=False max(tau-1)=6
+k=4 n=8 #par=22 #cyc=6 C1match=True D_B=5 bound=7 (a)ok=True attains=False max(tau-1)=6
+k=4 n=9 #par=30 #cyc=4 C1match=True D_B=7 bound=7 (a)ok=True attains=True max(tau-1)=7 | F(k)=7 (b)ok=True |ext|=1 d(lstar)=7 (c)ext==B^-m(nu)=True 9.2rows=True ext=[(3, 2, 2, 1, 1)]
+k=4 n=10 #par=42 #cyc=1 C1match=True D_B=12
+k=5 n=11 #par=56 #cyc=5 C1match=True D_B=8 bound=14 (a)ok=True attains=False max(tau-1)=10
+k=5 n=12 #par=77 #cyc=10 C1match=True D_B=8 bound=14 (a)ok=True attains=False max(tau-1)=10
+k=5 n=13 #par=101 #cyc=10 C1match=True D_B=9 bound=14 (a)ok=True attains=False max(tau-1)=10
+k=5 n=14 #par=135 #cyc=5 C1match=True D_B=14 bound=14 (a)ok=True attains=True max(tau-1)=14 | F(k)=14 (b)ok=True |ext|=6 d(lstar)=14 (c)ext==B^-m(nu)=True 9.2rows=True ext=[(4, 3, 3, 2, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 2, 2, 2, 1, 1)]
+k=5 n=15 #par=176 #cyc=1 C1match=True D_B=20
+k=6 n=16 #par=231 #cyc=6 C1match=True D_B=15 bound=23 (a)ok=True attains=False max(tau-1)=17
+k=6 n=17 #par=297 #cyc=15 C1match=True D_B=12 bound=23 (a)ok=True attains=False max(tau-1)=15
+k=6 n=18 #par=385 #cyc=20 C1match=True D_B=13 bound=23 (a)ok=True attains=False max(tau-1)=15
+k=6 n=19 #par=490 #cyc=15 C1match=True D_B=16 bound=23 (a)ok=True attains=False max(tau-1)=17
+k=6 n=20 #par=627 #cyc=6 C1match=True D_B=23 bound=23 (a)ok=True attains=True max(tau-1)=23 | F(k)=23 (b)ok=True |ext|=34 d(lstar)=23 (c)ext==B^-m(nu)=True 9.2rows=True S12alt==ext=True B^2k(mu_k)==nu_k=True
+k=6 n=21 #par=792 #cyc=1 C1match=True D_B=30
+k=7 n=22 #par=1002 #cyc=7 C1match=True D_B=24 bound=34 (a)ok=True attains=False max(tau-1)=27
+k=7 n=23 #par=1255 #cyc=21 C1match=True D_B=18 bound=34 (a)ok=True attains=False max(tau-1)=21
+k=7 n=24 #par=1575 #cyc=35 C1match=True D_B=18 bound=34 (a)ok=True attains=False max(tau-1)=21
+k=7 n=25 #par=1958 #cyc=35 C1match=True D_B=19 bound=34 (a)ok=True attains=False max(tau-1)=21
+k=7 n=26 #par=2436 #cyc=21 C1match=True D_B=26 bound=34 (a)ok=True attains=False max(tau-1)=27
+k=7 n=27 #par=3010 #cyc=7 C1match=True D_B=34 bound=34 (a)ok=True attains=True max(tau-1)=34 | F(k)=34 (b)ok=True |ext|=175 d(lstar)=34 (c)ext==B^-m(nu)=True 9.2rows=True S12alt==ext=True B^2k(mu_k)==nu_k=True
+k=7 n=28 #par=3718 #cyc=1 C1match=True D_B=42
+k=8 n=29 #par=4565 #cyc=8 C1match=True D_B=35 bound=47 (a)ok=True attains=False max(tau-1)=39
+k=8 n=30 #par=5604 #cyc=28 C1match=True D_B=28 bound=47 (a)ok=True attains=False max(tau-1)=31
+k=8 n=31 #par=6842 #cyc=56 C1match=True D_B=24 bound=47 (a)ok=True attains=False max(tau-1)=28
+k=8 n=32 #par=8349 #cyc=70 C1match=True D_B=25 bound=47 (a)ok=True attains=False max(tau-1)=28
+k=8 n=33 #par=10143 #cyc=56 C1match=True D_B=29 bound=47 (a)ok=True attains=False max(tau-1)=31
+k=8 n=34 #par=12310 #cyc=28 C1match=True D_B=38 bound=47 (a)ok=True attains=False max(tau-1)=39
+k=8 n=35 #par=14883 #cyc=8 C1match=True D_B=47 bound=47 (a)ok=True attains=True max(tau-1)=47 | F(k)=47 (b)ok=True |ext|=831 d(lstar)=47 (c)ext==B^-m(nu)=True 9.2rows=True S12alt==ext=True B^2k(mu_k)==nu_k=True
+k=8 n=36 #par=17977 #cyc=1 C1match=True D_B=56
+k=9 n=37 #par=21637 #cyc=9 C1match=True D_B=48 bound=62 (a)ok=True attains=False max(tau-1)=53
+k=9 n=38 #par=26015 #cyc=36 C1match=True D_B=40 bound=62 (a)ok=True attains=False max(tau-1)=44
+k=9 n=39 #par=31185 #cyc=84 C1match=True D_B=32 bound=62 (a)ok=True attains=False max(tau-1)=36
+k=9 n=40 #par=37338 #cyc=126 C1match=True D_B=32 bound=62 (a)ok=True attains=False max(tau-1)=36
+k=9 n=41 #par=44583 #cyc=126 C1match=True D_B=33 bound=62 (a)ok=True attains=False max(tau-1)=36
+k=9 n=42 #par=53174 #cyc=84 C1match=True D_B=42 bound=62 (a)ok=True attains=False max(tau-1)=44
+k=9 n=43 #par=63261 #cyc=36 C1match=True D_B=52 bound=62 (a)ok=True attains=False max(tau-1)=53
+k=9 n=44 #par=75175 #cyc=9 C1match=True D_B=62 bound=62 (a)ok=True attains=True max(tau-1)=62 | F(k)=62 (b)ok=True |ext|=3911 d(lstar)=62 (c)ext==B^-m(nu)=True 9.2rows=True S12alt==ext=True B^2k(mu_k)==nu_k=True
+k=9 n=45 #par=89134 #cyc=1 C1match=True D_B=72
+ALL OK
+real 16.36
+user 15.88
+sys 0.06

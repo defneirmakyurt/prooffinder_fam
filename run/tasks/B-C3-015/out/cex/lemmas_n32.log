@@ -1,0 +1,6 @@
+lemma checks n=1..32: partitions=43819 patterns=149217 failures=0
+6.1/6.2 random tests k=3..14: tested=11163 failures=0
+witness lambda*_k, k=3..40: d_B=k^2-2k-1 and B^(k^2-2k-2)=nu_k: failures=0
+real 18.01
+user 16.27
+sys 0.16

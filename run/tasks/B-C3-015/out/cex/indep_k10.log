@@ -1,0 +1,13 @@
+k=10 n=46 r=1 #P=105558 D_B=63 bound=79 attained=False cyc_def==cell1:True (#cyc=10) d<=tau-1:True max(tau-1)=69
+k=10 n=47 r=2 #P=124754 D_B=54 bound=79 attained=False cyc_def==cell1:True (#cyc=45) d<=tau-1:True max(tau-1)=59
+k=10 n=48 r=3 #P=147273 D_B=45 bound=79 attained=False cyc_def==cell1:True (#cyc=120) d<=tau-1:True max(tau-1)=49
+k=10 n=49 r=4 #P=173525 D_B=40 bound=79 attained=False cyc_def==cell1:True (#cyc=210) d<=tau-1:True max(tau-1)=45
+k=10 n=50 r=5 #P=204226 D_B=41 bound=79 attained=False cyc_def==cell1:True (#cyc=252) d<=tau-1:True max(tau-1)=45
+k=10 n=51 r=6 #P=239943 D_B=46 bound=79 attained=False cyc_def==cell1:True (#cyc=210) d<=tau-1:True max(tau-1)=49
+k=10 n=52 r=7 #P=281589 D_B=57 bound=79 attained=False cyc_def==cell1:True (#cyc=120) d<=tau-1:True max(tau-1)=59
+k=10 n=53 r=8 #P=329931 D_B=68 bound=79 attained=False cyc_def==cell1:True (#cyc=45) d<=tau-1:True max(tau-1)=69
+k=10 n=54 r=9 #P=386155 D_B=79 bound=79 attained=True cyc_def==cell1:True (#cyc=10) d<=tau-1:True max(tau-1)=79 | #max=18163 D==k^2-2k-1:True ext==pred(nu_k):True d(lstar)=79 parts(B^(D-2))=k+1 & B^(D-1)=nu:True S12 ext==pred(mu_k):True B^(2k)(mu_k)==nu_k:True
+ALL OK
+real 120.85
+user 115.32
+sys 1.11

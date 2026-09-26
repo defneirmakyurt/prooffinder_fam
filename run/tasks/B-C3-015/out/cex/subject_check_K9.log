@@ -4,7 +4,7 @@ k=4 n=9 D_B=7 max(tau-1)=7 bound=7 | T_k-1: extremal=1 pred(nu_k)=1 equal=True d
 k=5 n=11 D_B=8 max(tau-1)=10 bound=14
 k=5 n=12 D_B=8 max(tau-1)=10 bound=14
 k=5 n=13 D_B=9 max(tau-1)=10 bound=14
-k=5 n=14 D_B=14 max(tau-1)=14 bound=14 | T_k-1: extremal=6 pred(nu_k)=6 equal=True d(lstar)=14
+k=5 n=14 D_B=14 max(tau-1)=14 bound=14 | T_k-1: extremal=6 pred(nu_k)=6 equal=True d(lstar)=14 ext=[(4, 3, 3, 2, 1, 1), (4, 3, 2, 2, 2, 1), (4, 3, 2, 2, 1, 1, 1), (3, 3, 3, 2, 2, 1), (3, 3, 3, 2, 1, 1, 1), (3, 3, 2, 2, 2, 1, 1)]
 k=6 n=16 D_B=15 max(tau-1)=17 bound=23
 k=6 n=17 D_B=12 max(tau-1)=15 bound=23
 k=6 n=18 D_B=13 max(tau-1)=15 bound=23
@@ -32,6 +32,6 @@ k=9 n=42 D_B=42 max(tau-1)=44 bound=62
 k=9 n=43 D_B=52 max(tau-1)=53 bound=62
 k=9 n=44 D_B=62 max(tau-1)=62 bound=62 | T_k-1: extremal=3911 pred(nu_k)=3911 equal=True d(lstar)=62
 ALL OK
-real 17.09
-user 16.65
+real 19.03
+user 18.36
 sys 0.06
