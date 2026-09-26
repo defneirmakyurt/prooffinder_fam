@@ -133,3 +133,28 @@ Lower cells are the way in: they validate the checker, the search methods and an
 ## 10. Run notes
 
 This skill is frozen during the run; the head doesn't edit it. New pitfalls, clarifications and problem-specific lessons go to `run/H/lessons.md`, which is copied into briefs for problem H only.
+
+## 11. Checklist Part S seeds and branch notes
+
+Part S seeds (from the statement only; referees and gate only):
+- **S2 extremal values.**
+  - C1–C4, C6: the statement gives no values, so the optimum is "unknown".
+  - C5: the organisers' bounds are \(2368\le U(Q_9)\le 2400\), with the lower bound unpublished.
+- **S3 cases to cover.**
+  - Lone valleys count as paths.
+  - Paths are counted as sequences.
+  - Labels are a bijection onto \(1..2^d\).
+  - C1 and C4 each need both values.
+  - An exact value needs both halves: an attaining labelling and a lower bound over **all** labellings.
+- **S5 consistency.**
+  - Every value handed in must equal the checker's count on the submitted labelling.
+  - A lower-bound argument claimed for general \(d\) must agree with every verified small value.
+- **S6 checkable instances:** the checker's hand-computed \(Q_1\), \(Q_2\) cases, once the checker-builders have produced them.
+
+Branch notes (angles, each only into its own 2B lens):
+- ALGEBRAIC (angle): the automorphism group of \(Q_d\) (order \(2^d d!\)), for symmetry breaking or symmetric labellings.
+- TOPOLOGICAL (angle): the labelling as a discrete Morse-like function; valleys as local minima.
+- ANALYSIS (angle): averaging or probabilistic bounds over random labellings.
+- NUMBER-THEORY (angle): Hamming weight and parity classes of \(\{0,1\}^d\).
+- DISCRETE (angle): a labelling as an acyclic orientation or linear extension; the recursion \(Q_d=Q_{d-1}\times K_2\).
+- COMPUTATIONAL (angle, searchers): SAT/ILP for small \(d\), annealing, exhaustive search with proved symmetry breaking.
