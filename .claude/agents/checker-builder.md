@@ -3,6 +3,7 @@ name: checker-builder
 description: Proof Pursuit worker (clean-room). The head dispatches two of these independently, before any searcher, to write a small exact stdlib-only checker for a computational cell from the statement alone, with tests. Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: inherit
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:

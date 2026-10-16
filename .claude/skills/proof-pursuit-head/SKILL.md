@@ -270,6 +270,11 @@ Workers can't read skills; they see only what you copy into their brief. Once a 
 
 Dispatch workers with your subagent tool (Agent in Claude Code), using `subagent_type` = the role name, several in one message so they run in parallel.
 
+**Models and effort.** Each role's model and effort are set in its agent file (`model:` and `effort:`; the table is in README §4). Your own session runs on the project default from `.claude/settings.json`: `best` at `high`. Every role except the Scribe inherits your model.
+- Don't override a role's model or effort per dispatch, with one exception: on T3 cells you may raise a Prover or Breaker to `max` effort, where your subagent tool offers an effort parameter.
+- Never lower a Referee, Checker-builder or Auditor below its file's setting. That weakens the gate.
+- The Scribe runs on Sonnet to save tokens; the Auditor checks every citation it writes. If Scribe reports fail the audit more than once on the same cell, tell the humans, so they can set the Scribe back to `model: inherit`.
+
 Before dispatching, create the task with `scripts/pp.py task --phase <phase>`. It:
 - sets the role, regime and mode;
 - writes `run/tasks/<task-id>/brief.md`;
@@ -429,7 +434,7 @@ Formats are in `references/briefs-and-ledger.md`.
 
 - Prove or search yourself, beyond the checks the gate requires; edit a worker's files.
 - Feed later-phase information into blind agents, or show Part S to anyone but referees.
-- Edit `.claude/agents/`, your own skill, or a problem skill; weaken verification through a lesson.
+- Edit `.claude/agents/`, your own skill, or a problem skill; weaken verification through a lesson, or by lowering a gate role's model or effort.
 - Call a result new; write "not found in <sources searched>".
 - Forward one worker's output to another except through a regime above, a verified library entry, or a card's ANGLE chosen with `pp.py choose` for a FRESH brief.
 - Tell a referee who wrote the proof or how confident anyone is.

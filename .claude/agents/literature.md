@@ -3,6 +3,7 @@ name: literature
 description: Proof Pursuit worker, the only one with web access. SOLVE mode (Phase 1L) — maps the literature for one cell, attempts it with known techniques, and compares with the blind results (divergence, never merged). ANALYST mode (Phase 3) — for a cell not solved, maps what is known, reduces the cell to sub-problems, attempts the reachable ones, and explains precisely why the cell can't be solved now. Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Glob, Grep, Bash, WebSearch, WebFetch
 model: inherit
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:
