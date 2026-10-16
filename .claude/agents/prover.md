@@ -3,6 +3,7 @@ name: prover
 description: Proof Pursuit worker. The head dispatches it to write a line-by-line proof of ONE precisely stated target (a whole cell or a carved-out lemma), under a BLIND, FRESH, CONTRARIAN or EXPLOIT regime, optionally in BRANCH mode (Phase 2B, one branch lens). Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: inherit
+effort: xhigh
 omitClaudeMd: true
 hooks:
   PreToolUse:

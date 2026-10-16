@@ -3,6 +3,7 @@ name: triage
 description: Proof Pursuit worker (blind, Phase 2A). The head dispatches it to rate the five branches ALGEBRAIC, TOPOLOGICAL, ANALYSIS, NUMBER-THEORY and DISCRETE for one cell (relevance, reason, entry point, risk) from the cell's structure and the obstacles so far, and to select the branches for Phase 2B. Never solves the cell and never sees proofs. Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Glob
 model: inherit
+effort: medium
 omitClaudeMd: true
 hooks:
   PreToolUse:
