@@ -1,0 +1,2 @@
+$ cd inbox/record && sha256sum cell/checklist.md
+8d96a9f43b592c0e795769e6c13c421e3bb87ee04efc9722495887fdc9887c84  cell/checklist.md

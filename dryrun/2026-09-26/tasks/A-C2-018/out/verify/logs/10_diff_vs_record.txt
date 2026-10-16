@@ -1,0 +1,9 @@
+# diff of rerun stdout (timing and header lines removed) vs the saved logs in the record
+--- 07_A-C2-006_search.txt vs A-C2-006/out/cex/log.txt
+NO DIFFERENCE
+--- 08_A-C2-013_search.txt vs A-C2-013/out/cex/log_search.txt
+NO DIFFERENCE
+--- 09_A-C2-012_gram_search.txt vs A-C2-012/out/cex/log.txt
+NO DIFFERENCE
+--- 06_A-C2-002_sanity_lemma.txt vs A-C2-013/out/cex/log_subject_sanity.txt
+NO DIFFERENCE

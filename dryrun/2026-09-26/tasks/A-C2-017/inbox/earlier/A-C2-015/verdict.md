@@ -1,0 +1,3 @@
+ADVERSARY VERDICT: PROOF-ROUTE-FOUND
+
+The contrapositive attack closes: if sum arcsin|<x_i,x_{i+1}>| < pi/2 then, because x_k is orthogonal to x_1..x_{k-2}, the angle beta_k between x_k and span(x_1..x_{k-1}) obeys the exact recursion sin beta_k = sin phi_{k-1}/cos beta_{k-1}, and the identity cos(a)sin(a+p) - sin(p) = sin(a)cos(a+p) >= 0 gives beta_k <= phi_1+...+phi_{k-1} < pi/2 by induction; so all Gram-Schmidt residuals are nonzero and x_1..x_m are independent, impossible in R^(m-1). Full numbered proof in out/proof.md (no computation needed). The counterexample search (m up to 60 structured, m <= 12 random, m <= 10 local search) found only the equality set (margin 0; the m = 3 equality set is a whole curve, so the optimum is not strict), consistent with the proof.
