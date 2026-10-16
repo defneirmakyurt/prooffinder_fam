@@ -1,0 +1,23 @@
+Step5 identity residual simplifies to: 0
+random chains tested: 2800  m in 2..8
+min margin (bound - chain sum): -1.4657442e-47 at m = 3
+max error in Step-4 reduction identities: 9.7133e-25
+min (a_{m-2}+a_{m-1}-a') when sum<pi/2: -8.6517394e-48
+local search m=3: min margin found -9.271285e-27
+local search m=4: min margin found 1.1651119e-5
+local search m=5: min margin found 0.0011349925
+local search m=6: min margin found 0.016680056
+m=2 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=3 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=4 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=5 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=6 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=7 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)
+m=8 equality tuple: chain sum - bound = 0.0 ; A-pi/2 = 0.0
+   R^m trap: standard basis e_1..e_m chain sum - bound = 1.5708 (>0 shows dim hypothesis needed)

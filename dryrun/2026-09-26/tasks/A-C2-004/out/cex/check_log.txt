@@ -1,0 +1,11 @@
+recurrence (2) matches det for all leading minors, m=2..9: OK
+identity (a) residual: 0 ; identity (b) residual: 0
+lemma: min lhs-rhs over 20000 samples: -1.7272e-77
+admissible random chains tested: 32942 flagged (slack<1e-40): 9439 min slack sum(phi)-pi/2: -1.2511e-69
+flagged cases re-evaluated at 2048 bits: violations (<-1e-300): 0 ; max |slack| among flagged at 2048 bits: 6.2731e-609 (i.e. exact equality cases)
+equality tuple: hypotheses hold and chain sum = (m-2)pi/2 exactly, m=2..11: OK
+hill-climb max chain sum vs bound (float, exploratory): {3: (1.570796327, 1.570796327), 4: (3.141592654, 3.141592654), 5: (4.71238898, 4.71238898), 6: (6.283185307, 6.283185307), 7: (7.853981634, 7.853981634), 8: (9.424777961, 9.424777961)}
+
+real	0m26.080s
+user	0m25.821s
+sys	0m0.040s
