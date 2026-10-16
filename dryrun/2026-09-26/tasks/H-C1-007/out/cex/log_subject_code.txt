@@ -1,0 +1,32 @@
+=== run uphill.py Q3 ===
+../Q3.txt d=3 uphill_paths=14 (recurrence) =14 (explicit enumeration) valleys=1 local_maxima=2
+real 0.03
+user 0.01
+sys 0.00
+=== run uphill.py Q4 ===
+../Q4.txt d=4 uphill_paths=34 (recurrence) =34 (explicit enumeration) valleys=2 local_maxima=6
+real 0.02
+user 0.01
+sys 0.00
+=== run q3_exhaustive.py ===
+labellings examined: 40320
+min uphill paths over ALL 8! labellings of Q_3 = 14
+value distribution (lowest 6): [(14, 7104), (16, 14112), (17, 6720), (18, 4704), (19, 576), (20, 3648)]
+real 0.13
+user 0.11
+sys 0.00
+=== run identity_check.py ===
+d = 2 : 2000 random labellings, I1 and I2 hold
+d = 3 : 2000 random labellings, I1 and I2 hold
+d = 4 : 2000 random labellings, I1 and I2 hold
+d = 5 : 2000 random labellings, I1 and I2 hold
+d = 3 : all 8! = 40320 labellings, I1 and I2 hold
+real 1.12
+user 0.72
+sys 0.05
+=== run q4_upper.py 4 34 ===
+d = 4 best found: 34 (seeds used: 1 )
+order: ['1010', '0111', '0101', '1011', '1000', '0010', '0001', '0011', '1101', '1110', '1001', '0100', '0000', '0110', '1111', '1100']
+real 0.04
+user 0.02
+sys 0.01

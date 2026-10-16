@@ -1,0 +1,33 @@
+A Step4 float sanity: 200000 random (a,b) in [-10,10]^2, max |arccos|cos(a-b)| - rho(a-b)| = 1.997e-12 (tol 1e-9) OK
+B Step7 exact: all theta = k/D in [0,1/2], D=1..60 (960 values), failures = 0
+C Step8 exact: 3000 random rational (x,y) in [-3,3]^2, den<=97, failures = 0
+D Steps10-11 exact: 1500 random rational configs N=0..14 (30% with forced repeat), identity failures = 0, bound violations = 0
+E Step9: N=0..300, k=-20..N+20, failures = 0
+G exhaustive grid D=12 N=0: max S/pi = 0, bound = 0, <=, eq=True
+G exhaustive grid D=12 N=1: max S/pi = 0, bound = 0, <=, eq=True
+G exhaustive grid D=12 N=2: max S/pi = 1/2, bound = 1/2, <=, eq=True
+G exhaustive grid D=12 N=3: max S/pi = 1, bound = 1, <=, eq=True
+G exhaustive grid D=12 N=4: max S/pi = 2, bound = 2, <=, eq=True
+G exhaustive grid D=12 N=5: max S/pi = 3, bound = 3, <=, eq=True
+G exhaustive grid D=12 N=6: max S/pi = 9/2, bound = 9/2, <=, eq=True
+G exhaustive grid D=12 N=7: max S/pi = 6, bound = 6, <=, eq=True
+G exhaustive grid D=12 N=8: max S/pi = 8, bound = 8, <=, eq=True
+F local search N=2: best float S/pi = 0.499999996850, bound = 0.5, exact S/pi at rational rounding = 0.499999996860, exact <= bound: True
+F local search N=3: best float S/pi = 1.000000000000, bound = 1.0, exact S/pi at rational rounding = 1.000000000000, exact <= bound: True
+F local search N=4: best float S/pi = 1.999999996850, bound = 2.0, exact S/pi at rational rounding = 1.999999996857, exact <= bound: True
+F local search N=5: best float S/pi = 3.000000000000, bound = 3.0, exact S/pi at rational rounding = 3.000000000000, exact <= bound: True
+F local search N=6: best float S/pi = 4.499999979991, bound = 4.5, exact S/pi at rational rounding = 4.499999979988, exact <= bound: True
+F local search N=7: best float S/pi = 6.000000000000, bound = 6.0, exact S/pi at rational rounding = 6.000000000000, exact <= bound: True
+F local search N=8: best float S/pi = 7.999999956284, bound = 8.0, exact S/pi at rational rounding = 7.999999956286, exact <= bound: True
+F local search N=9: best float S/pi = 10.000000000000, bound = 10.0, exact S/pi at rational rounding = 10.000000000000, exact <= bound: True
+F local search N=10: best float S/pi = 12.499999912647, bound = 12.5, exact S/pi at rational rounding = 12.499999912647, exact <= bound: True
+F local search N=11: best float S/pi = 15.000000000000, bound = 15.0, exact S/pi at rational rounding = 15.000000000000, exact <= bound: True
+F local search N=12: best float S/pi = 17.999999921307, bound = 18.0, exact S/pi at rational rounding = 17.999999921366, exact <= bound: True
+H equality: balanced split (floor(N/2) on c, ceil(N/2) on c+1/2), N=1..30, random rational rotation c; S == bound and int k(N-k) == floor(N^2/4) exactly; failures = 0
+S6 N=2: S/pi = 1/2 (expected 1/2) OK
+S6 N=3: S/pi = 1 (expected 1) OK
+S6 N=4: S/pi = 2 (expected 2) OK
+S6 N=5: S/pi = 3 (expected 3) OK
+real 13.36
+user 12.60
+sys 0.12

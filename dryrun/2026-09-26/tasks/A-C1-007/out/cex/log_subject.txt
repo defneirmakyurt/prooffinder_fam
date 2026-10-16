@@ -1,0 +1,14 @@
+check1 (rho(z)+rho(z-1/2)=1/2): 48 values, failures=0
+check2 (cut identity): 2304 pairs, failures=0
+check3 N=0: grid max S/pi = 0, bound = 0, OK
+check3 N=1: grid max S/pi = 0, bound = 0, OK
+check3 N=2: grid max S/pi = 1/2, bound = 1/2, OK
+check3 N=3: grid max S/pi = 1, bound = 1, OK
+check3 N=4: grid max S/pi = 2, bound = 2, OK
+check3 N=5: grid max S/pi = 3, bound = 3, OK
+check3 N=6: grid max S/pi = 9/2, bound = 9/2, OK
+check3 N=7: grid max S/pi = 6, bound = 6, OK
+ALL OK
+real 0.37
+user 0.33
+sys 0.01

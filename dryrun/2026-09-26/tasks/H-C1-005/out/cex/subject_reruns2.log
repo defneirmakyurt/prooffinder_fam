@@ -1,0 +1,30 @@
+### crosscheck sweep 3 16
+T=1   NONE BELOW 1
+T=2   NONE BELOW 2
+T=3   NONE BELOW 3
+T=4   NONE BELOW 4
+T=5   NONE BELOW 5
+T=6   NONE BELOW 6
+T=7   NONE BELOW 7
+T=8   NONE BELOW 8
+T=9   NONE BELOW 9
+T=10  NONE BELOW 10
+T=11  NONE BELOW 11
+T=12  NONE BELOW 12
+T=13  NONE BELOW 13
+T=14  NONE BELOW 14
+T=15  FOUND 14
+T=16  FOUND 14
+real 0.48
+user 0.32
+sys 0.11
+### crosscheck counter 3 300
+d=3 trials=300 mismatches=0
+real 10.20
+user 7.12
+sys 2.23
+### crosscheck counter 4 300
+d=4 trials=300 mismatches=0
+real 12.50
+user 7.99
+sys 2.69

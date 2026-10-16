@@ -1,0 +1,4 @@
+S5: N=0..10000, failures = 0
+real 0.12
+user 0.02
+sys 0.01

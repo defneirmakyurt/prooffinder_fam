@@ -8,6 +8,7 @@ their Bash writes only into out/cex/). run/ outside the task, .claude/ and
 dryrun/ are always off limits. Bash is checked by scanning the command for
 path-like tokens, which is best effort only.
 """
+import datetime as dt
 import json
 import os
 import re
@@ -19,9 +20,24 @@ RUN = os.path.join(PROJECT, "run")
 TASKS = os.path.join(RUN, "tasks")
 FORBIDDEN_ROOTS = [os.path.join(PROJECT, ".claude"), os.path.join(PROJECT, "dryrun")]
 BIND_DIR = os.path.join(RUN, ".guard")
+GUARD_LOG = os.path.join(RUN, "guard.log")
+CONTEXT = {}
+
+
+def log_deny(reason):
+    """Append-only isolation audit trail: the head cannot read worker transcripts,
+    so a denial leaves no evidence anywhere else."""
+    try:
+        os.makedirs(RUN, exist_ok=True)
+        with open(GUARD_LOG, "a") as fh:
+            fh.write(json.dumps({"at": dt.datetime.now().isoformat(timespec="seconds"),
+                                 "reason": reason, **CONTEXT}) + "\n")
+    except OSError:
+        pass
 
 
 def deny(reason):
+    log_deny(reason)
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
         "permissionDecision": "deny",
@@ -181,6 +197,9 @@ def main():
     cwd = data.get("cwd") or PROJECT
     tool = data.get("tool_name", "")
     ti = data.get("tool_input") or {}
+    CONTEXT.update({"task": bound_task(agent_id), "agent_type": agent_type or "?", "tool": tool,
+                    "target": ti.get("file_path") or ti.get("notebook_path")
+                    or ti.get("command") or ti.get("pattern") or ""})
 
     if tool in ("Read", "NotebookRead"):
         check(resolve(ti.get("file_path", ""), cwd), False, agent_id, agent_type)
@@ -196,7 +215,7 @@ def main():
         check(root, False, agent_id, agent_type)
     elif tool == "Bash":
         cmd = ti.get("command", "")
-        if agent_type == "referee":
+        if agent_type in ("referee", "auditor"):
             for target, steps in bash_write_targets(cmd):
                 base = cwd
                 for step in steps:

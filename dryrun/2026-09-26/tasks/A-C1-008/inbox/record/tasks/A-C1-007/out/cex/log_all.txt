@@ -1,0 +1,66 @@
+P1 step0.5 k(N-k)<=floor(N^2/4): N in 0..120, k in -60..60, failures=0
+P2 B1/0.3 identities: 20000 random rationals, failures=0
+P3 B2 removal identity: 3000 random configs N in 2..9, failures=0
+P4 A2 cut identity: 1500 random pairs, failures=0; A3/A4 S=(1/2)int k(N-k): 1500 random configs N in 0..10, failures=0; bound violations=0
+P5 D=12 N=0: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=1: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=2: grid max S/pi = 1/2, bound = 1/2, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=3: grid max S/pi = 1, bound = 1, OK; maximisers attaining bound=27 (perp-free=10), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=4: grid max S/pi = 2, bound = 2, OK; maximisers attaining bound=6 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=5: grid max S/pi = 3, bound = 3, OK; maximisers attaining bound=182 (perp-free=5), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=6: grid max S/pi = 9/2, bound = 9/2, OK; maximisers attaining bound=21 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=7: grid max S/pi = 6, bound = 6, OK; maximisers attaining bound=714 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=8: grid max S/pi = 8, bound = 8, OK; maximisers attaining bound=56 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=9: grid max S/pi = 10, bound = 10, OK; maximisers attaining bound=2079 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=12 N=10: grid max S/pi = 25/2, bound = 25/2, OK; maximisers attaining bound=126 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=0: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=1: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=2: grid max S/pi = 3/7, bound = 1/2, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=3: grid max S/pi = 1, bound = 1, OK; maximisers attaining bound=6 (perp-free=6), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=4: grid max S/pi = 13/7, bound = 2, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=5: grid max S/pi = 3, bound = 3, OK; maximisers attaining bound=5 (perp-free=5), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=6: grid max S/pi = 30/7, bound = 9/2, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=7: grid max S/pi = 6, bound = 6, OK; maximisers attaining bound=1 (perp-free=1), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=8: grid max S/pi = 54/7, bound = 8, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=9: grid max S/pi = 69/7, bound = 10, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=10: grid max S/pi = 85/7, bound = 25/2, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=11: grid max S/pi = 103/7, bound = 15, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=7 N=12: grid max S/pi = 123/7, bound = 18, OK; maximisers attaining bound=0 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=0: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=1: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=2: grid max S/pi = 1/2, bound = 1/2, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=3: grid max S/pi = 1, bound = 1, OK; maximisers attaining bound=20 (perp-free=6), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=4: grid max S/pi = 2, bound = 2, OK; maximisers attaining bound=5 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=5: grid max S/pi = 3, bound = 3, OK; maximisers attaining bound=105 (perp-free=1), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=6: grid max S/pi = 9/2, bound = 9/2, OK; maximisers attaining bound=15 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=7: grid max S/pi = 6, bound = 6, OK; maximisers attaining bound=336 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=8: grid max S/pi = 8, bound = 8, OK; maximisers attaining bound=35 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=9: grid max S/pi = 10, bound = 10, OK; maximisers attaining bound=825 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=10 N=10: grid max S/pi = 25/2, bound = 25/2, OK; maximisers attaining bound=70 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=0: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=1: grid max S/pi = 0, bound = 0, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=2: grid max S/pi = 1/2, bound = 1/2, OK; maximisers attaining bound=1 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=3: grid max S/pi = 1, bound = 1, OK; maximisers attaining bound=90 (perp-free=55), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=4: grid max S/pi = 2, bound = 2, OK; maximisers attaining bound=12 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=5: grid max S/pi = 3, bound = 3, OK; maximisers attaining bound=1729 (perp-free=330), B4 failures=0, B5 failures=0, even-N perp-free=0
+P5 D=24 N=6: grid max S/pi = 9/2, bound = 9/2, OK; maximisers attaining bound=78 (perp-free=0), B4 failures=0, B5 failures=0, even-N perp-free=0
+P6 float N=2: best found S/pi = 0.499999999981, bound = 0.5, excess = -1.889e-11
+P6 float N=3: best found S/pi = 1.000000000000, bound = 1.0, excess = 0.000e+00
+P6 float N=4: best found S/pi = 1.999999999964, bound = 2.0, excess = -3.558e-11
+P6 float N=5: best found S/pi = 3.000000000000, bound = 3.0, excess = 4.441e-16
+P6 float N=6: best found S/pi = 4.499999999826, bound = 4.5, excess = -1.738e-10
+P6 float N=7: best found S/pi = 6.000000000000, bound = 6.0, excess = 1.776e-15
+P6 float N=8: best found S/pi = 7.999999999147, bound = 8.0, excess = -8.531e-10
+P6 float N=9: best found S/pi = 10.000000000000, bound = 10.0, excess = 3.553e-15
+P6 float N=10: best found S/pi = 12.499999999476, bound = 12.5, excess = -5.244e-10
+P6 float N=11: best found S/pi = 15.000000000000, bound = 15.0, excess = 5.329e-15
+P6 float N=12: best found S/pi = 17.999999998742, bound = 18.0, excess = -1.258e-09
+P6 float N=13: best found S/pi = 21.000000000000, bound = 21.0, excess = 1.421e-14
+P6 float N=14: best found S/pi = 24.499999998358, bound = 24.5, excess = -1.642e-09
+P6 float N=15: best found S/pi = 28.000000000000, bound = 28.0, excess = 2.132e-14
+P6 float N=16: best found S/pi = 31.999999997904, bound = 32.0, excess = -2.096e-09
+P6 max excess over bound (float, exploratory) = 2.132e-14
+RESULTS: {'P1': True, 'P2': True, 'P3': True, 'P4': True, 'P5': True, 'P6': True} ALL OK
+real 6.12
+user 6.00
+sys 0.01

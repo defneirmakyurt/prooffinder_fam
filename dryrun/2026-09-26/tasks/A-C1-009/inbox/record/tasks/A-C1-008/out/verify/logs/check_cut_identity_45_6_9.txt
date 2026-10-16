@@ -1,0 +1,12 @@
+check1: grid D=45, pairs=2025, failures=0
+check2: N=0, grid D2=9, max S (units of pi) = 0, bound = 0, equal = True
+check2: N=1, grid D2=9, max S (units of pi) = 0, bound = 0, equal = True
+check2: N=2, grid D2=9, max S (units of pi) = 4/9, bound = 1/2, equal = False
+check2: N=3, grid D2=9, max S (units of pi) = 1, bound = 1, equal = True
+check2: N=4, grid D2=9, max S (units of pi) = 17/9, bound = 2, equal = False
+check2: N=5, grid D2=9, max S (units of pi) = 3, bound = 3, equal = True
+check2: N=6, grid D2=9, max S (units of pi) = 13/3, bound = 9/2, equal = False
+ALL OK
+real 0.45
+user 0.31
+sys 0.01

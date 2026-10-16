@@ -1,0 +1,1 @@
+checker/verify.py = run/tasks/H-C1-002/out/verify.py (ground truth); second checker run/tasks/H-C1-001/out/verify.py = crosstest/verify_b.py; crosstest 208 cases, 0 disagreements (crosstest/crosstest.log)
