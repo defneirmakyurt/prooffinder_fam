@@ -1,0 +1,6 @@
+chains tested: 30000  max(sum theta - (m-2)pi/2) = 4.776179451937423e-13
+trig lemma grid violations: 0
+
+real	0m5.932s
+user	0m5.865s
+sys	0m0.004s

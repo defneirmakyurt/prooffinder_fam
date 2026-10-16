@@ -1,0 +1,2 @@
+$ cd inbox/record && cmp cell/accepted/proof.md tasks/A-C2-002/out/proof.md && cmp cell/accepted/claims.md tasks/A-C2-002/out/claims.md && echo IDENTICAL
+IDENTICAL

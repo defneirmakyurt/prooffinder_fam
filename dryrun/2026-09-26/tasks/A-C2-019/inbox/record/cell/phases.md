@@ -1,0 +1,19 @@
+| Task | Phase | Role | Regime | Mode | Branch | Subject | Created |
+|------|-------|------|--------|------|--------|---------|---------|
+| A-C2-001 | 1 | prover | BLIND | - | - | - | 12:21 |
+| A-C2-002 | 1 | prover | BLIND | - | - | - | 12:21 |
+| A-C2-003 | 1L | literature | LITERATURE | SOLVE | - | - | 12:23 |
+| A-C2-004 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C2-001 | 12:23 |
+| A-C2-005 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C2-002 | 12:23 |
+| A-C2-006 | GATE | referee | CLEAN-ROOM | GATE | - | A-C2-002 | 12:25 |
+| A-C2-007 | 2A | triage | BLIND | - | - | - | 12:27 |
+| A-C2-008 | 2A | triage | BLIND | - | - | - | 12:27 |
+| A-C2-009 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C2-003 | 12:27 |
+| A-C2-010 | 2B | prover | BLIND | BRANCH | ALGEBRAIC | - | 12:28 |
+| A-C2-011 | 2B | prover | BLIND | BRANCH | ANALYSIS | - | 12:28 |
+| A-C2-012 | 2B-XV | referee | CLEAN-ROOM | CROSS | ALGEBRAIC | A-C2-002 | 12:29 |
+| A-C2-013 | 2B-XV | referee | CLEAN-ROOM | CROSS | ANALYSIS | A-C2-002 | 12:29 |
+| A-C2-014 | 2 | referee | CLEAN-ROOM | VERIFY | - | A-C2-011 | 12:32 |
+| A-C2-015 | 2C | breaker | BLIND | ADVERSARY | - | - | 12:32 |
+| A-C2-016 | 2B-XV | referee | CLEAN-ROOM | CROSS | ALGEBRAIC | A-C2-011 | 12:34 |
+| A-C2-017 | 3 | literature | LITERATURE | ANALYST | - | - | 12:44 |

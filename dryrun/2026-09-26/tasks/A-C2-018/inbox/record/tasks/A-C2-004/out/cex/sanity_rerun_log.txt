@@ -1,0 +1,5 @@
+trials 200000 min of D_k - cos^2(psi_{k-1}) D_{k-1}: -2.220446049250313e-16
+
+real	0m1.153s
+user	0m1.141s
+sys	0m0.004s

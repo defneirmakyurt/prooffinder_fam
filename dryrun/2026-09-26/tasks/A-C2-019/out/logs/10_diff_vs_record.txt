@@ -1,0 +1,20 @@
+# diff of my rerun stdout (header/timing lines removed) vs record logs and vs A-C2-018's rerun logs
+--- 07_A-C2-006_search.txt vs tasks/A-C2-006/out/cex/log.txt
+NO DIFFERENCE
+--- 08_A-C2-013_search.txt vs tasks/A-C2-013/out/cex/log_search.txt
+3a4
+> 
+--- 09_A-C2-012_gram_search.txt vs tasks/A-C2-012/out/cex/log.txt
+27a28
+> 
+--- 06_sanity_lemma.txt vs tasks/A-C2-013/out/cex/log_subject_sanity.txt
+1a2
+> 
+--- 06_sanity_lemma.txt vs A-C2-018 06_A-C2-002_sanity_lemma.txt
+NO DIFFERENCE
+--- 07_A-C2-006_search.txt vs A-C2-018 07_A-C2-006_search.txt
+NO DIFFERENCE
+--- 08_A-C2-013_search.txt vs A-C2-018 08_A-C2-013_search.txt
+NO DIFFERENCE
+--- 09_A-C2-012_gram_search.txt vs A-C2-018 09_A-C2-012_gram_search.txt
+NO DIFFERENCE
