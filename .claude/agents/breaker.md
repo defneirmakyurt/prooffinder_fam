@@ -3,6 +3,7 @@ name: breaker
 description: Proof Pursuit worker. The head dispatches it to try to refute a target statement or intermediate lemma (random instances, optimisation of the violation, structured families) before provers invest in it, or as a standing lineage on prove-or-disprove cells, under a BLIND, FRESH or CONTRARIAN regime; in ADVERSARY mode (Phase 2C) it runs the contrapositive, counterexample search, local analysis and minimal failing sub-lemma tasks. Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: inherit
+effort: xhigh
 omitClaudeMd: true
 hooks:
   PreToolUse:

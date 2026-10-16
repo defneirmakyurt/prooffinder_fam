@@ -372,20 +372,30 @@ How the four problems map onto these types:
 
 ## 4. Roles
 
-| Role | Job | Tools |
-|---|---|---|
-| Prover | Line-by-line proof (blind, branch lens, repair, angle waves) | Read, Write, Edit, Glob, Grep, Bash |
-| Searcher | Programs that produce constructions, exhaustive/SAT searches, certificates | same |
-| Breaker | Refute targets early; ADVERSARY mode in Phase 2C | same |
-| Checker-builder | Exact stdlib-only checker from the statement alone | same |
-| Referee | VERIFY / GATE (7-step protocol) and CROSS (branch lens) | Read, Write (`verdict.md`, `cex/` only), Glob, Grep, Bash |
-| Literature | SOLVE (Phase 1L) and ANALYST (Phase 3); the only role with web access | Read, Write, Glob, Grep, Bash, WebSearch, WebFetch |
-| Triage | Branch relevance for Phase 2A; never solves | Read, Write, Glob |
-| Space | Phase 2S: carries the cell into several mathematical spaces, learns from the web which spaces and tools exist and what has and hasn't been used, checks each translation by code, reports what each space's tools can deliver; never solves, never chooses | Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch |
-| Scribe | SUBMISSION (hand-in) and REPORT (`final_report.md`) | Read, Write, Edit, Glob, Bash |
-| Auditor | Checks every citation in a final report, and re-runs its `RAN` lines | Read, Write, Glob, Grep, Bash |
+| Role | Job | Tools | Model, effort |
+|---|---|---|---|
+| Prover | Line-by-line proof (blind, branch lens, repair, angle waves) | Read, Write, Edit, Glob, Grep, Bash | head's, `xhigh` |
+| Searcher | Programs that produce constructions, exhaustive/SAT searches, certificates | same | head's, `high` |
+| Breaker | Refute targets early; ADVERSARY mode in Phase 2C | same | head's, `xhigh` |
+| Checker-builder | Exact stdlib-only checker from the statement alone | same | head's, `high` |
+| Referee | VERIFY / GATE (7-step protocol) and CROSS (branch lens) | Read, Write (`verdict.md`, `cex/` only), Glob, Grep, Bash | head's, `xhigh` |
+| Literature | SOLVE (Phase 1L) and ANALYST (Phase 3); web access, like Space | Read, Write, Glob, Grep, Bash, WebSearch, WebFetch | head's, `high` |
+| Triage | Branch relevance for Phase 2A; never solves | Read, Write, Glob | head's, `medium` |
+| Space | Phase 2S: carries the cell into several mathematical spaces, learns from the web which spaces and tools exist and what has and hasn't been used, checks each translation by code, reports what each space's tools can deliver; never solves, never chooses | Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch | head's, `high` |
+| Scribe | SUBMISSION (hand-in) and REPORT (`final_report.md`) | Read, Write, Edit, Glob, Bash | Sonnet, `high` |
+| Auditor | Checks every citation in a final report, and re-runs its `RAN` lines | Read, Write, Glob, Grep, Bash | head's, `high` |
 
 Every worker is a Claude Code subagent (`.claude/agents/<role>.md`) with `omitClaudeMd: true`, so personal CLAUDE.md rules don't leak in.
+
+**Models and effort.** The head session runs on `best` at `high` effort, set for everyone who opens the repo in `.claude/settings.json`. `best` is Fable 5.1, the most capable model in Claude Code, where the account has it, and Opus otherwise. Each worker's model and effort are set by `model:` and `effort:` in its agent file:
+- **"head's" (`model: inherit`)** means the worker runs on the head's model. Every role that does mathematics or guards the gate stays on it.
+- **`xhigh`** goes to the roles whose work is the hardest reasoning: provers, breakers, and the referees who re-derive every step. In the dry run they were also cheap: provers used 6.5% of the tokens.
+- **`high`** goes to roles whose output a checker, a referee or the auditor re-checks anyway. **`medium`** goes to triage, a short rating task that never solves.
+- **The Scribe is the one role on a cheaper model.** It adds no mathematics, it used 23% of the dry run's tokens, and the Auditor checks every citation it writes. If its reports keep failing the audit, set it back to `model: inherit`.
+- **Gate roles are never lowered:** no lesson or per-dispatch override may lower the model or effort of a Referee, Checker-builder or Auditor.
+- **The head may raise effort, never lower it:** on T3 cells it may dispatch a Prover or Breaker at `max` effort.
+
+To change them for yourself only, use `/model` and `/effort`, or put `model` and `effortLevel` in `.claude/settings.local.json`. `CLAUDE_CODE_EFFORT_LEVEL` overrides every agent's `effort:`, so leave it unset during a run. Agent files are read at startup: restart Claude Code after changing one.
 
 ---
 
@@ -504,6 +514,7 @@ If this system runs again, start with I4 and I6: the telemetry log from this run
 | `.claude/skills/problem-<slug>/SKILL.md` | One per problem: verbatim statement, cells, hand-in, typing, ladders, checker spec, angle bank, pitfalls, Part S seeds, branch notes | humans; frozen during a run |
 | `.claude/skills/problem-template/SKILL.md` | Template for new problem skills | humans |
 | `.claude/agents/<role>.md` | Worker locked cores | humans only |
+| `.claude/settings.json` | Project defaults: the head's model (`best`) and effort (`high`) | humans |
 | `.claude/lessons/` | Lessons layer, `pending/`, `CHANGELOG.md` | head, between phases |
 | `scripts/pp.py` | Ledger helper: tasks and inboxes, board, dead ends, pinning, cross-tests, matrix, gate, status, blind check, reports, finalize, summary, telemetry, technique library, cross-branch lessons | humans |
 | `scripts/guard.py` | Isolation hook for workers | humans |
@@ -567,3 +578,9 @@ If this system runs again, start with I4 and I6: the telemetry log from this run
 - **2026-09-26, README: the whole pipeline:**
   - §1's diagram now runs from the humans' set-up to their hand-in, with 2S beside Phase 1 and the gate, repair and lineage loops;
   - §3 now covers set-up and tiering, a worker's life from `pp.py task` to `pp.py done`, one cell command by command, choosing spaces, the gate and repair loop, lineages and waves, and problem types.
+- **2026-10-16, models and effort:**
+  - the head session defaults to `best` at `high` effort (`.claude/settings.json`);
+  - every agent file now sets `effort:`: `xhigh` for provers, breakers and referees, `medium` for triage, `high` for the rest;
+  - the Scribe moves to Sonnet, and every other role keeps the head's model;
+  - the head skill forbids lowering a gate role's model or effort, and allows `max` for provers and breakers on T3 cells;
+  - rationale and the dry run's token split in §4.
