@@ -1,0 +1,21 @@
+$ cd inbox/record && ls tasks | wc -l && ls tasks && ls cell/gate && cmp cell/gate/gate_report.md cell/gate/A-C2-002.md && echo gate_report.md==A-C2-002.md && ls tasks/A-C2-007 && grep -l "^VERDICT\|CROSS VERDICT\|ADVERSARY VERDICT" tasks/*/out/verdict.md
+17
+A-C2-001 A-C2-002 A-C2-003 A-C2-004 A-C2-005 A-C2-006 A-C2-007 A-C2-008 A-C2-009 A-C2-010 A-C2-011 A-C2-012 A-C2-013 A-C2-014 A-C2-015 A-C2-016 A-C2-017 
+A-C2-001.md
+A-C2-002.md
+A-C2-002.pre-2B.md
+A-C2-011.md
+gate_report.md
+gate_report.md==A-C2-002.md
+brief.md
+out
+tasks/A-C2-004/out/verdict.md
+tasks/A-C2-005/out/verdict.md
+tasks/A-C2-006/out/verdict.md
+tasks/A-C2-009/out/verdict.md
+tasks/A-C2-012/out/verdict.md
+tasks/A-C2-013/out/verdict.md
+tasks/A-C2-014/out/verdict.md
+tasks/A-C2-015/out/verdict.md
+tasks/A-C2-016/out/verdict.md
+0 cell/deadends.md

@@ -1,0 +1,4 @@
+tested 85820 violations 0 near-equality 23859 min slack B-pi/2 -1.3322676295501878e-14
+pivot-bound violations 0 min pivot slack -2.220446049250313e-16
+S2 tuple: chain sum = (m-2)*acos(0) for m=2..8 (exact: acos(1)=0, acos(0)=pi/2)
+real 5.601898483

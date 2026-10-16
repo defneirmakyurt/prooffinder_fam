@@ -1,0 +1,17 @@
+# STATEMENT section (final_report.md lines 19,21,23) vs brief.md TARGET lines 7-9 and cell/target.md lines 1-3
+report == brief TARGET: IDENTICAL
+report == cell/target.md: IDENTICAL
+report == inbox/target.md: IDENTICAL
+# 'new' occurrences in final_report.md:
+none
+# LIMITATIONS phrase:
+269:- **Agent agreement is evidence, not proof.** Two ACCEPTs, two CONFIRMED cross-checks and a ROBUST matrix (cell/gate/A-C2-002.md; cell/matrix.md) do not replace a human reading of cell/accepted/proof.md, Steps 1-7. In particular, humans must still check:
+# section headers:
+7:## 1. OUTCOME
+15:## 2. STATEMENT
+27:## 3. RESULT
+44:## 4. HOW IT WAS REACHED
+209:## 5. LITERATURE VS OURS
+239:## 6. REPRODUCIBILITY
+267:## 7. LIMITATIONS
+288:## 8. NEXT STEPS
