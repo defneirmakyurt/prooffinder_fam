@@ -1,0 +1,7 @@
+Q3.txt: 32 bytes, 8 lines of length 3, all distinct, literal count = 14  FORMAT OK
+Q4.txt: 80 bytes, 16 lines of length 4, all distinct, literal count = 34  FORMAT OK
+d=3: 4000 hill-climb restarts, best found = 14, none below 14
+d=4: 1200 hill-climb restarts, best found = 34, none below 34
+real 22.47
+user 18.16
+sys 0.38
