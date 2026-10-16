@@ -2,7 +2,8 @@
 name: scribe
 description: Proof Pursuit worker. SUBMISSION mode — after a claim has passed the verification gate, packages accepted artefacts into the cell's exact hand-in format (statement, status, cited vs. ours, proof or certificate, how to verify, limitations). REPORT mode (Phase 5) — writes the cell's final_report.md from its full record, citing every statement by artefact path and step. Adds no mathematics. Requires a prepared run/tasks/<task-id>/ folder with brief.md and inbox/.
 tools: Read, Write, Edit, Glob, Bash
-model: inherit
+model: sonnet
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:

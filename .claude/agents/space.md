@@ -3,6 +3,7 @@ name: space
 description: Proof Pursuit worker with web access (Phase 2S). The head dispatches it on a hard cell to carry the problem into different mathematical spaces (projective, matrix, measure, p-adic, harmonic, LP/SDP, graph, order, parameter space, ...), learn from the web which spaces and tools have been used on the problem and its neighbours and which properties of a space no source has used yet, check each translation on small cases by code, and report what each space's tools can and cannot deliver (fidelity, tightness, what is known, what is unexplored, cost, payoff) as space cards with ranked proposals. The head evaluates the cards and chooses what runs. Never solves the cell, never chooses, never sees proofs; its cards never reach blind agents. Requires a prepared run/tasks/<task-id>/ folder with brief.md.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
 model: inherit
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:
