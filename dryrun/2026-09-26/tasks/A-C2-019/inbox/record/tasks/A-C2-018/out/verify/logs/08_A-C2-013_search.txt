@@ -1,0 +1,8 @@
+$ cd out/verify/rerun/A-C2-013/out/cex && time -p /home/user/bainsahackathon/.venv/bin/python3 search.py 7   (bash builtin time; /usr/bin/time not installed)
+instances: 11200 | certified target violations: 0 | reduction failures: 0 | lemma certified failures: 0
+smallest certified lower bound of slack (bound - sum): -1.9873757771666523e-58 at m = 3
+dimension trap: R^m basis exceeds bound by exactly pi/2 for m=2..49: True
+elapsed 2.05s
+real 2.10
+user 2.07
+sys 0.01

@@ -1,0 +1,12 @@
+Step5 identity residual: 0
+m=2: best float chain sum 0.000000000000, bound 0.000000000000, gap 0.00e+00
+m=3: best float chain sum 1.570796326798, bound 1.570796326795, gap -2.65e-12
+m=4: best float chain sum 3.141579774932, bound 3.141592653590, gap 1.29e-05
+m=5: best float chain sum 4.710287315507, bound 4.712388980385, gap 2.10e-03
+m=6: best float chain sum 6.279599618500, bound 6.283185307180, gap 3.59e-03
+m=7: best float chain sum 7.829630100894, bound 7.853981633974, gap 2.44e-02
+elapsed 2.6s
+
+real	0m3.002s
+user	0m2.927s
+sys	0m0.044s

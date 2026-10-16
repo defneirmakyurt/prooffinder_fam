@@ -160,8 +160,10 @@ costs no extra slot.
 - [x] Move the dry-run ledgers to `dryrun/2026-09-26/`, reset `run/`, and commit. The library
   (`H-uphill-checker`) stays in `run/library/`.
 - Dry-run results are **not** submission-verified unless they pass the gate.
-- [ ] Phases 2A–2C and 3 were not reached at this size. A second mini dry run (a small 2A/2B/2C/3
-  chain on Angles C2) is still worth doing if the budget allows.
+- [x] Phases 2A–2C and 3 were not reached at this size. A second mini dry run (a small 2A/2B/2C/3
+  chain on Angles C2) is still worth doing if the budget allows. Done: A-C2 ran the full chain
+  (`dryrun/2026-09-26-c2-findings.md`, ledger in `dryrun/2026-09-26/A/C2/`); its proposed fixes are
+  open for the humans.
 
 ### B9. Clean up
 

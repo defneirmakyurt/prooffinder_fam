@@ -1,0 +1,5 @@
+min of sin(a+b) - sin(a)/cos(b) over 1e6 samples: 3.077760268865859e-12
+
+real	0m0.766s
+user	0m0.764s
+sys	0m0.000s

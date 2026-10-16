@@ -1,0 +1,18 @@
+$ cd inbox/record/tasks && sha256sum <7 proof.md>
+7d3306e52c2cf04585e0f340a427c684e0f738723485a55c942b00108d2bb5bf  A-C2-001/out/proof.md
+3e08fea36e4a73353a09efda5019a7491e811a5f8522c7d3c88e6bcb3e9a3ea1  A-C2-002/out/proof.md
+9769be8a5363fd0d0ab262a3059ee441a94fadee72c26a1e9602b78b72a7a331  A-C2-003/out/proof.md
+402203b28de76c3df70c98b111578c9e0a47f0b95fd11e005a7df4d4e8c571f0  A-C2-010/out/proof.md
+f23f6d47a4e0695761ec0ab4bccbdabcdcc48427d887c63ac6e951be5c2b23be  A-C2-011/out/proof.md
+07da1c354bf095b04706e464a17e52124c070aa917d1eaedae6bfbd89afcb157  A-C2-015/out/proof.md
+cee531226f11dd1bbb8a3b61bee8b068953345fb11c505bf88a25c1a4b66cd73  A-C2-017/out/proof.md
+--- diff vs A-C2-018 log 04
+NO DIFFERENCE
+--- proof.md files in record:
+tasks/A-C2-001/out/proof.md
+tasks/A-C2-002/out/proof.md
+tasks/A-C2-003/out/proof.md
+tasks/A-C2-010/out/proof.md
+tasks/A-C2-011/out/proof.md
+tasks/A-C2-015/out/proof.md
+tasks/A-C2-017/out/proof.md
