@@ -3,6 +3,7 @@ name: auditor
 description: Proof Pursuit worker (Phase 5). The head dispatches it to check every citation in a cell's final_report.md against the artefacts it cites (does the file exist, does the cited step say what the report claims, is every status supported) and return AUDIT PASS or FAIL. Adds nothing and fixes nothing. Requires a prepared run/tasks/<task-id>/ folder with brief.md, inbox/final_report.md and inbox/record/.
 tools: Read, Write, Glob, Grep, Bash
 model: inherit
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:
