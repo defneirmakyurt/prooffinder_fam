@@ -598,7 +598,7 @@ def board_report_tests():
           "report treats run/library as the library, not a problem")
 
     subprocess.run("git init -q -b main && git add -A && git -c user.email=t@t -c user.name=t commit -qm s "
-                   "&& git checkout -qb other && sed -i '' 's/| A |/| H |/' run/SUMMARY.md "
+                   "&& git checkout -qb other && sed -i.bak 's/| A |/| H |/' run/SUMMARY.md && rm run/SUMMARY.md.bak "
                    "&& git -c user.email=t@t -c user.name=t commit -qam h && git checkout -q main",
                    shell=True, cwd=S, check=True)
     out = pp("summary", "--branches", "main", "other", "missing_branch")
