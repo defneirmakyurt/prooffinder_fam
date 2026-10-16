@@ -3,6 +3,7 @@ name: searcher
 description: Proof Pursuit worker. The head dispatches it to write and run search/optimisation code that produces constructions, exhaustive or SAT searches, or computer-assisted bounds, scored by a provided checker, under a BLIND, FRESH, CONTRARIAN or EXPLOIT regime, optionally in BRANCH mode (Phase 2B, the lens as a search angle). Requires a prepared run/tasks/<task-id>/ folder with brief.md and inbox/checker/.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: inherit
+effort: high
 omitClaudeMd: true
 hooks:
   PreToolUse:

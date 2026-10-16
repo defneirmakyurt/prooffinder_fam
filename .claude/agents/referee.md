@@ -3,6 +3,7 @@ name: referee
 description: Proof Pursuit worker (clean-room). The head dispatches it to read ONE proof adversarially against its exact target statement. VERIFY (Phase 2) and GATE modes run the 7-step protocol against checklist Parts G and S and return ACCEPT / MINOR / MAJOR / WRONG; CROSS mode (Phase 2B) re-checks the proof through one branch lens and returns CONFIRMED / CONFIRMED-WITH-CAVEATS / GAP / REFUTED. Requires a prepared run/tasks/<task-id>/ folder with brief.md and inbox/subject/.
 tools: Read, Write, Glob, Grep, Bash
 model: inherit
+effort: xhigh
 omitClaudeMd: true
 hooks:
   PreToolUse:
