@@ -1,0 +1,15 @@
+ball-certified (200 bits): below bound 36, overlapping (not decided) 30, above bound 0
+N=2: min over 6 climbs of certified lower bound on (bound - S): 2.568e-08
+N=3: min over 6 climbs of certified lower bound on (bound - S): -5.666e-56
+N=4: min over 6 climbs of certified lower bound on (bound - S): 1.556e-06
+N=5: min over 6 climbs of certified lower bound on (bound - S): -9.735e-56
+N=6: min over 6 climbs of certified lower bound on (bound - S): 4.722e-06
+N=7: min over 6 climbs of certified lower bound on (bound - S): -4.086e-56
+N=8: min over 6 climbs of certified lower bound on (bound - S): 4.169e-06
+N=9: min over 6 climbs of certified lower bound on (bound - S): -1.892e-56
+N=10: min over 6 climbs of certified lower bound on (bound - S): 1.260e-05
+N=11: min over 6 climbs of certified lower bound on (bound - S): -7.328e-57
+N=12: min over 6 climbs of certified lower bound on (bound - S): 3.519e-05
+real 1.86
+user 1.76
+sys 0.02

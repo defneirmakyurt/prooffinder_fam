@@ -1,0 +1,7 @@
+subject counter Q1 [0,1] = 2 (hand: 2)
+subject counter Q2 [00,01,10,11] = 5 (hand: 5)
+d=1 min over all labellings = 2
+d=2 min over all labellings = 5
+real 0.02
+user 0.01
+sys 0.00

@@ -3,3 +3,4 @@ __pycache__/
 run/.guard/
 run/.start
 run/tasks/*/out/tmp/
+dryrun/*/tasks/*/out/tmp/

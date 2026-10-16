@@ -1,0 +1,5 @@
+E-checks failures: {'E1': 0, 'E2': 0, 'E3': 0, 'E4': 0, 'E5': 0} S6 values (units of pi): {2: '1/2', 3: '1', 4: '2', 5: '3'}
+ALL OK
+real 0.26
+user 0.13
+sys 0.02

@@ -1,0 +1,17 @@
+N=2: best exact S/pi over 30 restarts = 0.499999984088401 (exact <= bound: True), bound=1/2, gap=1.591e-08
+N=3: best exact S/pi over 30 restarts = 1.000000000000000 (exact <= bound: True), bound=1, gap=0.000e+00
+N=4: best exact S/pi over 30 restarts = 1.999997914530746 (exact <= bound: True), bound=2, gap=2.085e-06
+N=5: best exact S/pi over 30 restarts = 3.000000000000000 (exact <= bound: True), bound=3, gap=0.000e+00
+N=6: best exact S/pi over 30 restarts = 4.499994828976898 (exact <= bound: True), bound=9/2, gap=5.171e-06
+N=7: best exact S/pi over 30 restarts = 6.000000000000000 (exact <= bound: True), bound=6, gap=0.000e+00
+N=8: best exact S/pi over 30 restarts = 7.999989657500755 (exact <= bound: True), bound=8, gap=1.034e-05
+N=9: best exact S/pi over 30 restarts = 10.000000000000000 (exact <= bound: True), bound=10, gap=0.000e+00
+N=10: best exact S/pi over 30 restarts = 12.499983642139126 (exact <= bound: True), bound=25/2, gap=1.636e-05
+N=11: best exact S/pi over 30 restarts = 15.000000000000000 (exact <= bound: True), bound=15, gap=0.000e+00
+N=12: best exact S/pi over 30 restarts = 17.999980310686091 (exact <= bound: True), bound=18, gap=1.969e-05
+N=13: best exact S/pi over 30 restarts = 21.000000000000000 (exact <= bound: True), bound=21, gap=0.000e+00
+N=14: best exact S/pi over 30 restarts = 24.499955093482676 (exact <= bound: True), bound=49/2, gap=4.491e-05
+exact violations: 0
+real 4.50
+user 4.42
+sys 0.01

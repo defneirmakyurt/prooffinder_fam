@@ -1,0 +1,9 @@
+=== d=4, cutoff 34 (proves >= 34 if empty) ===
+  level  1: 16 states
+  level  2: 120 states
+  level  3: 656 states
+  level  4: 3156 states
+  level  5: 14064 states
+  level  6: 58632 states
+  level  7: 228192 states
+  level  8: 822106 states

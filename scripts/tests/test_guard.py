@@ -100,6 +100,20 @@ def cex():
     case("referee Bash glued redirect to out/", "deny", "Bash", {"command": "echo x>out/x.txt"}, **r)
     case("prover Bash writes out/ (unchanged)", "allow", "Bash", {"command": "python3 a.py > out/log.txt"})
 
+    print("== auditor Bash (re-runs the report's RAN lines)")
+    au = {"agent": "auditor"}
+    case("auditor Bash writes out/logs/", "allow", "Bash",
+         {"command": "python3 out/tmp/s.py > out/logs/run1.txt"}, **au)
+    case("auditor Bash writes out/audit.md", "allow", "Bash", {"command": "echo PASS > out/audit.md"}, **au)
+    case("auditor Bash reads its own record", "allow", "Bash",
+         {"command": "cp inbox/record/tasks/x/out/s.py out/tmp/"}, **au)
+    case("auditor Bash writes into inbox", "deny", "Bash",
+         {"command": "python3 s.py > inbox/record/patched.txt"}, **au)
+    case("auditor Bash tee outside the task", "deny", "Bash",
+         {"command": "python3 x.py | tee /tmp/pp_audit.log"}, **au)
+    case("auditor Bash writes another task", "deny", "Bash",
+         {"command": f"cp out/audit.md run/tasks/{T2}/out/"}, cwd=S, **au)
+
 
 if __name__ == "__main__":
     setup()
